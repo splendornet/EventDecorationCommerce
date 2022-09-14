@@ -1,0 +1,15 @@
+{% extends "customer/emails/base.html" %}
+{% load currency_filters i18n %}
+
+{% block tbody %}
+    <tr>
+        <td class="content-block">
+            <p xmlns="http://www.w3.org/1999/html">Hello {{user.first_name}} ,</p>
+            <p>Thank you for experiencing the service from Take Rent Pe platform. Your support and trust in us are much appreciated. For your next purchase, we are going to share with you more offers soon. Yes! Especially for You.
+
+            </p>
+            <p>Happy celebranto,</p>
+            <p style="line-height: 0px;">Rutuja, Take Rent Pe.</p><br/>
+        </td>
+    </tr>
+{% endblock %}

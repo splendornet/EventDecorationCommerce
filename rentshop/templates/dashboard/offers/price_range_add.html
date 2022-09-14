@@ -1,0 +1,146 @@
+{% extends 'dashboard/layout.html' %}
+{% load i18n %}
+
+{% block title %}
+    {% trans "Price Range" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li>
+            <a href="{% url 'dashboard:price-range-list' %}">Price Range</a>
+        </li>
+        <li class="active">{% trans "Add" %}</li>
+    </ul>
+{% endblock %}
+
+{% block headertext %}{{ title }}{% endblock %}
+{% block dashboard_content %}
+<style>
+    .tr_clone
+    {
+        display:none
+    }
+
+</style>
+    <form action="." method="post" class="well form-stacked wysiwyg" >
+        {% csrf_token %}
+        {{ formset.management_form }}
+        {{ formset.non_form_errors }}
+    <table class="table table-hover" id="item_table">
+        <thead>
+            <tr role="row">
+                <th>Category</th>
+                <th>Price Range</th>
+                <th>Discount Type</th>
+                <th>Discount</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <input type="hidden" name="form-TOTAL_FORMS" value="1" id="id_form-TOTAL_FORMS">
+            <input type="hidden" name="form-INITIAL_FORMS" value="0" id="id_form-INITIAL_FORMS">
+            <input type="hidden" name="form-MIN_NUM_FORMS" value="0" id="id_form-MIN_NUM_FORMS">
+            <input type="hidden" name="form-MAX_NUM_FORMS" value="10" id="id_form-MAX_NUM_FORMS">
+            {% for frm in formset %}
+                <tr id="{{ frm.prefix }}-row" class="{% if frm.price_rng.value == '' and forloop.counter0 > 0 or frm.price_rng.value is None and forloop.counter0 > 0 %}tr_clone{% else %}empty{% endif %}">
+                    <td>
+                        {% if forloop.counter0 == 0 and action == 'add' %}
+                        {{ form.category }}
+                         <input type="hidden" name="form-{{forloop.counter0}}-category" class="category-input" id="id-{{forloop.counter0}}-category">
+                        {% else %}
+                            {% if forloop.counter0 == 0 %}
+                                {{category.name}}
+                            {% endif %}
+                        {% endif %}
+                        {{ frm.id}}
+                    </td>
+                    <td>
+                        {{ frm.price_rng }}
+                    </td>
+                    <td>
+                        {{ frm.discount_type }}
+                    </td>
+                    <td>
+                        {{ frm.discount }}
+                        {% for error in frm.discount.errors %}
+                            <span class="error-block"><i class="icon-exclamation-sign"></i> {{ error }}</span>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <main style="height:32px" class="main_{{forloop.counter0}}">
+                    {% if frm.price_rng.value %}
+                    <button type="button" class="btn btn-sm btn-danger btn-attribute-delete"
+                            onclick="delete_price('{{forloop.counter0}}')">Delete
+                    </button>
+                    {% endif %}
+                </main>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+        <td>
+                        <button type="button" class="btn btn-warning" onclick="add_formset()">Add Row</button>
+                    </td>
+        <div class="form-actions">
+            <button class="btn btn-lg btn-primary" type="submit" data-loading-text="{% trans 'Saving...' %}">{% trans "Save" %}</button>
+            {% trans "or" %} <a href="{% url 'dashboard:price-range-list' %}">{% trans "cancel" %}</a>.
+        </div>
+    </form>
+{% endblock dashboard_content %}
+{% block extrascripts %}
+    <script>
+        $(function(){
+            console.log($('#id-0-category').val());
+        })
+        $("#id_category").on('change', function(){
+            var selected_val = $("#id_category option:selected").val();
+            $('.category-input').val(selected_val);
+        });
+    </script>
+    <script>
+        function add_formset(){
+            $('.empty:last').nextAll().slice(0, 1).toggleClass('empty tr_clone');
+        }
+        function delete_price(counter){
+    var attribute_id = 'id_pricerangemodel_set-'+counter+'-id'
+    var db_id = $('#'+attribute_id).val();
+    if (db_id == ''){
+        alert('You can not preform this action.')
+        return false;
+    }
+    var is_confirm = confirm("Do you really want to delete this value.");
+    if (is_confirm == false){
+        return false;
+    }
+
+    delete_price_ajax(db_id)
+
+}
+
+function delete_price_ajax(id){
+    $.ajax({
+        type:'GET',
+        url : '/delete_price_range/',
+        data : {
+            price_id: id
+        },
+        success : function(data){
+            if (data == '503'){
+                window.location.replace("/dashboard/catalogue/");
+            }
+            if (data == '200'){
+                window.location.reload();
+            }
+        },
+        failure : function(result){
+
+        },
+    });
+}
+    </script>
+{% endblock %}

@@ -1,0 +1,273 @@
+{% extends 'dashboard/layout.html' %}
+{% load i18n %}
+{% load thumbnail %}
+{% load staticfiles %}
+{% load sorting_tags %}
+{% load render_table from django_tables2 %}
+
+{% block body_class %}{{ block.super }} Exhibition Offers{% endblock %}
+
+{% block title %}
+{% trans "Exhibition Offers" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<style>
+    @media (max-width: 767px) {
+        .table-container{
+        overflow:auto !important;
+    }
+    .select2-container{
+        width:100% !important;
+        margin-bottom:10px ;
+    }
+    .form-inline input[type=text]{
+        margin-bottom:10px;
+    }
+}
+</style>
+
+<ul class="breadcrumb">
+    <li>
+        <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+    </li>
+    <li class="active">{% trans "Exhibition Offers" %}</li>
+</ul>
+{% endblock %}
+
+{% block header %}
+<div class="page-header action">
+    <h1>{% trans "Exhibition Offers" %}</h1>
+</div>
+{% endblock header %}
+
+{% block dashboard_content %}
+
+<div class="table-header">
+    <h3>
+        <em class="icon-sitemap icon-large"></em>
+        {% trans "Create offer" %}
+    </h3>
+</div>
+<div class="well">
+    <div style="float:left">
+        {% if not managemenu %}
+        <h3>
+            <a href="{% url 'dashboard:create-exhibition-offers' %}" class="btn btn-primary">
+
+                <em class="icon-plus"></em> {% trans "Create Offer" %}
+            </a>
+        </h3>
+        {% endif %}
+    </div>
+    <div style="float:right">
+        <h3>
+            <button type="button" class="btn btn-primary" onclick="download_menu('{% url 'export_exhibition_menu' %}', '{{request.GET.header_menu}}')">
+                {% trans "Download Offers" %}
+            </button>
+        </h3>
+    </div>
+</div>
+
+
+<!--{% block search_products %}-->
+<!--<div class="table-header">-->
+<!--    <h3>-->
+<!--        <em class="icon-search icon-large"></em>-->
+<!--        {% trans "Search Offers" %}-->
+<!--    </h3>-->
+<!--</div>-->
+<!--<div class="well">-->
+<!--    <form action="." method="get" class="form-inline">-->
+<!--        {% comment %}-->
+<!--        Add the current query string to the search form so that the-->
+<!--        sort order is not reset when searching.-->
+<!--        {% endcomment %}-->
+<!--        {% for name, value in request.GET.items %}-->
+<!--        {% if name not in form.fields %}-->
+
+<!--        {% endif %}-->
+<!--        {% endfor %}-->
+<!--        {% include "dashboard/partials/form_fields_inline.html" with form=form %}-->
+<!--        <button type="submit" class="btn btn-primary" data-loading-text="{% trans 'Searching...' %}">{% trans "Search" %}</button>-->
+<!--        <a class="btn btn-default" href="/dashboard/catalogue/exhibition_offers/index/" >{% trans "Reset" %}</a>-->
+<!--    </form>-->
+
+<!--</div>-->
+
+{% endblock %}
+
+
+        <table class="table table-striped table-bordered">
+
+            <caption>
+
+                <span id="menu_mark" class="selection_mark label label-default"></span>
+                {% if request.user.is_superuser %}
+                    <div class="pull-right">
+                        <div class="form-inline">
+                            <em class="icon-refresh"></em>
+                            {% trans "Bulk Actions" %}
+                            <input type="text" id="ids_menu_list" name="ids_list_menu" hidden>
+                            <input type="button" onclick="bulk_menu_delete()" value="{% trans "Delete" %}" class="btn btn-danger" />
+                        </div>
+                    </div>
+                {% endif %}
+            </caption>
+            {% if managemenu %}
+
+                <tr>
+                    <th><input type="checkbox" id="id_select_all_vendor"/> </th>
+                    <th>Menu</th>
+                    <th>No. Of Categories</th>
+                    <th>Date created</th>
+                    <th>Actions</th>
+                </tr>
+
+                {% for menu in managemenu %}
+                    {% if forloop.first %}
+                    <tr>
+                        <td>
+                            <input type="checkbox" class="menu_check" id="" value="{{menu.pk}}"/>
+                        </td>
+                        <td>
+                            <a href="{% url 'dashboard:update-exhibition-offers' pk=menu.pk %}">
+                                {{ menu.header_menu }}
+                            </a>
+                        </td>
+
+                        <td>
+                            {{menu.get_products_count|default:0}}
+                        </td>
+
+                        <td>{{menu.date_created}}</td>
+                        <td>
+                            <div class="btn-toolbar">
+                                <div class="btn-group">
+                                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
+                                        {% trans "Actions" %}
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li>
+                                            <a href="{% url 'dashboard:update-exhibition-offers' pk=menu.pk %}">{% trans "Edit Menu" %}</a>
+                                            <a href="{% url 'dashboard:delete-exhibition-offers' pk=menu.pk %}">{% trans "Delete Menu" %}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td>{% trans "No Menu found." %}</td>
+                </tr>
+            {% endif %}
+        </table>
+        {% include "dashboard/partials/pagination.html" %}
+
+
+{% endblock dashboard_content %}
+
+{% block extrascripts %}
+    {{ block.super }}
+    <script src="{% static 'oscar/js/dashboard/catalogue/product.js' %}"></script>
+
+    <script>
+        $('#id_select_all_vendor').change(function (){
+
+        $('.menu_check:checkbox').not(this).prop('checked', this.checked);
+
+            var menu_ids = $('.menu_check:checked').map(function(){
+                return $(this).val();
+            });
+
+            if (menu_ids.length == 0){
+                $('#menu_mark').html('')
+            }else{
+                $('#menu_mark').html('Total '+menu_ids.length+ ' menu selected.')
+            }
+        });
+
+        $('.menu_check').change(function (){
+
+            $('#id_select_all_vendor').prop('checked', false);
+
+            var menu_ids = $('.menu_check:checked').map(function(){
+                return $(this).val();
+            });
+
+            if (menu_ids.length == 0){
+                $('#menu_mark').html('')
+            }else{
+                $('#menu_mark').html('Total '+menu_ids.length+ ' menu selected.')
+            }
+        });
+
+        function bulk_menu_delete(){
+
+            var new_array = []
+
+            var menu_ids = $('.menu_check:checked').map(function(){
+                return $(this).val();
+            });
+
+            if (menu_ids.length == 0){
+                alert('Please select offer menu.');
+                return false;
+            }else{
+                for(var i=0; i<menu_ids.length; i++){
+                    new_array.push(menu_ids[i])
+                }
+            }
+
+            var is_confirm = confirm("Do you really want to delete the offer menu.");
+
+            if (is_confirm == false){
+                return false;
+            }
+
+            $('#ids_menu_list').val(new_array);
+
+            // ajax method
+            $.ajax({
+                type:'GET',
+                url : '/delete_bulk_exhibition/',
+                data : {
+                    menu_id: $('#ids_menu_list').val(),
+                },
+                success : function(data){
+                    if(data == 'IN_SERVER'){
+                        window.location.replace("/dashboard");
+                    }
+                    if (data == 'TRUE'){
+                        window.location.reload();
+                    }
+                },
+                failure : function(result){
+                },
+            });
+
+        }
+
+    </script>
+
+    <script>
+        function download_menu(url, header_menu, offer_title){
+            var checked_id = [];
+            $.each($("input[class='menu_check']:checked"), function(){
+                checked_id.push($(this).val());
+            });
+            var _url = url+'?&header_menu='+header_menu+'&checked_id='+checked_id;
+            document.location.href = _url;
+        }
+    </script>
+
+{% endblock %}
+
+{% block onbodyload %}
+{{ block.super }}
+oscar.dashboard.product_lists.init();
+{% endblock onbodyload %}

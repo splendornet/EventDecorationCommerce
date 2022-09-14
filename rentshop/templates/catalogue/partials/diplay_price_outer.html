@@ -1,0 +1,102 @@
+{% load common %}
+{% load reviews_tags %}
+{% load thumbnail %}
+{% load i18n %}
+{% load display_tags %}
+{% load staticfiles %}
+{% load mathfilters %}
+{% load purchase_info_tags %}
+{% load currency_filters %}
+{% load currency_filters %}
+{% load i18n %}
+{% load purchase_info_tags %}
+{% purchase_info_for_product request product as session %}
+
+
+<!-- common price -->
+{% get_price_whole_browse product.stockrecords.last as base_price %}
+{% if base_price %}
+<span>
+    {% if product.product_class.name  != 'Service' %}
+        ₹ {{base_price}}
+    {% endif %}
+</span>
+{% endif %}
+<!-- common price -->
+
+<span hidden>
+    {% if session.price.exists %}
+        {% if session.price.excl_tax == 0 %}
+            <span>{% trans "Free" %}</span>
+        {% elif session.price.is_tax_known %}
+            <span>
+                {% if not product.product_class.name  == 'Rent Or Sale' %}
+
+                    <!-- tax condition new -->
+                    {% if product.product_class.name  == 'Sale' %}
+                        {% if product.stockrecords.last.price_excl_tax %}
+                            ₹ {{product.stockrecords.last.price_excl_tax}}
+<!--                            {{product.stockrecords.last.price_excl_tax|currency:session.price.currency}}-->
+
+                        {% else %}
+                            ₹ {{ session.price.incl_tax }}
+                        {% endif %}
+                    {% endif %}
+
+                    {% if product.product_class.name  == 'Rent' %}
+                        {% if product.stockrecords.last.rent_price %}
+                            ₹ {{product.stockrecords.last.rent_price}}
+                        {% else %}
+                           ₹ {{ session.price.incl_tax }}
+                        {% endif %}
+                    {% endif %}
+
+                    {% if product.product_class.name  == 'Professional' %}
+                        {% if product.stockrecords.last.rent_price %}
+                            ₹  {{product.stockrecords.last.rent_price}}
+                        {% else %}
+                            ₹ {{ session.price.incl_tax }}
+                        {% endif %}
+                    {% endif %}
+
+                    {% if product.product_class.name == 'Rent' %}{% endif %}
+                {% elif product.get_product_class.name == 'Service' %}
+
+                {% else %}
+                    {% if request.path == '/' %}
+
+                        {% if product.stockrecords.last.price_excl_tax %}
+                            ₹ {{product.stockrecords.last.price_excl_tax|truncatechars:8}}/
+                        {% else %}
+                             ₹ {{ session.price.incl_tax|truncatechars:8}}/
+                        {% endif %}
+
+                        {% if product.stockrecords.last.rent_price %}
+                            ₹ {{product.stockrecords.last.rent_price|truncatechars:8}}
+                        {% else %}
+                             ₹ {{ session.price.incl_tax|truncatechars:8}}
+                        {% endif %}
+
+                    {% else %}
+
+                        {% if product.stockrecords.last.price_excl_tax %}
+                             ₹ {{product.stockrecords.last.price_excl_tax}}/
+                        {% else %}
+                            ₹ {{ session.price.incl_tax}}/
+                        {% endif %}
+
+                        {% if product.stockrecords.last.rent_price %}
+                             ₹ {{product.stockrecords.last.rent_price}}
+                        {% else %}
+                             ₹ {{ session.price.incl_tax}}
+                        {% endif %}
+
+                    {% endif %}
+                {% endif %}
+        </span>
+        {% else %}
+            <span>  ₹ {{ session.price.excl_tax }}</span>
+        {% endif %}
+    {% else %}
+    {% endif %}
+</span>

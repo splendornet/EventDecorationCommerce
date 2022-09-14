@@ -1,0 +1,23 @@
+{% extends "customer/emails/base.html" %}
+{% load currency_filters i18n %}
+
+{% block tbody %}
+{% autoescape off %}
+{% load static %}
+<tr>
+    <td class="content-block">
+        <p style="font-size:16px">Congratulations and welcome in our family!</p> <br/>
+        <p xmlns="http://www.w3.org/1999/html">Hello {{ vendor.first_name }} {{ vendor.last_name }},</p>
+        <p>We would like to welcome you as a service provider to our Client. We have a high demand for high quality service and no tolerance for error. Based on our research, that also describes your firm. We are glad to be doing business with you. </p>
+        <p>If there is anything we can do to help facilitate this new relationship, please do not hesitate to ask.</p>
+        <br/>
+        <p style="font-size:16px;"> Your account is under review, Once your account is reviewed we will let you know.</p>
+
+        <p>Please find the following credentials for asp Dashboard Login</p>
+        <p><b>Email Id : </b>{{email_id}}</p>
+        <p><b>Password : </b>{{pwd}}</p>
+    </td>
+</tr>
+
+{% endautoescape %}
+{% endblock %}

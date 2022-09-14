@@ -1,0 +1,291 @@
+
+{% extends "checkout/checkout.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}
+{% trans "Shipping address" %} | {{ block.super }}
+{% endblock %}
+
+{% block checkout_nav %}
+{% include 'checkout/nav1.html' with step=1 %}
+{% endblock %}
+
+{% block checkout_title %}{% trans "Shipping address" %}{% endblock %}
+
+{% block order_contents %}{% endblock %}
+
+{% block shipping_address %}
+<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+
+<style>
+    .active-shipping{color:#e91d4a !important;}
+    .alert{display:none;}
+    .upper-text{text-transform:uppercase;}
+
+    .well{
+    background-color:white;
+    border:none;
+    }
+    a:visited, a:focus{
+    color:white;
+    }
+     input[type="text"],label, input, button, select, textarea{
+    border-radius:4px;
+    }
+.shop-layout-wrap {
+background-color:white;
+}
+.form-control::placeholder {
+color:#e0e0e0 ! important;
+}
+#id_state, #id_line4{
+   background: transparent;
+    border-color: transparent;
+    color: #fff !important;
+}
+#id_state:focus{
+   background: transparent !important;
+    border-color: transparent !important;
+    color: #fff !important;
+    box-shadow:initial !important;
+}
+#id_line4:focus{
+   background: transparent !important;
+    border-color: transparent !important;
+    color: #fff !important;
+    box-shadow:initial !important;
+}
+@media(max-width: 767px){
+    #new_billing_address .panel-heading .panel-title h4,
+     #new_shipping_address .panel-heading .panel-title h4 {
+       text-align: left;
+    }
+    .left-meni {
+        text-align: left;
+    }
+    .right-meni {
+        text-align: left;
+    }
+}
+</style>
+
+<div class="col-sm-12">
+
+    {% block new_address_form %}
+    <div class="well">
+        <form action="{% url 'checkout:billing_address' fill_form=0%}" method="post" id="new_billing_address" class="form form-horizontal">
+            {% csrf_token %}
+            <div class="tab-content">
+                <div class="tab-pane active" role="tabpanel" id="step1">
+                    <div class="step1">
+                        <div class="panel panel-info">
+
+                            <div class="panel-heading" style="background-color:#CCCCCC; " >
+                                <div class="panel-title" >
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <h4 ><span class="glyphicon glyphicon-list-alt"></span> Billing Details</h4>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="id_email">Email Address</label>
+                                        {{form.email}}
+                                        {% if form.errors.email %}
+                                        <label class="error_label">{{form.errors.email.as_text}}</label>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="id_first_name">First Name</label>
+                                        {{form.first_name}}
+                                        {% if form.errors.first_name %}
+                                        <label class="error_label">{{form.errors.first_name.as_text}}</label>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="id_last_name">Last Name</label>
+                                        {{form.last_name}}
+                                        {% if form.errors.last_name %}
+                                        <label class="error_label">{{form.errors.last_name.as_text}}</label>
+                                        {% endif %}
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="id_line1">Delivery Address</label>
+                                        {{form.line1}}
+                                        {% if form.errors.line1 %}
+                                        <label class="error_label">{{form.errors.line1.as_text}}</label>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="id_country">Country</label>
+                                        {{form.country}}
+                                        {% if form.errors.country %}
+                                        <label class="error_label">{{form.errors.country.as_text}}</label>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="id_state">State</label>
+                                        <select name="state_raw" class="form-control" id="id_state_raw" required>
+                                            <option value="">State</option>
+                                            {% for state in states %}
+                                                <option value="{{state.id}}">{{state.state_name}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        {% if form.errors.state %}
+                                            <label class="error_label">{{form.errors.state.as_text}}</label>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+
+                                        <label for="id_line4">City</label>
+                                        <select name="city" class="form-control" id="id_city" required>
+                                            <option value="">City</option>
+                                        </select>
+
+                                        {% if form.errors.line4 %}
+                                            <label class="error_label">{{form.errors.line4.as_text}}</label>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="id_postcode">Postal Code</label>
+                                        {{form.postcode}}
+                                        {% if form.errors.postcode %}
+                                        <label class="error_label">{{form.errors.postcode.as_text}}</label>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="list-inline pull-right">
+                        <li>
+                            <button type="submit" class="btn btn-warning" data-loading-text="{% trans 'Continuing...' %}">{% trans "Save and Continue" %}</button>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+            <div class="row" style="border:0px solid; width:1px;">
+                {{form.state}}
+                {{form.line4}}
+            </div>
+        </form>
+    </div>
+    {% endblock %}
+</div>
+{% endblock shipping_address %}
+
+
+{% block shipping_method %}{% endblock %}
+{% block payment_method %}{% endblock %}
+
+{% block extrascripts %}
+
+{{block.super}}
+
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+        $(".cont").click(function (e) {
+            var previ = $('.wizard .wizard-inner .nav-tabs li.step1');
+            previ.removeClass('active');
+            previ.addClass('disabled');
+            var previ = $('.tab-content div#step1');
+            previ.removeClass('active');
+            previ.addClass('disabled');
+            var $active = $('.wizard .wizard-inner .nav-tabs li.step2');
+            $active.removeClass('disabled');
+            $active.addClass('active');
+            var $active = $('.tab-content div#step2');
+             $active.removeClass('disabled');
+            $active.addClass('active');
+        });
+        $(".prev-step").click(function (e) {
+            var previ = $('.wizard .wizard-inner .nav-tabs li.step2');
+            previ.removeClass('active');
+            previ.addClass('disabled');
+            var previ = $('.tab-content div#step2');
+            previ.removeClass('active');
+            previ.addClass('disabled');
+            var $active = $('.wizard .wizard-inner .nav-tabs li.step1');
+            $active.removeClass('disabled');
+            $active.addClass('active');
+            var $active = $('.tab-content div#step1');
+             $active.removeClass('disabled');
+            $active.addClass('active');
+        });
+
+        // state on change
+        $('#id_state_raw').on('change', function(){
+            $('#id_state').val($("#id_state_raw option:selected").text());
+            $('#id_city').empty().append('<option selected="selected" value="">Select City</option>');
+            $.ajax({
+                type:'GET',
+                url : '/city_ajax/',
+                data : {
+                    state_name: $(this).val(),
+                },
+                success : function(data){
+                    $.each(data, function(i, value) {
+                        console.log(value)
+                        $('#id_city').append($('<option>').text(value.text).attr('value', value.text));
+                    });
+                },
+                failure : function(result){
+                },
+            });
+        });
+        $('#id_city').on('change', function(){
+            $('#id_line4').val($("#id_city option:selected").text());
+        });
+
+        let path_current = window.location.pathname;
+        if(path_current == '/checkout/billing_address/1'){
+            var state = $('#id_state').val();
+            var city = $('#id_line4').val();
+            $.get('/get_state_id/?state_name='+state, function(data) {
+                $("#id_state_raw").val(data);
+                $.ajax({
+                type:'GET',
+                url : '/city_ajax/',
+                data : {
+                    state_name: data,
+                },
+                success : function(data){
+                    $.each(data, function(i, value) {
+                        $('#id_city').append($('<option>').text(value.text).attr('value', value.text));
+                    });
+                    $('#id_city').val(city);
+                },
+                failure : function(result){
+                },
+            });
+            });
+
+        }
+
+    });
+    $('input').attr('autocomplete','off');
+</script>
+
+{% endblock %}

@@ -1,0 +1,54 @@
+<style>
+    .stars{
+        width:90px; cursor: pointer;
+    }
+    .fa-color {
+        color: #333 !important;
+    }
+    .fa-star{
+        cursor: pointer;
+    }
+</style>
+{% if product.rating|floatformat:"0" == '1' %}
+    <div class="stars" onclick="review()">
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star fa-color"></span>
+        <span class="fa fa-star fa-color"></span>
+        <span class="fa fa-star fa-color"></span>
+        <span class="fa fa-star fa-color"></span>
+    </div>
+{% elif product.rating|floatformat:"0" == '2' %}
+    <div class="stars" onclick="review()">
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star fa-color"></span>
+        <span class="fa fa-star fa-color"></span>
+        <span class="fa fa-star fa-color"></span>
+    </div>
+{% elif product.rating|floatformat:"0" == '3' %}
+    <div class="stars" onclick="review()">
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star fa-color"></span>
+        <span class="fa fa-star fa-color"></span>
+    </div>
+{% elif product.rating|floatformat:"0" == '4' %}
+    <div class="stars" onclick="review()">
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star fa-color"></span>
+    </div>
+{% elif product.rating|floatformat:"0" == '5' %}
+    <div class="stars" onclick="review()">
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star checked"></span>
+    </div>
+{% else %}
+
+{% endif %}

@@ -1,0 +1,135 @@
+{% extends "catalogue/detail.html" %}
+{% load i18n %}
+{% block product_review %}
+
+<style>
+    .reviews_tab{display:none !important;
+    }
+    .description_tab,.additional_information_tab{
+        width:50% !important;
+    }
+    .btn-review{
+        text-transform: capitalize;
+        width:80px !important;
+    }
+    .btn-default{
+        background-color: #eddbdb;
+    }
+    .form-control:focus{
+        border: 1px solid #e0e0e0 !important;
+    }
+    #id_title, #id_captcha_1{
+        text-align: left;
+    }
+    #id_captcha_1{
+        margin-top:15px;
+    }
+</style>
+
+<div class="shop-layout-wrap active" id="nz-target" style="padding:0;" autofocus>
+    <section class='content nz-clearfix' id="id_review_div" data-rp="true" data-rpn="4">
+        <div class="nz-shop-posts nz-clearfix">
+            <section class="main-content" style="width:100%">
+                <form id="add_review_form" class="" method="post" action="./#addreview" style="padding: 70px 50px;background-color: #fff;">
+                    <fieldset>
+                        <legend>{% trans "Leave a product review" %}</legend>
+                        {% csrf_token %}
+                        {% include 'partials/form_field.html' with field=form.title %}
+                        <div class="reviewrating form-group {% if form.score.errors %}error{% endif %}">
+
+                            <label for="{{ form.score.auto_id }}" class="control-label required">
+                                <span>Rating <em style="color:red">*</em></span>
+                            </label>
+
+                            <div class="controls">
+
+                                <div class="form-group" id="rating-ability-wrapper">
+                                    <label class="control-label" for="rating">
+                                        <input type="hidden" id="selected_rating" name="score" value="" required="required">
+                                    </label>
+
+                                    <button type="button" class="btnrating btn btn-default btn-lg" data-attr="1" id="rating-star-1">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </button>
+                                    <button type="button" class="btnrating btn btn-default btn-lg" data-attr="2" id="rating-star-2">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </button>
+                                    <button type="button" class="btnrating btn btn-default btn-lg" data-attr="3" id="rating-star-3">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </button>
+                                    <button type="button" class="btnrating btn btn-default btn-lg" data-attr="4" id="rating-star-4">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </button>
+                                    <button type="button" class="btnrating btn btn-default btn-lg" data-attr="5" id="rating-star-5">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+
+                                {% for error in form.score.errors %}
+                                    <span class="error-block" style="color: red;">
+                                        <em class="icon-exclamation-sign"></em> {{ error }}
+                                    </span>
+                                {% endfor %}
+                            </div>
+                            {% comment %}
+                                {% include 'partials/form_field.html' with field=form.score %}
+                            {% endcomment %}
+                        </div>
+
+                        {% include 'partials/form_field.html' with field=form.body %}
+                        <span id="errMsg"></span>
+                        {% if form.name %}
+                            {% include 'partials/form_field.html' with field=form.name %}
+                        {% endif %}
+                        {% if form.email %}
+                            {% include 'partials/form_field.html' with field=form.email %}
+                        {% endif %}
+
+                        <p style="color:#000;">
+                            <strong>Captcha <em style="color:red">*</em></strong>
+                        </p>
+                        {{form.captcha}}
+                        {% if form.errors.captcha %}
+                            <span class="error-block" style="color: red;">
+                                <em class="icon-exclamation-sign"></em> {{form.errors.captcha.as_text}}
+                            </span>
+                            <br/><br/>
+                        {% endif %}
+
+                        <button type="submit" class="btn btn-yellow btn-red btn-review" data-loading-text="{% trans 'Saving...' %}">{% trans "Submit" %}</button>
+
+                        <a href="{{ product.get_absolute_url }}" class="btn btn-review btn-yellow btn-red">{% trans "Cancel" %}</a>
+                    </fieldset>
+                </form>
+            </section>
+        </div>
+    </section>
+</div>
+
+{% load static %}
+
+{% block extrascripts %}
+{{ block.super }}
+
+<script src="{% static 'oscar/js/product/ratings.js' %}"></script>
+
+<script>
+
+$(document).ready( function() {
+    var maxLen = 150;
+    $("#id_body").attr('maxlength','150');
+    $('#id_body').keypress(function(event){
+        var Length = $("#id_body").val().length;
+        if (Length >= maxLen){
+             $('#errMsg').text('Please enter comment in less than 150 characters.');
+        }else{
+            $('#errMsg').text('');
+        }
+    });
+
+ });
+
+</script>
+
+{% endblock %}
+{% endblock %}

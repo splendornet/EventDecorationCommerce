@@ -1,0 +1,42 @@
+{% if is_index_page %}
+
+<div class="page-content-wrap inactive-true page-content-wrap-slider" style="height:286px; margin-top:150px;">
+    <div id="rev_slider_1_1_wrapper" class="rev_slider_wrapper fullwidthbanner-container"
+         style="margin:0px auto;background-color:#000000;padding:0px;margin-top:0px;margin-bottom:0px;;background-repeat:repeat;background-size:normal;background-position:left top;">
+        <div id="rev_slider_1_1"
+             class="rev_slider fullwidthabanner tp-overflow-hidden" style="height: 100px; display:none;"
+             data-version="5.2.4.1">
+            <ul>
+                {% if slider_images %}
+                {% for slider_img_obj in slider_images %}
+                <li data-index="rs-1" data-transition="slidingoverlayright" data-slotamount="default"
+                    data-hideafterloop="0" data-hideslideonmobile="off" data-easein="default" data-easeout="default"
+                    data-masterspeed="default" data-thumb="upload/caffe/slider_bg1-2-156x110.jpg" data-rotate="0"
+                    data-saveperformance="off" data-title="Chocolateriе Theme" data-param1="" data-param2=""
+                    data-param3="" data-param4="" data-param5="" data-param6="" data-param7="" data-param8=""
+                    data-param9="" data-param10="" data-description="">
+                    <img src="{{slider_img_obj.slider_image.url}}" alt="" title="slider_bg1" width="1600" height="810"
+                         data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat"
+                         data-bgparallax="10" class="rev-slidebg" data-no-retina="">
+                </li>
+                {% endfor %}
+                {% else %}
+                <li data-index="rs-1" data-transition="slidingoverlayright" data-slotamount="default"
+                    data-hideafterloop="0" data-hideslideonmobile="off" data-easein="default" data-easeout="default"
+                    data-masterspeed="default" data-thumb="upload/caffe/slider_bg1-2-156x110.jpg" data-rotate="0"
+                    data-saveperformance="off" data-title="Chocolateriе Theme" data-param1="" data-param2=""
+                    data-param3="" data-param4="" data-param5="" data-param6="" data-param7="" data-param8=""
+                    data-param9="" data-param10="" data-description="">
+                    <img src="/media/slider_default_image.jpg" alt="" title="slider_bg1" width="1600" height="810"
+                         data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat"
+                         data-bgparallax="10" class="rev-slidebg" data-no-retina="">
+                </li>
+                {% endif %}
+            </ul>
+            <div class="tp-bannertimer" style="height: 5px; background-color: rgba(255, 255, 255, 0.15);"></div>
+        </div>
+    </div>
+</div>
+
+
+{% endif %}

@@ -1,0 +1,58 @@
+{% load display_tags %}
+{% load common %}
+{% load staticfiles %}
+{% iffeature "wishlists" %}
+
+        {% load wishlist_tags %}
+        {% if user.is_authenticated %}
+            {% with wishlists=user.wishlists.all %}
+            {# Select wishlists that contains product #}
+            {% wishlists_containing_product wishlists product as product_wishlists %}
+                {% if wishlists %}
+                    {% for wishlist in wishlists %}
+                        {% if wishlist not in product_wishlists %}
+<!--                            <a style="z-index:0;" href="{% url 'customer:wishlists-add-product' key=wishlist.key product_pk=product.pk %}" class="like" style="color:#fff;">-->
+                                <div class="product-page-wishhlist trp-display-inline-block">
+                                <a class="trp-img-hover-effect" href="{% url 'customer:wishlists-add-product' key=wishlist.key product_pk=product.pk %}" data-toggle="tooltip" title="Wishlist"><img
+                                data-src="{% static 'new_design/assets/images/productpage-wishlist-icon.svg' %}"
+                                data-hover="{% static 'new_design/assets/images/product-wishlist-icon-fill.svg' %}"
+                                src="{% static 'new_design/assets/images/productpage-wishlist-icon.svg' %}" alt=""></a>
+                                </div>
+<!--                            </a>-->
+                        {% else %}
+<!--                            <a style="z-index:0;" class="like" style="color:#red;">-->
+                          <div class="product-page-wishhlist trp-display-inline-block">
+                        <a class="trp-img-hover-effect" data-toggle="tooltip" title="Wishlist"><img
+                                data-src="{% static 'new_design/assets/images/product-wishlist-icon-fill.svg' %}"
+                                data-hover="{% static 'new_design/assets/images/product-wishlist-icon-fill.svg' %}"
+                                src="{% static 'new_design/assets/images/product-wishlist-icon-fill.svg' %}" alt=""></a>
+                    </div>
+<!--                            </a>-->
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <div class="product-page-wishhlist trp-display-inline-block">
+                    <form id="add_to_wishlist_form" style="z-index:0;" action="{% url 'customer:wishlists-add-product' product_pk=product.pk %}" method="post" class="btn-wishlist">
+                        {% csrf_token %}
+<!--                        <button type="submit" class="like">-->
+                        <a class="trp-img-hover-effect" data-toggle="tooltip" title="Wishlist" onclick="$('#add_to_wishlist_form').submit()"><img
+                                data-src="{% static 'new_design/assets/images/productpage-wishlist-icon.svg' %}"
+                                data-hover="{% static 'new_design/assets/images/product-wishlist-icon-fill.svg' %}"
+                                src="{% static 'new_design/assets/images/productpage-wishlist-icon.svg' %}" alt=""></a>
+
+<!--                        </button>-->
+                    </form>
+                        </div>
+                {% endif %}
+            {% endwith %}
+        {% else %}
+<!--            <button class="like" type="button" style="z-index:0;" onclick="window.open('/accounts/login/')">-->
+                <div class="product-page-wishhlist trp-display-inline-block">
+                        <a class="trp-img-hover-effect" href="#" data-toggle="tooltip" title="Wishlist" onclick="window.open('/accounts/login/')"><img
+                                data-src="{% static 'new_design/assets/images/productpage-wishlist-icon.svg' %}"
+                                data-hover="{% static 'new_design/assets/images/product-wishlist-icon-fill.svg' %}"
+                                src="{% static 'new_design/assets/images/productpage-wishlist-icon.svg' %}" alt=""></a>
+                    </div>
+<!--            </button>-->
+        {% endif %}
+    {% endiffeature %}

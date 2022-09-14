@@ -1,0 +1,108 @@
+{% extends 'dashboard/layout.html' %}
+{% load sorting_tags %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}
+    {% trans "Unit" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li class="active">{% trans "Product unit" %}</li>
+    </ul>
+{% endblock %}
+
+{% block header %}
+    <div class="page-header">
+        <h1>{% trans "Units" %}</h1>
+    </div>
+{% endblock header %}
+
+{% block dashboard_content %}
+
+    <div class="well">
+        <div style="float:left">
+            <form action="{% url 'dashboard:product_unit' %}" method="get" class="form-inline">
+                {% include 'dashboard/partials/form_fields_inline.html' with form=form %}
+                <button type="submit" class="btn btn-primary" data-loading-text="{% trans 'Searching...' %}">{% trans "Search" %}</button>
+                <a class="btn btn-default" href="{% url 'dashboard:product_unit' %}" >{% trans "Reset" %}</a>
+            </form>
+        </div>
+        <div style="float:right">
+            <a class="btn btn-primary" href="{% url 'dashboard:product_unit_create' %}">
+                {% trans "Add Unit" %}
+                <em class="fa fa-add"></em>
+            </a>
+            <!--<a class="btn btn-primary" href="{% url 'export_units' %}?unit={{request.GET.unit}}">{% trans "Download Unit" %}</a>-->
+            <button type="button" class="btn btn-primary" onclick="export_unit('{% url 'export_units' %}', '{{request.GET.unit}}')">{% trans "Download Unit" %}</button>
+        </div>
+    </div>
+
+    <form action="." method="post" class="order_table">
+        {% csrf_token %}
+        <table class="table table-striped table-bordered">
+            <caption>
+
+                <em class="icon-briefcase icon-large"></em> All Units
+                <span id="unit_mark" class="selection_mark label label-default"></span>
+                {% if request.user.is_superuser %}
+                <div class="pull-right">
+                    <div class="form-inline">
+                        <i class="icon-refresh"></i>
+                        {% trans "Bulk Actions" %}
+                        <input type="text" id="ids_list_unit" name="ids_list_vendor" hidden>
+                        <input type="button" onclick="bulk_unit_delete()" value="{% trans "Delete" %}" class="btn btn-danger" />
+                    </div>
+                </div>
+                {% endif %}
+
+            </caption>
+            {% if product_units %}
+                <tr>
+                    <th width="20"><input type="checkbox" id="unit_master"/> </th>
+                    <th>Unit Name</th>
+                    <th width="20">Action</th>
+                </tr>
+
+                {% for unit in product_units %}
+                    <tr>
+                        <td>
+                            <input type="checkbox" class="unit_checkbox" id="id_unit_id" value="{{unit.pk}}"/>
+                        </td>
+                        <td>{{unit.unit}}</td>
+                        <td>
+                            <div class="btn-toolbar">
+                                <div class="btn-group">
+                                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
+                                        {% trans "Actions" %}
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li>
+                                            <a href="{% url 'dashboard:product_unit_update' pk=unit.pk %}">{% trans "Edit Unit" %}</a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'dashboard:product_unit_delete' pk=unit.pk %}">{% trans "Delete unit" %}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr><td>{% trans "No unit found." %}</td></tr>
+            {% endif %}
+        </table>
+        {% include "dashboard/partials/pagination.html" %}
+    </form>
+{% endblock dashboard_content %}
+
+{% block extrascripts %}
+    {{ block.super }}
+    <script src="{% static 'oscar/js/dashboard/catalogue/unit.js' %}"></script>
+{% endblock %}

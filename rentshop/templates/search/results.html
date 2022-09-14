@@ -1,0 +1,77 @@
+{% extends "layout_2_col.html" %}
+
+{% load currency_filters %}
+{% load thumbnail %}
+{% load product_tags %}
+{% load i18n %}
+
+{% block title %}
+    "{{ query }}" | {{ block.super }}
+{% endblock %}
+
+{% block content %}
+<style>
+    @media(max-width: 767px) {
+        .caregory-reverse-mobile {
+            display: flex;
+            flex-direction: column-reverse;
+        }
+    }
+</style>
+{% block alter_messages %}
+    {% include "partials/alert_messages.html" %}
+{% endblock %}
+
+<!--<div class="nz-breadcrumbs nz-clearfix">-->
+<!--    <div class="container">-->
+<!--        <a href="{{ homepage_url }}" rel="v:url" property="v:title">{% trans "Home" %}</a>-->
+<!--        {% with category=product.categories.all.0 %}-->
+<!--            {% for c in category.get_ancestors_and_self %}-->
+<!--                <span>-->
+<!--                    <a rel="v:url" property="v:title" href="{{ c.get_absolute_url }}">{{ c.name }}</a>-->
+<!--                </span>-->
+<!--            {% endfor %}-->
+<!--                <span class="current">{{ query}}</span>-->
+<!--        {% endwith %}-->
+<!--    </div>-->
+<!--</div>-->
+
+<div class="shop-layout-wrap" id="nz-target">
+    <div class="loop">
+        <div class="container">
+            <section class="content lazy shop-layout animation-false nz-clearfix caregory-reverse-mobile">
+                <div class="product-category-body">
+                    <div class="product-category-content">
+                        <h2 class="product-category-title">
+                            Products matching "{{ query }}"
+                        </h2>
+                    </div>
+                </div>
+                {% if page.object_list  %}
+                <div class="woocommerce-products">
+                    <ul class="products">
+                        {% for result in page.object_list %}
+                        <li class="mix product nz-clearfix" data-groups='["all", "alcoholic-drinks"]' data-grid="ninzio_01">
+                            {% render_product result.object %}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% include "partials/pagination.html" with page_obj=page %}
+                {% endif %}
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+{% endblock %}
+
+{% block onbodyload %}
+    {{ block.super }}
+    oscar.search.init();
+{% endblock %}

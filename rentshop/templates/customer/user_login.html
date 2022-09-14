@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+{% load static %}
+{% load common %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>TakeRentPe : Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" media="screen" href="{% static 'oscar/css/loginregister/style.css' %}">
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" >
+
+    <style>
+        #particles-js{
+            background-image:url("{% static 'oscar/css/loginregister/login_banner.jpg' %}");
+        }
+    </style>
+<link rel="shortcut icon" href="{% static 'oscar/images/favicon_set_1/logo500x.png' %}"/>
+</head>
+<body>
+<div class="count-particles">
+    <div class="container">
+        <div id="login-box">
+            <div id="first">
+                <div class="">
+                    <div class="card">
+
+                        <div class="card-header">
+                            <h3>Sign In</h3>
+                            <div class="d-flex justify-content-end social_icon">
+                                {% get_social_link request as data %}
+                                <a href="{% if data.fb_link %} {{data.fb_link}} {% else %} https://www.facebook.com/Take-Rent-Pe-101019151839514 {% endif %}" target="_blank">
+                                <span><i class="fab fa-facebook-square"></i></span>
+                                </a>
+<!--                                <span><i class="fab fa-google-plus-square"></i></span>-->
+                                <a href="{% if data.twitter_link %} {{data.twitter_link}} {% else %} https://twitter.com/take_rent_pe {% endif %}" target="_blank">
+                                <span><i class="fab fa-twitter-square"></i></span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <form id="signin"  action="{{ request.get_full_path }}" method="post" role="form">
+                                {% csrf_token %}
+                                <div class="input-group form-group" style="padding:10px;">
+                                    <span class="input-group-addon" style="background-color:#edab00; border:0px; ">
+                                        <i class="fas fa-user"></i>
+                                    </span>
+                                    <input id="email" type="email" class="form-control" name="login-username" value="" placeholder="Email Address">
+                                </div>
+
+                                <div class="input-group form-group" style="padding:10px;">
+                                    <span class="input-group-addon" style="background-color:#edab00; border:0px; ">
+                                        <i class="fas fa-key"></i>
+                                    </span>
+                                    <input id="password" type="password" class="form-control" name="login-password" value="" placeholder="Password">
+                                </div>
+
+                                {% if login_form.errors %}
+                                    <h6 class="text-center" style="color:#fff; font-size:12px">
+                                        <b class="red-text">{{login_form.non_field_errors.as_text}}</b>
+                                    </h6>
+                                {% endif %}
+
+                                <div class="input-group form-group" style="padding:10px;">
+                                    <p class="text-center">
+                                    <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox"> <span class="remember" >Remember me</span>
+                                    </label>
+                                    <input type="submit" name="login_submit" value="Login" class="btn login_btn"></p>
+                                </div>
+                        </div>
+                        </form>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="links">
+                            Don't have an account?
+                            <a href="/accounts/register/" target="_blank">Sign Up</a>
+                        </div>
+                        <div class="d-flex justify-content-center links">
+                            <a href="{% url 'password-reset' %}" target="_blank">Forgot your password?</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /#login-box -->
+</div>
+
+</div>
+
+<!-- particles.js container -->
+<div id="particles-js"></div>
+
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script type='text/javascript' src="{% static 'oscar/js/users/particles.js' %}"></script>
+<script type='text/javascript' src="{% static 'oscar/js/users/partical/app.js' %}"></script>
+
+</body>
+</html>

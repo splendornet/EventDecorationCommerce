@@ -1,0 +1,366 @@
+{% load i18n %}
+{% load thumbnail %}
+{% load currency_filters %}
+{% load purchase_info_tags %}
+{% load widget_tweaks %}
+{% load shipping_tags %}
+{% load humanize %}
+{% load common %}
+{% load static %}
+
+<section class="trp-breadcrumb-sec">
+		<ul class="breadcrumb">
+			<li><a href="/">Home</a> </li>
+			<li>Shopping Cart</li>
+		</ul>
+	</section>
+	<!-- payment method section -->
+
+	<section class="trp-payment-method-sec trp-cart-page-sec pt-0 pb-80">
+		<div class="row trp-row">
+			<div class="col-md-12">
+				<div class="trp-product-listing-title-wrapper pb-10">
+					<h1 class="trp-product-listing-title">Shopping Cart</h1> </div>
+			</div>
+			<div class="col-md-9">
+				<div class="trp-payment-method-wrapper">
+					<div class="trp-payment-method-title text-center">
+						<h3 class="trp-title mt-0"><img src="{% static 'new_design/assets/images/payment-method-icon.svg' %}" alt="" class="mr-10">Payment Method</h3> </div>
+					<div class="trp-payment-method-steps">
+						<ul class="row trp-row">
+							<li class="col-sm-4"><span>STEP 1</span> 50% For advance booking</li>
+							<li class="col-sm-4"><span>STEP 2</span> 30% Before one day</li>
+							<li class="col-sm-4"><span>STEP 3</span> 20% Next day of the event</li>
+						</ul>
+					</div>
+				</div>
+                {% if basket.is_empty %}
+    {% block emptybasket %}
+        <br/><br/><br/><br/><br/>
+        <div id="" class='shop-layout-wrap content nz-clearfix sidebar-none padding-true'>
+        <div class='container page-standard-width' style="width: 98% !important;max-width: 100% !important;">
+            <div id="post-3398_" class="post-3398 page type-page status-publish hentry">
+                <section class="page-content nz-clearfix">
+                    <div class="woocommerce">
+                        <div class="product-category-body">
+                            <div class="product-category-content">
+                                <h4 class="product-category-title">Your basket is empty</h4>
+                                <a href="{{ homepage_url }}" style="    text-decoration: underline !important; color: #4f4f99;">{% trans "Continue shopping" %}</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+        </div>
+    {% endblock %}
+{% else %}
+				<div class="cart-productList-wrapper">
+					<form action="/basket/" method="post" class="basket_summary" id="basket_formset">
+                        {% csrf_token %}
+                        {{ formset.management_form }}
+						<table class="table trp-cartTable-responsive" cellspacing="0">
+							<thead>
+								<tr>
+									<th colspan="1" class="product-thumbnail">Product</th>
+									<th class="product-name">Date</th>
+									<th class="product-price">Price</th>
+									<th class="product-price" style="display:none">Quantity</th>
+									<th class="product-subtotal">Sub Total</th>
+									<th class="product-remove">Action</th>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+
+                            {% for form in formset %}
+                                        {% with line=form.instance product=form.instance.product %}
+                                            {% purchase_info_for_line request line as session %}
+
+                                                {{ form.id }}
+
+								<tr class="trp-cart_item" {% if line.is_package_product %} hidden {% endif %}>
+                                    <input type="hidden" name="form-{{forloop.counter0}}-prod_id" maxlength="10" id="id_form-{{forloop.counter0}}-prod_id" value="{{line.product.id}}" />
+                                    <input type="hidden" name="form-{{forloop.counter0}}-line_id" maxlength="10" id="id_form-{{forloop.counter0}}-line_id" value="{{line.id}}"/>
+
+									<td class="trp-product-thumbnail col-sm-4" data-title="Product">
+										<div class="trp-cartProduct-img-title">
+											<div class="trp-display-inline-block">
+												<a href="{{product.get_absolute_url}}">
+                                                    {% with image=product.primary_image %}
+                                                        {% thumbnail image.original "90x90" upscale=False as thumb %}
+                                                    <img width="78" height="82" src="{{thumb.url}}">
+                                                    {% empty %}
+                                                    <img src="{{image.original.url}}" alt="{{product}}"  class="img-sm" />
+                                                    {% endthumbnail %}
+                                                    {% endwith %}
+                                                </a>
+											</div>
+											<div class="trp-cartProduct-name trp-align-self-center "> <a href="{{line.product.get_absolute_url}}">{{line.product.title}}</a> </div>
+										</div>
+									</td>
+									<td class="trp-cartProduct-date trp-verticle-align-middle col-sm-4" data-title="Date">
+										<span>
+											<span style="font-weight: 600;">From </span>
+												{{line.booking_start_date |date:"d/m/Y"}} -
+											<span style="font-weight: 600;">To</span>
+											{{line.booking_end_date|date:"d/m/Y"}}
+										</span>
+										{% render_field form.booking_start_date class+="form-control" %}
+										{% render_field form.booking_end_date class+="form-control" %}
+									</td>
+									<td class="trp-cartProduct-price trp-verticle-align-middle col-sm-2" data-title="Price"> <span><bdi><span>₹ </span>{{ line.bind_unit_price|floatformat:2|intcomma }}</bdi>
+										</span>
+									</td>
+									<!-- product unit quantity -->
+                                                    <td style="vertical-align:middle; display:none">
+                                                        {% render_field form.quantity class+="form-control" %}
+                                                    </td>
+                                                    <!-- product unit quantity -->
+									<td class="trp-cartProduct-subtotal trp-verticle-align-middle col-sm-2" data-title="Sub Total"> <span><bdi><span>₹ </span>{{ line.pre_total|floatformat:2|intcomma }}</bdi>
+										</span>
+									</td>
+									<td class="trp-cartProduct-remove trp-verticle-align-middle col-sm-1 trp-whitePink-btn  trp-view-btn" data-title="Action">  <a href="#" data-id="{{ forloop.counter0 }}" data-behaviours="remove" class="btn-can button button1 remove inline" >
+                                                                Remove
+                                                            </a> </td>
+<!--									 <button hidden class="btn-update btn btn-yellow btn-red trp-display-none" type="submit" data-loading-text="{% trans 'Updating...' %}">-->
+<!--                                                            {% trans "Update" %}-->
+<!--                                                        </button>-->
+                                    <div style="display:none">
+                                                            {{ form.save_for_later }}
+                                                            {{ form.DELETE }}
+                                                        </div>
+									{% for field_errors in form.errors.values %}
+                                                            {% for error in field_errors %}
+                                                                <span class="error-block">
+                                                                    <i class="icon-exclamation-sign"></i>
+                                                                    {{ error }}
+                                                                </span>
+                                                            {% endfor %}
+                                                        {% endfor %}
+								</tr>
+                            {% endwith %}
+                                    {% endfor %}
+							</tbody>
+						</table>
+					</form>
+				</div>
+                {% endif %}
+			</div>
+
+			<div class="col-md-3">
+				<div class="trp-cart-sidebar-wrapper">
+					<!-- coupon -->
+					<div class="trp-view-offer-sec mb-30">
+						<a href="#" class="trp-offer-popup" data-toggle="modal" data-target="#sampleModalMd"><img src="{% static 'new_design/assets/images/offer-icon.svg' %}" alt="">View Offers</a>
+					</div>
+					<div class="trp-haveCoupon-wrapper">
+						{% with offer_discounts=basket.offer_discounts voucher_discounts=basket.grouped_voucher_discounts %}
+                        {% if voucher_discounts %}
+                            {% for discount in voucher_discounts %}
+						<form action="{% url 'basket:vouchers-remove' pk=discount.voucher.id %}" method="POST">
+							{% csrf_token %}
+							<div class="row trp-display-row-flex  trp-tab-display-block">
+								<div class="col-sm-10 col-md-7 trp-align-self-center trp-tab-pro-width-100 pr-0">
+									<div class="form-group">
+										<label class="trp-form-label" for="haveCoupon">Have a Coupon?</label>
+										<span style="display: block;width: 100%;"> {{discount.voucher.code}} Applied </span>
+										<input type="text" name="code" placeholder="Enter coupon code" class="form-control trp-display-none" id="haveCoupon" value="{{discount.voucher.code}} Applied"> </div>
+								</div>
+								<div class="col-sm-2 col-md-5 trp-tab-pro-width-100 trp-align-self-center">
+									<div class="trp-whitePink-btn trp-display-inline-block mr-15"> <button type="submit" class="trp-display-inline-block btn-apply coupon">Remove</button> </div>
+								</div>
+							</div>
+						</form>
+						{% endfor %}
+                        {% else %}
+						<form id="voucher_form" action="{% url 'basket:vouchers-add' %}" method="post">
+							{% csrf_token %}
+							<div class="row trp-display-row-flex  trp-tab-display-block">
+								<div class="col-sm-10 col-md-7 trp-align-self-center trp-tab-pro-width-100 pr-0">
+									<div class="form-group">
+										<label class="trp-form-label" for="haveCoupon">Have a Coupon?</label>
+										<input type="text" name="code" placeholder="Enter coupon code" class="form-control" id="haveCoupon"> </div>
+								</div>
+								<div class="col-sm-2 col-md-5 trp-tab-pro-width-100 trp-align-self-center">
+									<div class="trp-whitePink-btn trp-display-inline-block mr-15">
+
+										<a href="#" class="trp-display-inline-block" data-toggle="modal" onclick="return get_coupondata()">Apply</a>
+										
+									</div>
+								</div>
+							</div>
+						</form>
+						{% endif %}
+                    {% endwith %}
+					</div>
+					<!-- Cart Price -->
+					<div class="trp-cartPriceDetails-wrapper">
+						<div class="trp-cart-sidebar-title-wrapper">
+							<h3 class="trp-cart-sidebar-title">Price Details</h3> </div>
+						<div class="trp-cart-collaterals-totals">
+							<table cellspacing="0" class="table trp-collaterals-totals-table">
+								<tbody>
+									<tr>
+										<th class="text-left">Cart Total</th>
+										<td class="text-right"><span><span></span>{{ basket.cart_total_without_tax|currency:basket.currency }}</span>
+										</td>
+									</tr>
+									<tr>
+										<th class="text-left">Deposit</th>
+										<td class="text-right"><span><span></span>{{ basket.cart_deposit|currency:basket.currency }}</span>
+										</td>
+									</tr>
+									<tr>
+										<th class="text-left">Shipping Cost</th>
+										<td class="text-right"><span><span></span>{{ basket.get_shipping_total|currency:basket.currency }}</span>
+										</td>
+									</tr>
+									<tr>
+										<th class="text-left">Advance Payout</th>
+										<td class="text-right"><span><span></span>{{basket.advance_payment_price|currency:basket.currency}}</span>
+										</td>
+									</tr>
+									<tr>
+										<th class="text-left">Coupon Discount</th>
+										{% with offer_discounts=basket.offer_discounts voucher_discounts=basket.grouped_voucher_discounts %}
+        {% if offer_discounts or voucher_discounts %}
+            {% for discount in voucher_discounts %}
+											<td class="text-right">{{discount.discount|currency:basket.currency}}
+												<span class="badge">{{ discount.voucher.code }}</span></td>
+{% endfor %}
+        {% else %}
+
+										<td class="text-right" style="display: none;">Apply Coupon</td>
+
+										<td class="text-right"><a class="trp-offer-popup" href="#" data-toggle="modal" data-target="#sampleModalMd">View Offers</a> </td>
+										{% endif %}
+										{% endwith %}
+									</tr>
+									<tr>
+										<th class="text-left">Balance Amount</th>
+										<td class="text-right"><span><span></span>{{basket.balance_amount_price|currency:basket.currency}}</span>
+										</td>
+									</tr>
+
+									<tr>
+										<td colspan="2" class='ptb-15'>
+											<div class="trp-devider3 ">
+												<div>
+										</td>
+									</tr>
+
+									<tr class="trp-payable-amount">
+										<th class="text-left"><strong>Payable Amount</strong> <span data-toggle="tooltip" title="" data-original-title="Payable Amount " class="trp-info-icon-wrapper"><img class="trp-info-icon" src="{% static 'new_design/assets/images/info-circle.svg' %}" alt=""></span> </th>
+										<td class="text-right"><strong><span></span>{{basket.payable_amount|currency:basket.currency }}</strong> </td>
+									</tr>
+								</tbody>
+							</table>
+							</div>
+							<div class="trp-cart-purchase-btn mt-30"> <a href="{% url 'checkout:index' %}">Proceed to CheckOut</a> </div>
+							</div>
+						</div>
+					</div>
+				</div>
+		<div class="modal trp-offer-modal" id="sampleModalMd" tabindex="-1" role="dialog" aria-labelledby="abc" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+			  <div class="modal-content">
+				<div class="modal-header">
+				  <h5 class="modal-title" id="abc">View Offers</h5>
+				  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><img src="{% static 'new_design/assets/images/Icon-close.svg' %}" alt=""></button>
+				</div>
+				<div class="modal-body">
+
+						<ul class="trp-offer-list">
+
+							{% for voucher in voucher_list %}
+							<li>
+								<div class="trp-coupon-detail-wrapper">
+									<div class="trp-coupon-title-wrapper mb-5">
+										<h3 class="trp-coupon-title">{{voucher.title}}</h3>
+									</div>
+									<div class="trp-coupon-description-wrapper">
+										<p class="trp-coupon-description">{{voucher.description|safe}}</p>
+<!--											<a class="trp-coupon-condition-btn"><span>View more</span> <img src="{% static 'new_design/assets/images/icon-arrow-down.svg' %}" alt=""></a>-->
+<!--										<ul class="trp-coupon-conditions mt-10">-->
+<!--											<li>Lorem ipsum dolor sit amet, consectetur</li>-->
+<!--											<li>Lorem ipsum dolor sit amet, consectetur</li>-->
+<!--											<li>Lorem ipsum dolor sit amet, consectetur</li>-->
+<!--										</ul>-->
+									</div>
+									<form id="voucher_form" action="{% url 'basket:vouchers-add' %}" method="post">
+							{% csrf_token %}
+									<div class="trp-coupon-code-wrapper mt-15">
+										<div class="trp-coupon-code">
+											<a href="">{{voucher.code}}</a>
+											<input type="hidden" name="code" placeholder="Enter coupon code" class="form-control" id="haveCoupon" value="{{voucher.code}}">
+										</div>
+										</div>
+										<div class="trp-copy-coupon">
+											<button type="submit"><img src="{% static 'new_design/assets/images/copy-icon-line.svg' %}" alt=""> Tap to Apply </button>
+										</div>
+									</form>
+
+									<div class="trp-save-amount-wrapper mt-5 mb-15">
+										<p class="trp-save-amount">{{voucher.offer_mesaage}}</p>
+									</div>
+								</div>
+							</li>
+							{% endfor %}
+
+						</ul>
+
+				</div>
+			  </div>
+			</div>
+		  </div>
+
+		  <!-- model Single coupon-->
+		<div class="modal trp-offer-modal" id="sampleModalMd2" tabindex="-1" role="dialog" aria-labelledby="abc" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+			  <div class="modal-content">
+				<div class="modal-header">
+				  <h5 class="modal-title" id="abc">Offer Details</h5>
+				  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><img src="{% static 'new_design/assets/images/Icon-close.svg' %}" alt=""></button>
+				</div>
+				<div class="modal-body">
+
+						<ul class="trp-offer-list">
+							<li>
+								<div class="trp-coupon-detail-wrapper">
+									<div class="trp-coupon-title-wrapper mb-5">
+										<h3 class="trp-coupon-title" id="snt-offer-details">Get 60% off Lorem Ipsum</h3>
+									</div>
+									<div class="trp-coupon-description-wrapper">
+										<p class="trp-coupon-description" id="snt-offer-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolor </p>
+<!--										<ul class="trp-coupon-conditions mt-10 trp-display-block" >-->
+<!--											<li>Lorem ipsum dolor sit amet, consectetur</li>-->
+<!--											<li>Lorem ipsum dolor sit amet, consectetur</li>-->
+<!--											<li>Lorem ipsum dolor sit amet, consectetur</li>-->
+<!--										</ul>-->
+									</div>
+									<form id="voucher_form" action="{% url 'basket:vouchers-add' %}" method="post">
+										{% csrf_token %}
+									<div class="trp-coupon-code-wrapper mt-15">
+										<div class="trp-coupon-code">
+											<a href="" id="snt-code">LoremIpsum</a>
+											<input type="hidden" name="code" placeholder="Enter coupon code" class="form-control" id="snt-voucher" value="{{voucher.code}}">
+										</div>
+										<div class="trp-copy-coupon">
+											<button type="submit"><img src="{% static 'new_design/assets/images/copy-icon-line.svg' %}" alt=""> Tap to Apply</button>
+										</div>
+									</div>
+									<div class="trp-save-amount-wrapper mt-5 mb-15">
+										<p class="trp-save-amount" id="snt-offer_mesaage">You will save ₹2000 with this code</p>
+									</div>
+								</div>
+							</li>
+
+
+						</ul>
+
+				</div>
+			  </div>
+			</div>
+		  </div>
+	</section>

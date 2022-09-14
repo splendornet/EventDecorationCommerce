@@ -1,0 +1,163 @@
+{% extends 'dashboard/layout.html' %}
+{% load sorting_tags %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}
+    {% trans "Partners" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li class="active">{% trans "ASP" %}</li>
+    </ul>
+{% endblock %}
+
+{% block header %}
+    <div class="page-header">
+        <h1>{% trans "ASP(Associated Service Provider)" %}</h1>
+    </div>
+{% endblock header %}
+
+{% block dashboard_content %}
+
+    <div class="well">
+        <div style="float:left">
+            <form action="." method="get" class="form-inline">
+                {% include 'dashboard/partials/form_fields_inline.html' with form=form %}
+                <button type="submit" class="btn btn-primary" data-loading-text="{% trans 'Searching...' %}">{% trans "Search" %}</button>
+                <a class="btn btn-default" href="{% url 'dashboard:partner-list' %}" >{% trans "Reset" %}</a>
+            </form>
+        </div>
+        <div style="float:right">
+            <!--<a class="btn btn-primary" href="{% url 'export_vendors' %}?search_type={{request.GET.search_type}}&all_search={{request.GET.all_search}}&pincode={{request.GET.pincode}}&status={{request.GET.status}}">{% trans "Download Vendor" %}</a>-->
+            <button type="button" class="btn btn-primary" onclick="export_vendor_url('{% url 'export_vendors' %}', '{{request.GET.search_type}}', '{{request.GET.all_search}}', '{{request.GET.pincode}}', '{{request.GET.status}}')">{% trans "Download ASP" %}</button>
+        </div>
+    </div>
+
+    <form action="." method="post" class="order_table">
+        {% csrf_token %}
+        <table class="table table-striped table-bordered">
+
+            <caption>
+                <em class="icon-briefcase icon-large"></em> All ASP
+                <span id="vendor_mark" class="selection_mark label label-default"></span>
+                {% if request.user.is_superuser %}
+                    <div class="pull-right">
+                        <div class="form-inline">
+                            <em class="icon-refresh"></em>
+                            {% trans "Bulk Actions" %}
+                            <input type="text" id="ids_list_vendor" name="ids_list_vendor" hidden>
+                            <input type="button" onclick="bulk_vendor_delete()" value="{% trans "Delete" %}" class="btn btn-danger" />
+                        </div>
+                    </div>
+                {% endif %}
+            </caption>
+
+            {% if partners %}
+                <tr>
+                    <th><input type="checkbox" id="id_select_all_vendor"/> </th>
+                    <th>{% anchor 'name' _('ASP Name') %}</th>
+                    <th>{% trans 'ASP Email' %}</th>
+                    <th>Business Name</th>
+                    <th>{% trans 'Addresses' %}</th>
+                    <th>{% trans 'Pincode' %}</th>
+                    <th>{% trans 'Phone Number' %}</th>
+                    <th>{% trans 'Alt. Phone Number' %}</th>
+                    <th>Status</th>
+                    <th>&nbsp;</th>
+                </tr>
+
+                {% for partner in partners %}
+                    <tr>
+                        <td>
+                            <input type="checkbox" class="vendor_checkbox" id="id_vendor_id" value="{{partner.pk}}"/>
+                        </td>
+                        <td>
+                            <a href="{% url 'dashboard:partner-manage' pk=partner.pk %}">
+                                {{ partner.name }}
+                            </a>
+                        </td>
+                        <td>
+                            {% with users=partner.users.all %}
+                                {% if users %}
+                                    {% for user in users %}
+                                        {{ user.email}}
+                                    {% endfor %}
+                                {% else %}
+                                    {% trans 'No users associated.' %}
+                                {% endif %}
+                            {% endwith %}
+                        </td>
+                        <td>
+                            {{partner.business_name}}
+                        </td>
+                        <td>
+                           {{partner.address_line_1}}, {{partner.address_line_2}}, {{partner.city}}, {{partner.state}} - {{partner.pincode}}
+                        </td>
+                        <td>{{partner.pincode}}</td>
+                        <td>{{partner.telephone_number}}</td>
+                        <td>{{partner.alternate_mobile_number}}</td>
+                        <td>
+                            {% with users=partner.users.all %}
+                                {% if users %}
+                                    {% for user in users %}
+                                        {% if user.last_login == None and user.date_joined and not user.is_active and not partner.updated_date %}
+                                            Inactive <span class="badge">New User</span>
+                                        {% elif not user.is_active %}
+                                            Inactive
+                                            <em style="color:red">(Blocked)</em>
+                                        {% else %}
+                                            Active
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    {% trans 'No users associated.' %}
+                                {% endif %}
+                            {% endwith %}
+                        </td>
+                        <td>
+                            <div class="btn-toolbar">
+                                <div class="btn-group">
+                                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
+                                        {% trans "Actions" %}
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li><a href="{% url 'dashboard:partner-manage' pk=partner.pk %}">{% trans "Edit ASP" %}</a></li>
+                                        <li><a href="{% url 'dashboard:partner-delete' pk=partner.pk %}">{% trans "Delete ASP" %}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td>{% trans "No asp found." %}</td>
+                </tr>
+            {% endif %}
+        </table>
+        {% include "dashboard/partials/pagination.html" %}
+    </form>
+{% endblock dashboard_content %}
+
+{% block extrascripts %}
+    {{ block.super }}
+    <script src="{% static 'oscar/js/dashboard/partner/partner.js' %}"></script>
+    <script>
+        $(document).ready(function(){
+            $("#id_name").attr('minlength', '1');
+            $('#id_search_type').select2();
+            $('#id_status').select2();
+        });
+    </script>
+    <style>
+        .select2{
+            width:155px !important;
+        }
+    </style>
+{% endblock %}

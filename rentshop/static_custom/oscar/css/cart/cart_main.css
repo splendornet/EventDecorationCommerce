@@ -1,0 +1,262 @@
+/* *********************************************************** */
+/****** CART CSS *******/
+/* *********************************************************** */
+
+body {
+	font-family: 'Arial';
+	font-size: 1.1vw;
+}
+
+.heading {
+	margin-left: 0%;
+	margin-top: 15px;
+	font-family: 'Playball', cursive;
+	color: #edab00;
+	font-size: 2.5vw;
+	width: 100%;
+	margin-bottom: 35px;
+}
+
+.container-fluid {
+	margin-top: 156px;
+}
+
+.img-sm {
+	width: 110px;
+	height: 80px;
+}
+
+.itemside .info {
+	margin-top: 10px;
+	padding-left: 15px;
+	padding-right: 7px;
+}
+
+.text-muted {
+	color: #969696 !important
+}
+
+a {
+	text-decoration: none !important
+}
+
+.td_design {
+	vertical-align: middle;
+}
+
+.dlist-align {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+}
+
+[class*="dlist-"] {
+	margin-bottom: 15px;
+	margin-right: 5px;
+}
+
+.coupon {
+	border-radius: 1px;
+}
+
+.price {
+	font-weight: 600;
+	color: #212529;
+}
+
+.Headings {
+	font-family: 'Arial';
+	font-size: 1.1vw;
+	background-color: #edab00;
+	width: 17%;
+	border: 1px solid #CCCCCC;
+	color: #ffffff;
+	font-weight: lighter;
+	vertical-align: middle;
+	text-align: center;
+}
+
+.btn-fa {
+	background-color: #EFEFEF;
+	color: #f1bc19;
+	border-color: #ffffff;
+	padding: 6px 12px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 1.1vw;
+	margin: 0px 2px;
+	cursor: pointer;
+}
+
+.btn-fa:hover {
+	color: #ffffff;
+	background-color: #f1bc19;
+	border-color: #F44336;
+}
+
+.button {
+	background-color: #f1bc19;
+	color: white;
+	border: none;
+	padding: 2px 22px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 1.1vw;
+	margin: 0px 2px;
+	cursor: pointer;
+}
+
+.button1 {
+	box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.07), 0 4px 10px 0 rgba(0, 0, 0, 0.07);
+	border-radius: 4px;
+}
+
+.heading_payment {
+	background-color: #333333 !important;
+	color: #FFFFFF !important;
+	border: 1px soid #CCCCCC;
+	text-align: center;
+	height: 35px;
+	padding-top: 5px;
+}
+
+.heading_payment>label {
+	color: #FFFFFF !important;
+	font-size: 18px;
+	font-weight: 400;
+}
+
+td {
+	color: #000;
+	font-size: 16px;
+}
+
+td>span {
+	font-size: 16px !important;
+}
+
+td>input {
+	font-size: 16px !important;
+	color: #000 !important;
+}
+
+.btn-can {
+	color: #fff !important;
+	margin: -11px 4px;
+	padding: 7px 18px;
+	text-transform: capitalize;
+}
+
+.btn-can:hover {
+	background-color: #e91d4a;
+	color: #fff !important;
+}
+
+.fa-heart:hover {
+	color: #fff !important;
+}
+
+.img-sm {
+	width: 110px;
+	height: 80px !important;
+}
+
+tbody {
+	border: 1px solid #ddd;
+}
+
+.card {
+	position: relative;
+	display: -ms-flexbox;
+	display: flex;
+	-ms-flex-direction: column;
+	flex-direction: column;
+	min-width: 0;
+	word-wrap: break-word;
+	background-color: #fff;
+	background-clip: border-box;
+	border: 1px solid rgba(0, 0, 0, .125);
+	border-radius: .25rem;
+}
+
+.card-body {
+	-ms-flex: 1 1 auto;
+	flex: 1 1 auto;
+	padding: 1.25rem;
+}
+
+dl {
+	border: 0px;
+	padding: 0;
+}
+
+dl dt {
+	float: left;
+	clear: left;
+	width: 35%;
+	text-align: left;
+	font-weight: 600;
+	color: #000;
+	font-family: Arial;
+	font-size: 16px;
+}
+
+dl dd {
+	margin: 0 0 0 0px !important;
+	padding: 0 0 5px;
+}
+
+.btn-sml {
+	text-transform: capitalize;
+}
+
+dd {
+	color: #000 !important;
+}
+
+.fa-fill {
+	color: red !important;
+}
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 40%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.nz-breadcrumbs:after{
+    display:none;
+}

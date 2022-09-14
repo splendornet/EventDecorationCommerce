@@ -1,0 +1,46 @@
+{% load i18n %}
+
+{% block product_images_content %}
+<div class="table-header">
+    <h3 class="pull-left">{% trans "Combo Offer" %}</h3>
+</div>
+{{combo_form.errors}}
+<div class="well">
+    <div class="row">
+        <div class="form-group col-md-12" style="padding-left:15px; padding-right:15px; margin-bottom:10px;">
+            <p class="control-label"> <strong>Combo Offer Title*</strong> </p>
+            {{combo_form.title}}
+            {% if combo_form.errors.title %}
+                <p class="color-red">* Enter a valid offer title.</p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-12" style="padding-left:15px; padding-right:15px; margin-bottom:10px;">
+            <p class="control-label"> <strong>Combo Offer Description*</strong> </p>
+            {{combo_form.description}}
+            {% if combo_form.errors.description %}
+                <p class="color-red">* Enter a valid offer description.</p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-12" style="padding-left:15px; padding-right:15px; margin-bottom:10px;">
+            <p class="control-label"> <strong>Combo Offer Price*</strong> </p>
+            {{combo_form.combo_price}}
+            {% if combo_form.errors.combo_price %}
+                <p class="color-red">* Enter a valid offer price.</p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-12" style="padding-left:15px; padding-right:15px; margin-bottom:10px;">
+            <p class="control-label"> <strong>Combo Offer Products*</strong> </p>
+            {{combo_form.combo_product}}
+            {% if combo_form.errors.combo_product %}
+                <p class="color-red">* Enter a valid offer products.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock product_images_content %}

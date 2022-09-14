@@ -1,0 +1,19 @@
+{% extends "customer/emails/base.html" %}
+{% load currency_filters i18n %}
+
+{% block tbody %}
+{% autoescape off %}
+{% load static %}
+<tr>
+    <td class="content-block">
+        <p xmlns="http://www.w3.org/1999/html">Hello Admin,</p>
+        <p>New user registered.</p>
+        <p><b>Name :</b> {{ user_obj.first_name }} {{ user_obj.last_name }}</p>
+        <p><b>Email Id :</b> {{user_obj.email}}</p>
+        <p><b>Contact Number :</b> {{custom_profile}}</p>
+        <br/>
+    </td>
+</tr>
+
+{% endautoescape %}
+{% endblock %}

@@ -1,0 +1,247 @@
+{% extends "checkout/layout.html" %}
+{% load currency_filters %}
+{% load thumbnail %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block title %}
+    {% blocktrans with number=order.number %}
+        Order {{ number }}: confirmation
+    {% endblocktrans %} | {{ block.super }}
+{% endblock title %}
+
+{% block checkout_nav %}
+    {% include 'checkout/nav.html' with step=5 %}
+{% endblock %}
+
+{% block checkout_title %}
+    {% blocktrans with number=order.number %}
+        Order {{ number }}: confirmation
+    {% endblocktrans %}
+{% endblock %}
+
+{% block content %}
+<style>
+    .active-thx{color:#e91d4a !important;}
+</style>
+<div class="thanks">
+    <section class='content nz-clearfix' data-rp="true" data-rpn="4">
+        <div class="container ship-container">
+            <div class="single-image-content" style="padding:37px 30px 30px 30px;">
+                <p class="lead success-msg">
+                    {% blocktrans with number=order.number %}
+                    Your order has been placed and a confirmation email has been sent - your order number is
+                    <strong>{{ number }}</strong>.
+                    {% endblocktrans %}
+                    {% trans "Please make a note of this reference and quote it in any communication with us regarding your order." %}
+                </p>
+                <br/><br/>
+
+                <div class="nz-row">
+                    {% block shipping_info %}
+                    {% if shipping_address %}
+                    <div class="col vc_col-sm-6 col6" style="    font-size: 14px;line-height: 24px;color: #999;background-color: #f5f5f5;padding: 30px 50px;position: relative;">
+                        <div class="sub-header">
+                            <h2>{% trans "Shipping" %}</h2>
+                        </div>
+                        {% if order.shipping_address %}
+                        <div class="" style="background-color:#f5f5f5">
+                            <div class="product-category-content">
+                                <h4 class="product-category-title">Address</h4>
+                                {% for field in order.shipping_address.active_address_fields %}
+                                    {{ field }}
+                                {% endfor %}
+                                <br/> <br/>
+                                {% if order.shipping_address.phone_number %}
+                                <h4>{% trans "Contact" %}</h4>
+                                <p>
+                                    {% trans "Phone" %}: {{ order.shipping_address.phone_number }}
+                                    {% if guest_email %}
+                                    <br/>{% trans "Email" %}: {{ guest_email }}
+                                    {% endif %}
+                                </p>
+                                {% endif %}
+                                <br/>
+                                {% if order.shipping_address.notes %}
+                                <h4>{% trans "Instructions" %}</h4>
+                                <p>{{ order.shipping_address.notes|linebreaks }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    {% endblock shipping_info %}
+                </div>
+
+                <div class="nz-row">
+                    <div class="cart-table table-responsive">
+                        <table class="shop_table shop_table_responsive cart table-bordered table-stripped" cellspacing="0" style="width:100%">
+                            <thead>
+                            <tr>
+                                <th class="product-thumbnail">&nbsp;&nbsp;</th>
+                                <th class="product-thumbnail">Item</th>
+                                <th class="product-date">Date</th>
+                                <th class="product-price">Unit Price</th>
+                                <th class="product-name">Quantity</th>
+                                <th class="product-quantity">Sub Total</th>
+                                <th class="product-ad-pay">Total Amount(Incl. Tax)</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for line in order.lines.all %}
+                            <tr>
+                                <td>
+                                    {% with image=line.product.primary_image %}
+                                    {% thumbnail image.original "200x200" upscale=False as thumb %}
+                                        <a href="{{ line.product.get_absolute_url }}"><img width="90" height="90"  class="thumbnail" src="{{ thumb.url }}" alt="{{ product.get_title }}"></a>
+                                    {% endthumbnail %}
+                                    {% endwith %}
+                                </td>
+                                <td>
+                                    {{ line.description }}
+                                    <span class="badge">{{line.order_type}}</span>
+                                </td>
+                                <td>
+                                    {% if line.order_type == 'Sale' %}
+                                                    -
+                                    {% else %}
+                                        <i>
+                                            {{line.booking_start_date |date:"d/m/Y"}} To {{line.booking_end_date|date:"d/m/Y"}}
+                                        </i>
+                                    {% endif %}
+                                </td>
+                                <td class="product-tax" data-title="tax">
+                                    <span class="tax">{{line.unit_price_incl_tax|currency:order.currency }}</span>
+                                </td>
+                                <td class="product-tax" data-title="tax">
+                                    <span class="tax">{{ line.quantity }}</span>
+                                </td>
+                                 <td class="product-tax" data-title="tax">
+                                     <span class="tax">{{ line.pre_total|currency:order.currency }}</span>
+                                 </td>
+                                <td class="product-tax" data-title="tax">
+                                     <span class="tax">{{ line.line_price_incl_tax|currency:order.currency }}</span>
+                                 </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <br/>
+                {% block basket_totals %}
+                <div class="row">
+                    <div class="col-sm-5 pull-right">
+                        <h2>{% trans 'Totals' %}</h2>
+
+                            <div id="basket_totals">
+                                <table class="table table-condensed table-bordered table-stripped">
+                                    <tr>
+                                        <th colspan="2"><h3>{% trans "Basket" %}</h3></th>
+                                    </tr>
+                                    {% with discounts=order.basket_discounts %}
+                                        {% block discount_totals %}
+                                            {% if discounts %}
+                                                <tr>
+                                                    <td>{% trans "Basket total (before discounts)" %}</td>
+                                                    <td class="align-right">{{ order.basket_total_before_discounts_incl_tax|currency:order.currency }}</td>
+                                                </tr>
+                                                {% for discount in discounts %}
+                                                    <tr>
+                                                        <td><span class="label label-success">{% trans "Discount" %}</span> {{ discount.offer }}</td>
+                                                        <td class="align-right">- {{ discount.amount|currency:order.currency }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            {% endif %}
+                                        {% endblock discount_totals %}
+
+                                        {% block basket_total %}
+                                            {% if discounts %}
+                                                <tr>
+                                                    <th class="total">{% trans "Basket total (after discounts)" %}</th>
+                                                    <th class="total align-right">{{ order.basket_total_incl_tax|currency:order.currency }}</th>
+                                                </tr>
+                                            {% else %}
+                                                <tr class="basket-items">
+                                                    <th class="total">{% trans "Basket total" %}</th>
+                                                    <th class="total align-right">
+                                                        {% if show_tax_separately %}
+                                                            {{ order.basket_total_excl_tax|currency:order.currency }}
+                                                        {% else %}
+                                                            {{ order.basket_total_incl_tax|currency:order.currency }}
+                                                        {% endif %}
+                                                    </th>
+                                                </tr>
+                                            {% endif %}
+                                        {% endblock basket_total %}
+                                    {% endwith %}
+
+
+
+                                    {% if show_tax_separately %}
+                                        <tr>
+                                            <th colspan="2">&nbsp;</th>
+                                        </tr>
+                                        <tr>
+                                            <th class="total">{% trans "Order tax" %}</th>
+                                            <th class="total align-right">
+                                                {{ order.total_tax|currency:order.currency }}
+                                            </th>
+                                        </tr>
+                                    {% endif %}
+
+                                    {% block post_order_action_totals %}
+                                        {% with actions=order.post_order_actions %}
+                                            {% if actions %}
+                                                <tr>
+                                                    <th colspan="2">&nbsp;</th>
+                                                </tr>
+                                                <tr>
+                                                    <th colspan="2"><h3>{% trans "Post order actions" %}</h3></th>
+                                                </tr>
+                                                {% for action in order.post_order_actions %}
+                                                    <tr>
+                                                        <td class="total" colspan="2"><p>{{ action.message }}</p></td>
+                                                    </tr>
+                                                {% endfor %}
+                                            {% endif %}
+                                        {% endwith %}
+                                    {% endblock post_order_action_totals %}
+
+                                    {% block order_total %}
+
+                                        <tr>
+                                            <td class="total"><h3>{% trans "Order total" %}</h3></td>
+                                            <td class="total align-right"><h3 class="price_color">{{ order.total_incl_tax|currency:order.currency }}</h3></td>
+                                        </tr>
+                                    {% endblock order_total %}
+                                </table>
+                            </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                    <a href="{{ homepage_url }}" class="btn btn-yellow btn-red pull-right">
+                        {% trans "Continue shopping" %}
+                    </a>
+                </div>
+                </div>
+
+                {% endblock basket_totals %}
+
+            </div>
+        </div>
+    </section>
+</div>
+
+
+
+{% endblock content %}
+
+{% block tracking %}
+    {% if send_analytics_event %}
+        {% include "partials/google_analytics_transaction.html" %}
+    {% endif %}
+{% endblock %}

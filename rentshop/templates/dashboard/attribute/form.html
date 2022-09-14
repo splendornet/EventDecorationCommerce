@@ -1,0 +1,121 @@
+{% extends 'dashboard/layout.html' %}
+{% load currency_filters %}
+{% load i18n %}
+
+{% block body_class %}{{ block.super }} create-page{% endblock %}
+
+{% block title %}
+    {{ title }} | {% trans "Attributes" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<style>
+     .tr_clone
+    {
+    display:none
+    }
+</style>
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li>
+            <a href="{% url 'dashboard:attribute-index' %}">Attribute</a>
+        </li>
+        <li class="active">{% trans "Edit" %}</li>
+    </ul>
+{% endblock %}
+
+{% block headertext %}Attribute{% endblock %}
+
+{% block dashboard_content %}
+    <div class="table-header">
+        <h2><i class="icon-money icon-large"></i>
+            {% if voucher %}
+                Edit Attribute
+            {% else %}
+                Create Attribute
+            {% endif %}
+        </h2>
+    </div>
+    <form action="." method="post" class="well form-stacked">
+        {% csrf_token %}
+        {% include "dashboard/partials/form_fields.html" with form=form %}
+        {{ attribute_formset.management_form }}
+        {{ attribute_formset.non_form_errors }}
+        <div class="form-group">
+            <label for="id_value" class=" control-label">
+                Values
+            </label>
+            <table class="table table-hover" id="item_table">
+                <tbody>
+                    {% for attribute_form in attribute_formset %}
+                    <tr id="{{ attribute_form.prefix }}-row" class="{% if attribute_form.attribute.value == None and forloop.counter0 > 0  %}tr_clone{% else %}empty{% endif %} {% if attribute_form.attribute.value %}has_attribute{% endif %}">
+                        <td>
+                            {{ attribute_form.value }}
+                        </td>
+                    </tr>
+                    {{attribute_form.id}}
+                    {% for error in attribute_form.non_field_errors %}
+                    {{error}}
+                    {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-warning addbtn" onclick="add_attribute_formset()" style="margin-right: 5px;" id="add">Add Row</button>
+        </div>
+        {% block form_actions %}
+            <div class="form-actions">
+                <button class="btn btn-primary btn-lg" type="submit" data-loading-text="{% trans 'Saving...' %}">{% trans "Save" %}</button> {% trans "or" %}
+                <a href="{% url 'dashboard:attribute-index' %}" class="btn btn-default">{% trans "cancel" %}</a>
+            </div>
+        {% endblock form_actions %}
+    </form>
+{% endblock dashboard_content %}
+
+{% block extrascripts %}
+    {{ block.super }}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+function add_attribute_formset(){
+    $('.empty:last').nextAll().slice(0, 1).toggleClass('empty tr_clone');
+}
+function delete_attribute(counter){
+    var attribute_id = 'id_form-'+counter+'-id'
+    var db_id = $('#'+attribute_id).val();
+    if (db_id == ''){
+        alert('You can not preform this action.')
+        return false;
+    }
+    var is_confirm = confirm("Do you really want to delete this attribute.");
+
+    if (is_confirm == false){
+        return false;
+    }
+    delete_attribute_ajax(db_id)
+}
+
+function delete_attribute_ajax(id){
+    $.ajax({
+        type:'GET',
+        url : '/delete_product_attribute/',
+        data : {
+            attribute_id: id
+        },
+        success : function(data){
+            if (data == '503'){
+                window.location.replace("/dashboard/catalogue/");
+            }
+            if (data == '200'){
+                window.location.reload();
+            }
+        },
+        failure : function(result){
+
+        },
+    });
+}
+
+
+</script>
+{% endblock %}

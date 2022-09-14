@@ -1,0 +1,131 @@
+{% extends "layout_2_col.html" %}
+
+{% load static %}
+{% load basket_tags %}
+{% load category_tags %}
+{% load product_tags %}
+{% load common %}
+{% load i18n %}
+
+{% block title %}
+    Wedding Venue | {{ block.super }}
+{% endblock %}
+
+{% block alert %}
+    {% include "partials/alert_messages.html" %}
+{% endblock %}
+
+{% block content %}
+
+<style>
+    @media(max-width: 767px) {
+        .caregory-reverse-mobile {
+            display: flex;
+            flex-direction: column-reverse;
+        }
+    }
+</style>
+<!-- extra css -->
+<link rel="stylesheet" href="{% static 'oscar/css/products/product_main.css' %}" type="text/css" media="screen">
+<link rel="stylesheet" href="{% static 'oscar/css/products/product_browse.css' %}" type="text/css" media="screen">
+<!-- extra css -->
+
+
+<div class="shop-layout-wrap" id="nz-target">
+
+    <div class="loop">
+        <div class="container product_con">
+
+            <section class="content lazy shop-layout animation-false nz-clearfix caregory-reverse-mobile" style="padding-top: 25px;">
+
+                <form action="/catalogue/wedding_venue" method="get">
+                    <div class="col-md-3">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a style="font: 300 14px/18px 'Open Sans', sans-serif;" data-toggle="collapse" data-parent="#accordion" href="#collapsex">
+                                        Wedding Venues
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapsex" class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <div class="form-group full-input">
+                                        <label for="sel1">Select Venues:</label>
+                                        <style>
+                                            #id_venues{
+                                                margin-left:0px;}
+                                        </style>
+                                        {{search_form.venues}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% include "catalogue/partials/filter_sidebar.html" %}
+                    </div>
+                </form>
+
+                {% if wedding_products %}
+                    <!-- catelog browser -->
+                    <div class="col-md-9 col-9-pd infinite-container remove-padding-mobile">
+                        <div class="woocommerce-products " id="product_list">
+                            <ul class="products infinite-item">
+                                {% if page_obj.number == 1 %}
+
+                                {% get_premium_product wedding_products as premium_product %}
+                                {% if data %}
+
+                                {% for product in premium_product %}
+                                    <div class="col-md-4">
+                                        {% render_product product %}
+                                    </div>
+                                {% endfor %}
+                                {% endif %}
+                                {% endif %}
+
+                                {% for product in wedding_products %}
+                                {% if premium_product %}
+                                    {% if product not in premium_product %}
+
+                                        <div class="col-md-4">
+                                            {% render_product product %}
+                                        </div>
+                                    {% endif %}
+                                {% else %}
+
+
+                                        <div class="col-md-4">
+                                            {% render_product product %}
+                                        </div>
+
+                                {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    {% include "partials/pagination.html" %}
+                {% else %}
+                    <div class="col-md-9 col-9-pd infinite-container">
+                        <div class="product-category-body" style="margin-top:7px;">
+                            <div class="product-category-content">
+                                <h4 class="product-category-title">No Products</h4>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </section>
+            <div class="row text-center">
+                <div class="loading loader" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock content %}
+
+{% block onbodyload %}
+    {{ block.super }}
+
+{% endblock %}

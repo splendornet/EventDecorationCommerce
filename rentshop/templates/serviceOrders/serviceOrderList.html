@@ -1,0 +1,97 @@
+{% extends 'dashboard/layout.html' %}
+{% load sorting_tags %}
+{% load i18n %}
+
+{% block title %}
+    {% trans "Service Order Enquiry" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li class="active">{% trans "Service Order Enquiry" %}</li>
+    </ul>
+{% endblock %}
+
+{% block header %}
+    <div class="page-header">
+        <h1>{% trans "Service Order Enquiry" %}</h1>
+    </div>
+{% endblock header %}
+
+{% block dashboard_content %}
+    <div class="well">
+        <form action="." method="get" class="form-inline">
+            {% include 'dashboard/partials/form_fields_inline.html' with form=form %}
+            <button type="submit" class="btn btn-primary" data-loading-text="{% trans 'Searching...' %}">{% trans "Search" %}</button>
+            <a class="btn btn-default" href="/service-order-list/" >{% trans "Reset" %}</a>
+            <button type="button" class="btn btn-danger" onclick="export_service('/export_service_order/', '{{request.GET.name}}')">Download</button>
+        </form>
+    </div>
+    <form action="." method="post" class="service_order_table">
+        {% csrf_token %}
+        <table class="table table-striped table-bordered">
+            <caption>
+                <i class="icon-briefcase icon-large"></i>All Service Order Enquiry
+                <span id="service_mark" class="selection_mark label label-default"></span>
+            </caption>
+            {% if serviceOrder %}
+                <tr>
+                    <th>
+                        <input type="checkbox" class="master_checkbox" id="master_service_checkbox">
+                    </th>
+                    <th>{% anchor 'name' _('Product') %}</th>
+                    <th>Name</th>
+                    <th>{% trans 'Email' %}</th>
+                    <th>Mobile</th>
+                    <th>Booking Date</th>
+                    <th>Enquiry Date</th>
+                </tr>
+                {% for serviceOrderRec in serviceOrder %}
+                    <tr>
+                        <td>
+                            <input type="checkbox" value="{{serviceOrderRec.id}}" class="checked_service"/>
+                        </td>
+                        <td>
+                            {{ serviceOrderRec.product }}
+                        </td>
+                        <td>
+                            {{ serviceOrderRec.name }}
+                        </td>
+                        <td>
+                            {{ serviceOrderRec.email }}
+                        </td>
+                        <td>
+                           {{ serviceOrderRec.mobile }}
+                        </td>
+
+                        <td>
+                            {% if serviceOrderRec.booking_start_date %}
+                                {{ serviceOrderRec.booking_start_date }} - {{ serviceOrderRec.booking_end_date }}
+                            {% elif serviceOrderRec.booking_date %}
+                                {{serviceOrderRec.booking_date}}
+                            {% else %}
+                            -
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {{ serviceOrderRec.added_date }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr><td>{% trans "No enquiry found." %}</td></tr>
+            {% endif %}
+        </table>
+        {% include "dashboard/partials/pagination.html" %}
+    </form>
+{% endblock dashboard_content %}
+
+{% load static %}
+{% block extrascripts %}
+    {{ block.super }}
+    <script src="{% static 'oscar/js/dashboard/service_order/service_order.js' %}"></script>
+{% endblock %}

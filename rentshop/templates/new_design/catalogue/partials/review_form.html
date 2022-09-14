@@ -1,0 +1,63 @@
+{% load i18n %}
+{% load common %}
+
+{% review_form request product as review_form %}
+                  <form id="add_review_form" class="" method="post" action="{% url 'catalogue:reviews-add' product_slug=product.slug product_pk=product.id %}">
+                    {% csrf_token %}
+                    <div class="row ">
+                      <div class="col-md-6">
+                        <div class="row ">
+                          <div class="col-sm-6">
+                            <div class="form-group">
+                              <label class="trp-form-label" for="id_name">Name</label>
+                              <input type="text" name="name" class="form-control" id="id_name" placeholder="Enrer Your Name" required >
+                            </div>
+                          </div>
+                          <div class="col-sm-6">
+                            <div class="form-group">
+                              <label class="trp-form-label" for="id_email">Email</label>
+                              <input type="email" name="email" class="form-control" id="id_email" placeholder="Enrer Your Email" required >
+                            </div>
+                          </div>
+                          <div class="col-sm-12">
+                            <div class="form-group">
+                              <label class="trp-form-label" for="rating" class="display-inline-block">Your Rating</label>
+                              <div class="trp-form-ratting display-inline-block">
+                                <div class="star-rating">
+                                  <input type="radio" id="1-form-stars" name="rating" value="5" onchange="getRating(this)" />
+                                  <label for="1-form-stars" class="star">&#9733;</label>
+                                  <input type="radio" id="2-form-stars" name="rating" value="4" onchange="getRating(this)"/>
+                                  <label for="2-form-stars" class="star">&#9733;</label>
+                                  <input type="radio" id="3-form-stars" name="rating" value="3" onchange="getRating(this)"/>
+                                  <label for="3-form-stars" class="star">&#9733;</label>
+                                  <input type="radio" id="4-form-stars" name="rating" value="2" onchange="getRating(this)" />
+                                  <label for="4-form-stars" class="star">&#9733;</label>
+                                  <input type="radio" id="5-form-star" name="rating" value="1" onchange="getRating(this)"/>
+                                  <label for="5-form-star" class="star">&#9733;</label>
+                                </div>
+
+                                    <span class="error-block" style="color: red;" >
+                                        <em class="icon-exclamation-sign" ></em> <span id="score_error">{{ error }}</span>
+                                    </span>
+
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-sm-12">
+                            <div class="form-group">
+                              <label class="trp-form-label" for="userMessageReview">Message</label>
+                              <textarea name="body" id="userMessageReview" class="form-control"  rows="5" required></textarea>
+                            </div>
+                          </div>
+                             <input type="hidden" name="title" minlength="2" required="" value="{{product.title}}" id="id_title" class="form-control">
+                            <input type="hidden" id="selected_rating" name="score" value="" required="required">
+                          <div class="col-sm-12 text-right">
+                              <button type="submit" class="trp-form-submit" data-loading-text="{% trans 'Saving...' %}" onclick="return check_submit(this)">{% trans "Submit" %}</button>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+
+                  </form>
+

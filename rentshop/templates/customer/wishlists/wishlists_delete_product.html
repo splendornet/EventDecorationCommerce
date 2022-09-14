@@ -1,0 +1,41 @@
+{% extends 'new_design/customer/account_base.html' %}
+{% load i18n %}
+
+
+{% block tabcontent %}
+
+<style>
+    .text-capital{
+        text-transform: capitalize;
+    }
+</style>
+
+<div class="col-md-9">
+    <div class="trp-acc-mainContent-wrapper">
+        <div class="trp-acc-mainContent-title-wrapper mb-0">
+            <h1 class="trp-acc-mainContent-title m-0">Remove from wishlist</h1>
+        </div>
+        <div class="trp-acc-detail-wrapper trp-acc-order-table-wrapper trp-acc-wishlist-table">
+            <form method="post" style="margin-left:5%">
+                {% csrf_token %}
+                <br/>
+                <p>
+                    {% blocktrans with product_name=object.get_title wishlist_name=wishlist.name %}
+                        Are you sure you want to delete {{ product_name }} from wish list {{ wishlist_name }}?
+                    {% endblocktrans %}
+                </p>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-lg text-capital trp-acc-wishlist-addCart" data-loading-text="{% trans 'Removing...' %}">{% trans 'Remove' %}</button> {% trans 'or' %}
+                    <a href="{% url 'customer:wishlists-list' %}">{% trans 'cancel' %}</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    var element = document.getElementById("wishlist_link");
+    element.classList.add("active");
+</script>
+
+{% endblock tabcontent %}

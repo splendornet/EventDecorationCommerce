@@ -1,0 +1,103 @@
+{% load string_filters %}
+
+{% comment %}
+Use message tags to control these alerts.  Available tags include:
+- safe: allow HTML in the message
+- block: for longer messages - this adds extra padding
+- noicon: don't show an icon
+- error/success/info - these change the connotation of the alert
+{% endcomment %}
+
+<style>
+    .alert-safe,.alert-info{
+        background-color:#4CAF50;
+
+    }
+    .alert-success{
+            background-color:green;
+
+    }
+
+
+    .alert-danger{
+        background-color:red;
+    }
+
+    #messages {
+        top: 83vh;
+        z-index: 4;
+        left: 20px;
+        position: fixed;
+        border-radius: 4px;
+        box-shadow: 0 0 8px 1px rgba(0, 0, 0, 0.08);
+        margin-left: 20px;
+        width:95%;
+    }
+
+    .cartAlert {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+    .cartAlert p:last-child {
+        margin-right: 10px;
+    }
+    .alert, .alertinner {
+        padding-top: 10px;
+        font-size:14px !important;
+        font-weight:bold;
+    }
+
+@media( max-width: 767px){
+     #messages{
+         top: 31%;
+          width: 94%;
+          left: -5px;
+     }
+}
+
+@media( max-width: 1024px){
+     #messages{
+         top: 50%;
+          width: 94%;
+          left: -5px;
+     }
+}
+@media( min-width: 1025px){
+     #messages{
+         width: 94%;
+          left: -5px;
+     }
+}
+</style>
+
+<div id="messages" style="display:none;">
+{% if messages %}
+    {% for message in messages|slice:":1" %}
+    <div class="alert {% for tag in message.tags|split %}alert-{% if tag == 'error' %}danger{% else %}{{ tag }}{% endif %} {% endfor %} fade in">
+            <a class="close" data-dismiss="alert" href="#" style="text-decoration: none;">&times;</a>
+            <div class="cartAlert {% if 'noicon' not in message.tags %}wicon{% endif %}">
+                {# Allow HTML to be embedded in messages #}
+                {% if 'safe' in message.tags %}
+                    {{ message|safe }}
+                {% else %}
+                    {{ message }}
+                {% endif %}
+
+                {% if 'noicon' not in message.tags %}
+                    {# Include an icon by default #}
+                    {% if 'success' in message.tags %}
+                        <i class="icon-ok-sign"></i>
+                    {% elif 'info' in message.tags %}
+                        <i class="icon-info-sign"></i>
+                    {% elif 'warning' in message.tags %}
+                        <i class="icon-warning-sign"></i>
+                    {% elif 'danger' in message.tags or 'error' in message.tags %}
+                        <i class="icon-exclamation-sign"></i>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}
+</div>

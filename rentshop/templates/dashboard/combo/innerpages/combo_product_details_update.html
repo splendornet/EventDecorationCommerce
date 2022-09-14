@@ -1,0 +1,119 @@
+<!-- formset error -->
+{% for field in form.hidden_fields %}
+    {{ field }}
+{% endfor %}
+<!-- formset error -->
+
+<div class="form-group" style="margin-bottom:10px;">
+    <p class="control-label">
+        <strong>Combo Offer Title</strong>
+    </p>
+    {{form.title}}
+    {% if form.errors.title %}
+        <p class="color-red">* Enter a valid offer name.</p>
+    {% endif %}
+</div>
+
+<div class="form-group" style="margin-bottom:10px;">
+    <p class="control-label">
+        <strong>Combo Offer Description</strong>
+    </p>
+    {{form.description}}
+    {% if form.errors.description %}
+        <p class="color-red">* Enter a valid offer description.</p>
+    {% endif %}
+</div>
+
+<div class="form-group" style="margin-bottom:10px;">
+    <p class="control-label">
+        <strong>Combo Offer UPC</strong>
+    </p>
+    {{form.upc}} <br/>
+    <p class="color-red">
+        {{form.errors.upc.as_text}}
+    </p>
+</div>
+
+<div class="row">
+    <div class="form-group col-md-8" style="margin-bottom:10px; padding-left:15px; padding-right:15px;">
+        <p class="control-label">
+            <strong>Combo Offer Date *</strong>
+        </p>
+        <input name="daterange_combo" type="text" class="form-control">
+    </div>
+
+    <div class="" hidden>
+        {{form.combo_start_date}}
+        {{form.combo_end_date}}
+    </div>
+
+    <div class="form-group col-md-4" style="padding-left:15px; padding-right:15px; margin-bottom:10px;">
+        {% if request.user.is_superuser %}
+            <p class="control-label"> <strong>Is approved *</strong> </p>
+            {{form.is_approved}}
+        {% endif %}
+    </div>
+</div>
+
+{{ stockrecord_formset.management_form }}
+{{ stockrecord_formset.non_form_errors }}
+
+{% for stockrecord_form in stockrecord_formset %}
+
+    {% include "dashboard/partials/form_field.html" with field=stockrecord_form.id nolabel=True %}
+
+    <div class="row">
+        {% if request.user.is_staff and not request.user.is_superuser %}
+            <div class="form-group col-md-6" style="margin-bottom:10px;" hidden>
+                <p class="control-label"> Partner * </p>
+                {% include "dashboard/partials/form_field.html" with field=stockrecord_form.partner nolabel=True %}
+            </div>
+            <div class="form-group col-md-12" style="margin-bottom:10px;">
+                <p class="control-label">Offer Price *</p>
+                {% include "dashboard/partials/form_field.html" with field=stockrecord_form.price_excl_tax nolabel=True %}
+            </div>
+        {% else %}
+            <div class="form-group col-md-6" style="margin-bottom:10px;">
+                <p class="control-label"> <strong>Partner *</strong> </p>
+                {% include "dashboard/partials/form_field.html" with field=stockrecord_form.partner nolabel=True %}
+            </div>
+            <div class="form-group col-md-6" style="margin-bottom:10px;">
+                <p class="control-label"><strong>Offer Price *</strong></p>
+                {% include "dashboard/partials/form_field.html" with field=stockrecord_form.price_excl_tax nolabel=True %}
+            </div>
+        {% endif %}
+
+    <!-- vendor sku -->
+    <div class="form-group" style="margin-bottom:10px;" hidden>
+        <p class="control-label">SKU</p>
+        {% include "dashboard/partials/form_field.html" with field=stockrecord_form.partner_sku nolabel=True %}
+    </div>
+    <!-- vendor sku -->
+
+    <!-- currency -->
+    <div class="form-group" style="margin-bottom:10px;" hidden>
+        <p class="control-label">Price Currency</p>
+        {% include "dashboard/partials/form_field.html" with field=stockrecord_form.price_currency nolabel=True %}
+    </div>
+
+    <!-- tax percentage -->
+    <div class="form-group" style="margin-bottom:10px;" hidden>
+        <p class="control-label">Tax Percentage %</p>
+        {% include "dashboard/partials/form_field.html" with field=stockrecord_form.tax_percentage nolabel=True %}
+    </div>
+    </div>
+    <!-- tax percentage -->
+
+{% endfor %}
+
+<div hidden>
+    {{ category_formset.management_form }}
+    {{ category_formset.non_form_errors }}
+    {% for category_form in category_formset %}
+        <tr>
+            <td hidden style="border:1px solid #000;">
+                {% include "dashboard/partials/form_fields_inline.html" with form=category_form %}
+            </td>
+        </tr>
+    {% endfor %}
+</div>

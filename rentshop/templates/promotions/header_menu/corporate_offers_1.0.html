@@ -1,0 +1,201 @@
+{% extends "layout_2_col.html" %}
+{% load i18n %}
+{% load thumbnail %}
+{% load currency_filters %}
+{% load purchase_info_tags %}
+{% load display_tags %}
+{% load reviews_tags %}
+{% load staticfiles %}
+{% load mathfilters %}
+{% load common %}
+
+{% load product_tags %}
+{% load purchase_info_tags %}
+
+{% block navigation %}
+    {% include "partials/nav_primary.html" with expand_dropdown=1 %}
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block column_left %}
+{% endblock %}
+
+{% block content %}
+
+<style>
+#nz-content {
+	background: #ccc;
+	font-family: arial, verdana, tahoma;
+	margin-top: 100px;
+}
+
+.accordion {
+  width: 100%;
+  max-width: 1080px;
+  height: 350px;
+  overflow: hidden;
+  margin: 50px auto;
+      box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.35);
+    -webkit-box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.35);
+    -moz-box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.35);
+}
+
+.accordion li {
+border-left: 1px solid #888;
+    box-shadow: 0 0 25px 10px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0 0 25px 10px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0 0 25px 10px rgba(0, 0, 0, 0.5);
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+}
+.accordion ul {
+  width: 100%;
+  display: table;
+  table-layout: fixed;
+  margin: 0;
+  padding: 0;
+}
+
+.accordion ul li {
+  display: table-cell;
+  vertical-align: bottom;
+  position: relative;
+  width: 16.666%;
+  height: 350px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  transition: all 500ms ease;
+}
+
+.accordion ul li div {
+  display: block;
+  overflow: hidden;
+  width: 100%;
+}
+
+.accordion ul li div a {
+  display: block;
+  height: 350px;
+  width: 100%;
+  position: relative;
+  z-index: 3;
+  vertical-align: bottom;
+  padding: 15px 20px;
+  box-sizing: border-box;
+  color: #fff;
+  text-decoration: none;
+  font-family: Open Sans, sans-serif;
+  transition: all 200ms ease;
+}
+
+.accordion ul li div a * {
+  opacity: 0;
+  margin: 0;
+  width: 100%;
+  text-overflow: ellipsis;
+  position: relative;
+  z-index: 5;
+  white-space: nowrap;
+  overflow: hidden;
+  -webkit-transform: translateX(-20px);
+  transform: translateX(-20px);
+  -webkit-transition: all 400ms ease;
+  transition: all 400ms ease;
+}
+
+.accordion ul li div a h2 {
+  font-family: Montserrat, sans-serif;
+  text-overflow: clip;
+  font-size: 24px;
+  text-transform: uppercase;
+ // margin-bottom: 2px;
+ // top: 160px;
+}
+
+.accordion ul li div a p {
+  top: 160px;
+  font-size: 13.5px;
+}
+
+.accordion ul:hover li { width: 8%; }
+
+.accordion ul:hover li:hover { width: 60%; }
+
+.accordion ul:hover li:hover a { background: rgba(0, 0, 0, 0.4); }
+
+.accordion ul:hover li:hover a * {
+  opacity: 1;
+  -webkit-transform: translateX(0);
+  transform: translateX(0);
+}
+ @media screen and (max-width: 600px) {
+
+body { margin: 0; }
+
+.accordion { height: auto; }
+
+.accordion ul li,
+.accordion ul li:hover,
+.accordion ul:hover li,
+.accordion ul:hover li:hover {
+  position: relative;
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  -webkit-transition: none;
+  transition: none;
+}
+}
+.h2-p{
+    bottom: 0;
+    position: absolute !important;
+    background: rgba(0, 0, 0, 0.5);
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    padding: 20px;
+    font-size: 16px !important;
+    margin: -0px -0px -0px -20px !important;
+}
+
+.main_h{
+    text-align:center;
+    font-size: 24px;
+    color:#333;
+}
+
+</style>
+
+<div id="nz-content" class='content nz-clearfix sidebar-none padding-false'>
+
+    {% for all_categories_obj in list_obj  %}
+     <div > <h3  class="main_h" style="{% if forloop.first %}padding-top: 4.5em;{% endif %}">{{all_categories_obj.offer_title}}</h3></div>
+<div class="accordion">
+  <ul>
+      {% for product in all_categories_obj.products %}
+        {% with image=product.primary_image %}
+        {% thumbnail image.original "650x350" upscale=False as thumb %}
+        <li style="background-image: url('{{thumb.url }}')">
+          <div>
+              <a href="{{ product.get_absolute_url }}" target="_blank">
+                  <h2 class="h2-p">{{product.title}}</h2>
+              </a>
+          </div>
+        </li>
+      {% endthumbnail %}
+      {% endwith %}
+      {% endfor %}
+  </ul>
+</div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}
+{% block extrascripts %}
+{{block.super}}
+
+{% endblock %}

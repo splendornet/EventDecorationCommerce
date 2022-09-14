@@ -1,0 +1,58 @@
+{% extends "customer/baseaccountpage.html" %}
+{% load i18n %}
+{% load currency_filters %}
+{% load staticfiles %}
+
+{% block tabcontent %}
+
+    <style>
+        body { margin: 0; font-family: "Arial", sans-serif; } .addr { margin-left: 5%; margin-top: 5px; ; } .h6 { font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size: 1vw; color: #edab00; } .Table_product { display: table; font-family: 'Arial'; font-size: 1.1vw; border-collapse: collapse; width: 85%; margin-left: 5%; margin-top: 25px; border: 1px solid #CCCCCC; text-align: center; color: #000000; } .Headings { display: table-row; background-color: #edab00; width: 17%; border: 1px solid #CCCCCC; color: #ffffff; font-weight: lighter; vertical-align: middle; text-align: center; } .Rows { display: table-row; border: 1px solid #CCCCCC; vertical-align: middle; } .Cells { display: table-cell; padding: 10px; width: 17%; border: 1px solid #CCCCCC; vertical-align: middle; } .Cells a img { cursor: pointer; width: 50%; height: 25%; } .Cells img { cursor: pointer; width: 50%; height: 25%; }
+    </style>
+
+<h3 class="heading"> My Custom Orders </h3>
+
+<div style="overflow-x:auto;">
+    {% if enquiry %}
+
+    <div class="Table_product">
+
+        <div class="Headings">
+            <div class="Cells"><p>Order Number</p></div>
+            <div class="Cells"><p>Total</p></div>
+            <div class="Cells"><p>Action</p></div>
+        </div>
+
+        {% for en in enquiry %}
+            <div class="Rows">
+                <div class="Cells">
+                    <p>{{en.basket_instance.id|add:"100000"}}</p>
+                </div>
+                <div class="Cells">
+                    {{en.basket_instance.cart_total_without_tax}} Rs
+                </div>
+                <div class="Cells">
+                    <a href="{% url 'customer:user-custom-order-place' %}?basket_id={{en.basket_instance.id}}" class="like1">Place Order</a>
+                </div>
+            </div>
+        {% endfor %}
+
+
+    </div>
+    {% else %}
+        <h4 style="text-align: center; color: #edab2e; font-size: 28px; margin-top: 3em;">No Custom Orders</h4>
+    {% endif %}
+</div>
+
+<script>
+    var element = document.getElementById("my_custom_order_link");
+    element.classList.add("active");
+</script>
+
+
+{% endblock tabcontent %}
+
+{% block extrascripts %}
+{{ block.super }}
+<script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+{% endblock %}
+

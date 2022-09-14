@@ -1,0 +1,71 @@
+{% if enquirySaved == False %}
+      {% if enquiryAlreadySent == False %}
+
+            <style>
+                .form-control:focus {
+    border-color: #d6c0c0 !important;
+    outline: 0;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
+select.form-control, textarea.form-control, input[type="text"].form-control, input[type="password"].form-control, input[type="datetime"].form-control, input[type="datetime-local"].form-control, input[type="date"].form-control, input[type="month"].form-control, input[type="time"].form-control, input[type="week"].form-control, input[type="number"].form-control, input[type="email"].form-control, input[type="url"].form-control, input[type="search"].form-control, input[type="tel"].form-control, input[type="color"].form-control{
+    text-align:left !important;
+    color:black !important;
+}
+            </style>
+
+          <section class="trp-product-enquiry-sec pt-50 mb-0 p-20 pb-0" id="trp-product-enquiry-sec">
+    <div class="row trp-row">
+        <div class="col-md-12">
+            <form action="/service-enquiry/{{product.id}}/" method="post">
+                {% csrf_token %}
+                <div class="row ">
+                    <div class="col-md-12">
+                        <div class="row ">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="trp-form-label" for="name">Name</label>
+                                    <input type="text" name="name" class="form-control" id="userName"
+                                           placeholder="Enter Your Name" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="trp-form-label" for="email">Email</label>
+                                    <input type="email" name="email" class="form-control" id="userEmail"
+                                           placeholder="Enter Your Email" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="trp-form-label" for="mobile_number">Mobile Number</label>
+                                    <input type="tel" name="mobile_number" class="form-control" id="userPhone"
+                                           placeholder="Enter Your Mobile Number" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="trp-form-label" for="booking_date">Select Date</label>
+                                    <input type="date" name="booking_date" class="form-control" id="id_booking_date"
+                                           placeholder="Select Date" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 text-right">
+                                <input type="submit" value="Submit" id="submit" class="trp-form-submit">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+</section>
+      {% else %}
+
+      {% endif %}
+
+{% else %}
+
+{% endif %}

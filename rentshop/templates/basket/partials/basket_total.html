@@ -1,0 +1,66 @@
+{% load i18n %}
+{% load currency_filters %}
+{% load shipping_tags %}
+
+<style>
+    .span-br{
+        font-size:12px !important;
+    }
+    .col-50{
+        width:50%;
+    }
+    .col-10{
+        width:10%;
+    }
+    .col-40{
+            width:40%;
+    }
+    .col-50-r{
+        text-align:right;
+        font-weight:400;
+    }
+</style>
+
+{% with offer_discounts=basket.offer_discounts voucher_discounts=basket.grouped_voucher_discounts %}
+<!--        <div class="left-meni"><h5>Total Items in cart</h5></div><div class="right-meni"><h5> ₹ {{ basket.cart_total_without_tax|floatformat:2 }}</h5></div>-->
+
+
+<!--        <div class="left-meni"><h5>Shipping Total</h5></div><div class="right-meni"><h5>₹ {{basket.get_shipping_total|floatformat:2}}</h5></div>-->
+<!--        <div class="left-meni"><h5>Deposit</h5></div><div class="right-meni"><h5>₹ {{ basket.cart_deposit|floatformat:2 }}</h5></div>-->
+
+<!--			  <div class="clear"></div>-->
+
+<!--			  <div class="left-meni"><h5>Sub Total </h5></div><div class="right-meni"><h5>₹ {{ basket.payable_amount|floatformat:2}}</h5></div>-->
+<!--{% with offer_discounts=basket.offer_discounts voucher_discounts=basket.grouped_voucher_discounts %}-->
+<!--        {% if offer_discounts or voucher_discounts %}-->
+<!--            {% for discount in voucher_discounts %}-->
+
+
+<!--   			  <div class="left-meni"><h5>Discount/Coupon </h5></div><div class="right-meni"><h5> ₹ {{discount.discount|floatformat:2}}</h5></div>-->
+<!--{% endfor %}-->
+<!--{% endif %}-->
+<!--{% endwith%}-->
+
+<!--			  <div class="clear"></div>-->
+<!--   			  <div class="left-meni"><h5>Order Total </h5></div><div class="right-meni"><h5>₹ {{ basket.cart_total_without_tax|floatformat:2 }}</h5></div>-->
+
+<!--   			  <div class="left-meni"><h5>Advance Minimum </h5></div><div class="right-meni"><h5>₹ {{ basket.payable_amount|floatformat:2 }}</h5></div>-->
+
+
+        <div class="left-meni"><h5>Cart Total</h5></div><div class="right-meni"><h5> {{ basket.cart_total_without_tax|currency:basket.currency }}</h5></div>
+        <div class="left-meni"><h5>Deposit</h5></div><div class="right-meni"><h5>{{ basket.cart_deposit|currency:basket.currency }}</h5></div>
+        <div class="left-meni"><h5>Shipping Cost</h5></div><div class="right-meni"><h5>{{basket.get_shipping_total|currency:basket.currency }}</h5></div>
+        <div class="left-meni"><h5>Advance Payout</h5></div><div class="right-meni"><h5>{{basket.advance_payment_price|currency:basket.currency}}</h5></div>
+        <div class="left-meni"><h5>Balance Amount</h5></div><div class="right-meni"><h5>{{basket.balance_amount_price|currency:basket.currency}}</h5></div>
+{% with offer_discounts=basket.offer_discounts voucher_discounts=basket.grouped_voucher_discounts %}
+        {% if offer_discounts or voucher_discounts %}
+            {% for discount in voucher_discounts %}
+
+
+   			  <div class="left-meni"><h5>Coupon Discount </h5></div><div class="right-meni"><h5> {{discount.discount|currency:basket.currency}}</h5></div>
+{% endfor %}
+{% endif %}
+{% endwith%}
+	<div class="left-meni"><h5>Payable Amount</h5></div><div class="right-meni"><h5> {{basket.payable_amount|currency:basket.currency }}</h5></div>
+
+{% endwith %}

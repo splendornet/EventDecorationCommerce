@@ -1,0 +1,28 @@
+{% load static %}
+<div class="col-md-3">
+    <div class="trp-acc-mainSidebar-wrapper">
+        <div class="trp-acc-sidebar-profile-meta text-center">
+            <div class="trp-profile-img-wrapper">
+                <img src="{% static 'new_design/assets/images/profile-photo.png' %}" alt="" width="80" height="80">
+            </div>
+            <div class="trp-acc-profile-uName">
+                <h3 class="m-0">{{request.user.first_name|title}} {{request.user.last_name|title}}</h3>
+            </div>
+        </div>
+        <div class="trp-acc-sidebar-menu-wrapper">
+            <ul class="trp-acc-sidebar-menu-list">
+                <li id={% if request.user.is_staff %}"my_vendor_profile_link"{% else %}"my_profile_link"{% endif %}><a href="{% url 'customer:profile-view' %}">My Profile</a></li>
+                <li id="my_order_link"><a href="{% url 'customer:order-list' %}">My Order Details</a></li>
+                <li id="my_custom_order_link"><a href="{% url 'customer:user-custom-order' %}">My Custom Order</a></li>
+                <li id="wishlist_link"><a href="{% url 'customer:wishlists-list' %}">My Whishlist</a></li>
+                <li id="my_coupon_link"><a href="{% url 'customer:user-my-coupon' %}">My Coupons</a></li>
+                <li id="faq_link"><a href="{% url 'faq' %}" target="_blank">FAQ</a></li>
+                {% if request.user.is_staff %}
+                    <li><a href="{% url 'dashboard:index' %}">Other Account</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% block tabcontent %}
+{% endblock %}

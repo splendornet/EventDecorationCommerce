@@ -1,0 +1,238 @@
+{% extends 'dashboard/layout.html' %}
+{% load i18n %}
+{% load static %}
+{% load common %}
+
+{% block body_class %}{{ block.super }} create-page{% endblock %}
+
+{% block title %}
+    {{ title }} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li>
+            <a href="{% url 'dashboard:customize-voucher-list1' %}">Customize Coupons</a>
+        </li>
+        {% if action == "update" %}
+            <li class="active">Update Customize Coupon</li>
+        {% else %}
+            <li class="active">Create Customize Coupon</li>
+        {% endif %}
+    </ul>
+{% endblock %}
+
+{% block headertext %}
+    {% if action == "update" %}Update Customize Coupon{% else %}{% trans "Create Customize Coupon" %}{% endif %}
+{% endblock %}
+
+{% block dashboard_content %}
+<style>
+    .tr_clone
+    {
+        display:none
+    }
+
+</style>
+<link rel="stylesheet" href="{% static 'oscar/css/products/common_select2.css' %}" type="text/css" media="screen">
+<!--{{form}}-->
+<!--{{form1}}-->
+<!--{{formset}}-->
+    <form action="." method="post" class="form-stacked well wysiwyg">
+
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {{ form1.non_field_errors }}
+        <div class="form-group" style="margin-bottom:10px;">
+    <label for="id_distributor_name">UIN</label>
+    {{form1.coupon_distibutor}}
+            <br/>
+    <p class="color-red">
+        {{form1.errors.coupon_distibutor.as_text}}
+    </p>
+</div>
+
+        <div class="form-group" style="margin-bottom:10px;">
+            <label for="id_distributor_name">Name</label><br/>
+            <input type="text" class="form-control" name="distributor_name" id="id_distributor_name" value="{{form1.coupon_distibutor.full_name}}" disabled>
+        </div>
+        <div class="form-group" style="margin-bottom:10px;">
+            <label for="id_distributor_cdn">CDN</label><br/>
+            <input type="text" class="form-control"  name="distributor_name" id="id_distributor_cdn" value=" " disabled>
+        </div>
+
+    {{form.code}}
+
+
+        <div class="form-group" style="margin-bottom:10px;">
+    <label for="id_distributor_name">Usage</label>
+    {{form.usage}}
+            <br/>
+    <p class="color-red">
+        {{form.errors.usage.as_text}}
+    </p>
+</div>
+        <div class="form-group" style="margin-bottom:10px;">
+    <label for="id_distributor_name">Description</label>
+    {{form1.description}}
+            <br/>
+    <p class="color-red">
+        {{form1.errors.description.as_text}}
+    </p>
+</div>
+
+    {{form.start_datetime}}
+
+    {{form.end_datetime}}
+          
+
+        <table class="table table-hover" id="item_table">
+        <thead>
+            <tr role="row">
+                <th>Category</th>
+                <th>Coupon Count</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <input type="hidden" name="form-TOTAL_FORMS" value="1" id="id_form-TOTAL_FORMS">
+            <input type="hidden" name="form-INITIAL_FORMS" value="0" id="id_form-INITIAL_FORMS">
+            <input type="hidden" name="form-MIN_NUM_FORMS" value="0" id="id_form-MIN_NUM_FORMS">
+            <input type="hidden" name="form-MAX_NUM_FORMS" value="10" id="id_form-MAX_NUM_FORMS">
+            {{ formset.management_form }}
+             {{ formset.non_form_errors }}
+            {% for frm in formset %}
+            {{ frm.non_field_errors }}
+
+                <tr id="{{ frm.prefix }}-row" class="{% if frm.category.value == '' and forloop.counter0 > 0 or frm.category.value is None and forloop.counter0 > 0 %}tr_clone{% else %}empty{% endif %}">
+                    <td>
+                        {{frm.category}}
+                        {{ frm.id}}
+                    </td>
+                    <td>
+                        {{frm.coupon_count}}
+                    </td>
+                    <td>
+                        {{ frm.start_datetime }}
+                    </td>
+                    <td>
+                        {{ frm.end_datetime }}
+                    </td>
+                    <td>
+                        <main style="height:32px" class="main_{{forloop.counter0}}">
+                    {% if frm.category.value %}
+                    <button type="button" class="btn btn-sm btn-danger btn-attribute-delete"
+                            onclick="delete_price('{{forloop.counter0}}')">Delete
+                    </button>
+                    {% endif %}
+                </main>
+                    </td>
+
+                </tr>
+            {% endfor %}
+        <td>
+                        <button type="button" class="btn btn-warning" onclick="add_formset()">Add Row</button>
+                    </td>
+        </tbody>
+    </table>
+
+        {% block form_actions %}
+            <div class="form-actions">
+                <button class="btn btn-primary btn-lg" type="submit" data-loading-text="{% trans 'Saving...' %}">{% trans "Save" %}</button> {# This is an input so we distinguish between which button was pressed #}
+                <!--<input class="btn btn-primary btn-lg" type="submit" name="action" value="{% trans "Save and edit products" %}"/>-->
+                {% trans "or" %}
+                <a class="btn btn-primary btn-lg" href="{% url 'dashboard:customize-voucher-list1' %}">{% trans "cancel" %}</a>
+            </div>
+        {% endblock form_actions %}
+    </form>
+{% endblock dashboard_content %}
+
+{% block extrascripts %}
+    {{ block.super }}
+<script>
+
+
+</script>
+ <script>
+        function add_formset(){
+            $('.empty:last').nextAll().slice(0, 1).toggleClass('empty tr_clone');
+        }
+
+        $("#id_coupon_distibutor").change(function(){
+            if($("#id_coupon_distibutor").val() != '')
+            {
+            coupon_id = $("#id_coupon_distibutor").val();
+            get_coupondata(coupon_id);
+            }
+        });
+
+        function get_coupondata(coupon_id)
+        {
+        $.ajax({
+                type:'GET',
+                url: '/get_coupondist',
+                data: {
+                  'coupon_id': coupon_id,
+                },
+                success: function (data) {
+                if(data.status == 500){
+                $("#id_distributor_name").val(data.name)
+               $("#id_distributor_cdn").val(data.cdn)
+               $("#id_code").val(data.cdn)
+                }
+                }
+            })
+        }
+
+        $(document).ready(function(){
+        if($("#id_coupon_distibutor").val() != '')
+            {
+            coupon_id = $("#id_coupon_distibutor").val();
+            get_coupondata(coupon_id);
+            }
+        });
+
+        function delete_price(counter){
+    var attribute_id = 'id_customizecouponmodel_set-'+counter+'-id'
+    var db_id = $('#'+attribute_id).val();
+    if (db_id == ''){
+        alert('You can not preform this action.')
+        return false;
+    }
+    var is_confirm = confirm("Do you really want to delete this value.");
+    if (is_confirm == false){
+        return false;
+    }
+
+    delete_price_ajax(db_id)
+
+}
+
+function delete_price_ajax(id){
+    $.ajax({
+        type:'GET',
+        url : '/delete_customize_category/',
+        data : {
+            price_id: id
+        },
+        success : function(data){
+            if (data == '503'){
+                window.location.replace("/dashboard/catalogue/");
+            }
+            if (data == '200'){
+                window.location.reload();
+            }
+        },
+        failure : function(result){
+
+        },
+    });
+}
+    </script>
+
+{% endblock %}

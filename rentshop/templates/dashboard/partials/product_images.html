@@ -1,0 +1,62 @@
+<li class='sortable-handle {% if image_form.original.value is None and forloop.counter0 > 1 %}
+hide_me
+{% else %}
+show
+{% endif %} {% if image_form.original.value %}has_image{% endif %} draggable-element'  style="" id="img_box_{{forloop.counter}}">
+
+    <style>
+        {% if not request.user.is_superuser and request.user.is_staff %}
+            .is_vendor{
+                display:none;
+            }
+            label[for^="id_images-"] {
+                display:none;
+            }
+        {% endif %}
+        label{
+            //display: none;
+        }
+        input[type='checkbox']{
+            //display: none;
+        }
+        .upload-image li > div{
+            margin-bottom:30px;
+        }
+        .upload-image li > div + label, .upload-image li > div + label + input{
+        display:block;
+        }
+
+    </style>
+
+    {% for field in form %}
+        {% if field.is_hidden %}
+            {{ field }}
+        {% elif "original" in field.id_for_label %}
+            <div>
+                {{ field }}
+            </div>
+            {% for error in field.errors %}
+
+                <ul class="error-block">
+                    <li>{{ error }}</li>
+                </ul>
+            {% endfor %}
+        {% else %}
+
+            {{ field.label_tag }}
+            {{ field }}
+
+            {% for error in field.errors %}
+                <ul class="error-block">
+                    <li>{{ error }}</li>
+                </ul>
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+    {{ form.non_field_errors }}
+    <main style="height:32px" class="main_{{forloop.counter0}}">
+        {% if image_form.original.value %}
+        <button type="button" class="btn btn-sm btn-danger btn-image-delete" onclick="delete_image('{{forloop.counter0}}')">Delete</button>
+        {% endif %}
+    </main>
+</li>

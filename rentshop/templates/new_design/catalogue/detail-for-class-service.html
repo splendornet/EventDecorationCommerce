@@ -1,0 +1,465 @@
+{% extends 'new_design/base.html' %}
+{% load staticfiles %}
+{% load thumbnail %}
+{% load common %}
+{% load product_tags %}
+{% load purchase_info_tags %}
+{% block content %}
+
+{% load reviews_tags %}
+{% load i18n %}
+{% load mathfilters %}
+{% load thumbnail %}
+{% load common %}
+{% load history_tags %}
+{% load currency_filters %}
+{% load reviews_tags %}
+{% load staticfiles %}
+{% load product_tags %}
+{% load display_tags %}
+{% load i18n %}
+{% load purchase_info_tags %}
+<section class="trp-breadcrumb-sec">
+    <ul class="breadcrumb">
+        <li><a href="/">Home</a></li>
+        <li><a href="/">Rental catalogue</a></li>
+        <li><a href="{{product.categories.first.get_absolute_url}}">{{product.categories.first.name}}</a></li>
+        <li>{{product.title}}</li>
+    </ul>
+</section>
+<!-- Product gallary section -->
+<section class="trp-layout-detail-product">
+    <div class="row trp-row">
+        <div class="col-md-6 trp-product-left">
+            <div class="trp-product-gallary-wrapper">
+                <div class="slider-container">
+                    {% with all_images=product.get_all_images %}
+                    <div class="trp-prduct-gallery-slider">
+                        {% for image in all_images %}
+                        <div class="item-slick">
+                            <!-- Smita Patil: Make changes when youtube video url field is added -->
+                            {% if product.video and forloop.last %}
+                                {% update_url product.video as video_link %}
+
+                                <a href='{{video_link}}' class="trp-gallery-video">
+                                    <img src="{{image.original.url}}" alt="Alt">
+                                </a>
+                                {% else %}
+                                <a href='{{image.original.url}}'>
+                                    <img src="{{image.original.url}}" alt="Alt">
+                                    {% if image.caption %}<p class="text-center trp-product-gallary-img-overlay">{{image.caption}}</p> {% endif %}
+                                </a>
+                                {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="slider-nav">
+                        {% for image in all_images %}
+                        <img class="item-slick" src="{{image.original.url}}" alt="Alt">
+                        {% endfor %}
+                    </div>
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 trp-product-right">
+            <div class="trp-product-meta">
+                <h1 class="trp-product-title mb-25 mt-0">{{ product.title }}</h1>
+                {% if product.rating %}
+                {% include "new_design/catalogue/partials/display_rating.html" %}
+                {% endif %}
+                <div class="trp-devider"></div>
+                <!-- Single price -->
+                {% if product.product_class.name != "Service" %}
+                <div class="trp-veriable-price-wrapper mt-25">
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-12">
+                            <div class="trp-product-price-1">
+                                <label class="trp-radio-lable"><span class="trp-product-price">₹ 5,300 <span
+                                        class="trp-product-mrp">(₹ 16,520)</span></span> <span
+                                        class="trp-product-discount-amount">Your Savings ( ₹ 11,220 Off)</span></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                <div class="trp-product-btn mt-30">
+                    <div class="trp-whitePink-btn trp-display-inline-block mr-20">
+                        <a href="#trp-product-enquiry-sec" id="product-enquiry">Contact us</a>
+                    </div>
+                    {% include "new_design/catalogue/partials/add_to_wishlist.html" %}
+                </div>
+                {% if product.product_class.name != "Service" %}
+                <div class="trp-product-shipping mt-40">
+                    <p class="trp-product-shipping-label">Product Price + Shipping Price</p>
+                    <p class="trp-product-shipping-tprice">
+                        <span class="trp-product-wsprice">₹ 5,300.00</span> + <span class="trp-product-shiping-cost">₹ 0.00</span>
+                        <span class="trp-free-shiping-badge ml-5"><img src="{% static 'new_design/assets/images/shiping-truck-icon.svg' %}"
+                                                                       alt="free shiping"> FREE SHIPPING</span>
+                    </p>
+                </div>
+                {% endif %}
+                <div class="trp-how-to-rent-btn mt-35">
+                    <a href="#id_trp-how-to-rent"><img src="{% static 'new_design/assets/images/how-rent-icon.svg' %}" class="mr-10" alt="">How to
+                        Rent<img src="{% static 'new_design/assets/images/arrow-dwn-icon.svg' %}" class="ml-10" alt=""></a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!--Enquiry form  -->
+<section class="trp-product-enquiry-sec pt-50 mb-0 p-20 pb-0" id="trp-product-enquiry-sec">
+    <div class="row trp-row">
+        <div class="col-md-12">
+            <form action="/service-enquiry/{{product.id}}/" method="post">
+                {% csrf_token %}
+                <div class="row ">
+                    <div class="col-md-12">
+                        <div class="row ">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="trp-form-label" for="id_name">Name</label>
+                                    <span style="color:red" id="name-error"></span>
+                                    <input type="text" name="name" class="form-control" id="id_name"
+                                           placeholder="Enter Your Name" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="trp-form-label" for="id_email">Email</label>
+                                    <span style="color:red" id="email-error"></span>
+                                    <input type="email" name="email" class="form-control" id="id_email"
+                                           placeholder="Enter Your Email" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="trp-form-label" for="id_mobile_number">Mobile Number</label>
+                                    <span style="color:red" id="mobile_number-error"></span>
+                                    <input type="tel" name="mobile_number" class="form-control" id="id_mobile_number"
+                                           placeholder="Enter Your Mobile Number" maxlength="10" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                            <div class="form-group">
+                              <label class="trp-form-label" for="id_booking_date">Select Date</label>
+                                <span style="color:red" id="booking_date-error"></span>-->
+                              <input type="text" name="booking_date" class="form-control" id="id_booking_date" placeholder="Select Date" required>
+                            </div>
+                          </div>
+<!--                            <div class="col-sm-6">-->
+<!--                                <div class="form-group">-->
+<!--                                    <label class="trp-form-label" for="id_booking_date">Select Date</label>-->
+<!--                                    <span style="color:red" id="booking_date-error"></span>-->
+<!--                                    <input type="date" name="booking_date" class="form-control" id="id_booking_date"-->
+<!--                                           placeholder="Select Date" required>-->
+<!--                                </div>-->
+<!--                            </div>-->
+                            <div class="col-sm-12 text-right">
+                                <input type="button" value="Submit" class="trp-form-submit" id="enquiry-btn">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+
+<!--PRODUCT DESCRIPTION and review section  -->
+<section class="trp-product-detail-review-section pt-80 pb-10" id="snt-desc-section">
+    <div class="row trp-row">
+        <div class="col-md-12">
+            <div class="trp-product-detail-tab-wrapper">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#productDescription" data-toggle="tab">PRODUCT DESCRIPTION</a>
+                    </li>
+                    <li><a href="#productDetails" data-toggle="tab">PRODUCT DETAILS</a>
+                    </li>
+                    <li><a href="#reviews" data-toggle="tab">REVIEWS</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content ">
+                    <div class="tab-pane active" id="productDescription">
+                        {{ product.description|safe }}
+                    </div>
+                    <div class="tab-pane" id="productDetails">
+                        {% block product_info %}
+                            <table class="table table-bordered" style="color:#000;">
+                                {% if product.upc %}
+                                <tr class="">
+                                    <th>UPC</th>
+                                    <td class="product_weight">
+                                        {{ product.upc }}
+                                    </td>
+                                </tr>
+                                {% endif %}
+                                <tr class="alt">
+                                    <th>Product Type</th>
+                                    <td class="product_dimensions">{{ product.get_product_class.name }}</td>
+                                </tr>
+                                {% purchase_info_for_product request product as session %}
+                                {% if session.price.exists %}
+                                {% if session.price.is_tax_known %}
+                                <tr class="alt">
+                                    {% if product.get_product_class.name == 'Sale' %}
+                                    <th>Sale Price</th>
+                                    {% elif product.get_product_class.name == 'Rent' %}
+                                    <th>Rent Price</th>
+                                    {% elif product.get_product_class.name == 'Professional' %}
+                                    <th>Service Price</th>
+                                    {% elif product.get_product_class.name == 'Rent Or Sale' %}
+                                    <th>Unit Price</th>
+                                    {% endif %}
+                                    <td class="product_dimensions">
+                                        {% get_price_whole product.stockrecords.last as base_price %}
+                                        ₹ {{base_price}}
+                                    </td>
+                                </tr>
+                                {% endif %}
+                                {% if session.stockrecord.unit %}
+                                <tr class="alt">
+                                    <th>Unit</th>
+                                    <td class="product_dimensions">{{ session.stockrecord.unit }}</td>
+                                </tr>
+                                {% endif %}
+
+                                {% if product.get_product_class.name == 'Rent Or Sale' %}
+                                <tr class="alt">
+                                    <th>Rent Price</th>
+                                    <td class="product_dimensions">{% get_rent_price product.stockrecords.last as base_price %}
+                                        ₹ {{base_price}}
+                                    </td>
+                                </tr>
+                                {% endif %}
+                                {% if not is_freeze %}
+                                <tr class="alt">
+                                    <th>Availability</th>
+                                    <td class="product_dimensions">{{ session.availability.message}}</td>
+                                </tr>
+                                {% endif %}
+                                {% endif %}
+
+                                {% for av in product.attribute_values.all %}
+                                <tr class="alt">
+                                    <th>{{av.attribute.name}}</th>
+                                    <td class="product_dimensions">{{ av.value_as_html }}</td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        {% endblock %}
+                    </div>
+                    {% iffeature "reviews" %}
+                                {% block product_review %}
+                {% include "new_design/catalogue/partials/review.html" %}
+                    {% endblock product_review %}
+                    {% endiffeature %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<!-- How to rent section -->
+{% include "new_design/partials/how_to_rent.html" %}
+<!-- payment method section -->
+{% include "new_design/partials/payment_method_section.html" %}
+
+{% endblock %}
+{% block extrascripts %}
+    {{block.super}}
+<script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="{% static 'core_assets/packages/jquery-toast-plugin-1/src/jquery.toast.css' %}"/>
+
+    <script type="text/javascript" src="{% static 'core_assets/packages/jquery-toast-plugin-1/src/jquery.toast.js' %}"></script>
+    <script type="text/javascript" src="{% static 'new_design/assets/js/daterangepicker.js' %}"></script>
+    <link rel="stylesheet" type="text/css" media="all" href="{% static 'new_design/assets/css/daterangepicker.css' %}" />
+
+
+    <script>
+        $(function() {
+        // Card's slider
+        var $carousel = $('.trp-prduct-gallery-slider');
+        $carousel
+            .slick({
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                arrows: false,
+                autoplay: false,
+                infinite: false,
+                autoplaySpeed: 10000,
+                asNavFor: '.slider-nav'
+            })
+
+            $('.slider-nav').slick({
+                slidesToShow: 6,
+                slidesToScroll: 1,
+                lazyLoad: 'ondemand',
+                asNavFor: '.trp-prduct-gallery-slider',
+                infinite: false,
+                dots: false,
+                centerMode: false,
+                focusOnSelect: true
+            });
+        });
+        $('.trp-prduct-gallery-slider').slickLightbox({
+            itemSelector        : 'a',
+            navigateByKeyboard  : true
+        });
+    </script>
+    <script>
+        $(".trp-img-hover-effect img").mouseover(function () {
+            $(this).attr('src', $(this).data("hover"));
+        }).mouseout(function () {
+            $(this).attr('src', $(this).data("src"));
+        });
+    </script>
+    <!-- tooltip -->
+    <script>
+        $(document).ready(function(){
+          $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+    <!-- contact us btn  -->
+    <script>
+        $(document).ready(function() {
+            $("#product-enquiry").click(function() {
+                $(".trp-product-enquiry-sec").show();
+                });
+        });
+    </script>
+    <script>
+        $(function(){
+            $("#enquiry-btn").click(function() {
+            $.ajax({
+                url: "/service-enquiry/{{product.id}}/",
+                type: 'POST',
+                data: {
+                    "name": $("#id_name").val(),
+                    "mobile_number": $("#id_mobile_number").val(),
+                    "email": $("#id_email").val(),
+                    "booking_date": $("#id_booking_date").val(),
+                    "csrfmiddlewaretoken":$("input[name='csrfmiddlewaretoken']").val()
+                },
+                success: function(data){
+                    if(data.status == '0'){
+                        alert(data.message);
+
+                        if(data.error.hasOwnProperty('mobile_number')){
+                            $("#mobile_number-error").text(data.error.mobile_number[0].message);
+                        }
+                        if(data.error.hasOwnProperty('name')){
+                            $("#name-error").text(data.error.name[0].message);
+                        }
+                        if(data.error.hasOwnProperty('email')){
+                            $("#email-error").text(data.error.email[0].message);
+                        }
+                        if(data.error.hasOwnProperty('name')){
+                            $("#booking_date-error").text(data.error.booking_date[0].message);
+                        }
+                    }
+                    else{
+                        alert(data.message);
+                        window.location.reload();
+                    }
+                },
+                error: function(error){
+                    alert("error");
+                }
+            });
+        });
+        });
+
+        function getRating(el) {
+  console.log("value"+el.value);
+  $("#selected_rating").val(el.value);
+  console.log("value1"+$("#selected_rating").val());
+
+}
+function check_submit(e){
+        var rating_value = $('#selected_rating').val();
+        if(!rating_value)
+        {
+         $("#score_error").text('This value is required');
+         return false;
+        }
+        return true;
+}
+
+    </script>
+
+<script>
+    $(document).ready(function () {
+
+            $('#messages').hide();
+
+            {% if messages %}
+              {% for message in messages %}
+                    var status = '{{message.tags}}';
+                    if (status == 'success'){
+                        $.toast({
+                            heading: 'Success',
+                            text: '{{message}}',
+                            icon: 'success',
+                            loader: true,
+                            html: true,
+                            loaderBg: '#9EC600',
+                            position: 'bottom-right',
+                        });
+                    }else{
+                        $.toast({
+                        heading: 'Warning',
+                        text: '{{message}}',
+                        icon: 'warning',
+                        loader: true,
+                        html: true,
+                        loaderBg: '#9EC600',
+                        position: 'bottom-right',
+                        });
+                    }
+                {% endfor %}
+
+            {% endif %}
+            });
+
+</script>
+<script>
+            $(function() {
+
+              $('input[name="booking_date"]').daterangepicker({
+                  autoApply: true,
+                  singleDatePicker: true,
+                  UpdateInput: false,
+                  autoUpdateInput: false,
+                  dateFormat: 'YYYY-MM-DD',
+                  locale: {
+                      cancelLabel: 'Clear'
+                  }
+              });
+
+              $('input[name="booking_date"]').on('apply.daterangepicker', function(ev, picker) {
+                  $(this).val(picker.startDate.format('YYYY-MM-DD'));
+              });
+
+              $('input[name="booking_date"]').on('cancel.daterangepicker', function(ev, picker) {
+                  $(this).val('');
+              });
+
+              });
+            </script>
+<script>
+          function activaTab(tab){
+
+            $('.nav-tabs a[href="#' + tab + '"]').tab('show');
+          };
+          </script>
+{% endblock %}

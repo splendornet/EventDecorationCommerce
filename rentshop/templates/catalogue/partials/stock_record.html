@@ -1,0 +1,106 @@
+{% load currency_filters %}
+{% load i18n %}
+{% load purchase_info_tags %}
+{% load common %}
+{% purchase_info_for_product request product as session %}
+
+<!-- common price -->
+{% get_price_whole product.stockrecords.last as base_price %}
+<span>
+    {% if product.product_class.name  != 'Service' %}
+    <p class="price_color">₹ {{base_price}}</p>
+    {% endif %}
+</span>
+<!-- common price -->
+
+
+<!--{% if session.price.exists %}-->
+    <!--{% if session.price.excl_tax == 0 %}-->
+        <!--<p class="price_color">{% trans "Free" %}</p>-->
+    <!--{% elif session.price.is_tax_known %}-->
+        <!--<p class="price_color">-->
+
+            <!--{% if not product.product_class.name  == 'Rent Or Sale' %}-->
+
+                <!--&lt;!&ndash; tax condition new &ndash;&gt;-->
+                <!--{% if product.product_class.name  == 'Sale' %}-->
+                    <!--{% if product.stockrecords.last.sale_price_with_tax %}-->
+                        <!--{{product.stockrecords.last.sale_price_with_tax|currency:session.price.currency}}-->
+                    <!--{% else %}-->
+                        <!--{{ session.price.incl_tax|currency:session.price.currency }}-->
+                    <!--{% endif %}-->
+                <!--{% endif %}-->
+
+                <!--{% if product.product_class.name  == 'Rent' %}-->
+                    <!--{% if product.stockrecords.last.rent_price_with_tax %}-->
+                        <!--{{product.stockrecords.last.rent_price_with_tax|currency:session.price.currency}}-->
+                    <!--{% else %}-->
+                        <!--{{ session.price.incl_tax|currency:session.price.currency }}-->
+                    <!--{% endif %}-->
+                <!--{% endif %}-->
+
+                <!--{% if product.product_class.name  == 'Professional' %}-->
+                    <!--{% if product.stockrecords.last.rent_price_with_tax %}-->
+                        <!--{{product.stockrecords.last.rent_price_with_tax|currency:session.price.currency}}-->
+                    <!--{% else %}-->
+                        <!--{{ session.price.incl_tax|currency:session.price.currency }}-->
+                    <!--{% endif %}-->
+                <!--{% endif %}-->
+
+                <!--{% if product.product_class.name == 'Rent' %}{% endif %}-->
+                <!--{% elif product.get_product_class.name == 'Service' %}-->
+
+                <!--{% else %}-->
+                    <!--{% if request.path == '/' %}-->
+
+                        <!--<em style="font-size:16px;">-->
+                        <!--{% if product.stockrecords.last.sale_price_with_tax %}-->
+                            <!--{{product.stockrecords.last.sale_price_with_tax|currency:session.price.currency|truncatechars:8}}/-->
+                        <!--{% else %}-->
+                            <!--{{ session.price.incl_tax|currency:session.price.currency|truncatechars:8}}/-->
+                        <!--{% endif %}-->
+
+                        <!--{% if product.stockrecords.last.rent_price_with_tax %}-->
+                            <!--{{product.stockrecords.last.rent_price_with_tax|currency:session.price.currency|truncatechars:8}}-->
+                        <!--{% else %}-->
+                            <!--{{ session.price.rent_price|currency:session.price.currency|truncatechars:8}}-->
+                        <!--{% endif %}-->
+                        <!--</em>-->
+                    <!--{% else %}-->
+
+                        <!--{% if product.stockrecords.last.sale_price_with_tax %}-->
+                            <!--{{product.stockrecords.last.sale_price_with_tax|currency:session.price.currency}}-->
+                        <!--{% else %}-->
+                            <!--{{ session.price.incl_tax|currency:session.price.currency}}/-->
+                        <!--{% endif %}-->
+
+                        <!--{% if product.stockrecords.last.rent_price_with_tax %}-->
+                            <!--{{product.stockrecords.last.rent_price_with_tax|currency:session.price.currency}}-->
+                        <!--{% else %}-->
+                            <!--{{ session.price.rent_price|currency:session.price.currency}}-->
+                        <!--{% endif %}-->
+
+                    <!--{% endif %}-->
+                <!--{% endif %}-->
+            <!--</p>-->
+    <!--{% else %}-->
+        <!--<p class="price_color">{{ session.price.excl_tax|currency:session.price.currency }}</p>-->
+    <!--{% endif %}-->
+<!--{% else %}-->
+    <!--<p class="price_color">&nbsp;</p>-->
+<!--{% endif %}-->
+
+<!--<p class="{{ session.availability.code }} availability" style="display:none; font-weight:bold">-->
+    <!--{% if verbose %}-->
+        <!--{% if product.get_product_class.name != 'Service' %}-->
+        <!--{{ session.availability.message }}-->
+        <!--{% endif %}-->
+    <!--{% else %}-->
+        <!--{% if product.get_product_class.name == 'Service' %}-->
+            <!--Available-->
+        <!--{% else %}-->
+            <!--{{ session.availability.short_message }}-->
+        <!--{% endif %}-->
+    <!--{% endif %}-->
+<!--</p>-->
+

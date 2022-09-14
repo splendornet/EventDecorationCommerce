@@ -1,0 +1,227 @@
+{% extends "layout_2_col.html" %}
+{% load i18n %}
+{% load thumbnail %}
+{% load currency_filters %}
+{% load purchase_info_tags %}
+{% load display_tags %}
+{% load reviews_tags %}
+{% load staticfiles %}
+{% load mathfilters %}
+{% load common %}
+
+{% load product_tags %}
+{% load purchase_info_tags %}
+
+{% block navigation %}
+    {% include "partials/nav_primary.html" with expand_dropdown=1 %}
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block column_left %}
+{% endblock %}
+
+{% block content %}
+
+<style xmlns="http://www.w3.org/1999/html">
+    html {
+        scroll-behavior: smooth !important;
+    }
+
+    .Sale { background-color:#F4B801 !important; } .Rent { background-color:#F4B801  !important; } .RentOrSale { background-color:#F4B801 !important; } .Service { background-color:#F4B801 !important; } .Professional{background-color:#F4B801 !important; } .Sale_after { border-color: transparent transparent #F4B801 transparent; } .Rent_after { border-color: transparent transparent #F4B801  transparent;} .RentOrSale_after { border-color: transparent transparent #F4B801 transparent; } .Service_after { border-color: transparent transparent #F4B801 transparent; } .Professional_after{border-color: transparent transparent #F4B801 transparent; } .Sale_before { border-color: transparent #F4B801 transparent transparent; } .Rent_before { border-color: transparent #F4B801  transparent transparent;} .RentOrSale_before { border-color: transparent #F4B801 transparent transparent; } .Service_before { border-color: transparent #F4B801 transparent transparent;} .Professional_before{border-color: transparent #F4B801 transparent  transparent; } .btn-link-red{ background-color: #f4b800; color: #fff !important; } .btn-link-red:hover{ background-color: #e91d4a; color: #fff !important; } .btn-gp{ margin-right:0 !important; }
+    .home-banner-img{
+     //   height:30em !important;
+    }
+    .banner-text-mr{
+      //  margin-top:-130px !important;;
+    }
+    .postid-2784 .btn-red {
+        width: auto;
+        margin-bottom: 0px !important;
+        margin-right: 10px;
+    }
+    .nz-content-box-2 .box-content {
+        margin-bottom: 0px !important;
+        height: auto !important;
+        padding-bottom: 0px !important;
+    }
+    .section-1-pr, .section-3-div{
+        padding-top:10px  !important;
+    }
+    @media only screen and (min-width: 768px) {
+        .woocommerce .products .product, .woocommerce .menu-group {
+            padding-right: 0px !important;
+            padding-left: 0px !important;
+        }
+    }
+    .mr-top-l1{
+        padding-top: 1rem !important;
+    }
+    #parallax_2{
+        margin-bottom:0px !important;
+    }
+    .main-wrapper-qoute{
+        background-image: url("/static/core_assets/packages/best_qoutes/design1.jpg");
+        background-size: contain;
+        background-repeat: no-repeat;
+        height:640px;
+        position: relative;
+        background-position:center;
+        top: 2em !important;
+        margin-top:90px;
+    }
+    .left-div{
+        //padding-top:30px;
+        margin:13% auto;
+        padding-left:100px;
+        color:#fff;
+    }
+    .left-div>h4{
+        color:#fff;
+        font-size:40px;
+        font-weight:bold;
+        line-height:2.5;
+        text-shadow: 2px 2px #000;
+    }
+    .left-div>h1{
+        color:#fff;
+        font-size:100px;
+        font-weight:bold;
+        text-shadow: 2px 2px #000;
+    }
+    .right-div {
+        //padding-top:30px;
+        margin:40% auto;
+    }
+    .right-div > ul {
+        list-style:none;
+    }
+    .right-div > ul > li {
+        color:#000;
+        font-size:30px;
+        line-height:1.4;
+        text-transform: uppercase;
+    }
+    .yellow-strip{
+        background-color: orange;
+        opacity: 0.9;
+        padding: 10px 0px;
+        /* margin: 5px; */
+        margin-left: 0px;
+        margin-right: 0px;
+        bottom: 0;
+        position: absolute;
+        width: 100%;
+    }
+    .cn-h6{
+        color:#fff;
+        font-size:20px;
+    }
+
+    .btn-qoute{
+        background-color:orange;
+        color:#fff;
+        width:14%;
+        font-weight: bold;
+        margin-top:50px;
+        margin-bottom:20px;
+            padding: 5px 20px;
+    background-color: #FF9900;
+    color: #f1f1f1 !important;
+    font-weight:400;
+    border-radius: 3px;
+    transition: .2s;
+
+    }
+    @media(max-width: 767px) {
+      .main-wrapper-qoute {
+        height: 250px;
+      }
+      .btn-qoute{
+        width: 54%;
+      }
+    }
+</style>
+
+
+<div class="main-wrapper-qoute">
+<!--    <div class="row">-->
+<!--        <div class="col-md-8">-->
+<!--            <div class="left-div">-->
+<!--                <h4>Get</h4>-->
+<!--                <h1>Best Quote</h1>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="col-md-4">-->
+<!--            <div class="right-div">-->
+<!--                <ul>-->
+<!--                    <li>Corporate event</li>-->
+<!--                    <li>Exhibitions</li>-->
+<!--                    <li>Fashion shows</li>-->
+<!--                    <li>Concerts</li>-->
+<!--                </ul>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="row yellow-strip">-->
+<!--        <div class="yellow-strip-inner">-->
+<!--            <div class="col-md-3 text-center">-->
+<!--                <h6 class="cn-h6 cn-con">7378989996</h6>-->
+<!--            </div>-->
+<!--            <div class="col-md-3 text-center">-->
+<!--                <h6 class="cn-h6 cn-web">www.takerentpe.com</h6>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+</div>
+
+<div class="form-warrper">
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <img src="{% static 'core_assets/packages/best_qoutes/flowchart2.jpg' %}" alt="Our Flow"/>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            {% if request.user.is_authenticated %}
+            <a href="/catalogue/form_best_quote" target="_blank" class="btn btn-qoute">Fill Your Information</a>
+            {% else %}
+            <a href="#" onclick="alert('Please login')" class="btn btn-qoute">Fill Your Information</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+<!--<div id="nz-content" class='content nz-clearfix sidebar-none padding-false'>-->
+
+
+    <!--<div class='page-full-width'>-->
+        <!--&lt;!&ndash; post start &ndash;&gt;-->
+        <!--<div id="post-28" class="post-28 page type-page status-publish hentry">-->
+            <!--<section class="page-content nz-clearfix">-->
+
+                        <!--<div id="parallax_0" class="parallax">-->
+                            <!--<div data-source-url="/media/design1.jpg" class="home-banner-img parallax1" style="background-image: url(&quot;http://livedemo00.template-help.com/opencart_53405/image/cache/catalog/parallax-1-2050x1677.jpg&quot;); background-position: 50% 51.9385%; width: 1360px; margin-left: -680px; left: 50%;height:100%">-->
+                                <!--<div class="container">-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                <!--<div id="nz-features" class="mr-top-l1 nz-section horizontal autoheight-false animate-false full-width-false " data-animation-speed="35000" data-parallax="false">-->
+                    <!--<div class="container m-less-padding">-->
+                        <!--<div class="nz-row" style="text-align:center">-->
+                            <!--<a href="/catalogue/form_best_quote" target="_blank" class="button button-ghost turquoise large round"  type="button" style="box-border:1px #e91d4a;     box-shadow:none;color: #00c1cf;background-color: #e91d4a;color: #fff;"> Fill Your Informations<br> </a>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+
+            <!--</section>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+
+{% endblock %}

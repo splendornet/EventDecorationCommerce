@@ -1,0 +1,79 @@
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+<style>
+    .box1{
+        border:1px solid #555;
+        border-radius:3px;
+        //padding:10px;
+        margin:5px;
+    }
+    .box-title{
+        background-color: #ddd;
+        padding: 1px;
+        text-align: center;
+    }
+    .box-title > h6{
+        margin:5px;
+    }
+    .box-body{
+        padding:20px;
+        text-align:center;
+    }
+    .plus-btn{
+        background-color: transparent;
+        border: 0;
+        font-size:26px;
+    }
+    .box-footer{
+        text-align: center;
+        padding: 5px;
+    }
+    .place-footer{
+        height:41px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 14px;
+        padding: 5px;
+    }
+</style>
+
+<div class="row">
+    {{ comboproduct_formset.management_form }}
+    {% for i in comboproduct_formset %}
+        {% include "dashboard/partials/form_field.html" with field=i.id nolabel=True %}
+        <div class="col-md-3">
+            <div class="box1">
+                <div class="box-title">
+                    <h6>Product {{forloop.counter}}</h6>
+                </div>
+                <div class="box-body">
+                    {% if i.product.value %}
+                        <button type="button" class="plus-btn" onclick="remove_product('{{forloop.counter0}}', '{{i.product.value}}')">
+                            <em class="fa fa-minus-circle"></em>
+                        </button>
+                    {% else %}
+                        <button type="button" class="plus-btn" onclick="add_product('{{forloop.counter}}')">
+                            <em class="fa fa-plus-circle"></em>
+                        </button>
+                    {% endif %}
+                </div>
+                <div class="box-footer">
+                    <div class="place-footer">
+                        {% if i.product.value %}
+                            <div class="form-product" id="product-{{forloop.counter}}">
+                                {{i.product}}
+                                <input class="set_product_id" type="hidden" value="{{i.product.value}}"/>
+                            </div>
+                        {% else %}
+                            <span id="product-span-{{forloop.counter}}">No product</span>
+                            <div class="form-product" id="product-{{forloop.counter}}" style="display:none;">
+                                {{i.product}}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    {% endfor %}
+</div>

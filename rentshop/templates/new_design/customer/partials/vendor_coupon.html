@@ -1,0 +1,177 @@
+{% load static %}
+<div class="trp-mycoupon-accordion" id="trp-mycoupon-accordion-1">
+    <div class="trp-mycoupon-accordion-item-wrapper">
+        <div class="trp-accordion-title-wrapper">
+            <h3 class="trp-accordion-title ">Allotted Coupons <span style="font-weight: 400;">(CDN)</span></h3>
+        </div>
+        <div class="trp-accordion-arrow">
+            <img src="{% static 'new_design/assets/images/accodian-droparrow.svg' %}" alt="">
+        </div>
+    </div>
+    <!-- </div> -->
+
+    <div class="trp-acc-mycoupon-wrapper trp-mycoupon-accordion-containt trp-sub-acc-wrap">
+        <div class="trp-sub-accordion-wrapper">
+            <div class="trp-mycoupon-sub-wrapper active">
+                <div class="trp-accordion-title-wrapper">
+                    <h3 class="trp-accordion-title ">Active Coupons</h3>
+                </div>
+                <div class="trp-accordion-arrow">
+                    <img src="{% static 'new_design/assets/images/dropdown-circle-arrow.svg' %}" alt="">
+                </div>
+            </div>
+            <div class="trp-acc-detail-wrapper trp-acc-order-table-wrapper trp-acc-wishlist-table trp-mycoupon-accordion-table trp-on">
+                {% if vendor_vouchers %}
+                <table class="table table-striped trp-acc-order-table ">
+                    <thead>
+                    <tr>
+                        <!-- <th class="col-sm-2">Coupon Code</th> -->
+                        <th class="col-sm-4">Offer Details</th>
+                        <th class="col-sm-3">Category</th>
+                        <th class="col-sm-3 text-left">Validation Period</th>
+                        <th class="col-sm-2 text-right">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for voucher in vendor_vouchers %}
+                    <tr>
+
+                        <td class="col-sm-4" data-title="Offer Details">
+                            <div class="trp-cartProduct-img-title">
+                                <div class="trp-wishlistProduct-name text-left trp-coupon-detail-link"><a href="#">{{voucher.offer_details}}</a>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="col-sm-3  trp-acc-wishlist-price text-left" data-title="Category"> {% for category in voucher.categories %}<span>{{category}}</span>{% endfor %}
+                        </td>
+                        <td class="col-sm-3 text-left trp-acc-wishlist-price " data-title="Validation Period"><span>{{voucher.start_date|date:"d/m/Y"}} to {{voucher.end_date|date:"d/m/Y"}}</span>
+                        </td>
+                        <td class="col-sm-2 text-right" data-title="Action">
+                            <div><a href="#" class="trp-acc-wishlist-delet-link" aria-label="Edit"
+                                    data-product_id="">
+                                <img src="{% static 'new_design/assets/images/icon-edit.svg' %}" alt=""></a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                    No active coupons
+                    {% endif %}
+            </div>
+        </div>
+
+        <div class="trp-sub-accordion-wrapper mt-20">
+            <div class="trp-mycoupon-sub-wrapper">
+                <div class="trp-accordion-title-wrapper">
+                    <h3 class="trp-accordion-title ">Used Coupons</h3>
+                </div>
+                <div class="trp-accordion-arrow">
+                    <img src="{% static 'new_design/assets/images/dropdown-circle-arrow.svg' %}" alt="">
+                </div>
+            </div>
+            <div class="trp-acc-detail-wrapper trp-acc-order-table-wrapper trp-acc-wishlist-table trp-mycoupon-accordion-table">
+                {% if vendor_used_vouchers %}
+                <table class="table table-striped trp-acc-order-table ">
+                    <thead>
+                    <tr>
+                        <th class="col-sm-2">Coupon Code</th>
+                        <th class="col-sm-3">Offer Details</th>
+                        <th class="col-sm-3">Redeemed Against</th>
+                        <th class="col-sm-2 text-left">Used Date</th>
+                        <th class="col-sm-1 text-right">Details</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for voucher in vendor_used_vouchers %}
+                    <tr>
+                        <td class="col-sm-2" data-title="Coupon Code">
+                            <div class="trp-cartProduct-img-title">
+                                <div class="trp-display-inline-block trp-copy-code">
+                                    <p class="mb-0">{{voucher.code}}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="col-sm-3" data-title="Offer Details">
+                            <div class="trp-cartProduct-img-title">
+                                <div class="trp-wishlistProduct-name text-left trp-coupon-detail-link"><a href="#">{{voucher.offer_details}}</a>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="col-sm-3  trp-acc-wishlist-price text-left" data-title="Redeemed Against">{% for category in voucher.redeemded %} <span>{{category}}</span> {% endfor %}
+                        </td>
+                        <td class="col-sm-2 text-left trp-acc-wishlist-price " data-title="Used Date">
+                            <span>{{voucher.used_date|date:"d/m/Y"}}</span>
+                        </td>
+                        <td class="col-sm-1 text-right trp-acc-wishlist-price " data-title="Details">{% for upc in voucher.upc_list %}<span>({{upc}})</span> {% endfor %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="trp-wishlistProduct-name text-left trp-coupon-detail-link">No used coupons</div>
+                {% endif %}
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<div class="trp-mycoupon-accordion mt-40" id="trp-mycoupon-accordion-2">
+    <div class="trp-mycoupon-accordion-item-wrapper">
+        <div class="trp-accordion-title-wrapper">
+            <h3 class="trp-accordion-title ">Used Coupons</h3>
+        </div>
+        <div class="trp-accordion-arrow">
+            <img src="{% static 'new_design/assets/images/accodian-droparrow.svg' %}" alt="">
+        </div>
+    </div>
+    <!-- </div> -->
+    <div class="trp-acc-mycoupon-wrapper trp-mycoupon-accordion-containt">
+        <div class="trp-acc-detail-wrapper trp-acc-order-table-wrapper trp-acc-wishlist-table trp-mycoupon-accordion-table">
+            {% if categorywise_vouchers %}
+            <table class="table table-striped trp-acc-order-table ">
+                <thead>
+                <tr>
+                    <th class="col-sm-3">Category</th>
+                    <th class="col-sm-2 text-center">Coupon Count</th>
+                    <th class="col-sm-2 text-center">Used Coupon</th>
+                    <th class="col-sm-4 text-center">Balance Active Coupon</th>
+                    <th class="col-sm-1 text-right">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for voucher in categorywise_vouchers %}
+                <tr>
+                    <td class="col-sm-3  trp-acc-wishlist-price text-left" data-title="Category">
+                        <div class="trp-wishlistProduct-name text-left trp-coupon-detail-link"><a href="#">{{voucher.category}}</a>
+                        </div>
+                        </span>
+                    </td>
+
+                    <td class="col-sm-3 text-center trp-acc-wishlist-price " data-title="Coupon Count"><span>{{voucher.coupon_count}}</span>
+                    </td>
+
+                    <td class="col-sm-2 text-center trp-acc-wishlist-price " data-title="Used Coupon"><span>{{voucher.used_coupon}}</span>
+                    </td>
+                    <td class="col-sm-4 text-center trp-acc-wishlist-price " data-title="Balance Active Coupon">
+                        <span>{{voucher.balanced_coupon}}</span>
+                    </td>
+                    <td class="col-sm-1 text-right" data-title="Action">
+                        <div><a href="#" class="trp-acc-wishlist-delet-link" aria-label="Edit" data-product_id=""><img
+                                src="{% static 'new_design/assets/images/icon-edit.svg' %}" alt=""></a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            No coupons
+            {% endif %}
+        </div>
+    </div>
+</div>

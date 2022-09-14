@@ -1,0 +1,22 @@
+{% load reviews_tags %}
+{% load i18n %}
+{% load mathfilters %}
+
+
+{% load reviews_tags %}
+{% load i18n %}
+
+<div class="star-rating" title="Rated 4 out of 5">
+    <span style="width:{% if product.rating %} {{product.rating|div:5|mul:100}}% {% else %} 0% {% endif %}">
+        <strong class="rating">{{product.rating|floatformat}}</strong> out of 5
+    </span>
+</div>
+
+{% if user.is_authenticated %}
+{% if product|is_review_permitted:user %}
+    <a id="write_review"  href="{% url 'catalogue:reviews-add' product_slug=product.slug product_pk=product.id %}#id_review_div" class="btn btn-red btn-yellow btn-sm">
+        {% trans "Write a review" %}
+    </a>
+{% endif %}
+        {% endif %}
+</p>

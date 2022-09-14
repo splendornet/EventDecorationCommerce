@@ -1,0 +1,362 @@
+{% extends 'new_design/base.html' %}
+{% load static %}
+{% load common %}
+{% load humanize %}
+{% load display_tags %}
+{% block content %}
+<!--breadcrumbs  -->
+<section class="trp-breadcrumb-sec">
+    <ul class="breadcrumb">
+        <li><a href="/">Home</a></li>
+        <li><a href="/">Rental catalogue</a></li>
+        {% if category.get_parent %}
+        <li> <a href="{{ category.get_parent.get_absolute_url }}">{{ category.get_parent.name }} </a></li>
+        {% endif %}
+        <li>{{ title }}</li>
+    </ul>
+</section>
+
+<!-- main section -->
+<section class="trp-layout-detail-product">
+    <div class="row trp-row row-d-table">
+        <!-- sidebar -->
+        <div class="col-md-3 col-tabp-4 col-d-table-cell ">
+            <div class="trp-mobile-accordion">
+                <p>Filters <span class="trp-sidebarToggel-icon"></span></p>
+            </div>
+            <div class="trp-sidebar-wrapper trp-mobile-accordion-div">
+                <form action="." method="get" id="filter-form">
+                <div class="trp-sidebar-catogery-wrapper">
+                    <div class="trp-sidebar-title-wrapper">
+                        <h3 class="trp-sidebar-title">
+                            {% if category.get_parent %}
+                                {{category.get_parent.name}}
+                            {% else %}
+                                {{ category.name }}
+                            {% endif %}
+                            Category
+                        </h3>
+                        <p class="mb-15"><a href="{{request.path}}" class="trp-clear-all-link ">Clear All</a></p>
+                    </div>
+                    <ul class="trp-sidebar-list">
+                        {% for cat in category_list %}
+                            <li class="trp-radio-pink ">
+                                {% if cat.id == filters.category %}
+                                    <input type="radio" id="decorationCategory-{{forloop.counter}}" name="category" checked value={{cat.id}}>
+                                {% elif not filters.category and cat.name == category.name %}
+                                    <input type="radio" id="decorationCategory-{{forloop.counter}}" name="category" checked value={{cat.id}}>
+                                {% else %}
+                                    <input type="radio" id="decorationCategory-{{forloop.counter}}" name="category" value={{cat.id}} onclick="form.submit();">
+                                {% endif %}
+                                <label class="trp-catogery-lable" for="decorationCategory-{{forloop.counter}}">{{cat.name}}</label>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                {% get_category_wise_filter category as filter_data %}
+                {% if filter_data %}
+                    {% for attr , values in filter_data.items %}
+                        <div class="trp-devider2 mt-20 mb-20"></div>
+                        <div class="trp-sidebar-catogery-wrapper">
+                            <div class="trp-sidebar-title-wrapper">
+                                <h3 class="trp-sidebar-title">{{attr|title}}</h3>
+                            </div>
+                            <ul class="trp-sidebar-list">
+                                {% for value in values %}
+                                    <li class="trp-pink-checkbox">
+                                        {% check_selected_filter value request.GET.filter_list as selected_value %}
+                                        {% if selected_value %}
+                                        <input type="checkbox" name="control_att" id="{{attr}}-checkbox-{{forloop.counter}}" onclick="trigger_filter_select(this, '{{attr}}')" data-original-title='{{attr}}' value="{{value}}" checked>
+                                        {% else %}
+                                        <input type="checkbox" name="control_att" id="{{attr}}-checkbox-{{forloop.counter}}" onclick="trigger_filter_select(this, '{{attr}}')" data-original-title='{{attr}}' value="{{value}}">
+                                        {% endif %}
+                                        <label for="{{attr}}-checkbox-{{forloop.counter}}" class="trp-catogery-lable">
+                                            {% if attr == 'color' or attr == 'Color' or attr == 'COLOR' %}
+                                                <span class="sidebar-color" style="background-color: {{value}};"></span>
+                                            {% endif %}
+                                            {{value}}
+                                        </label>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endfor %}
+
+                {% endif %}
+                <input type="hidden" id="id_filter_list" name="filter_list" value="{% if request.GET.filter_list %} {{request.GET.filter_list}} {% endif %}">
+                    <input type="hidden" name="price_range" id="price_filter" value="{% if request.GET.price_range %} {{request.GET.price_range}} {% endif %}">
+                </form>
+            </div>
+        </div>
+        <div class="col-md-9 col-tabp-8 col-d-table-cell">
+            <div class="trp-product-listing-title-wrapper ">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h1 class="trp-product-listing-title">{{ title }}</h1>
+                    </div>
+                    <div class="col-sm-4">
+                        <select class="trp-price-range form-control mt-10" name="price-range" id="price-range" onchange="add_price_filter()">
+                            <option value=''>Select Price Range</option>
+                            {% for k,v in price_filter %}
+                                {% if request.GET.price_range == k %}
+                                    <option value="{{k}}" selected>{{v}}</option>
+                                {% else %}
+                                    <option value="{{k}}">{{v}}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            {% if products %}
+                <div class="trp-product-listing-wrapper">
+                    <div class="row display-flex">
+                        {% for product in products %}
+                            <div class="col-sm-6 col-tabp-6 col-md-4 col-xl-3 mb-30 trp-product-list-item">
+                                <div class="trp-offer-card text-center mt-10 pb-20 trp-same-height">
+                                {% with all_images=product.get_all_images %}
+                                    {% for image in all_images %}
+                                        {% if image.is_dp_image %}
+                                    <a href="{{product.get_absolute_url}}"><img class="trp-best-deals-img" src="{{image.original.url}}" alt="Featured Products"></a>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endwith %}
+                                <div class="trp-offer-card-header">
+                                    <a href="{{product.get_absolute_url}}"><p class="trp-product-img-title"> {{ product.title }} </p></a>
+                                </div>
+                                <p class="trp-product-price">
+                                    {% if product.product_class.name == 'Rent' or product.product_class.name == 'Professional' %}
+                                        <span class="trp-rent-price">
+                                            <span class="trp-rent-decorationCategorytitle">Rent:</span> ₹ {{product.stockrecords.last.rent_base_price}} {% if product.stockrecords.all.last.rent_market_price %}<small class="snt-product-mrp" style="text-decoration-line: line-through;">(₹ {{product.stockrecords.all.last.rent_market_price|intcomma}})</small>{% endif %}
+                                        </span><br>
+                                    {% elif product.product_class.name == 'Sale' %}
+                                        <span class="trp-sale-price">
+                                            <span class="trp-rent-decorationCategorytitle">Sale:</span> ₹ {{product.stockrecords.last.sale_base_price}} {% if product.stockrecords.all.last.sale_market_price %}<small class="snt-product-mrp" style="text-decoration-line: line-through;">(₹ {{product.stockrecords.all.last.sale_market_price|intcomma}})</small>{% endif %}
+                                        </span>
+                                    {% elif product.product_class.name == 'Rent Or Sale' %}
+                                        <span class="trp-rent-price">
+                                            <span class="trp-rent-price-title">Rent:</span> ₹ {{product.stockrecords.last.rent_base_price}} {% if product.stockrecords.all.last.rent_market_price %}<small class="snt-product-mrp" style="text-decoration-line: line-through;">(₹ {{product.stockrecords.all.last.rent_market_price|intcomma}})</small>{% endif %}
+                                        </span><br>
+                                        <span class="trp-sale-price">
+                                            <span class="trp-rent-price-title">Sale:</span> ₹ {{product.stockrecords.last.sale_base_price}} {% if product.stockrecords.all.last.sale_market_price %}<small class="snt-product-mrp" style="text-decoration-line: line-through;">(₹ {{product.stockrecords.all.last.sale_market_price|intcomma}})</small>{% endif %}
+                                        </span>
+                                    {% endif %}
+                                </p>
+                                {% if product.get_perc %}
+                                    <span class="trp-offer-badge">{{product.get_perc}}%<span>OFF</span></span>
+                                {% endif %}
+                                    {% load wishlist_tags %}
+                                    {% if user.is_authenticated %}
+                                        {% with wishlists=user.wishlists.all %}
+                                        {# Select wishlists that contains product #}
+                                        {% wishlists_containing_product wishlists product as product_wishlists %}
+                                        {% if wishlists %}
+                                            {% for wishlist in wishlists %}
+                                            <span class="trp-wishlist-badge">
+                                                <a href="{{product.get_absolute_url}}">
+                                                    {% if wishlist not in product_wishlists %}
+                                                    <img data-src="{% static 'new_design/assets/images/product-wishlist-icon-white.svg' %}" data-hover="{% static 'new_design/assets/images/product-wishlist-fill-icon.svg' %}" src="{% static 'new_design/assets/images/product-wishlist-icon-white.svg' %}" alt="">
+                                                    {% else %}
+                                                    <img data-src="{% static 'new_design/assets/images/product-wishlist-fill-icon.svg' %}" data-hover="{% static 'new_design/assets/images/product-wishlist-fill-icon.svg' %}" src="{% static 'new_design/assets/images/product-wishlist-fill-icon.svg' %}" alt="">
+                                                    {% endif %}
+                                                </a>
+                                            </span>
+                                            {% endfor %}
+                                        {% endif %}
+                                        {% endwith %}
+                                    {% endif %}
+                                {% if product.product_class.name != 'Service' %}
+                                    <p class="trp-freeShipping-tag">
+                                        <img src="{% static 'new_design/assets/images/shipping-icon.svg' %}" alt="Free Shipping' %}">
+                                        {% if not product.is_transporation_available %}
+                                            Free Shipping & Installation
+                                        {% else %}
+                                            {% get_shipping_price product.stockrecords.last as shipping_price %}
+                                            {% if shipping_price %}
+                                                {{shipping_price}}
+                                            {% else %}
+                                                Free Shipping & Installation
+                                            {% endif %}
+                                        {% endif %}
+                                    </p>
+                                {% endif %}
+                                <div class="trp-product-list-btn mt-30 " >
+                                    <a class ="trp-display-inline-block trp-rent-btn" href="{{product.get_absolute_url}}">View Details</a>
+<!--                                    {% if product.product_class.name == 'Sale' or product.product_class.name == 'Rent Or Sale' %}-->
+<!--                                        <a class ="trp-display-inline-block add-to-cart-btn" href="{{product.get_absolute_url}}" >Add to Cart</a>-->
+<!--                                    {% endif %}-->
+<!--                                    {% if product.product_class.name == 'Rent' or product.product_class.name == 'Rent Or Sale' or product.product_class.name == 'Professional' %}-->
+<!--                                        <a class ="trp-display-inline-block trp-rent-btn" href="{{product.get_absolute_url}}">For Rent</a>-->
+<!--                                    {% endif %}-->
+<!--                                    {% if product.product_class.name == 'Service' %}-->
+<!--                                        <a class ="trp-display-inline-block trp-rent-btn" href="{{product.get_absolute_url}}">Contact Us</a>-->
+<!--                                    {% endif %}-->
+                                </div>
+                            </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% if paginator %}
+                    <div class="mt-35 mb-45 simple-pagination">
+                    <ul>
+                        <li>
+                            {% if page_obj.has_previous %}
+                                <a href="?{% get_parameters page %}page={{ page_obj.previous_page_number }}" class="page-link prev">
+                            {% else %}
+                                <a class="current prev">
+                            {% endif %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="15.108" height="9.439" viewBox="0 0 15.108 9.439"><defs></defs><path class="prev-icon" d="M315.308,379.79a.686.686,0,0,1,.078.967l-2.45,2.9h12.071a.687.687,0,0,1,0,1.373H312.98l2.41,2.907a.686.686,0,1,1-1.054.879l-3.751-4.513,3.755-4.438A.686.686,0,0,1,315.308,379.79Z" transform="translate(-310.586 -379.627)"></path></svg> Prev
+                            </a>
+                        </li>
+                        {% for page_num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == page_num %}
+                                <li><a href="?{% get_parameters page %}page={{page_num}}" class="page-link current">{{page_num}}</a></li>
+                            {% elif page_num > page_obj.number|add:'-5' and page_num < page_obj.number|add:'5' %}
+                                <li><a class="page-link" href="?{% get_parameters page %}page={{page_num}}">{{page_num}}</a></li>
+                            {% else %}
+<!--                                <li><a href="?page={{page_num}}" class="page-link">{{page_num}}</a></li>-->
+                            {% endif %}
+                        {% endfor %}
+                        <li>
+                            {% if page_obj.has_next %}
+                                <a href="?{% get_parameters page %}page={{ page_obj.next_page_number }}" class="page-link next">
+                            {% else %}
+                                <a class="current next">
+                            {% endif %}
+                                Next <svg xmlns="http://www.w3.org/2000/svg" width="15.108" height="9.439" viewBox="0 0 15.108 9.439"><defs></defs><path class="next-icon" d="M322.972,379.79a.686.686,0,0,0-.078.967l2.45,2.9H313.273a.687.687,0,1,0,0,1.373H325.3l-2.41,2.907a.686.686,0,1,0,1.054.879l3.751-4.513-3.755-4.438A.686.686,0,0,0,322.972,379.79Z" transform="translate(-312.586 -379.627)"></path></svg>
+                                </a>
+                        </li>
+                    </ul>
+                </div>
+                {% endif %}
+                <div class="trp-acc-mainContent-wrapper mb-35">
+                    <p class="trp-listing-description"> {% if filters.category %} {% for cat in category_list %} {% if cat.id == filters.category %} {{cat.description|striptags }} {% endif %} {% endfor %} {% else %} {{ category.description|striptags}} {% endif %}</p>
+                </div>
+            {% else %}
+                <p>No record found</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% block extrascripts %}
+{{ block.super }}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/jquery.simplePagination.js"></script>
+
+<!-- sticky menu -->
+<script type="text/javascript">
+    $(document).ready(function() {
+        var $navbar = $("#trp-header");
+        AdjustHeader(); // Incase the user loads the page from halfway down (or something);
+        $(window).scroll(function() {
+            AdjustHeader();
+        });
+        function AdjustHeader(){
+            if ($(window).scrollTop() > 30) {
+                if (!$navbar.hasClass("navbar-fixed-top")) {
+                    $navbar.addClass("navbar-fixed-top");
+                }
+            } else {
+                  $navbar.removeClass("navbar-fixed-top");
+                }
+              }
+            });
+
+</script>
+
+<!-- add active link in menu item -->
+<script type="text/javascript">
+    $(document).ready(function ($) {
+        var url = window.location.href;
+        var activePage = url;
+        $('.navbar-nav a').each(function () {
+            var linkPage = this.href;
+
+            if (activePage == linkPage) {
+                $(this).closest("li").addClass("active");
+            }
+        });
+    });
+</script>
+
+<script>
+    $(".trp-img-hover-effect img").mouseover(function () {
+      $(this).attr('src', $(this).data("hover"));
+    }).mouseout(function () {
+      $(this).attr('src', $(this).data("src"));
+    });
+</script>
+
+<script>
+
+</script>
+<!--Hide menu   -->
+<script>
+    $(document).ready(function () {
+        $(document).click(function (event) {
+            var clickover = $(event.target);
+            var _opened = $(".navbar-collapse").hasClass("collapse in");
+            // alert(_opened)
+            if (_opened === true && !clickover.hasClass("navbar-toggle")) {
+                $("button.navbar-toggle").click();
+            }
+        });
+    });
+</script>
+
+<!-- wishlist hover effect -->
+<script>
+    // wishlist badge color hover effect
+  $(".trp-wishlist-badge img").mouseover(function () {
+    $(this).attr('src', $(this).data("hover"));
+  }).mouseout(function () {
+    $(this).attr('src', $(this).data("src"));
+  });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('.trp-mobile-accordion').on('click', function () {
+            $('.trp-mobile-accordion').toggleClass('side-bar-active');
+            $('.trp-mobile-accordion-div ').toggleClass('side-bar-collapse');
+            $('.trp-mobile-accordion-div').slideToggle('fast');
+        });
+    });
+</script>
+
+<!-- filter functions -->
+<script>
+
+    function trigger_filter_select(e, type){
+        var final_array = []
+        var check_name = type + '-checkbox';
+        $('[name=control_att]:checked').map(function() {
+            var text = this.value;
+            var text_attr = jQuery(this).data('original-title');
+
+            if (text){
+                final_array.push( { [text_attr]: text } )
+            }
+        });
+        if(final_array.length > 0){
+            $('#id_filter_list').val(JSON.stringify(final_array));
+        }
+        else{
+            $('#id_filter_list').val("");
+        }
+        $('#filter-form').submit();
+    }
+
+    function add_price_filter(){
+        price_range = $("#price-range option:selected").val();
+        console.log(price_range);
+        $("#price_filter").val(price_range);
+        console.log('submitted data @@');
+        $('#filter-form').submit();
+    }
+</script>
+{% endblock %}
+
+

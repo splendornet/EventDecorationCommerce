@@ -1,0 +1,17 @@
+{% extends "customer/emails/base.html" %}
+{% load currency_filters i18n %}
+
+
+{% block tbody %}
+    <tr>
+        <td class="content-block">
+            <p xmlns="http://www.w3.org/1999/html">Hello {{user.get_full_name}},</p>
+            <p>We noticed you left something in your cart. Complete your order now and get more offers! Hurry up!
+            </p>
+            <a href="{{domain}}{% url 'basket:summary'%}">{{domain}}{% url 'basket:summary'%}</a><br/>
+
+            <p>Happy celebranto,</p>
+            <p style="line-height: 0px;">Rutuja, Take Rent Pe.</p><br/>
+        </td>
+    </tr>
+{% endblock %}

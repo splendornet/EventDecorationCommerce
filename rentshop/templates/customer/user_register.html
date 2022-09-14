@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+{% load static %}
+{% load common %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>TakeRentPe | Register</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" media="screen" href="{% static 'oscar/css/loginregister/style.css' %}">
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" >
+
+    <style>
+        #particles-js{
+            background-image:url("{% static 'oscar/css/loginregister/login_banner.jpg' %}");
+        }
+        .er-size{
+            color:#fff; font-weight:300; font-size:12px;
+        }
+        #second{
+            //height:auto;
+        }
+        
+    </style>
+<link rel="shortcut icon" href="{% static 'oscar/images/favicon_set_1/logo500x.png' %}"/></head>
+<body>
+
+
+
+<!-- count particles -->
+<div class="count-particles">
+    <div class="container">
+        <div id="login-box">
+            <div id="second" style="display:block">
+                <div class="">
+                    <div class="card2">
+                        <div class="card-header">
+                            <h3>Sign Up</h3>
+                            <div class="d-flex justify-content-end social_icon">
+                                {% get_social_link request as data %}
+                                <a href="{% if data.fb_link %} {{data.fb_link}} {% else %} https://www.facebook.com/Take-Rent-Pe-101019151839514 {% endif %}" target="_blank">
+                                <span><i class="fab fa-facebook-square"></i></span>
+                                </a>
+<!--                                <span><i class="fab fa-google-plus-square"></i></span>-->
+                                <a href="{% if data.twitter_link %} {{data.twitter_link}} {% else %} https://twitter.com/take_rent_pe {% endif %}" target="_blank">
+                                <span><i class="fab fa-twitter-square"></i></span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <form action="{{ request.get_full_path }}" method="post" name="registration" class="form-horizontal" role="form">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <div></div>
+                                    <label for="inputEmail3" class="col-xs-4 col-sm-4 remember">Email</label>
+                                    <div class="col-xs-8 col-sm-8">
+                                        <input value="{% if registration_form.errors %} {{registration_form.email.value}} {% endif %}" name="registration-email" type="email" class="form-control " id="inputEmail3" placeholder="Email">
+                                        <b class="red-text er-size">{{registration_form.errors.email.as_text}}</b>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1" class="col-xs-4 col-sm-4 remember">First Name</label>
+                                    <div class="col-xs-8 col-sm-8">
+                                        <input type="text" value="{% if registration_form.errors %} {{registration_form.first_name.value}} {% endif %}" name="registration-first_name" class="form-control" id="firstname" aria-describedby="emailHelp" placeholder="Enter Firstname">
+                                        <b class="red-text er-size">{{registration_form.errors.first_name.as_text}}</b>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1" class="col-xs-4 col-sm-4 remember">Last Name</label>
+                                    <div class="col-xs-8 col-sm-8">
+                                        <input value="{% if registration_form.errors %} {{registration_form.last_name.value}} {% endif %}" type="text"  name="registration-last_name" class="form-control" id="lastname" aria-describedby="emailHelp" placeholder="Enter Lastname">
+                                        <b class="red-text er-size">{{registration_form.errors.last_name.as_text}}</b>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1" class="col-xs-4 col-sm-4 remember">Mobile Number</label>
+                                    <div class="col-xs-8 col-sm-8">
+                                        <input value="{% if registration_form.errors %} {{registration_form.mobile_number.value}} {% endif %}" type="text" name="registration-mobile_number" id="mno"  class="form-control" aria-describedby="emailHelp" placeholder="Enter Mobile Number">
+                                        <b class="red-text er-size">{{registration_form.errors.mobile_number.as_text}}</b>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1" class="col-xs-4 col-sm-4 remember">Password</label>
+                                    <div class="col-xs-8 col-sm-8">
+                                        <input type="password" name="registration-password1" id="password"  class="form-control" aria-describedby="emailHelp" placeholder="Enter Password">
+                                        <b class="red-text er-size">{{registration_form.errors.password1.as_text}}</b>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1" class="col-xs-4 col-sm-4 remember">Confirm Password</label>
+                                    <div class="col-xs-8 col-sm-8">
+                                        <input type="password" name="registration-password2" id="confirm_password"  class="form-control" aria-describedby="emailHelp" placeholder="Confirm Password">
+                                        <b class="red-text er-size">{{registration_form.errors.password2.as_text}}</b>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1" class="col-xs-4 col-sm-4 remember">Captcha</label>
+                                    <div class="col-xs-8 col-sm-8">
+                                        {{registration_form.captcha}}
+                                        <i style="margin-top:-70px; color:#fff; cursor:pointer; float:right;" class="fa fa-sync captcha-rf"></i>
+                                        <b class="red-text er-size">{{registration_form.errors.captcha.as_text}}</b>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="padding:10px;">
+                                    <div class="col-xs-12 col-sm-12 ">
+                                        <p class="text-center">
+                                            <input type="submit" vocab="Register" name="registration_submit" value="Sign In" class="btn login_btn">
+                                        </p>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-footer">
+                            <div class="col-md-12 ">
+                                <p class="text-center links">
+                                    <a href="/accounts/login/" target="_blank">
+                                        Already have an account?
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /#login-box -->
+    </div>
+
+</div>
+
+<!-- particles.js container -->
+<div id="particles-js"></div>
+<style>
+    .captcha{
+        margin-bottom:10px;
+    }
+</style>
+
+<!-- scripts -->
+<script src="../particles.js"></script>
+<script src="js/app.js"></script>
+<script src="login.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script type='text/javascript' src="{% static 'oscar/js/users/particles.js' %}"></script>
+<script type='text/javascript' src="{% static 'oscar/js/users/partical/app.js' %}"></script>
+<script>
+    $('#id_registration-captcha_1').addClass('form-control');
+    $('.captcha-rf').click(function () {
+    $.getJSON("/captcha/refresh/", function (result) {
+        $('.captcha').attr('src', result['image_url']);
+        $('#id_captcha_0').val(result['key'])
+    });
+});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{% load i18n %}
+
+{% block product_images_content %}
+<div class="table-header">
+    <h3 class="pull-left">{% trans "Upload, change or remove images" %}</h3>
+    <button type="button" onclick="add_image_formset()" class="btn btn-xs btn-warning pull-right">Add Image</button>
+</div>
+<div class="well">
+    {{ image_formset.management_form }}
+    {{ image_formset.non_form_errors }}
+    <ol id="right1" class='upload-image'>
+        {% for image_form in image_formset %}
+            {% include "dashboard/partials/product_images.html" with form=image_form %}
+        {% endfor %}
+    </ol>
+</div>
+{% endblock product_images_content %}

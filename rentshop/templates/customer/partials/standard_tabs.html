@@ -1,0 +1,61 @@
+{% load i18n %}
+{% load display_tags %}
+
+<!--<li{% if active_tab == 'profile' %} class="active"{% endif %}>-->
+<!--<a href="{% url 'customer:profile-view' %}">{% trans "Profile" %}</a>-->
+<!--</li>-->
+<!--<li{% if active_tab == 'orders' %} class="active"{% endif %}>-->
+<!--<a href="{% url 'customer:order-list' %}">{% trans "Order History" %}</a>-->
+<!--</li>-->
+<!--<li{% if active_tab == 'addresses' %} class="active"{% endif %}>-->
+<!--<a href="{% url 'customer:address-list' %}">{% trans "Address Book" %}</a>-->
+<!--</li>-->
+<!--<li{% if active_tab == 'emails' %} class="active"{% endif %}>-->
+<!--<a href="{% url 'customer:email-list' %}">{% trans "Email History" %}</a>-->
+<!--</li>-->
+<!--<li{% if active_tab == 'alerts' %} class="active"{% endif %}>-->
+<!--<a href="{% url 'customer:alerts-list' %}">{% trans "Product Alerts" %}</a>-->
+<!--</li>-->
+<!--<li{% if active_tab == 'notifications' %} class="active"{% endif %}>-->
+<!--<a href="{% url 'customer:notifications-inbox' %}">{% trans "Notifications" %}</a>-->
+<!--</li>-->
+<!--{% iffeature 'wishlists' %}-->
+<!--<li{% if active_tab == 'wishlists' %} class="active"{% endif %}>-->
+<!--<a href="{% url 'customer:wishlists-list' %}">{% trans "Wish Lists" %}</a>-->
+<!--</li>-->
+
+
+<!--<aside class="content-sidebar">-->
+
+    <!--<ul class="nav nav-pills nav-stacked">-->
+        <!--<li>-->
+            <!--<a href="{% url 'customer:profile-view' %}" class="id_profile active-p" id="active-p">Profile</a>-->
+        <!--</li>-->
+        <!--<li>-->
+            <!--<a href="{% url 'customer:order-list' %}" class="id_order active-p" id="active-o">Order History</a>-->
+        <!--</li>-->
+        <!--<li>-->
+            <!--<a href="{% url 'customer:wishlists-list' %}" class="">Wish Lists</a>-->
+        <!--</li>-->
+
+    <!--</ul>-->
+
+<!--</aside>-->
+<aside id="column-left">
+    <div class="box account info">
+        <div class="box-heading">
+            <h4>My Account</h4>
+        </div>
+        <div class="box-content">
+            <ul>
+                <li> <a href="{% url 'customer:profile-view' %}" class="id_profile active-p" id="active-p">Profile</a></li>
+                <li> <a href="{% url 'customer:order-list' %}" class="id_order active-p" id="active-o">Order History</a></li>
+                <li><a href="{% url 'customer:wishlists-list' %}" class="">Wish Lists</a></li>
+
+            </ul>
+        </div>
+    </div>
+
+</aside>
+
+{% endiffeature %}

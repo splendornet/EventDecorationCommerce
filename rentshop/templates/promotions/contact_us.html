@@ -1,0 +1,315 @@
+{% extends "layout_2_col.html" %}
+{% load i18n %}
+{% load thumbnail %}
+{% load currency_filters %}
+{% load purchase_info_tags %}
+{% load display_tags %}
+{% load reviews_tags %}
+{% load staticfiles %}
+{% load mathfilters %}
+{% load common %}
+
+{% load product_tags %}
+{% load purchase_info_tags %}
+
+{% block navigation %}
+    {% include "partials/nav_primary.html" with expand_dropdown=1 %}
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block column_left %}
+{% endblock %}
+{% block content %}
+
+<style>
+
+
+    @import url('https://fonts.googleapis.com/css?family=Playball&display=swap');
+    //@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+    @font-face {
+    font-family: 'cn-sans'; /*a name to be used later*/
+    src: url('https://fonts.googleapis.com/css?family=Open+Sans'); /*URL to font*/
+}
+
+    html {
+        //font-family: Arial;
+        font-size: 16px;
+    }
+
+    .cn_main{ margin-top: 165px;}
+
+    .cn_sidebar {
+        height: 100vh;
+        background: #1c080a;
+        font-size: 0.65em;
+    }
+
+    .img{
+        margin-left:5px;
+    }
+
+    .twitter {
+        padding: 1px 1px 1px 90px
+    }
+
+    .heading{
+
+        margin-left:0px;
+        margin-top:5px;
+        font-family: 'Playball', cursive;
+        color:#edab00;
+    }
+
+    .container {}
+
+    .form-container {
+
+        position: relative;
+        padding: 28px ;
+        overflow: hidden;
+        border-radius: .25rem;
+        height:100%;
+    }
+
+    .form-group {
+        margin-bottom: 1.3rem;
+    }
+
+    .row {}
+
+    .col-2 {}
+
+    label {
+        display: inline-block;
+        margin-bottom: .5rem;
+	    filter: drop-shadow(2px 2px 2px #CCCCCC);
+    }
+
+    .form-control {
+        display: block;
+        width: 100%;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+	    filter: drop-shadow(2px 2px 2px #CCCCCC);
+    }
+
+    .btn {
+        display: inline-block;
+        color: #fff;
+	    cursor: pointer;
+	    text-align:top;
+	    font-size: 1rem;
+        border-radius: .25rem;
+        outline: 0;
+	    margin-left:17%;
+    }
+
+    .cn_error{
+        color:red;
+    }
+
+    .lab-cn{
+        font-size:1rem;
+        
+    }
+
+    .btn-mr-15{
+        margin-top:-15px;
+    }
+
+    .btn-primary {
+        background-color:#FFCC00;
+    }
+
+    .btn_cn{
+        color: #212529;
+        background-color: #ffc107;
+        border-color: #ffc107;
+        color:#000 !important;
+    }
+
+    .btn_cn:hover {
+        color: #212529;
+        background-color: #e0a800;
+        border-color: #d39e00;
+        color:#000 !important;
+    }
+
+    /* Change Style when screen width is 576px or more */
+    @media (max-width: 576px) {
+    .col-2 {
+            flex: 0 0 16.666667%;
+            max-width: 16.666667%;
+        }
+    .col-10 {
+        flex: 0 0 83.333333%;
+        max-width: 83.333333%;
+
+    }
+    label {
+        margin-bottom: 0;
+    }
+    .btn {
+        display: inline-block;
+        width: auto;
+    }
+
+}
+
+@media only screen and (max-width: 576px) {
+    .cn_main{
+        overflow-x:hidden;
+    }
+    .cn_sidebar{
+        height: 31vh;
+    }
+    .image{
+        text-align:center;
+        padding-top:18px;
+    }
+    .image > img{
+        width: 25em !important;
+    }
+    .twitter{
+        padding:0;
+    }
+    .heading{
+        text-align:center;
+        margin-top:15px;
+    }
+    .btn_cn{
+        margin-left:0;
+    }
+}
+
+.alert-x {
+  padding: 20px;
+  background-color: #eb5578;
+  color: white;
+  border-radius:5px;
+  margin-bottom:20px;
+}
+
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+input, textarea {
+    color:#000 !important;
+    font-size: 16px !important;
+}
+
+.my-sm-0{
+    margin-left:-5px !important;
+    border-radius:0;
+    //font:"Open Sans", sans-serif
+    font:"cn-sans"
+}
+.menu-bar>li{
+    //font:"Open Sans", sans-serif
+    font:"cn-sans"
+}
+.cn_main{
+font:"cn-sans" !important;}
+
+</style>
+
+
+
+
+
+<div class="cn_main">
+    <div class="row">
+        <div class="col-md-2">
+            <section class="cn_sidebar">
+                <div class="image">
+                    <img alt="Contact us" src="{% static 'oscar/images/icons/contact_us_img.png' %}" style="width:100%;">
+                </div>
+            </section>
+        </div>
+        <div class="col-md-8">
+            <section class="twitter">
+                <h3 class="heading"> Contact Us</h3>
+                <br/><br/>
+                <div class="containerx">
+                    <div class="form-container">
+                        <form action="." method="post">
+                            {% csrf_token %}
+
+                            {% if messages %}
+                                {% for message in messages|slice:":1" %}
+                                    <div class="alert-x">
+                                        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                                        {{message}}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+
+                            <div class="form-group row">
+                                <label for="inputUser" class="col-md-2 lab-cn">Name:</label>
+                                <div class="col-md-10">
+                                    {{form.name}}
+                                    {% if form.errors.name %}
+                                        <span class="cn_error">{{form.errors.name.as_text}}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputEmail" class="col-md-2 lab-cn">Email Address:</label>
+                                <div class="col-md-10">
+                                    {{form.email}}
+                                    {% if form.errors.email %}
+                                        <span class="cn_error">{{form.errors.email.as_text}}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputPassword" class="col-md-2 lab-cn">Mobile Number:</label>
+                                <div class="col-md-10">
+                                    {{form.phone}}
+                                    {% if form.errors.phone %}
+                                        <span class="cn_error">{{form.errors.phone.as_text}}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="exampleTextarea" class="col-md-2 lab-cn">Message:</label>
+                                <div class="col-md-10">
+                                    {{form.message}}
+                                    {% if form.errors.message %}
+                                        <span class="cn_error">{{form.errors.message.as_text}}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <button style="text-transform: capitalize;" type="submit" class="btn btn_cn btn-warning btn-mr-15">Send</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+
+<!-- -->
+
+
+{% endblock %}
+

@@ -1,0 +1,422 @@
+{% extends 'dashboard/layout.html' %}
+{% load i18n %}
+{% load thumbnail %}
+{% load staticfiles %}
+{% load form_tags %}
+
+{% block body_class %}{{ block.super }} create-page catalogue{% endblock %}
+
+{% block title %}
+    Combo | {% trans "Products" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li>
+            <a href="{% url 'dashboard:combo-index' %}">{% trans "Combo" %}</a>
+        </li>
+        <li class="active">
+            {% if type %}
+                Update Combo
+            {% else %}
+                Create Combo
+            {% endif %}
+        </li>
+    </ul>
+{% endblock %}
+
+{% block headertext %}{{ title }}{% endblock %}
+
+{% block dashboard_content %}
+
+    <style>
+        {% if isVendor %}
+            .partner_class{
+                display: none !important;
+            }
+        {% endif %}
+        .seq-class{
+            margin-top: -15px;
+            margin-bottom: 5px;
+        }
+    </style>
+
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <style>
+        .box1{
+            border:1px solid #555;
+            border-radius:3px;
+            //padding:10px;
+            margin:5px;
+        }
+        .box-title{
+            background-color: #ddd;
+            padding: 1px;
+            text-align: center;
+        }
+        .box-title > h6{
+            margin:5px;
+        }
+        .box-body{
+            padding:20px;
+            text-align:center;
+        }
+        .plus-btn{
+            background-color: transparent;
+            border: 0;
+            font-size:26px;
+        }
+        .box-footer{
+            text-align: center;
+            padding: 5px;
+        }
+        .place-footer{
+            height:41px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            padding: 5px;
+        }
+        .cke_1 .cke_bottom {
+    background-color: #f8f8f8;
+}
+    </style>
+
+
+    <form onsubmit="validate_final()" action="{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}" method="post" class="form-stacked wysiwyg fixed-actions {% if request.user.is_superuser %} admin_combo_form {% else %} vendor_combo_form {% endif %}" enctype="multipart/form-data" data-behaviour="affix-nav-errors" autocomplete="off">
+        {% csrf_token %}
+
+        <div class="row">
+
+            {% block tab_nav %}
+                <div class="col-md-3" hidden>
+                    <div data-spy="affix" class="affix-top" data-offset-top="200">
+                        <div class="table-header">
+                            <h3>{% trans "Sections" %}</h3>
+                        </div>
+                        <ul class="nav nav-list bs-docs-sidenav" id="product_update_tabs">
+                            {% block tabs %}
+                                <li class="active">
+                                    <a href="#product_details" data-toggle="tab">
+                                        {% trans 'Combo Product Details' %}
+                                    </a>
+                                </li>
+                            {% endblock tabs %}
+                        </ul>
+                    </div>
+                </div>
+            {% endblock tab_nav %}
+
+            <div class="col-md-12">
+                <div class="tab-content">
+
+                    <h3>
+                        {% if type %}
+                            Update Combo Offer
+                        {% else %}
+                            Create Combo Offer
+                        {% endif %}
+                    </h3>
+                    {% block tab_content %}
+
+                        {% block product_details %}
+                            <div class="tab-pane active" id="product_details" >
+                                <div class="table-header">
+                                    <h3>{% trans "Combo Offer" %}</h3>
+                                </div>
+                                <div hidden>{{combo_form.product}}</div>
+                                <div class="well product-details">
+                                    <div class="row">
+                                        <div class="form-group col-md-6" style="padding-left:15px; padding-right:15px; margin-bottom:10px;">
+                                            <p class="control-label"> <strong>Combo Offer Title*</strong> </p>
+                                            {{combo_form.title}}
+                                            {% if combo_form.errors.title %}
+                                                <p class="color-red">
+                                                    {{combo_form.title.errors.as_text}}
+                                                </p>
+                                            {% endif %}
+                                        </div>
+                                        <div class="form-group col-md-6" style="padding-left:15px; padding-right:15px; margin-bottom:10px;">
+                                            <p class="control-label"> <strong>Combo Offer UPC*</strong> </p>
+                                            {{combo_form.upc}}
+                                            {% if combo_form.errors.upc %}
+                                                <p class="color-red">
+                                                    {{combo_form.upc.errors.as_text}}
+                                                </p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                        <div class="row">
+                                        <div class="form-group col-md-12" style="padding-left:15px; padding-right:15px; margin-bottom:10px;">
+                                            <p class="control-label"> <strong>Combo Offer Description*</strong> </p>
+                                            {{combo_form.description}}
+                                            {% if combo_form.errors.description %}
+                                            <p class="color-red">
+                                                {{combo_form.description.errors.as_text}}
+                                            </p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-12" style="padding-left:15px; padding-right:15px; margin-bottom:10px;">
+                                            <p class="control-label"> <strong>Combo Offer Price*</strong> </p>
+                                            {{combo_form.combo_price}}
+                                            {% if combo_form.errors.combo_price %}
+                                            <p class="color-red">
+                                                {{combo_form.combo_price.errors.as_text}}
+                                            </p>
+                                            {% endif %}
+                                        </div>
+                                        <div class="form-group col-md-6" style="padding-left:15px; padding-right:15px; margin-bottom:10px;" hidden>
+                                            <p class="control-label"> <strong>Combo Offer Max Allotment*</strong> </p>
+                                            {{combo_form.max_allowed}}
+                                            {% if combo_form.errors.max_allowed %}
+                                            <p class="color-red">
+                                                {{combo_form.max_allowed.errors.as_text}}
+                                            </p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-12" style="padding-left:15px; padding-right:15px; margin-bottom:10px;">
+                                            <p class="control-label"> <strong>Is Active*</strong> </p>
+                                            {{combo_form.is_active}}
+                                                {% if combo_form.errors.is_active %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="tab-pane active" id="product_details">
+                                <div class="table-header">
+                                    <h3>{% trans "Add Products" %}</h3>
+                                </div>
+                                <div class="well">
+                                    <div class="row">
+                                        <div class="form-group col-md-12" style="padding-left:15px; padding-right:15px; margin-bottom:10px;">
+                                            <p class="control-label"> <strong>Combo Offer Products*</strong> </p>
+                                            {{combo_form.combo_product}}
+                                            {% if combo_form.errors.combo_product %}
+                                                <p class="color-red">* Enter a valid offer products.</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                    <!-- row -->
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="alert alert-success" id="dp_hide" hidden>
+                                                Please remove duplicate products.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        {{ combo_form_set.management_form }}
+                                        {% for i in combo_form_set %}
+                                        {% include "dashboard/partials/form_field.html" with field=i.id nolabel=True %}
+                                        <div class="col-md-3">
+                                            <div class="box1">
+                                                <div class="box-title">
+                                                    <h6>Product {{forloop.counter}}</h6>
+                                                </div>
+                                                <div class="box-body">
+                                                    {% if i.combo_product.value %}
+                                                    <button type="button" class="plus-btn" onclick="remove_product('{{forloop.counter0}}', '{{i.combo_product.value}}')">
+                                                        <em class="fa fa-minus-circle"></em>
+                                                    </button>
+                                                    {% else %}
+                                                    <button type="button" class="plus-btn" onclick="add_product('{{forloop.counter}}')">
+                                                        <em class="fa fa-plus-circle"></em>
+                                                    </button>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="box-footer">
+                                                    <div class="place-footer">
+                                                        {% if i.combo_product.value %}
+                                                        <div class="form-product" id="product-{{forloop.counter}}">
+                                                            {{i.combo_product}}
+                                                            <input class="set_product_id" type="hidden" value="{{i.combo_product.value}}"/>
+                                                        </div>
+                                                        {% else %}
+                                                        <span id="product-span-{{forloop.counter}}">No product</span>
+                                                        <div class="form-product" id="product-{{forloop.counter}}" style="display:none;">
+                                                            {{i.combo_product}}
+                                                        </div>
+                                                        {% endif %}
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+
+                                    <!-- row -->
+
+                                </div>
+                            </div>
+                        {% endblock product_details %}
+                    {% endblock tab_content %}
+                </div>
+            </div>
+        </div>
+
+        {% block fixed_actions_group %}
+            <div class="fixed-actions-group">
+                <div class="form-group">
+                    <div class="pull-right">
+                        <a href="{% url 'dashboard:combo-index' %}">
+                            {% trans "Cancel" %}
+                        </a>
+                        {% trans "or" %}
+                        <button class="btn btn-primary btn-lg" name="action" type="submit" value="save">
+                            {% trans "Save" %}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        {% endblock fixed_actions_group %}
+    </form>
+{% endblock dashboard_content %}
+
+{% block extrascripts %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<link rel="stylesheet" href="{% static 'oscar/css/products/common_select2.css' %}" type="text/css" media="screen">
+ <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+    <script>
+
+$(document).ready(function() {
+               $('.cm-product').select2();
+        });
+        function checkIfArrayIsUnique(myArray) {
+            return myArray.length === new Set(myArray).size;
+        }
+
+
+        function validate_final(){
+
+            $('#dp_hide').hide();
+            var product_array = [];
+
+            $(".cm-product").each(function() {
+                if(this.value){
+                    product_array.push(this.value);
+                }
+            });
+
+            var is_unique =  checkIfArrayIsUnique(product_array)
+
+            if (is_unique == false){
+                $('#dp_hide').show();
+                alert('Please remove duplicate products')
+                event.preventDefault();
+                return false;
+            }
+        }
+
+
+
+        $('#id_upc').on('keydown', function(){
+           $('#id_stockrecords-0-partner_sku').val(this.value)
+        });
+
+        $('#id_stockrecords-0-tax_percentage').val(1);
+
+        $(function() {
+
+            if('{{form.combo_start_date.value.date}}' && '{{form.combo_end_date.value}}'){
+                var start_date = moment('{{form.combo_start_date.value.date}}').format('YYYY-MM-DD');
+                var end_date = moment('{{form.combo_end_date.value.date}}').format('YYYY-MM-DD');
+            }else{
+                var start_date = moment().startOf('hour')
+                var end_date = moment().startOf('hour').add(24, 'hour')
+                $('#id_combo_start_date').val(start_date.format('YYYY-MM-DD'));
+                $('#id_combo_end_date').val(end_date.format('YYYY-MM-DD'));
+            }
+
+            $('input[name="daterange_combo"]').daterangepicker({
+                opens: 'right',
+                minDate:new Date(),
+                startDate: start_date,
+                endDate: end_date,
+                locale: {
+                    format: 'YYYY-MM-DD'
+                }
+            }, function(start, end, label) {
+                start_date = start.format('YYYY-MM-DD')
+                end_date = end.format('YYYY-MM-DD')
+                $('#id_combo_start_date').val(start_date);
+                $('#id_combo_end_date').val(end_date);
+            });
+
+            product_ids = []
+
+            // for each
+            $('.set_product_id').each(function(){
+                product_ids.push($(this).val());
+            })
+
+            // on change method
+
+            $(".combo_product_l").on('change', function(){
+                if(jQuery.inArray(this.value, product_ids) != -1) {
+                    alert('Product already added.')
+                    $(this).val('');
+                } else {
+                    product_ids.push(this.value);
+                }
+
+            });
+
+        });
+
+    </script>
+
+
+    <script>
+
+        function add_product(cnt){
+            $('#product-span-'+cnt).hide();
+            $('#product-'+cnt).show();
+        }
+
+        function remove_product(cnt, id){
+
+            var is_confirm = confirm("Do you really want to remove product.");
+            if (is_confirm == false){
+                return false;
+            }
+
+            var idx = $('#id_combo_product-'+cnt+'-id').val();
+
+            $.ajax({
+                type:'GET',
+                url : '/delete_combo_product/',
+                data : {
+                    combo_id: idx,
+                },
+                success : function(data){
+                    if(data == 'IN_SERVER'){
+                        window.location.replace("/dashboard");
+                    }
+                    if (data == 'TRUE'){
+                        window.location.reload();
+                    }
+                },
+                failure : function(result){
+                },
+            });
+        }
+
+    </script>
+
+{% endblock %}

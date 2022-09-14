@@ -1,0 +1,112 @@
+{% extends 'dashboard/layout.html' %}
+
+{% load i18n %}
+
+{% block body_class %}{{ block.super }} catalogue{% endblock %}
+
+{% block title %}
+{% trans "Stock alerts" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<ul class="breadcrumb">
+    <li>
+        <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+    </li>
+    <li class="active">{% trans "Stock alerts" %}</li>
+</ul>
+{% endblock %}
+
+{% block header %}
+<div class="page-header">
+  <h1>{% trans "Stock alerts" %}</h1>
+</div>
+{% endblock header %}
+
+{% block dashboard_content %}
+<div class="table-header">
+    <h2 class="pull-left"><i class="icon-sitemap icon-large"></i>{{ description }}</h2> &nbsp;
+    <span id="stock_mark" class="selection_mark label label-default"></span>
+    <div class="pull-right">
+        <div class="btn-group pull-right">
+            <button class="btn btn-primary dropdown-toggle" type="submit" data-toggle="dropdown" aria-expanded="true">
+                {% trans "Filter" %}
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="{% url 'dashboard:stock-alert-list' %}">{% trans "All" %}</a></li>
+                <li><a href="{% url 'dashboard:stock-alert-list' %}?status=Open">{% trans "Open" %}</a></li>
+                <li><a href="{% url 'dashboard:stock-alert-list' %}?status=Closed">{% trans "Closed" %}</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="well">
+        <form method="get" class="form-inline">
+            {% include 'dashboard/partials/form_fields_inline.html' with form=form %}
+            <button type="submit" class="btn btn-primary top-spacer" data-loading-text="{% trans 'Searching...' %}">{% trans "Search" %}</button>
+            <a href="/dashboard/catalogue/stock-alerts/" class="btn btn-default">Reset</a>
+            <button type="button" class="btn btn-danger" onclick="export_low_stock('/export_low_stock/', '{{request.GET.product}}', '{{request.GET.status}}')">Download Stock Alerts</button>
+        </form>
+    </div>
+
+<table class="table table-striped table-bordered table-hover">
+    {% if alerts %}
+    <tr>
+        <th>
+            <input type="checkbox" id="id_select_all_lowstock"/>
+        </th>
+        <th>{% trans "Product" %}</th>
+        <th>{% trans "Partner" %}</th>
+        <th>{% trans "Low stock threshold" %}</th>
+        <th>{% trans "Current available stock" %}</th>
+        <th>{% trans "Date alert raised" %}</th>
+        <th>{% trans "Status" %}</th>
+        <th></th>
+    </tr>
+    {% for alert in alerts %}
+    <tr>
+        <td>
+            <input type="checkbox" name="selected_lowstock" class="selected_lowstock" value="{{ alert.id }}"/>
+        </td>
+        <td>
+            <a href="{% url 'dashboard:catalogue-product' alert.stockrecord.product.id %}{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}">
+                {{ alert.stockrecord.product.get_title }}
+            </a>
+        </td>
+        <td>{{ alert.stockrecord.partner.display_name }}</td>
+        <td>{{ alert.stockrecord.low_stock_threshold }}</td>
+        <td>{{ alert.stockrecord.net_stock_level }}</td>
+        <td>{{ alert.date_created }}</td>
+        <td>{{ alert.status }}</td>
+        <td>
+            {% if alert.status == 'Open' %}
+            <a class="btn btn-info" href="{% url 'dashboard:catalogue-product' pk=alert.stockrecord.product.id %}">{% trans "Update" %}</a>
+            {% else %}
+            <button class="btn btn-info" disabled>Update</button>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+
+    {% else %}
+
+    <tr><td>{% trans "No stock alerts found." %}</td></tr>
+
+    {% endif %}
+</table>
+
+{% endblock dashboard_content %}
+
+{% load static %}
+{% block extrascripts %}
+    {{ block.super }}
+
+    <script src="{% static 'oscar/js/dashboard/catalogue/lowstock.js' %}"></script>
+<script>
+$(document).ready(function() {
+               $('#id_product').select2();
+        });
+</script>
+{% endblock %}

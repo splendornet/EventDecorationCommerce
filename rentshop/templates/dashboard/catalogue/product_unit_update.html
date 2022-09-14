@@ -1,0 +1,49 @@
+{% extends "dashboard/layout.html" %}
+{% load category_tags %}
+{% load i18n %}
+
+{% block body_class %}{{ block.super }} create-page partner{% endblock %}
+
+{% block title %}
+    Add Calender Event | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li>Unit update</li>
+    </ul>
+{% endblock %}
+
+
+
+{% block headertext %}
+Update new unit
+{% endblock %}
+
+{% block dashboard_content %}
+    <form action="." method="post" class="well form-stacked wysiwyg" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row">
+            <p>
+                {% if form.non_field_errors %}
+                    {{form.non_field_errors}}
+                {% endif %}
+            </p>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="email">Unit:</label>
+                    {{form.unit}}
+                    <span style="color:red">{{form.unit.errors.as_text}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button class="btn btn-lg btn-primary" type="submit" data-loading-text="{% trans 'Updating...' %}">{% trans "Update" %}</button>
+            <a href="{% url 'dashboard:product_unit' %}" style="padding:10px 16px" class="btn-link-cancel btn btn-default">Cancel</a>
+        </div>
+    </form>
+
+{% endblock dashboard_content %}

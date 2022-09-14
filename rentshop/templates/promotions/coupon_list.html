@@ -1,0 +1,94 @@
+{% extends "layout_2_col.html" %}
+
+{% load basket_tags %}
+{% load category_tags %}
+{% load product_tags %}
+{% load i18n %}
+{% load common %}
+{% block title %}
+    {% if summary %}{{ summary }} |{% endif %} {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+
+        <!-- breadcrumbs -->
+<!--        <div class="nz-breadcrumbs nz-clearfix">-->
+<!--            <div class="container">-->
+<!--                <a href="{{ homepage_url }}" rel="v:url" property="v:title">{% trans "Home" %}</a>-->
+<!--                <span class="current">{% if summary == 'All products' %}{{ summary }}{% else %}{{category}} {% endif %}</span>-->
+<!--            </div>-->
+<!--        </div>-->
+
+
+
+        <div class="shop-layout-wrap" id="nz-target">
+
+
+            <div class="loop">
+                <div class="container">
+                    <section class="content lazy shop-layout animation-false nz-clearfix">
+                        <div class="product-category-body">
+                            <div class="product-category-content">
+                                <h2 class="product-category-title">Coupons</h2>
+                            </div>
+                        </div>
+                        {% if coupon %}
+                        <div class="woocommerce-products">
+                            <ul class="products">
+                                {% for coupons in coupon %}
+
+                                <li class="mix product nz-clearfix" data-groups='["all", "alcoholic-drinks"]' data-grid="ninzio_01">
+                                    <div class="product-body">
+                                        <div class="product-details">
+                                            <div class="product-title nz-clearfix">
+                                            <h3>{{coupons}}</h3>
+                                            <span class="price">
+                                                <ins>
+                                                    <span class="amount">
+                                                        Coupon Code
+                                                        <span class="badge" style="font-size:16px;">{{coupons.code}}</span>
+                                                    </span>
+                                                </ins>
+                                            </span>
+                                            </div>
+                                            <div class="well">
+                                                <b>Valid From</b>: <i>{{coupons.start_datetime|date:'d/m/Y h:i'}}</i> to <i>{{coupons.end_datetime|date:'d/m/Y h:i'}}</i>
+                                                <b class="pull-right">
+                                                    {% for i in coupons.offers.all %}
+                                                        {% for j in i.benefit_id|coupon_value %}
+                                                            {{j.value}} % (Discount)
+                                                        {% endfor %}
+                                                    {% endfor %}
+                                                </b>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                             {% include "partials/pagination.html" %}
+                        </div>
+                        {% else %}
+                        <div class="product-category-body">
+                            <div class="product-category-content">
+                                <h4 class="product-category-title">No coupon</h4>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </section>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+{% endblock content %}
+
+{% block onbodyload %}
+    {{ block.super }}
+    oscar.search.init();
+{% endblock %}

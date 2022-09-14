@@ -1,0 +1,43 @@
+<div class="col-xs-12 col-sm-3">
+                        <div class="trp-acc-detail-p">
+                            <p class="mb-5">Name</p>
+                        </div>
+                    </div>
+<div class="col-xs-12 col-sm-9">
+                        <div class="trp-acc-detail-p">
+                            <p>{{ user.get_full_name }}</p>
+                        </div>
+</div>
+
+<div class="col-xs-12 col-sm-3">
+    <div class="trp-acc-detail-p">
+        <p class="mb-5">Email Address</p>
+    </div>
+</div>
+<div class="col-xs-12 col-sm-9">
+    <div class="trp-acc-detail-p">
+        <p>{{user.email}}</p>
+    </div>
+</div>
+
+<div class="col-xs-12 col-sm-3">
+    <div class="trp-acc-detail-p">
+        <p class="mb-5">Mobile Number</p>
+    </div>
+</div>
+<div class="col-xs-12 col-sm-9">
+    <div class="trp-acc-detail-p">
+        <p>{{user.profile_user.mobile_number|default:"NA" }}</p>
+    </div>
+</div>
+
+<div class="col-xs-12 col-sm-3">
+    <div class="trp-acc-detail-p">
+        <p class="mb-5">Date Registered</p>
+    </div>
+</div>
+<div class="col-xs-12 col-sm-9">
+    <div class="trp-acc-detail-p">
+        <p>{{user.date_joined}}</p>
+    </div>
+</div>

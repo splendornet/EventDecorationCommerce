@@ -1,0 +1,196 @@
+{% extends 'dashboard/layout.html' %}
+{% load sorting_tags %}
+{% load i18n %}
+
+{% block title %}
+    {% trans "Multi Database" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li class="active"> <a href="{% url 'dashboard:asp-db' %}">{% trans "Multi Database" %}</a></li>
+    </ul>
+{% endblock %}
+
+{% block header %}
+    <div class="page-header">
+        <h1>{% trans "Multi Database" %}</h1>
+    </div>
+{% endblock header %}
+
+{% block dashboard_content %}
+    <form action="." method="post" class="order_table">
+        {% csrf_token %}
+        <table class="table table-bordered">
+            <caption>
+                <em class="icon-briefcase icon-large"></em> Multi DB Details
+                <span id="selected_mark" class="selection_mark label label-default"></span>
+                <input type="hidden" id="ids_ev_list">
+            </caption>
+            {% if multi %}
+                <tr>
+                    <th colspan="5" style="text-align:center">Category</th>
+                </tr>
+                <tr>
+                    <td colspan="5" style="text-align:center">{{multi.category}}</td>
+                </tr>
+                <tr>
+                    <th colspan="5" style="text-align:center">Frontliener ASP</th>
+                </tr>
+                <tr>
+                    <th style="text-align:center">Sr. No.</th>
+                    <th>Name</th>
+                    <th>Area</th>
+                    <th>Mobile No. 1</th>
+                    <th>Mobile No. 2</th>
+
+                </tr>
+            {% for vendor in multi.frontliener.all %}
+            <tr>
+
+                    <td style="text-align:center">{{ forloop.counter }}</td>
+                    <td>{{vendor.name}}</td>
+                    <td>{{vendor.address_line_1}}</td>
+                    <td>{{vendor.telephone_number}}</td>
+                    <td>{{vendor.alternate_mobile_number}}</td>
+
+            </tr>
+            {% endfor %}
+                <tr>
+                     <th colspan="5" style="text-align:center">Backup1 ASP</th>
+                </tr>
+            <tr>
+                <th style="text-align:center">Sr. No.</th>
+                    <th>Name</th>
+                    <th>Area</th>
+                    <th>Mobile No. 1</th>
+                    <th>Mobile No. 2</th>
+            </tr>
+            {% for vendor in multi.backup1.all %}
+            <tr>
+
+                    <td style="text-align:center">{{ forloop.counter }}</td>
+                    <td>{{vendor.name}}</td>
+                    <td>{{vendor.address_line_1}}</td>
+                    <td>{{vendor.telephone_number}}</td>
+                    <td>{{vendor.alternate_mobile_number}}</td>
+
+            </tr>
+             {% endfor %}
+            <tr>
+                 <th colspan="5" style="text-align:center">Backup2 ASP</th>
+            </tr>
+
+            <tr>
+                <th style="text-align:center">Sr. No.</th>
+                    <th>Name</th>
+                    <th>Area</th>
+                    <th>Mobile No. 1</th>
+                    <th>Mobile No. 2</th>
+            </tr>
+            {% for vendor in multi.backup2.all %}
+            <tr>
+
+                <td style="text-align:center">{{ forloop.counter }}</td>
+                    <td>{{vendor.name}}</td>
+                    <td>{{vendor.address_line_1}}</td>
+                    <td>{{vendor.telephone_number}}</td>
+                    <td>{{vendor.alternate_mobile_number}}</td>
+
+            </tr>
+{% endfor %}
+            {% else %}
+                <tr><td>{% trans "No record found." %}</td></tr>
+            {% endif %}
+        </table>
+        {% include "dashboard/partials/pagination.html" %}
+    </form>
+{% endblock dashboard_content %}
+
+{% load static %}
+{% block extrascripts %}
+    {{ block.super }}
+    <script>
+
+        function export_prime_bucket(url, order_number){
+
+            var checked_id = [];
+            $.each($("input[class='selected_event']:checked"), function(){
+                checked_id.push($(this).val());
+            });
+
+            var _url = url+'?&order_number='+order_number;
+            document.location.href = _url;
+
+        }
+
+
+
+$('#master_event').change(function (){
+
+    $('.selected_event:checkbox').not(this).prop('checked', this.checked);
+
+    var selected_ids = $('.selected_event:checked').map(function(){
+        return $(this).val();
+    });
+
+    if (selected_ids.length == 0){
+        $('#selected_mark').html('')
+    }else{
+        $('#selected_mark').html('Total '+selected_ids.length+ ' event selected.')
+    }
+
+});
+
+$('.selected_event').change(function (){
+
+    $('#master_event').prop('checked', false);
+
+    var selected_ids = $('.selected_event:checked').map(function(){
+        return $(this).val();
+    });
+
+    if (selected_ids.length == 0){
+        $('#selected_mark').html('')
+    }else{
+        $('#selected_mark').html('Total '+selected_ids.length+ ' event selected.')
+    }
+
+});
+
+    </script>
+<script>
+
+function get_type() {
+  alert("The input value has changed. The new value is: ");
+  var type_value = $("#id_type").val();
+        if(type_value == 'INDIVIDUAL')
+            {
+               $("#catform").attr("action", "/create_individual_db/");
+             }
+             else{
+             $("#catform").attr("action", "/create_multi_db/");
+             }
+
+}
+    function create_abp(ul,category, type){
+            console.log(category);
+            console.log(type);
+            var url='';
+            if(type == 'INDIVIDUAL')
+            {
+                url= '/create_individual_db/';
+             }
+             else{
+             url =  '/create_multi_db/';
+             }
+             alert(ul);
+            var _url = ul+'?&category='+category;
+            alert(_url);
+            document.location.href = _url;
+        }
+</script>
+{% endblock %}

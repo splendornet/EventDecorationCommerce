@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {{ flatpage.title }}
+{% endblock %}
+
+{% block content %}
+<style>
+    .term_n_cond{
+        width:90%;
+        text-align: justify;
+        margin:50px;
+    }
+</style>
+<div class="term_n_cond">
+    <h1>{{ flatpage.title }}</h1>
+   {{ flatpage.content }}
+</div>
+
+{% endblock %}

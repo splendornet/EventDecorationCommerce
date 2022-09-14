@@ -1,0 +1,122 @@
+{% extends 'dashboard/layout.html' %}
+{% load currency_filters %}
+{% load i18n %}
+
+{% block body_class %}{{ block.super }} create-page{% endblock %}
+
+{% block title %}
+    {{ title }} | {% trans "Premium Products" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li>
+            <a href="{% url 'dashboard:premium-index' %}">Premium Product</a>
+        </li>
+
+    <li class="active">{% trans "Edit" %}</li>
+    </ul>
+{% endblock %}
+
+{% block headertext %}Premium Product{% endblock %}
+
+{% block dashboard_content %}
+    <div class="table-header">
+        <h2><i class="icon-money icon-large"></i>
+            {% if voucher %}
+                Edit Premium Product
+            {% else %}
+                Create Premium Product
+            {% endif %}
+        </h2>
+    </div>
+    <form action="." method="post" class="well form-stacked">
+        {% csrf_token %}
+        <div class="form-group" style="margin-bottom:10px;">
+    <p class="control-label">Category</p>
+    {{form.category}}
+    {% if form.errors.category %}
+        <p class="color-red">*{{form.errors.category.as_text}}</p>
+    {% endif %}
+</div>
+
+<!--<div class="form-group" style="margin-bottom:10px;">-->
+<!--                     <p class="control-label">UPC</p>-->
+
+<!--     <select class="form-control" id="id_upc" name="upc" style="width:100%;" multiple>-->
+<!--                                <option value="">&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</option>-->
+
+<!--                                {% for item in form.upc %}-->
+<!--                                {{item}}-->
+<!--                                {% endfor %}-->
+<!--                            </select>-->
+<!--    <p class="color-red">-->
+<!--        {{form.errors.upc.as_text}}-->
+<!--    </p>-->
+<!--</div>-->
+
+        <div class="form-group" style="margin-bottom:10px;" >
+                 <p class="control-label">Product</p>
+
+
+                            <select class="form-control" id="id_product" name="product" style="width:100%;" multiple>
+                                <option value="">-----------</option>
+
+                                {% for item in form.product %}
+                                {{item}}
+                                {% endfor %}
+                            </select>
+            {% if form.errors.product %}
+        <p class="color-red">*{{form.errors.product.as_text}}</p>
+    {% endif %}
+                        </div>
+<!--        {% include "dashboard/partials/form_fields.html" with form=form %}-->
+        {% block form_actions %}
+            <div class="form-actions">
+                <button class="btn btn-primary btn-lg" type="submit" data-loading-text="{% trans 'Saving...' %}">{% trans "Save" %}</button> {% trans "or" %}
+                <a href="{% url 'dashboard:premium-index' %}" class="btn btn-default">{% trans "cancel" %}</a>
+            </div>
+        {% endblock form_actions %}
+    </form>
+{% endblock dashboard_content %}
+{% load static %}
+{% block extrascripts %}
+    {{ block.super }}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A==" crossorigin="anonymous"></script>-->
+<link rel="stylesheet" href="{% static 'oscar/css/products/common_select2.css' %}" type="text/css" media="screen">
+
+<script>
+function get_products(){
+            var category_id = $('#id_category').val();
+            $.ajax({
+                url: '/load_products',
+                data: {
+                  'category_id': category_id
+                },
+                success: function (data) {
+                    //alert("hiii"+data);
+                    $("#id_product").html(data);
+
+
+                }
+            });
+        }
+
+
+
+$(document).ready(function() {
+               $('#id_category').select2();
+               $('#id_product').select2(
+               {
+                multiple: true,
+               });
+
+        });
+
+
+</script>
+{% endblock %}

@@ -1,0 +1,197 @@
+{% load currency_filters %}
+{% load i18n %}
+{% load purchase_info_tags %}
+{% purchase_info_for_product request product as session %}
+{% load humanize %}
+<style>
+    .text-dark{
+    color:#e91d4a;
+    font-weight: bold;
+    }
+    .cut-price {
+        color: black;
+        font-weight: 500;
+        position: relative;
+        text-decoration-thickness: 3px;
+        font-family: 'open sans';
+    }
+    .cut-price:after {
+        content: '';
+        display: block;
+        height: 0px;
+        width: 100%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        border: 1px solid red;
+        transform: translate(-50%, -50%);
+    }
+</style>
+{% if product.product_class.name == 'Sale' %}
+
+    {% if product.stockrecords.all.last.sale_total_saving and product.stockrecords.all.last.sale_market_price %}
+        <span class="price" style="font-family: 'open sans';color:black;">your savings :</span>
+        <span class="text-dark" style="font-family: 'open sans';">₹ {{product.stockrecords.all.last.sale_total_saving|floatformat:"0"|intcomma}}</span>
+        <span></span>&nbsp;<span class="cut-price">(₹ {{product.stockrecords.all.last.sale_market_price|intcomma}})</span>
+    {% endif %}
+
+{% elif product.product_class.name == 'Rent' %}
+
+    {% if product.stockrecords.all.last.rent_market_price and product.stockrecords.all.last.rent_total_saving %}
+        <span class="price" style="font-family: 'open sans';color:black;">your savings :</span>
+        <span class="text-dark" style="font-family: 'open sans';">₹ {{product.stockrecords.all.last.rent_total_saving|floatformat:"0"|intcomma}}</span>
+        <span></span>&nbsp;<span class="cut-price">(₹ {{product.stockrecords.all.last.rent_market_price|intcomma}})</span>
+    {% endif %}
+
+{% elif product.product_class.name == 'Professional' %}
+
+    {% if product.stockrecords.all.last.rent_market_price and product.stockrecords.all.last.rent_total_saving %}
+        <span class="price" style="font-family: 'open sans'; color:black;">your savings :</span>
+        <span class="text-dark" style="font-family: 'open sans';">₹ {{product.stockrecords.all.last.rent_total_saving|floatformat:"0"|intcomma}}</span>
+        <span></span>&nbsp;<span class="cut-price">(₹ {{product.stockrecords.all.last.rent_market_price|intcomma}})</span>
+    {% endif %}
+
+{% elif product.product_class.name == 'Rent Or Sale' %}
+
+    {% if product.stockrecords.all.last.rent_market_price and product.stockrecords.all.last.rent_total_saving %}
+        <span class="price" style="font-family: 'open sans';color:black;">your savings For Rent :</span>
+        <span class="text-dark" style="font-family: 'open sans';">₹ {{product.stockrecords.all.last.rent_total_saving|floatformat:"0"|intcomma}}</span>
+        <span></span>&nbsp;<span class="cut-price">(₹ {{product.stockrecords.all.last.rent_market_price|intcomma}})</span>
+    {% endif %}
+    <br/>
+    {% if product.stockrecords.all.last.sale_total_saving and product.stockrecords.all.last.sale_market_price %}
+        <span class="price" style="font-family: 'open sans';color:black;">your savings For Sale :</span>
+        <span class="text-dark" style="font-family: 'open sans';">₹ {{product.stockrecords.all.last.sale_total_saving|floatformat:"0"|intcomma}}</span>
+        <span></span>&nbsp;<span class="cut-price">(₹ {{product.stockrecords.all.last.sale_market_price|intcomma}})</span>
+    {% endif %}
+
+{% else %}
+
+{% endif %}
+
+
+<!--{% load currency_filters %}-->
+<!--{% load i18n %}-->
+<!--{% load humanize %}-->
+<!--{% load purchase_info_tags %}-->
+<!--{% purchase_info_for_product request product as session %}-->
+<!--<style>-->
+    <!--.text-dark{-->
+        <!--color:black;-->
+        <!--font-weight: bold;-->
+    <!--}-->
+    <!--.price-label{-->
+        <!--font-family: 'open sans';-->
+        <!--color:black;-->
+    <!--}-->
+    <!--.font-open-sans{-->
+        <!--font-family: 'open sans';-->
+    <!--}-->
+    <!--.cut-price{-->
+        <!--color:black;-->
+        <!--text-decoration-thickness: 3px;-->
+        <!--position: relative;-->
+    <!--}-->
+    <!--.cut-price:after {-->
+         <!--content: '';-->
+        <!--display: block;-->
+        <!--height: 0px;-->
+        <!--width: 100%;-->
+        <!--position: absolute;-->
+        <!--top: 50%;-->
+        <!--left: 50%;-->
+        <!--border: 1px solid red;-->
+        <!--transform: translate(-50%, -50%);-->
+    <!--}-->
+    <!--.mr-left-20{-->
+        <!--margin-left:20px;-->
+    <!--}-->
+    <!--.w-10{-->
+        <!--width:10%;-->
+    <!--}-->
+    <!--.w-50{-->
+        <!--width:50%;-->
+    <!--}-->
+    <!--.display-flex{-->
+        <!--display:flex;-->
+    <!--}-->
+    <!--.pr-0-pl-0{-->
+        <!--padding-left: 0;-->
+        <!--padding-right: 0;-->
+    <!--}-->
+<!--</style>-->
+
+<!--{% if product.product_class.name == 'Sale' %}-->
+
+    <!--{% if product.stockrecords.all.last.sale_total_saving and product.stockrecords.all.last.sale_market_price %}-->
+        <!--<div class="row">-->
+            <!--<div class="col-md-6">-->
+                <!--<span class="price price-label price-label-black w-50">your savings</span>-->
+            <!--</div>-->
+            <!--<div class="col-md-1">:</div>-->
+            <!--<div class="col-md-5 display-flex pr-0-pl-0">-->
+                <!--<span class="text-dark font-open-sans">Rs {{product.stockrecords.all.last.sale_total_saving|floatformat:2|intcomma}}</span>-->
+                <!--<span></span>&nbsp;<span class="cut-price">(Rs {{product.stockrecords.all.last.sale_market_price|floatformat:2|intcomma}})</span>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--{% endif %}-->
+
+<!--{% elif product.product_class.name == 'Rent' %}-->
+
+    <!--{% if product.stockrecords.all.last.rent_market_price and product.stockrecords.all.last.rent_total_saving %}-->
+        <!--<div class="row">-->
+            <!--<div class="col-md-6">-->
+                <!--<span class="price price-label price-label-black w-50">your savings</span>-->
+            <!--</div>-->
+            <!--<div class="col-md-1">:</div>-->
+            <!--<div class="col-md-5 display-flex pr-0-pl-0">-->
+                <!--<span class="text-dark font-open-sans">Rs {{product.stockrecords.all.last.rent_total_saving|floatformat:2|intcomma}}</span>-->
+                <!--<span></span>&nbsp;<span class="cut-price">(Rs {{product.stockrecords.all.last.rent_market_price|floatformat:2|intcomma}})</span>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--{% endif %}-->
+
+<!--{% elif product.product_class.name == 'Professional' %}-->
+
+    <!--{% if product.stockrecords.all.last.rent_market_price and product.stockrecords.all.last.rent_total_saving %}-->
+        <!--<div class="row">-->
+            <!--<div class="col-md-6">-->
+                <!--<span class="price price-label price-label-black w-50">your savings</span>-->
+            <!--</div>-->
+            <!--<div class="col-md-1">:</div>-->
+            <!--<div class="col-md-5 display-flex pr-0-pl-0">-->
+                <!--<span class="text-dark font-open-sans">Rs {{product.stockrecords.all.last.rent_total_saving|floatformat:2|intcomma}}</span>-->
+                <!--<span></span>&nbsp;<span class="cut-price">(Rs {{product.stockrecords.all.last.rent_market_price|floatformat:2|intcomma}})</span>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--{% endif %}-->
+
+<!--{% elif product.product_class.name == 'Rent Or Sale' %}-->
+
+    <!--{% if product.stockrecords.all.last.rent_market_price and product.stockrecords.all.last.rent_total_saving %}-->
+        <!--<div class="row">-->
+            <!--<div class="col-md-6">-->
+                <!--<span class="price price-label price-label-black w-50">your savings For Rent</span>-->
+            <!--</div>-->
+            <!--<div class="col-md-1">:</div>-->
+            <!--<div class="col-md-5 display-flex pr-0-pl-0">-->
+                <!--<span class="text-dark font-open-sans">Rs {{product.stockrecords.all.last.rent_total_saving|floatformat:2|intcomma}}</span>-->
+                <!--<span></span>&nbsp;<span class="cut-price">(Rs {{product.stockrecords.all.last.rent_market_price|floatformat:2|intcomma}})</span>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--{% endif %}-->
+
+    <!--{% if product.stockrecords.all.last.sale_total_saving and product.stockrecords.all.last.sale_market_price %}-->
+        <!--<div class="row">-->
+            <!--<div class="col-md-6">-->
+                <!--<span class="price price-label price-label-black w-50">your savings For Sale</span>-->
+            <!--</div>-->
+            <!--<div class="col-md-1">:</div>-->
+            <!--<div class="col-md-5 display-flex pr-0-pl-0">-->
+                <!--<span class="text-dark font-open-sans">Rs {{product.stockrecords.all.last.sale_total_saving|floatformat:2|intcomma}}</span>-->
+                <!--<span></span>&nbsp;<span class="font-open-sans cut-price">(Rs {{product.stockrecords.all.last.sale_market_price|floatformat:2|intcomma}})</span>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--{% endif %}-->
+
+<!--{% endif %}-->

@@ -1,0 +1,86 @@
+{% extends 'dashboard/layout.html' %}
+{% load i18n %}
+{% load thumbnail %}
+{% load staticfiles %}
+{% load sorting_tags %}
+{% load render_table from django_tables2 %}
+
+{% block body_class %}{{ block.super }} catalogue{% endblock %}
+
+{% block title %}
+{% trans "Margins" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<style>
+    @media (max-width: 767px) {
+        .table-container{
+        overflow:auto !important;
+    }
+    .select2-container{
+        width:100% !important;
+        margin-bottom:10px ;
+    }
+    .form-inline input[type=text]{
+        margin-bottom:10px;
+    }
+}
+</style>
+
+<ul class="breadcrumb">
+    <li>
+        <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+    </li>
+    <li class="active">{% trans "Front Pages" %}</li>
+</ul>
+{% endblock %}
+
+{% block header %}
+<div class="page-header action">
+    <h1>{% trans "Front Pages" %}</h1>
+</div>
+{% endblock header %}
+
+{% block dashboard_content %}
+
+
+
+{% endblock dashboard_content %}
+
+{% block extrascripts %}
+    {{ block.super }}
+    <script>
+
+        $('#id_category').on('change', function(){
+
+            $('#id_sub_category').select2({placeholder: 'Select Sub Category'});
+            $("#id_sub_category").empty();
+
+            $.ajax({
+                type:'GET',
+                url : '/dashboard/accounts/get-sub-category/',
+                data : {
+                    category: this.value,
+                },
+                success : function(data){
+                    var sub_category = JSON.parse(data);
+                    $("#id_sub_category").select2('data', sub_category);
+                    var toAppend = ''
+                    toAppend += "<option value=''>Select Sub Category</option>"
+                    $.each(sub_category, function(i,o){
+                        toAppend += '<option value='+o.id+'>'+o.text+'</option>';
+                    });
+                    $('#id_sub_category').append(toAppend);
+                },
+                failure : function(result){
+                },
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block onbodyload %}
+{{ block.super }}
+    oscar.dashboard.product_lists.init();
+    oscar.init();
+{% endblock onbodyload %}

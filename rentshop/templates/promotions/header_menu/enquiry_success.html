@@ -1,0 +1,101 @@
+{% extends "layout_2_col.html" %}
+{% load i18n %}
+{% load thumbnail %}
+{% load currency_filters %}
+{% load purchase_info_tags %}
+{% load display_tags %}
+{% load reviews_tags %}
+{% load staticfiles %}
+{% load mathfilters %}
+{% load static %}
+{% load common %}
+
+{% load product_tags %}
+{% load purchase_info_tags %}
+
+{% block navigation %}
+    {% include "partials/nav_primary.html" with expand_dropdown=1 %}
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block column_left %}
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'oscar/css/products/contact_style.css' %}" type="text/css" media="screen">
+
+<style>
+    @import url('https://fonts.googleapis.com/css?family=Playball&display=swap');
+    .heading {
+        background-color: #FFCC33;
+        padding:0px !important;
+        margin-top:50px !important;
+    }
+    .heading1 {
+        margin-left: 225px;
+        margin-top: 5px;
+        font-family: 'Playball', cursive;
+        color: #ffffff;
+        height: 50px;
+        font-size: 30px;
+    }
+    .h3{
+        color: #000 !important;
+        font-size:26px;
+    }
+    .xbtn{
+        color: #212529;
+        background-color: #d39e00;
+        border-color: #c69500;
+        display: inline-block;
+        font-weight: 400;
+        color: #212529;
+        text-align: center;
+        vertical-align: middle;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        padding: .375rem .75rem;
+        font-size: 16px;
+        line-height: 1.5;
+        border-radius: .25rem;
+        transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+    .xbtn-warning {
+        color: #212529;
+        padding:6px 30px;
+        background-color: #ffc107;
+        border-color: #ffc107;
+        margin-left:13%;
+    }
+    
+</style>
+
+
+
+<div class="shop-layout-wrap" id="nz-target" autofocus style="background-color:#fff;">
+    <section class='content nz-clearfix' data-rp="true" data-rpn="4" style="width:100%;">
+        <div class="heading"><h3 class="heading1">Get Best Quote</h3></div>
+    <div class="qoute-form-wrapper setup-content">
+        <main class="main">
+            <section class="twitter">
+                <div class="heading">
+
+                    </div>
+
+            <div class="container">
+	  <h3 class="h3">Your response has been recorded successfully.</h3>
+	  <br/>
+      <a href="/catalogue/form_best_quote" target="_blank" class="xbtn xbtn-warning">Get Best Quote</a>
+    </div>
+            </section>
+        </main>
+         </div>
+    </section>
+</div>
+
+{% endblock %}

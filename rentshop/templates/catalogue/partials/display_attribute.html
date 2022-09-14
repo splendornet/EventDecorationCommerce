@@ -1,0 +1,56 @@
+{% load currency_filters %}
+{% load i18n %}
+{% load static %}
+{% load purchase_info_tags %}
+{% purchase_info_for_product request product as session %}
+{% load common %}
+
+
+{% get_attribute product.upc as attribute %}
+{% if attribute %}
+    <div class="row mr-l-0">
+        <input value="1" class="has_attribute" hidden/>
+        <div class="main-attribute form-horizontal">
+            {% for attr , values in attribute.items %}
+                {% if attr|lower != "colour" and attr|lower != "color" %}
+                    <div class="form-group">
+                        <label class="col-lg-4 attr-label">
+                            <strong>{{attr|title}} :</strong>
+                        </label>
+                        <div class="col-lg-8">
+                            <select name="control-attr" class="form-control control-attr" onchange="trigger_attr_select(this, '{{attr}}')" id="id_{{attr}}_mapping_set-{{forloop.counter0}}-attribute">
+                                <option value="">---------</option>
+                                {% for value in values %}
+                                    <option value="{{value}}">{{value}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% for attr , values in attribute.items %}
+                {% if attr|lower == "colour" or  attr|lower == "color" %}
+                    <div class="custom-radios form-group">
+                        <div class="col-md-3">
+                            <label class="attr-label">Colors:</label>
+                        </div>
+                        <div class="col-md-9">
+                        {% for value in values %}
+                            <div class="">
+                                <input class="color_el" type="radio" id="color-{{forloop.counter0}}" name="color_attr" onchange="trigger_attr_select(this, '{{attr}}')" value="{{value}}">
+                                <label for="color-{{forloop.counter0}}">
+                                    <span style="background-color: {{value}};">
+                                        <img src="{% static 'check-icn.svg' %}" alt="Checked Icon" />
+                                    </span>
+                                </label>
+                            </div>
+                        {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% else %}
+    <input value="0" class="has_attribute" hidden/>
+{% endif %}

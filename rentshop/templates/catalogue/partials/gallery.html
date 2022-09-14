@@ -1,0 +1,83 @@
+<!-- https://ubislider.com/ -->
+
+{% load thumbnail %}
+{% load i18n %}
+{% load staticfiles %}
+
+<style>
+
+    #imageSlider>img{
+        //width:10px !important;
+    }
+    #zero-slider{
+        //border:3px solid #000 !important;
+    }
+    .img-fix-size>img{
+        width:700px !important;
+        height:700px !important;
+    }
+
+    .zoomContainer {
+        top: 252px !important;
+        width: 0px !important;
+        left: 210px !important;
+    }
+</style>
+
+{% with all_images=product.get_all_images %}
+{% if all_images %}
+    <div class="ubislider-image-container left ub-x img-fix-size"  id="imageSlider" data-ubislider="#zero-slider"></div>
+    <div class="ubislider left" id="zero-slider">
+        <a class="arrow prev"></a>
+        <a class="arrow next"></a>
+        <ul class="ubislider-inner">
+            {% for image in all_images %}
+                {% thumbnail image.original "550x550" as thumb %}
+                    <li>
+                        <img src="{{thumb.url}}" alt="{{product}}" class="ubslide">
+                    </li>
+                {% endthumbnail %}
+            {% endfor %}
+        </ul>
+    </div>
+{% else %}
+     <img src="/media/image_not_found.jpg" alt="{{product}}">
+{% endif %}
+{% endwith %}
+
+
+{% block extrascripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/elevatezoom/3.0.8/jqueryElevateZoom.js"></script>
+    <link href="{% static 'rentshop/css/ubislider.css' %}" rel="stylesheet"/>
+    <script>
+       $(document).ready(function(){
+            $('#zero-slider').ubislider({
+                arrowsToggle: true,
+                type: 'ecommerce',
+                hideArrows: true,
+                autoSlideOnLastClick: true,
+                modalOnClick: true,
+                position: 'vertical',
+                onTopImageChange: function(){
+    	           $('#imageSlider img').elevateZoom();
+                }
+            });
+
+            $('.ubislider-image-container').on('click', function(){
+                $('.cart_div').css('z-index', '99')
+
+            })
+
+            $(document).click(function(){
+                if ($(".ubiModal").is(":visible")){
+                    $('.cart_div').css('z-index', '99')
+                }else{
+                    $('.cart_div').css('z-index', '9999')
+                }
+            })
+
+        });
+    </script>
+
+{% endblock %}

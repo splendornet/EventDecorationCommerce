@@ -1,0 +1,128 @@
+{% extends "layout_2_col.html" %}
+
+{% load static %}
+{% load basket_tags %}
+{% load category_tags %}
+{% load product_tags %}
+{% load common %}
+{% load i18n %}
+
+{% block title %}
+    {% if summary %}{{ summary }} |{% endif %} {{ block.super }}
+{% endblock %}
+
+{% block alert %}
+    {% include "partials/alert_messages.html" %}
+{% endblock %}
+
+{% block content %}
+
+<style>
+    @media(max-width: 767px) {
+        .caregory-reverse-mobile {
+            display: flex;
+            flex-direction: column-reverse;
+        }
+    }
+</style>
+
+<!-- extra css -->
+<link rel="stylesheet" href="{% static 'oscar/css/products/product_main.css' %}" type="text/css" media="screen">
+<link rel="stylesheet" href="{% static 'oscar/css/products/product_browse.css' %}" type="text/css" media="screen">
+<!-- extra css -->
+
+
+<div class="shop-layout-wrap" id="nz-target">
+
+    <div class="loop">
+        <div class="container product_con">
+
+            <section class="content lazy shop-layout animation-false nz-clearfix caregory-reverse-mobile" style="padding-top: 25px;">
+
+                <form action="." method="get">
+<!--                    {% include "catalogue/partials/filter.html" %}-->
+                    <div class="col-md-3">
+                        {% include "catalogue/partials/filter_sidebar.html" %}
+                    </div>
+                </form>
+
+                {% if products %}
+                    <!-- catelog browser -->
+                    <div class="col-md-9 col-9-pd infinite-container remove-padding-mobile">
+                        <div class="woocommerce-products " id="product_list">
+                            <ul class="products infinite-item">
+                                {% if not request.GET.mega_search and not request.GET.price_range and not request.GET.category and not request.GET.event and not request.GET.control_att and not request.GET.filter_list%}
+                                {% if page_obj.number == 1 %}
+                                {% get_premium_product products as premium_product %}
+                                {% if premium_product %}
+
+                                {% for product in premium_product %}
+                                    <div class="col-md-4">
+                                        {% render_product product %}
+                                    </div>
+                                {% endfor %}
+                                {% endif %}
+                                {% endif %}
+
+                                {% for product in products %}
+                                {% get_premium_product products as premium_product %}
+                                {% if premium_product %}
+                                    {% if product not in premium_product %}
+
+                                        <div class="col-md-4">
+                                            {% render_product product %}
+                                        </div>
+                                    {% endif %}
+                                {% else %}
+                                        <div class="col-md-4">
+                                            {% render_product product %}
+                                        </div>
+
+                                {% endif %}
+
+                                {% endfor %}
+                                {% else %}
+                                {% for product in products %}
+                                 <div class="col-md-4">
+                                            {% render_product product %}
+                                        </div>
+
+                                {% endfor %}
+                                {% endif %}
+
+                            </ul>
+                        </div>
+                    </div>
+                    {% include "partials/pagination.html" %}
+                {% else %}
+                    <div class="col-md-9 col-9-pd infinite-container">
+                        <div class="product-category-body" style="margin-top:7px;">
+                            <div class="product-category-content">
+                                <h4 class="product-category-title">No Products</h4>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </section>
+            <div class="row text-center">
+                <div class="loading loader" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock content %}
+
+{% block onbodyload %}
+    {{ block.super }}
+
+{% endblock %}
+
+{% block extrascripts %}
+    {{block.super}}
+
+      <script type="text/javascript" src="{% static 'oscar/js/product/product_details.js' %}"></script>
+
+{% endblock %}

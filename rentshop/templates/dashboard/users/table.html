@@ -1,0 +1,24 @@
+{% extends 'dashboard/table.html' %}
+{% load i18n %}
+
+{% block table.caption %}
+    <h3 class="pull-left" style="margin-top:5px">
+        <em class="icon-group icon-large"></em> All users
+        <span id="user_mark" class="selection_mark label label-default"></span>
+    </h3>
+    <div class="pull-right">
+        <div class="form-inline">
+            <em class="icon-refresh"></em> {% trans "Bulk Actions" %}
+            <label for="inlineCheckboxes">{% trans "With selected customers:" %}</label>
+            <label>
+                <input type="radio" name="action" value="make_active" /> {% trans "Make active" %}
+            </label>
+            <label>
+                <input type="radio" name="action" value="make_inactive" /> {% trans "Make inactive" %}
+            </label>
+            <input type="submit" value="{% trans 'Go!' %}" class="btn btn-primary" />
+            <button onclick="delete_bulk_user()" type="button" class="btn btn-danger">{% trans 'Delete' %}</button>
+            <input type="text" id="ids_list_user" hidden/>
+        </div>
+    </div>
+{% endblock %}

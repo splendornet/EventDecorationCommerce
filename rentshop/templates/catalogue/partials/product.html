@@ -1,0 +1,51 @@
+{% load reviews_tags %}
+{% load thumbnail %}
+{% load i18n %}
+{% load display_tags %}
+{% load staticfiles %}
+{% load mathfilters %}
+{% load purchase_info_tags %}
+{% load currency_filters %}
+{% load currency_filters %}
+{% load common %}
+{% load i18n %}
+{% load purchase_info_tags %}
+{% purchase_info_for_product request product as session %}
+
+
+{% block product %}
+
+    <div class="shop-loader">&nbsp;</div>
+
+    <div class="item-slide">
+        <div class="box-img">
+            {% with image=product.primary_image %}
+                {% thumbnail image.original "x200" upscale=False as thumb %}
+                    <a href="{{product.get_absolute_url}}" target="_blank">
+                        <img style="width:100%;/*object-fit: cover !important;*/background-color: white;" src="{{thumb.url}}" alt="{{ product.get_title }}" class="ne-img" >
+                    </a>
+                {% empty %}
+                    <a href="{{product.get_absolute_url}}" target="_blank">
+                        <img style="width:100%;/*object-fit: cover !important;*/background-color: white;" src="{{image.original.url}}" alt="{{ product.get_title }}" class="ne-img" >
+                    </a>
+                {% endthumbnail %}
+            {% endwith %}
+          {% if product.get_perc %}   <span class="tag2 hot" style="padding:5px;">{{product.get_perc }}% <br>off </span> {% endif %}
+            <div class="text-wrap">
+                <h4>{{product.get_title|truncatechars:20}}</h4>
+                <div class="desc">
+                    {% include "catalogue/partials/diplay_price_outer.html" %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div class="book-now-c col-xs-6">
+    <a href="{{product.get_absolute_url}}" target="_blank" style="margin-left:-50px;">Add to Cart</a>
+</div>
+<div class="book-now-d col-xs-6">
+    <a href="{{product.get_absolute_url}}" target="_blank"><i class="fa fa-heart" ></i> </a>
+</div>
+{% endblock %}
+
+

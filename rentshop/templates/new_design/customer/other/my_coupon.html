@@ -1,0 +1,86 @@
+{% extends 'new_design/customer/account_base.html' %}
+{% load static %}
+{% load common %}
+{% block tabcontent %}
+    <div class="col-md-9">
+        <div class="trp-acc-mycoupon-wrapper">
+            <div class="trp-acc-mainContent-title-wrapper trp-border-btm-0 mb-0 ">
+                <h1 class="trp-acc-mainContent-title m-0 ">My Coupons</h1>
+            </div>
+        </div>
+        {% if request.user.is_staff %}
+            {% include "new_design/customer/partials/vendor_coupon.html" %}
+        {% else %}
+            {% include "new_design/customer/partials/user_coupon.html" %}
+        {% endif %}
+    </div>
+    {% block extrascripts %}
+        {{ block.super }}
+        <script>
+            document.getElementById("my_order_link").classList.remove("active");
+            document.getElementById("my_custom_order_link").classList.remove("active");
+            document.getElementById("my_coupon_link").classList.add("active");
+            document.getElementById("faq_link").classList.remove("active");
+            document.getElementById("wishlist_link").classList.remove("active");
+            if(document.getElementById("my_vendor_profile_link")){
+                document.getElementById("my_vendor_profile_link").classList.remove("active");
+            }
+            if(document.getElementById("my_profile_link")){
+                document.getElementById("my_profile_link").classList.remove("active");
+            }
+        </script>
+        <!-- accordian -->
+		<script>
+			$(document).ready(function () {
+                $(".trp-mycoupon-accordion-item-wrapper").click(function(){
+                        $(this).toggleClass("active");
+                       $(this).siblings(".trp-mycoupon-accordion-containt").toggle();
+                });
+                $(".trp-sub-acc-wrap .trp-mycoupon-sub-wrapper").click(function(){
+
+            $(".trp-sub-acc-wrap .trp-mycoupon-sub-wrapper").removeClass("active");
+            $(this).toggleClass("active");
+            $(".trp-sub-acc-wrap .trp-mycoupon-accordion-table").hide();
+            $(this).siblings(".trp-sub-acc-wrap .trp-mycoupon-accordion-table").toggle();
+          });
+            });
+		</script>
+<link rel="stylesheet" type="text/css" href="{% static 'core_assets/packages/jquery-toast-plugin-1/src/jquery.toast.css' %}"/>
+    <script type="text/javascript" src="{% static 'core_assets/packages/jquery-toast-plugin-1/src/jquery.toast.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+
+            $('#messages').hide();
+
+            {% if messages %}
+              {% for message in messages %}
+                    var status = '{{message.tags}}';
+                    if (status == 'success'){
+                        $.toast({
+                            heading: 'Success',
+                            text: '{{message}}',
+                            icon: 'success',
+                            loader: true,
+                            html: true,
+                            loaderBg: '#9EC600',
+                            position: 'bottom-right',
+                        });
+                    }else{
+                        $.toast({
+                        heading: 'Warning',
+                        text: '{{message}}',
+                        icon: 'warning',
+                        loader: true,
+                        html: true,
+                        loaderBg: '#9EC600',
+                        position: 'bottom-right',
+                        });
+                    }
+                {% endfor %}
+
+            {% endif %}
+            });
+    </script>
+
+    {% endblock %}
+{% endblock %}

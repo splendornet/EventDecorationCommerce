@@ -1,0 +1,53 @@
+{% extends 'dashboard/layout.html' %}
+
+{% load i18n %}
+
+{% block title %}
+    Coupon Distributor Delete | {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{{ block.super }} create-page{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li>
+            <a href="{% url 'dashboard:coupon-distributors' %}">{% trans "Coupon Distributors" %}</a>
+        </li>
+        <li class="active">Delete Coupon Distributor</li>
+    </ul>
+{% endblock %}
+
+{% block headertext %}{{ title }}{% endblock %}
+
+{% block dashboard_content %}
+    <div class="table-header">
+        <h2>Delete Coupon Distributor</h2>
+    </div>
+    <form action="{{ request.GET.urlencode }}" method="post" class="well" id="form">
+        {% csrf_token %}
+        <p style="font-size:18px;">Are you really want to delete {{distributor.full_name}} distributor?</p>
+        <div class="form-actions">
+            <input type="hidden" value="{{distributor.id}}" name="product">
+            <button type="button" onclick="confirm_event_delete()" class="btn btn-danger">{% trans "Delete" %}</button>
+            {% trans "or" %}
+            <a href="{% url 'dashboard:coupon-distributors' %}">{% trans "cancel" %}</a>
+        </div>
+    </form>
+{% endblock %}
+
+{% load static %}
+{% block extrascripts %}
+    {{ block.super }}
+    <script>
+        function confirm_event_delete(){
+            var is_confirm = confirm("Do you really want to delete the coupon distributor.");
+            if (is_confirm == false){
+                return false;
+            }
+            $('#form').submit();
+        }
+    </script>
+{% endblock %}

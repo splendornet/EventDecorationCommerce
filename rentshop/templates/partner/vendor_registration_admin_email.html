@@ -1,0 +1,21 @@
+{% extends "customer/emails/base.html" %}
+{% load currency_filters i18n %}
+
+{% block tbody %}
+{% autoescape off %}
+{% load static %}
+<tr>
+    <td class="content-block">
+        <p xmlns="http://www.w3.org/1999/html">Hello Admin,</p>
+        <p>New ASP registered.</p>
+        <p><b>Business Name :</b> {{ partner_obj.business_name}}</p>
+        <p><b>Name :</b> {{ vendor.first_name }} {{ vendor.last_name }}</p>
+        <p><b>Email Id :</b> {{email_id}}</p>
+        <p><b>Contact Number :</b> {{partner_obj.telephone_number}}</p>
+        <p><b>Address :</b> {{partner_obj.address_line_1}} {{partner_obj.address_line_2}} {{partner_obj.city}} {{partner_obj.state}} -{{partner_obj.pincode}}</p>
+        <br/>
+    </td>
+</tr>
+
+{% endautoescape %}
+{% endblock %}

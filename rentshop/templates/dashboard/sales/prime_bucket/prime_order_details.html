@@ -1,0 +1,305 @@
+{% extends 'dashboard/layout.html' %}
+{% load i18n %}
+{% load currency_filters %}
+{% load common %}
+
+{% block body_class %}{{ block.super }} orders{% endblock %}
+
+{% block title %}
+    {% blocktrans with number=order.number %}Order {{ number }}{% endblocktrans %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li>
+            <a href="{% url 'dashboard:prime-bucket' %}">{% trans "Prime Bucket" %}</a>
+        </li>
+        <li class="active">#{{ order.number }}</li>
+    </ul>
+{% endblock %}
+
+{% block headertext %}
+    {% blocktrans with number=order.number %}Order #{{ number }}{% endblocktrans %}
+{% endblock  %}
+
+{% block dashboard_content %}
+
+<style>
+    .tab-content > .active {
+    display: block;
+    margin-top: 20px !important;
+    margin-left: 20px !important;
+}
+.select-div .select2{
+    width:300px !important;
+}
+</style>
+
+    {% block order_information %}
+
+    {% if user.is_superuser %}
+        <div class="table-header">
+            <h3>{% trans "Order Items" %}</h3>
+        </div>
+        <table class="table table-striped table-bordered table-hover">
+            <tbody>
+                <tr>
+                    <td><strong>Product</strong></td>
+                    <td><strong>Product Type</strong></td>
+                    <td><strong>Product Category</strong></td>
+                    <td><strong>Allocate Vendor</strong></td>
+                    <td><strong>Product Category Sales ASP</strong></td>
+                    <td><strong>Product ASP (OG)</strong></td>
+                    <td><strong>Action</strong></td>
+                </tr>
+                {% for order_line in order_lines %}
+                    {% if order_line.order_type in 'Rent,Professional' %}
+                        {% product_category_asp order_line.product.categories.all.last as product_category_asp %}
+                        {% product_category_asp_data order_line as product_category_asp_data %}
+                        {% product_category_indiasp_data order_line as product_category_indiasp_data %}
+                        <tr>
+                        <td>
+                            <a href="{% url 'dashboard:catalogue-product' pk=order_line.product.id %}" target="_blank">
+                                {{order_line.product}}
+                            </a>
+                        </td>
+                        <td>
+                            {{order_line.order_type}}
+                        </td>
+                        <td>
+                            {{order_line.product.categories.all.last}}
+                        </td>
+                            <td>
+                                {% if order_line.allocated_order_line.all %}
+                                {{order_line.allocated_order_line.last.vendor}}
+                                {% else %}
+                                -
+                                {% endif %}
+                        </td>
+                        <td>
+                            {% if not product_category_asp.status %}
+                                {{product_category_asp.message}}
+                            {% elif product_category_asp.status == 3 %}
+                                <a href="{% url 'dashboard:create-asp-db' %}" class="" target="_blank">Create Sale Database</a>
+                            {% else %}
+                                {{product_category_asp.message}}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if order_line.partner.pk %}
+                            <a href="{% url 'dashboard:partner-manage' pk=order_line.partner.pk %}" target="_blank">
+                                {{order_line.partner_name}}
+                            </a>
+                            {% else %}
+                            {{order_line.partner_name}}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if not product_category_asp.status or product_category_asp.status == 3 %}
+                                 <button type="button" disabled class="btn btn-block btn-success">Allocated</button>
+                            {% elif product_category_asp.status == 2 %}
+                            {% if order_line.allocated_order_line.all %}
+                            <button type="button" onclick="alert('{{order_line.allocated_order_line.last.vendor_name}} is already allocated.')" class="btn btn-block btn-success">
+                                        Allocated
+                                    </button>
+
+                                {% else %}
+                                <button type="button" class="btn btn-block btn-primary" onclick="toggle_inditab('{{order_line.id}}')" >Allocate</button>
+                                {% endif %}
+<!--                                <button type="button" disabled class="btn btn-block btn-success">Allocated</button>-->
+                            {% else %}
+                                {% if order_line.allocated_order_line.all %}
+                                    <button type="button" onclick="alert('{{order_line.allocated_order_line.last.vendor_name}} is already allocated.')" class="btn btn-block btn-success">
+                                        Allocated
+                                    </button>
+                                {% else %}
+                                    <button type="button" class="btn btn-block btn-primary" onclick="toggle_tab('{{order_line.id}}')">Allocate</button>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                        <tr id="allocate_tab_{{order_line.id}}" hidden class="toggle_tr" style="background-color:#fff;">
+                        <td colspan="5" style="background:#fff;">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active"><a data-toggle="tab" href="#fl_{{order_line.id}}">Front Liner</a></li>
+                                        <li class=""><a data-toggle="tab" href="#b1_{{order_line.id}}">Backup 1</a></li>
+                                        <li class=""><a data-toggle="tab" href="#b2_{{order_line.id}}">Backup 2</a></li>
+                                    </ul>
+
+                                    <div class="tab-content" style="margin-top: -1px; border:1px solid #ddd;">
+                                        <div id="fl_{{order_line.id}}" class="tab-pane fade in active">
+                                            <div class="radio-x" style="padding-left:10px;">
+                                                {% for fl in product_category_asp_data.front_liner %}
+                                                    <div class="radio">
+                                                        <label>
+                                                            <input type="radio" id="vendor_radio_{{order_line.id}}" name="vendor_radio_{{order_line.id}}" value="{{fl.id}}">
+                                                            {{fl.name}}
+                                                        </label>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div id="b1_{{order_line.id}}" class="tab-pane fade in">
+                                            <div class="radio-x" style="padding-left:10px;">
+                                                {% for fl in product_category_asp_data.backup_1 %}
+                                                    <div class="radio">
+                                                        <label>
+                                                            <input type="radio" name="vendor_radio_{{order_line.id}}" value="{{fl.id}}">
+                                                            {{fl.name}}
+                                                        </label>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div id="b2_{{order_line.id}}" class="tab-pane fade in">
+                                            <div class="radio-x" style="padding-left:10px;">
+                                                {% for fl in product_category_asp_data.backup_2 %}
+                                                    <div class="radio">
+                                                        <label>
+                                                            <input type="radio" name="vendor_radio_{{order_line.id}}" value="{{fl.id}}">
+                                                            {{fl.name}}
+                                                        </label>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-xs btn-primary" onclick="save_vendor('{{order_line.id}}')" style="margin:15px;">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                <tr id="reallocate_tab_{{order_line.id}}" hidden class="toggle_tr" style="background-color:#fff;">
+                        <td colspan="7" style="background:#fff;">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active"><a data-toggle="tab" href="#indi_{{order_line.id}}">Individual ASP</a></li>
+                                    </ul>
+
+                                    <div class="tab-content" style="margin-top: -1px; border:1px solid #ddd;">
+                                        <div id="indi_{{order_line.id}}" class="tab-pane fade in active select-div">
+                                            <select name="vendor_radio" id="vendor_select" >
+                                                {% for fl in product_category_indiasp_data.indi_liner %}
+
+                                                        {% if allocated.order_line == order_line and allocated.vendor_name == fl.name %}
+                                                        {% else %}
+
+                                                                    <option value="{{fl.id}}">
+                                                                        {{fl.name}}
+                                                                    </option>
+
+                                                        {% endif %}
+
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <button class="btn btn-xs btn-primary" onclick="re_allocate_vendor_indi('{{order_line.id}}')" style="margin:15px;">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+    {% endblock order_information %}
+
+
+{% endblock dashboard_content %}
+
+
+{% load static %}
+{% block extrascripts %}
+    {{ block.super }}
+    <script src="{% static 'oscar/js/dashboard/orders/order_details.js' %}"></script>
+    <script>
+        // toggle tabs
+        function toggle_tab(id){
+            $('.toggle_tr').hide();
+            $('#allocate_tab_'+id).show();
+        }
+        // toggle tabs
+
+        // toggle inditabs
+        function toggle_inditab(id){
+            $('.toggle_tr').hide();
+            $('#reallocate_tab_'+id).show();
+        }
+        // toggle inditabs
+
+        // save vendor
+        function save_vendor(id){
+            var selector = 'vendor_radio_'+id;
+            var selected_vendor = $("input[name="+selector+"]:checked").val();
+            if(selected_vendor){
+                //var is_confirm = confirm("Do you really want to allocate the vendor.");
+                //if (is_confirm == false){
+                //    return false;
+               // }
+                save_vendor_ajax(id, selected_vendor);
+            }else{
+                alert('Please select ASP.');
+            }
+        }
+        // save vendor
+
+        // save vendor ajax
+        function save_vendor_ajax(id, vendor_id){
+
+            $('.loader').css('display', 'block');
+
+            $.ajax({
+                type:'GET',
+                url : '/allocate_vendor_sales/',
+                data : {
+                    order_line_id: id,
+                    vendor_id: vendor_id
+                },
+                success : function(data){
+                    $('.loader').css('display', 'none');
+                    if(data == 'SWR'){
+                        window.location.reload();
+                    }
+                    if(data == 'IN_SERVER'){
+                        window.location.replace("/dashboard");
+                    }
+                    if(data == '200'){
+                        window.location.reload();
+                    }
+                },
+                failure : function(result){
+                },
+            });
+        }
+        // save vendor ajax
+
+        $(document).ready(function() {
+               $('#vendor_select').select2();
+        });
+
+        function re_allocate_vendor_indi(id){
+         var selected_vendor = $( "#vendor_select" ).val();
+           // var selector = 'vendor_radio_'+id;
+           // var selected_vendor = $("input[name="+selector+"]:checked").val();
+            if(selected_vendor){
+                save_vendor_ajax(id, selected_vendor);
+            }else{
+                alert('Please select ASP.');
+            }
+        }
+    </script>
+{% endblock %}
+
+{% block onbodyload %}
+    {{ block.super }}
+    oscar.dashboard.orders.initTabs();
+    oscar.dashboard.orders.initTable();
+{% endblock %}

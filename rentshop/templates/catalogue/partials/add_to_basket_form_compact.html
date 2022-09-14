@@ -1,0 +1,67 @@
+{% load basket_tags %}
+{% load i18n %}
+{% load purchase_info_tags %}
+{% load common %}
+{% purchase_info_for_product request product as session %}
+
+{% if session.availability.is_available_to_buy %}
+    {% basket_form request product 'single' as basket_form %}
+    <form action="{% url 'basket:add' pk=product.pk %}" method="post">
+        {% csrf_token %}
+        {{ basket_form.as_p }}
+
+        {% if product.get_product_class.name == 'Rent Or Sale' %}
+        {% line_item_checker request product as in_basket_obj %}
+         <div class="btn-group">
+             {% if not in_basket_obj %}
+            <button type="submit"  class="btn btn-red m-btn btn-sep" name="order_type" value="Rent">Buy</button>
+            <button type="submit" class="btn btn-red m-btn " name="order_type" value="Sale">&nbsp;&nbsp;&nbsp;Rent&nbsp;</button>
+             {% else %}
+             {% for i in in_basket_obj %}
+                {% if i.order_type == 'Sale' %}
+                    <button type="submit" disabled  class="btn btn-red m-btn btn-sep" name="order_type" value="Rent">Rent</button>
+                    <button type="submit"  class="btn btn-red m-btn" name="order_type" value="Sale">&nbsp;&nbsp;Buy&nbsp;&nbsp;</button>
+                {% elif i.order_type == 'Rent' %}
+                    <button type="submit"   class="btn btn-red m-btn btn-sep" name="order_type" value="Rent">Rent</button>
+                    <button type="submit" disabled class="btn btn-red m-btn" name="order_type" value="Sale">&nbsp;&nbsp;Buy&nbsp;&nbsp;</button>
+                {% else %}
+                    <button type="submit" disabled  class="btn btn-red m-btn btn-sep" name="order_type" value="Rent">Rent</button>
+                    <button type="submit" disabled class="btn btn-red m-btn" name="order_type" value="Sale">&nbsp;&nbsp;Buy&nbsp;&nbsp;</button>
+                {% endif %}
+                {% endfor %}
+             {% endif %}
+         </div>
+            <!--<button type="submit" class="btn btn-primary btn-block" data-loading-text="{% trans 'Adding...' %}">{% trans "Add to basket" %}</button>-->
+        {% else %}
+            {% if product.get_product_class.name == 'Rent' %}
+                <button type="submit" class="btn btn-red" data-loading-text="{% trans 'Adding...' %}" name="order_type" value="Rent">
+                    {% trans "Rent" %}
+                </button>
+            {% elif product.get_product_class.name == 'Sale' %}
+                <button type="submit" class="btn btn-red" data-loading-text="{% trans 'Adding...' %}" name="order_type" value="Sale">
+                    {% trans "Buy" %}
+                </button>
+            {% elif product.get_product_class.name == 'Professional' %}
+                <button type="submit" class="btn btn-red" data-loading-text="{% trans 'Adding...' %}" name="order_type" value="Professional">
+                    {% trans "Rent" %}
+                </button>
+
+            {% else %}
+                <span class="btn btn-default disabled">{% trans "Add to basket" %}</span>
+            {% endif %}
+        {% endif %}
+    </form>
+{% else %}
+    {% if product.get_product_class.name == 'Service' %}
+        <a href="{{product.get_absolute_url}}" class="btn btn-red btn-yellow btn-link">View Details</a>
+        <!--<button class="btn btn-red" id="btn_id_{{product.id}}" onclick="serviceEnquiryForm({{product.id}})" type="button" style="margin: 0 0 15px;">{% trans "Contact Us" %}</button>-->
+    {% else %}
+        <button class="btn btn-red disabled" disabled style="margin: 0 0 15px;">{% trans "Add to basket" %}</button>
+    {% endif %}
+{% endif %}
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    $('document').ready(function(){
+        <!--alert('');-->
+    });
+</script>

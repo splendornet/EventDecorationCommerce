@@ -1,0 +1,53 @@
+{% extends 'dashboard/layout.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block body_class %}{{ block.super }} create-page{% endblock %}
+
+{% block title %}
+    {{ title }} | {% trans "Ranges" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li>
+            <a href="{% url 'dashboard:range-list' %}">{% trans "Coupon Season" %}</a>
+        </li>
+        {% if range %}
+            <li class="active">Update Coupon Seasons</li>
+        {% else %}
+            <li class="active">Create Coupon Seasons</li>
+        {% endif %}
+    </ul>
+{% endblock %}
+
+{% block headertext %}
+    {% if range %}{{ range.name }}{% else %}{% trans "Create New Coupon Seasons" %}{% endif %}
+{% endblock %}
+
+{% block dashboard_content %}
+<link rel="stylesheet" href="{% static 'oscar/css/products/common_select2.css' %}" type="text/css" media="screen">
+
+
+
+    <form action="." method="post" class="form-stacked well wysiwyg">
+        {% csrf_token %}
+        {% include "dashboard/partials/form_fields.html" with form=form %}
+        {% block form_actions %}
+            <div class="form-actions">
+                <button class="btn btn-primary btn-lg" type="submit" data-loading-text="{% trans 'Saving...' %}">{% trans "Save" %}</button> {# This is an input so we distinguish between which button was pressed #}
+                <!--<input class="btn btn-primary btn-lg" type="submit" name="action" value="{% trans "Save and edit products" %}"/>-->
+                {% trans "or" %}
+                <a class="btn btn-primary btn-lg" href="{% url 'dashboard:range-list' %}">{% trans "cancel" %}</a>
+            </div>
+        {% endblock form_actions %}
+    </form>
+{% endblock dashboard_content %}
+
+{% block extrascripts %}
+    {{ block.super }}
+
+{% endblock %}

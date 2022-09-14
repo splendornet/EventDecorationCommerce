@@ -1,0 +1,86 @@
+{% extends 'new_design/customer/account_base.html' %}
+{% load static %}
+{% load humanize %}
+{% block tabcontent %}
+    <div class="col-md-9">
+        <div class="trp-acc-mainContent-wrapper">
+            <div class="trp-acc-mainContent-title-wrapper mb-0">
+                <h1 class="trp-acc-mainContent-title m-0">Orders details <span>#{{order.number}}</span></h1>
+            </div>
+            <div class="trp-acc-detail-wrapper trp-acc-order-table-wrapper trp-acc-wishlist-table">
+                <table class="table  trp-acc-order-table">
+                    <thead>
+                    <tr>
+                        <th class="col-sm-4">Product</th>
+                        <th class="col-sm-2 text-center">Quantity</th>
+                        <th class="col-sm-2 text-center">Order Date</th>
+                        <th class="col-sm-2 text-center">Cost</th>
+                        <th class="col-sm-2 text-right">Total</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for line in order.lines.all %}
+                        {% with product=line.product %}
+                            <tr>
+                                <td class="col-sm-4" data-title="Product">
+                                    <div class="trp-cartProduct-img-title">
+                                        <div class="trp-display-inline-block">
+<!--                                            <a href="{% url 'customer:user-only-order' order_id=order.id product_id=product.id line_id=line.id %}">-->
+                                            <a href="{% url 'customer:user-only-order' order_id=order.id product_id=product.id line_id=line.id %}" target="_blank">
+                                                {% if product.images.first %}
+                                                    <img width="68" height="58" src="{{product.images.first.original.url}}">
+                                                {% else %}
+                                                    <img width="68" height="58" src="{% static 'oscar/images/icons/no_image.png' %}">
+                                                {% endif %}
+                                            </a>
+                                        </div>
+                                        <div class="trp-wishlistProduct-name ">
+                                            <a href="{{line.product.get_absolute_url}}" target="_blank">{{line.description}}</a>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="col-sm-2 text-center trp-font-13" data-title="Quantity"><span>{{line.quantity}}</span></td>
+                                <td class="col-sm-2 text-center trp-font-13" data-title="Order Date"><span>{{ order.date_placed |date:"d/m/Y"}}</span></td>
+                                <td class="col-sm-2 text-center trp-font-13" data-title="Cost"><span>₹ {{line.line_price_incl_tax|floatformat:2|intcomma}}</span></td>
+                                <td class="col-sm-2 text-right trp-font-13" data-title="Total"><span>₹ {{line.line_price_incl_tax|floatformat:2|intcomma}}</span></td>
+                            </tr>
+                        {% endwith %}
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td class="col-sm-4 trp-hidden-sm"></td>
+                        <td class="col-sm-2 trp-hidden-sm"></td>
+                        <td class="col-sm-2 trp-hidden-sm"></td>
+                        <td class="col-sm-2 text-right trp-hidden-sm trp-font-w-600"> Grand Total</td>
+                        <td class="col-sm-2 text-right" data-title="Grand Total">₹ {{order.basket_total_incl_tax|floatformat:2|intcomma}}</td>
+                    </tr>
+                    </tfoot>
+                </table>
+                <div class="trp-order-summery-btn trp-whitePink-btn">
+                    {% if order.get_order_summary %}
+                        <a href="{{order.get_order_summary}}" target="_blank">Download Order Summary</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% block extrascripts %}
+        {{ block.super }}
+        <script>
+            document.getElementById("wishlist_link").classList.remove("active");
+            document.getElementById("my_custom_order_link").classList.remove("active");
+            document.getElementById("my_coupon_link").classList.remove("active");
+            document.getElementById("faq_link").classList.remove("active");
+            if(document.getElementById("my_vendor_profile_link")){
+                document.getElementById("my_vendor_profile_link").classList.remove("active");
+            }
+            if(document.getElementById("my_profile_link")){
+                document.getElementById("my_profile_link").classList.remove("active");
+            }
+            var element = document.getElementById("my_order_link");
+            console.log(element);
+            element.classList.add("active");
+        </script>
+    {% endblock %}
+{% endblock %}

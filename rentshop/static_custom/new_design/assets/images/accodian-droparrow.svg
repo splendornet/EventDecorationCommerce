@@ -1,0 +1,12 @@
+<svg version="1.2" baseProfile="tiny-ps" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+	<title>New Project</title>
+	<defs>
+		<image width="12" height="7" id="img1" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMiIgaGVpZ2h0PSI2Ljg2MSIgdmlld0JveD0iMCAwIDEyIDYuODYxIj4KICAgIDxwYXRoIGZpbGw9IiMwNjAxMTAiIGQ9Ik0xMi4xOSAxMy4zMTVsNC41MzcgNC41NDFhLjg1NC44NTQgMCAwIDAgMS4yMTEgMCAuODY1Ljg2NSAwIDAgMCAwLTEuMjE1TDEyLjggMTEuNWEuODU2Ljg1NiAwIDAgMC0xLjE4My0uMDI1bC01LjE3OSA1LjE2MmEuODU4Ljg1OCAwIDEgMCAxLjIxMSAxLjIxNXoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC02LjE4OCAtMTEuMjQ2KSIvPgo8L3N2Zz4K"/>
+	</defs>
+	<style>
+		tspan { white-space:pre }
+		.shp0 { fill: #f1f1f1 } 
+	</style>
+	<path id="Background" class="shp0" d="M12 24C5.36 24 0 18.64 0 12C0 5.36 5.36 0 12 0C18.64 0 24 5.36 24 12C24 18.64 18.64 24 12 24Z" />
+	<use id="Icon ionic-ios-arrow-down (1)" href="#img1" transform="matrix(1,0,0,1,6,8)"/>
+</svg>

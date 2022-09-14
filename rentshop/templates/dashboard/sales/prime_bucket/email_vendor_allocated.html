@@ -1,0 +1,20 @@
+{% extends "customer/emails/base.html" %}
+{% load currency_filters i18n %}
+
+{% block tbody %}
+    <tr>
+        <td class="content-block">
+            <h4 style="font-weight:300;">Dear {{allocated_obj.vendor_name}},</h4><br>
+            <h4 style="font-weight:300;">
+                You have received a new order #{{allocated_obj.order_number}} for {{allocated_obj.order_line.booking_start_date.date}} - {{allocated_obj.order_line.booking_end_date.date}}.
+            </h4>
+            <h4>Option 1:</h4>
+            <p>Check your ASP account or Click on the link given below to check details of the order.</p>
+            <p><a href="{{domain}}/dashboard/orders/{{allocated_obj.order_number}}">{{domain}}/dashboard/orders/{{allocated_obj.order_number}}</a> </p>
+            <h4>Option 2:</h4>
+            <p><a href="{{domain}}/media/order_summary/order_summary_{{allocated_obj.order_number}}.pdf">order_summary</a> </p><br>
+            <p style="color: #ee4d84;font-weight: 700;">Happy Celebranto!</p>
+        </td>
+    </tr>
+
+{% endblock %}

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+{% load static %}
+{% load common %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'new_design/assets/images/favicon.png' %}" type="image/x-icon">
+    <title>Take Rent Pe</title>
+    <link rel="stylesheet" href="{% static 'new_design/assets/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'new_design/assets/css/bootstrap-theme.min.css' %}">
+    <!-- css -->
+    <link rel="stylesheet" href="{% static 'new_design/assets/css/spacing-helper.css' %}">
+    <link rel="stylesheet" href="{% static 'new_design/assets/css/style.css' %}">
+    <!-- fonts -->
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Vollkorn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body class="trp-register-page">
+    <section class="trp-form-section pt-40 pb-20 height-tab-pro-100 trp-login-padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="trp-form-img text-center">
+                        <img src="{% static 'new_design/assets/images/form-images/from-head-img.svg' %}" alt="">
+                    </div>
+                    <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+                        <div class="trp-form-wrapper mt-20">
+                            <div class="trp-form-header text-center">
+                                <img src="{% static 'new_design/assets/images/logo.png' %}" alt="Take Remt Pe" class="trp-form-logo">
+                                <h1 class="trp-form-header-title">Login</h1>
+                            </div>
+                            <div class="trp-form">
+                                <form id="signin" action="{{ request.get_full_path }}" method="post" role="form">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label for="email">Enter Email</label>
+                                        <input class="form-control" type="email" name="login-username" id="email" placeholder="Enter your email" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="password">Enter Password</label>
+                                        <input class="form-control" type="password" name="login-password" id="password" placeholder="Enter your password" required>
+                                    </div>
+                                    {% if login_form.errors %}
+                                    <h6 class="text-center" style="color:#fff; font-size:12px">
+                                        <b class="snt-red-text">{{login_form.non_field_errors.as_text}}</b>
+                                    </h6>
+                                    {% endif %}
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <input type="submit" name="login_submit" value="Login" id="submit" class="trp-form-submit">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p class="trp-form-link mt-15 text-right trp-mobile-left"><a href="{% url 'password-reset' %}" target="_blank">Forgot your password?</a></p>
+                                        </div>
+                                    </div>
+                                    <div class="mt-20 trp-checkbox">
+                                        <input type="checkbox" name="remember-me" id="remember-me" >
+                                        <label for="remember-me" class="">Remember me</label>
+                                    </div>
+                                </form>
+                                <div class="text-center mt-10">
+                                    <p class="trp-form-link">Don't have an account? <a href="/accounts/register/{% if request.META.QUERY_STRING %}?{{ request.META.QUERY_STRING }}{% endif %}" target="_blank">Sign Up</a></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="trp-form-social text-cetner mt-30">
+                            {% get_social_link request as data %}
+                            <ul>
+                                <li><a href="{% if data.fb_link %} {{data.fb_link}} {% else %} https://www.facebook.com/Take-Rent-Pe-101019151839514 {% endif %}"><img src="{% static 'new_design/assets/images/form-images/navy-facebook-icon.svg' %}" alt=""></a></li>
+                                <li><a href="{% if data.twitter_link %} {{data.twitter_link}} {% else %} https://twitter.com/take_rent_pe {% endif %}"><img src="{% static 'new_design/assets/images/form-images/navy-twitter-icon.svg' %}" alt=""></a></li>
+                                <li><a href="{% if data.youtube_link %} {{data.youtube_link}} {% else %}https://www.youtube.com/channel/UCW7mHue2nbWxqE7xCAKi2VQ {% endif %}"><img src="{% static 'new_design/assets/images/form-images/navy-youtube-icon.svg' %}" alt=""></a></li>
+                                <li><a href="{% if data.insta_link %} {{data.insta_link}} {% else %}https://www.instagram.com/takerentpe/ {% endif %}"><img src="{% static 'new_design/assets/images/form-images/navy-insta-icon.svg' %}" alt=""></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
+        <script src="{% static 'new_design/assets/js/bootstrap.min.js' %}"></script>
+        <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+        <!--Hide menu   -->
+        <script>
+            $(document).ready(function () {
+                $(document).click(function (event) {
+                    var clickover = $(event.target);
+                    var _opened = $(".navbar-collapse").hasClass("collapse in");
+                    // alert(_opened)
+                    if (_opened === true && !clickover.hasClass("navbar-toggle")) {
+                        $("button.navbar-toggle").click();
+                    }
+                });
+            });
+          </script>
+    </footer>
+</body>
+</html>

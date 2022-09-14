@@ -1,0 +1,210 @@
+{% extends 'dashboard/layout.html' %}
+{% load static %}
+{% load category_tags %}
+{% load i18n %}
+{% load render_table from django_tables2 %}
+
+{% block body_class %}{{ block.super }} catalogue{% endblock %}
+
+{% block title %}
+    {% trans "Categories" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li class="active">{% trans "Categories" %}</li>
+    </ul>
+{% endblock %}
+
+{% block header %}
+    <div class="page-header" >
+        <h1>{{main_category}} {% trans "Categories" %}</h1>
+    </div>
+{% endblock header %}
+
+{% block extrastyles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'oscar/packages/multiselect/lib/google-code-prettify/prettify.css' %}" type="text/css" media="screen">
+    <link rel="stylesheet" href="{% static 'oscar/packages/multiselect/css/style.css' %}" type="text/css" media="screen">
+{% endblock %}
+
+{% block dashboard_content %}
+
+
+    <div class="table-header">
+        <h2 class="text-center" style="font-size:16px;">Main category</h2>
+    </div>
+    <div class="well">
+        <form action="." method="post" class='wysiwyg' id="category_form">
+            {% csrf_token %}
+            <div id="transfer1" class="transfer-demo"></div>
+
+            <div class="row">
+
+                <div class="col-xs-5">
+                    <select name="from[]" id="multi_d" class="form-control" size="14" multiple="multiple">
+                        {% for category in categories %}
+                            <option value="{{category.id}}">{{category.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-xs-2">
+                    <button type="button" id="multi_d_rightSelected" class="btn btn-default btn-block">
+                        Add
+                    </button>
+                    <button type="button" id="multi_d_leftSelected" class="btn btn-default btn-block">
+                        Remove
+                    </button>
+                    <button type="button" id="id_reset" onclick="window.location.reload()" class="btn btn-default btn-block">
+                        Reset
+                    </button>
+                </div>
+
+                <div class="col-xs-5">
+                    <select name="to[]" id="multi_d_to" class="form-control" size="14" multiple="multiple"></select>
+                    <input type="text" id="id_category_id" name="category_id" hidden>
+                </div>
+            </div>
+
+            <br/>
+            <button type="button" onclick="save_range()" class="btn btn-primary" id="category_submit">Submit</button>
+            <a href="/dashboard/catalogue/categories/" class="btn btn-default">Cancel</a>
+        </form>
+    </div>
+
+{% endblock dashboard_content %}
+
+{% block extrascripts %}
+    {{ block.super }}
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+    <script type="text/javascript" src="{% static 'oscar/packages/multiselect/dist/js/multiselect.min.js' %}"></script>
+
+    <script type="text/javascript">
+
+    // method to submit category range
+    function save_range(){
+
+        var sub_cat = [];
+        var original_sub_cat = [];
+
+        {% for category in categories %}
+            original_sub_cat.push('{{category.id}}')
+        {% endfor %}
+
+        $('#multi_d_to option').each(function (){
+            sub_cat.push(this.value)
+        });
+
+        $('#id_category_id').val(sub_cat);
+
+        for(var i=0; i < original_sub_cat.length; i++){
+            var n = sub_cat.includes(original_sub_cat[i])
+            if (n == false){
+                alert('Please select all categories.')
+                return false;
+            }
+        }
+        $('#category_form').submit();
+    }
+    </script>
+
+    <script>
+
+        $(document).ready(function() {
+
+            // make code pretty
+            window.prettyPrint && prettyPrint();
+
+            // multi-select js
+            $('#multi_d').multiselect({
+
+                right: '#multi_d_to, #multi_d_to_2',
+                rightSelected: '#multi_d_rightSelected, #multi_d_rightSelected_2',
+                leftSelected: '#multi_d_leftSelected, #multi_d_leftSelected_2',
+                rightAll: '#multi_d_rightAll, #multi_d_rightAll_2',
+                leftAll: '#multi_d_leftAll, #multi_d_leftAll_2',
+
+                // remove default sorting.
+                sort : {
+                    //return false;
+                },
+
+                moveToRight: function(Multiselect, $options, event, silent, skipStack) {
+
+                    var button = $(event.currentTarget).attr('id');
+
+                    if (button == 'multi_d_rightSelected') {
+                        var $left_options = Multiselect.$left.find('> option:selected');
+
+                        Multiselect.$right.eq(0).append($left_options);
+
+                        if ( typeof Multiselect.callbacks.sort == 'function' && !silent ) {
+                            Multiselect.$right.eq(0).find('> option').sort(Multiselect.callbacks.sort).appendTo(Multiselect.$right.eq(0));
+                        }
+                    } else if (button == 'multi_d_rightAll') {
+                        var $left_options = Multiselect.$left.children(':visible');
+                        Multiselect.$right.eq(0).append($left_options);
+
+                        if ( typeof Multiselect.callbacks.sort == 'function' && !silent ) {
+                            Multiselect.$right.eq(0).find('> option').sort(Multiselect.callbacks.sort).appendTo(Multiselect.$right.eq(0));
+                        }
+                    } else if (button == 'multi_d_rightSelected_2') {
+                        var $left_options = Multiselect.$left.find('> option:selected');
+                        Multiselect.$right.eq(1).append($left_options);
+
+                        if ( typeof Multiselect.callbacks.sort == 'function' && !silent ) {
+                            Multiselect.$right.eq(1).find('> option').sort(Multiselect.callbacks.sort).appendTo(Multiselect.$right.eq(1));
+                        }
+                    } else if (button == 'multi_d_rightAll_2') {
+                        var $left_options = Multiselect.$left.children(':visible');
+                        Multiselect.$right.eq(1).append($left_options);
+
+                        if ( typeof Multiselect.callbacks.sort == 'function' && !silent ) {
+                            Multiselect.$right.eq(1).eq(1).find('> option').sort(Multiselect.callbacks.sort).appendTo(Multiselect.$right.eq(1));
+                        }
+                    }
+                },
+
+                moveToLeft: function(Multiselect, $options, event, silent, skipStack) {
+
+                    var button = $(event.currentTarget).attr('id');
+                    if (button == 'multi_d_leftSelected') {
+                        var $right_options = Multiselect.$right.eq(0).find('> option:selected:last');
+                        Multiselect.$left.append($right_options);
+
+                        if ( typeof Multiselect.callbacks.sort == 'function' && !silent ) {
+                            Multiselect.$left.find('> option').sort(Multiselect.callbacks.sort).appendTo(Multiselect.$left);
+                        }
+                    } else if (button == 'multi_d_leftAll') {
+                        var $right_options = Multiselect.$right.eq(0).children(':visible');
+                        Multiselect.$left.append($right_options);
+
+                        if ( typeof Multiselect.callbacks.sort == 'function' && !silent ) {
+                            Multiselect.$left.find('> option').sort(Multiselect.callbacks.sort).appendTo(Multiselect.$left);
+                        }
+                    } else if (button == 'multi_d_leftSelected_2') {
+                        var $right_options = Multiselect.$right.eq(1).find('> option:selected');
+                        Multiselect.$left.append($right_options);
+
+                        if ( typeof Multiselect.callbacks.sort == 'function' && !silent ) {
+                            Multiselect.$left.find('> option').sort(Multiselect.callbacks.sort).appendTo(Multiselect.$left);
+                        }
+                    } else if (button == 'multi_d_leftAll_2') {
+                        var $right_options = Multiselect.$right.eq(1).children(':visible');
+                        Multiselect.$left.append($right_options);
+
+                        if ( typeof Multiselect.callbacks.sort == 'function' && !silent ) {
+                            Multiselect.$left.find('> option').sort(Multiselect.callbacks.sort).appendTo(Multiselect.$left);
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
+
+{% endblock %}

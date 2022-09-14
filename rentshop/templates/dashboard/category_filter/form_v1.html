@@ -1,0 +1,81 @@
+{% extends 'dashboard/layout.html' %}
+{% load currency_filters %}
+{% load common %}
+{% load i18n %}
+
+{% block body_class %}{{ block.super }} create-page{% endblock %}
+
+{% block title %}
+    {% trans "Category Filter" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<ul class="breadcrumb">
+    <li>
+        <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+    </li>
+    <li class="active">{% trans "Edit" %}</li>
+</ul>
+{% endblock %}
+
+{% block headertext %}Filter For- {{category_name}}{% endblock %}
+
+{% block dashboard_content %}
+<div class="page-content">
+    <div class="table-header">
+        <h2>{{category_name}}</h2>
+    </div>
+
+    <form method="post" class="well" enctype='multipart/form-data'>
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input disabled type="text" name="category" value="{{category_name}}" placeholder="Category" id="id_category" class="form-control wpcf7-text wpcf7-validates-as-required">
+                    <p class="color-red"></p>
+                    <input type="hidden" name="id" value="{{obj.id}}" class="form-control">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label>Filters</label>
+<!--                    {{form.filter_names}}-->
+                    <select name="filter_names" class="form-control select2-hidden-accessible"  multiple="true" id="id_filter_names" tabindex="-1" aria-hidden="true" style="width: 100%;">
+                        <option value="">--------------</option>
+                        {% for item in form.filter_names %}
+                            {% check_selected item form.filter_names.value as selected_value %}
+                            {% if selected_value.data.selected %}
+                                <option value="{{selected_value.data.value}}" selected>{{selected_value.data.value}}</option>
+                            {% else %}
+                                <option value="{{selected_value.data.value}}">{{selected_value.data.value}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+
+                    <p class="color-red"></p>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-md btn-primary">Update</button>
+        <a href="{% url 'dashboard:category-filter-index'  %}" class="btn btn-md btn-default">Cancel</a>
+    </form>
+</div>
+{% endblock dashboard_content %}
+
+{% block extrascripts %}
+    {{ block.super }}
+<script>
+    $('select option').filter(function() {
+        return !this.value || $.trim(this.value).length == 0 || $.trim(this.text).length == 0;
+    }).remove();
+
+    $(document).ready(function() {
+               $('#id_filter_names').select2();
+               });
+
+</script>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% load thumbnail %}
+{% if record.primary_image.original.url %}
+
+    {% with image=record.primary_image %}
+        {% thumbnail image.original "70x70" upscale=False as thumb %}
+        <a href="#0" data-original="{{ image.original.url }}" class="sub-imagex">
+            <img style="width:50px; height:50px;" src="{{ thumb.url }}" alt="{% if image.caption %}{{ image.caption }}{% else %}{{ record.get_title }}{% endif %}" height="{{ thumb.height }}" width="{{ thumb.width }}">
+        </a>
+        {% empty %}
+        <a href="#0" data-original="{{ image.original.url }}" class="sub-imagex">
+            <img style="width:50px; height:50px;" src="{{ image.original.url }}" alt="{% if image.caption %}{{ image.caption }}{% else %}{{ record.get_title }}{% endif %}">
+        </a>
+        {% endthumbnail %}
+    {% endwith %}
+{% else %}
+    —
+{% endif %}
+
+

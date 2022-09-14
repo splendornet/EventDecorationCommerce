@@ -1,0 +1,112 @@
+{% extends 'new_design/base.html' %}
+{% load i18n %}
+{% load thumbnail %}
+{% load currency_filters %}
+{% load purchase_info_tags %}
+{% load widget_tweaks %}
+{% load shipping_tags %}
+{% load humanize %}
+{% load common %}
+{% load static %}
+
+{% block title %}
+    {% trans "Basket" %} | {{ block.super }}
+{% endblock %}
+{% block breadcrumbs %}
+
+{% endblock %}
+{% block content %}
+{% include 'new_design/basket/basket_content.html' %}
+{% endblock content %}
+
+{% block onbodyload %}
+    {{ block.super }}
+    {# We pass in the URL to send AJAX requests to #}
+    var options = {
+        'basketURL': '{% url 'basket:summary' %}'
+    };
+    oscar.basket.init(options);
+ console.log('here$$');
+{% endblock %}
+
+{% block extrascripts %}
+    {{block.super}}
+<link rel="stylesheet" type="text/css" href="{% static 'core_assets/packages/jquery-toast-plugin-1/src/jquery.toast.css' %}"/>
+    <script type="text/javascript" src="{% static 'core_assets/packages/jquery-toast-plugin-1/src/jquery.toast.js' %}"></script>
+    <script src="{% static 'oscar/js/oscar/cart/cart_main.js' %}" type="text/javascript"></script>
+
+
+
+<script>
+    $(document).ready(function () {
+
+            $('#messages').hide();
+
+            {% if messages %}
+              {% for message in messages %}
+                    var status = '{{message.tags}}';
+                    if (status == 'success'){
+                        $.toast({
+                            heading: 'Success',
+                            text: '{{message}}',
+                            icon: 'success',
+                            loader: true,
+                            html: true,
+                            loaderBg: '#9EC600',
+                            position: 'bottom-right',
+                        });
+                    }else{
+                        $.toast({
+                        heading: 'Warning',
+                        text: '{{message}}',
+                        icon: 'warning',
+                        loader: true,
+                        html: true,
+                        loaderBg: '#9EC600',
+                        position: 'bottom-right',
+                        });
+                    }
+                {% endfor %}
+
+            {% endif %}
+            });
+
+</script>
+	<script src="{% static 'oscar/js/oscar/ui.js' %}"></script>
+<script>
+	function get_coupondata(coupon_id)
+        {
+        coupon_id = $("#haveCoupon").val();
+        if(!coupon_id)
+        {
+          alert("Please enter coupon code");
+          return false;
+        }
+        else{
+        $.ajax({
+                type:'GET',
+                url: '/get_coupondetails',
+                data: {
+                  'coupon_id': coupon_id,
+                },
+                success: function (data) {
+
+                if(data.status == 500){
+
+                document.getElementById("snt-offer-details").innerHTML = data.offer_details;
+                document.getElementById("snt-offer-description").innerHTML = data.description;
+                document.getElementById("snt-code").innerHTML = data.code;
+                $("#snt-voucher").val(data.code);
+                document.getElementById("snt-offer_mesaage").innerHTML = data.offer_mesaage;
+				$("#sampleModalMd2").modal();
+                }
+                else if (data == '503'){
+                window.location.reload();
+            }
+                },
+                async: false,
+            });
+            }
+        }
+</script>
+{% endblock %}

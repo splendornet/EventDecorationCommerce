@@ -1,0 +1,1161 @@
+{% extends "layout.html" %}
+
+{% load reviews_tags %}
+{% load i18n %}
+{% load mathfilters %}
+{% load thumbnail %}
+{% load common %}
+{% load history_tags %}
+{% load currency_filters %}
+{% load reviews_tags %}
+{% load staticfiles %}
+{% load product_tags %}
+{% load display_tags %}
+{% load i18n %}
+{% load purchase_info_tags %}
+
+{% block title %}  {% if product.product_title_meta %} {{product.product_title_meta}} {% else %} {{product.title }} {% endif %} - TakeRentPe{% endblock %}
+{% block description %}{% if product.meta_description %} {{product.meta_description}} {% endif %}{% endblock %}
+
+
+{% block alert %}
+
+
+<!--    {% include "partials/alert_messages.html" %}-->
+{% endblock %}
+
+{% block content %}
+
+<!-- extra css -->
+<link href="{% static 'oscar/css/products/product_details.css' %}" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+<!-- extra css -->
+<style>
+        .row{
+            margin-left:0px !important;
+            margin-right:0px !important;
+        }
+     input[class="time-text"]{ text-align:center; } input[type=number]::-webkit-outer-spin-button, input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; } input[type=number] { -moz-appearance:textfield; }
+     #unit{
+         text-transform: none;
+         }
+</style>
+<style>
+      input[type="text"]{ text-align:center; } input[type=number]::-webkit-outer-spin-button, input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; } input[type=number] { -moz-appearance:textfield; }
+
+     .row > .column { padding: 0 8px; } .row:after { content: ""; display: table; clear: both; } /* Create four equal columns that floats next to eachother */
+     .column {
+        float: left;
+         display:flex;
+    } /* The Modal (background) */ .modal { display: none; position: fixed; z-index: 1; padding-top: 20px; left: 15%; top: 5%; width: 75%; overflow: auto; background-color: rgba(0, 0, 0, 0.8); } /* Modal Content */ .modal-content { position: relative; background-color: #fefefe; margin: auto; padding: 0; width: 90%; max-width: 500px; } /* The Close Button */ .close { color: white; position: absolute; top: 10px; right: 25px; font-size: 35px; font-weight: bold; } .close:hover, .close:focus { color: #999; text-decoration: none; cursor: pointer; }
+/* Hide the slides by default */ .mySlides { display: none; } /* Next & previous buttons */ .prev, .next { cursor: pointer; position: absolute; top: 50%; width: auto; padding: 16px; margin-top: -50px; color: white; font-weight: bold; font-size: 20px; transition: 0.6s ease; border-radius: 0 3px 3px 0; user-select: none; -webkit-user-select: none; background-color: rgba(0, 0, 0, 0.8); } /* Position the "next button" to the right */ .next { right: 0; border-radius: 3px 0 0 3px; } /* On hover, add a black background color with a little bit see-through */ /* Number text (1/3 etc) */ .numbertext { color: #f2f2f2; font-size: 12px; padding: 8px 12px; position: absolute; top: 0; }
+/* Caption text */
+    .caption-container {
+        text-align: center;
+        background-color: black;
+        color: white;
+    }
+img.demo { opacity: 0.6; } .active, .demo:hover { opacity: 1; }
+img.hover-shadow { transition: 0.3s; }
+ .hover-shadow-x:hover {
+ box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); }
+ /* CSS Document */
+    .img-modal{
+        left:0px !important;
+        top: 160px !important;
+        width: 100% !important;
+    }
+    .slide-div {
+        display:flex;
+        height: 500px;
+    }
+.mySlides{
+width: 100% !important;
+}
+.mySlides img{
+height: 100% !important;
+}
+.outer-col{
+    display: flex;
+    height: 100px;
+}
+.column img{
+    margin-right:5px;
+}
+.daterangepicker .calendar th, .daterangepicker .calendar td{
+	height: 30px !important;
+}
+.next {
+    border-radius: 3px 0 0 3px;
+    top: 30%;
+
+}
+.prev{
+	top: 30%;
+}
+.modal-content.product-details-modal {
+    max-width: 60%;
+    width: 100%;
+    background-color: transparent;
+}
+.product-details-modal .slide-div {
+    position: relative;
+}
+.product-details-modal img{
+    object-fit: contain;
+}
+.slide-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
+}
+.product-details-modal .image-wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.product-details-modal .image-wrapper img {
+    object-fit: cover;
+}
+.image-wrapper img{
+    width:50px !important;
+    height:50px !important;
+}
+.preview-thumbnail.nav-tabs li img{
+    height:50px !important;
+    width:50px !important;
+}
+.preview-pic .active img,
+ .preview-thumbnail.nav-tabs li img{
+    border: none !important;
+}
+.preview-thumbnail.nav-tabs li {
+    //width: 18%;
+    //margin-right: 2.5%;
+}
+
+.outer-col .column{
+    margin:auto !important;
+}
+.b:after {
+  content: "]";
+  color:black;
+}
+
+.b:before {
+  content: "[";
+  color:black;
+
+}
+.widget-title {
+  font: 20px/26px Arial, sans-serif;
+  background-image: linear-gradient(#000000, #000000),
+    linear-gradient(#000000, #000000),
+    linear-gradient(#000000, #000000),
+    linear-gradient(#000000, #000000);
+
+  background-repeat: no-repeat;
+  background-size: 8px 3px;
+  background-position: top left, top right, bottom left, bottom right;
+
+  border: solid #000000;
+  text-align: justify;
+  border-width: 0 3px;
+  display: inline-block;
+  vertical-align: top;
+  padding: 5px 15px;
+  margin: 20px;
+}
+.preview-thumbnail.nav-tabs li {
+    margin-right: 16px;
+}
+
+</style>
+{% freeze_product product.id  as is_freeze %}
+
+<div class="shop-layout-wrap" id="nz-target" autofocus style="background-color:#fff;">
+    <section class='content nz-clearfix' data-rp="true" data-rpn="4" style="width:100%;">
+        <div class="container m-less-padding">
+            <div class="nz-shop-posts nz-clearfix">
+                <section class="main-content left" style="padding-right:0px;width:100%;">
+
+                    <div class="card">
+                        <div class="container-fliud">
+                            <div class="wrapper row">
+
+                                <!-- product images -->
+                                <div class="preview col-md-6">
+                                    {% with all_images=product.get_all_images %}
+                                    <div class="row">
+                                        <div class="column" style="width:100%; height:550px !important;">
+                                            <div class="preview-pic tab-content">
+                                                {% for image in all_images %}
+						                        <div class="tab-pane {% if forloop.first %}active{% endif %}" id="pic-{{forloop.counter}}">
+                                                    <img src="{{image.original.url}}" onclick="openModal();currentSlide(1)" class="hover-shadow" alt="{{product.title}}" style="max-height:530px !important;">
+                                                </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="myModal" class="modal img-modal">
+                                        <span class="close cursor" onclick="closeModal()">&times;</span>
+                                        <div class="modal-content product-details-modal">
+                                            <div class="slide-div">
+                                            {% for image in all_images %}
+                                            <div class="mySlides">
+                                                <div class="numbertext">{{forloop.counter}} / {{all_images.count}}</div>
+                                                <img src="{{image.original.url}}" style="width:100%" alt="">
+                                            </div>
+                                            {% endfor %}
+                                                <a class="slide-nav prev" onclick="plusSlides(-1)">&#10094;</a>
+                                                <a class="slide-nav next" onclick="plusSlides(1)">&#10095;</a>
+                                                </div>
+                                            <!-- Next/previous controls -->
+
+
+                                            <!-- Caption text -->
+                                            <div class="caption-container">
+                                                <p id="caption"></p>
+                                            </div>
+
+                                            <!-- Thumbnail image controls -->
+                                            <div class="outer-col">
+                                            <div class="column">
+                                                {% for image in all_images %}
+                                                <div class="image-wrapper">
+                                                    <img src="{{image.original.url}}" alt="" onclick="currentSlide('{{forloop.counter}}')" style="width:100px; height:100px;">
+                                                </div>
+                                                {% endfor %}
+                                            </div>
+                                                </div>
+                                        </div>
+                                    </div>
+                                    {% endwith %}
+                                    <ul class="preview-thumbnail nav nav-tabs">
+                                        {% with all_images=product.get_all_images %}
+                                        {% for image in all_images %}
+                                            <li class="{% if forloop.first %}active{% endif %}">
+                                                <a data-target="#pic-{{forloop.counter}}" data-toggle="tab">
+                                                    <img src="{{image.original.url}}" alt="{{product.title}}"/>
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                        {% endwith %}
+                                    </ul>
+                                </div>
+                                <!-- product images -->
+
+                                <!-- product details -->
+                                <div class="details col-md-6">
+
+                                    <!-- product title -->
+                                    <div class="row mr-l-0">
+                                        <h3 style="margin-top:0;color:black;font-size:20px;">
+                                            {{product.get_title}}
+                                        </h3>
+
+                                        {% if not product.is_transporation_available %}
+                                            <h6 style="color:#000; font-size: 12px; font-weight: bold;">
+                                                <i class="fa fa-truck fa-flip-horizontal" style="font-size:20px"></i>
+                                                Free Shipping
+                                                <input  class="time-text" style="width:40px !important;" id="id_shipping_price" type="hidden" name="id_shipping_price" value="0"/>
+                                            </h6>
+                                        {% else %}
+                                        <h6 style="color:#000; font-size: 12px; font-weight: bold;">
+                                            <i class="fa fa-truck fa-flip-horizontal" style="font-size:20px"></i>
+                                            {% get_shipping_price product.stockrecords.last as data1 %}
+
+                                            {% if product.product_class.name != 'Service' %}
+                                            {% if data1 %}
+                                            {{data1}}
+                                            {% else %}
+                                            Free Shipping
+                                            {% endif %}
+                                            {% endif %}
+                                        </h6>
+                                        {% endif %}
+                                    </div>
+                                    <!-- product title -->
+
+                                    <!-- product ratings -->
+                                    <div class="row mr-l-0">
+                                        <div class="rating">
+
+                                            {% if product.rating %}
+                                                {% include "catalogue/partials/display_rating.html" %}
+                                            {% else %}
+                                                <div class="stars" onclick="review()">
+                                                    <span class="fa fa-star" style="color: #333 !important;"></span>
+                                                    <span class="fa fa-star" style="color: #333 !important;"></span>
+                                                    <span class="fa fa-star" style="color: #333 !important;"></span>
+                                                    <span class="fa fa-star" style="color: #333 !important;"></span>
+                                                    <span class="fa fa-star" style="color: #333 !important;"></span>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <!-- product ratings -->
+
+                                    <!-- product variants -->
+                                    <div style="font-family:'open sans'">
+
+                                        <div class="row mr-l-0">
+                                            <h4 style="font-size:18px">
+                                                {% include "catalogue/partials/display_price.html" %}
+                                            </h4>
+                                        </div>
+
+                                        {% get_saving_price product.stockrecords.last as data %}
+                                        {% if data %}
+                                        <div class="row mr-l-0" style="padding-top:10px;">
+                                            <h4>
+                                                {% include "catalogue/partials/display_savings.html" %}
+                                            </h4>
+                                        </div>
+                                        {% endif %}
+
+
+                                        {% include "catalogue/partials/display_attribute.html" %}
+
+                                        {% if product.product_class.name != 'Sale' %}
+                                            {% if product.product_class.name == 'Service' %}
+                                            {% else %}
+                                                <div class="row mr-l-0 mr-t-10">
+                                                    <h5 class="colors timeo" style="font-family: 'open sans' !important; margin-top:0;">Start Booking:<span>&nbsp;</span>
+                                                        <input class="time-text" id="id_daterange" type="text" name="daterange" value="" {% if product.product_class.name != 'Sale'  %} onchange="check_date(this)" {% endif %}/>
+                                                    </h5>
+                                                </div>
+                                            {% endif %}
+                                        {% endif %}
+
+                                        {% if product.product_class.name != 'Service' %}
+
+                                            <div class="row mr-l-0 mr-t-10 quantity-row" >
+                                                <h5 class="colors timeo" style="font-family: 'open sans' !important; margin-top:0;">Quantity:<span>&nbsp;</span>
+                                                    {% if product.product_cost_type == 'Multiple' %}
+                                                    {% get_quantity_for_multiple product.stockrecords.last as quantity_value %}
+
+                                                    <input onchange="set_quantity(this)" class="time-text" style="width:40px !important;" id="id_quantity_value" type="number" name="id_quantity_value" value="{{quantity_value}}"/>
+
+                                                    {% else %}
+                                                    <input onchange="set_quantity(this)" class="time-text" style="width:40px !important;" id="id_quantity_value" type="number" name="id_quantity_value" value="1"/>
+                                                    {% endif %}
+                                                    &nbsp <span id="unit">{{product.stockrecords.last.unit|default:''}}</span>
+
+                                                    <input  class="time-text" style="width:40px !important;" id="prod_id" type="hidden" name="prod_id" value="{{product.id}}"/>
+
+                                                </h5>
+                                            </div>
+                                            <div class="row mr-l-0 mr-t-10">
+                                                <h5 class="colors timeo" style="font-family: 'open sans' !important; margin-top:0;">Total Cost:<span>&nbsp;</span>
+                                                    {% get_total_cost product.stockrecords.last as data1 %}
+                                                    {% if data1 %}
+                                                    <span  id="total_cost">
+                                                        ₹ {{ data1 }} </span>
+                                                    {% else %}
+                                                    <span id="total_cost">
+                                                        {% get_price_whole_details product.stockrecords.last as base_price %}
+                                                    ₹ {{base_price}}
+                                                        {% endif %}
+
+                                                    </span>
+                                                </h5>
+<!--                                                <h5 class="colors timeo" style="font-family: 'open sans' !important; margin-top:0;">( Product Price + Shipping Price</h5>-->
+<!--                                                {% get_product_cost_multiple product.stockrecords.last as data %}-->
+<!--                                                {% get_price_whole_details product.stockrecords.last as base_price %}-->
+<!--                                                {% get_shipping_price_total product.stockrecords.last as data1 %}-->
+<!--                                                <h5 class="colors timeo" style="font-family: 'open sans' !important; margin-top:0;"><span id="total_cal" class="price-family">{% if product.product_cost_type == 'Multiple' and data %}₹ {{data}} {% else %}₹ {{base_price}} {% endif %} {% if data1 %}+  {{data1}} {% else %}+ ₹ 0.00 {% endif %} )</span></h5>-->
+
+                                            </div>
+                                        {% if product.is_transporation_available %}
+                                            <div class="row mr-l-0 mr-t-10 widget-title">
+
+                                                 <h5 class="colors timeo" style="font-family: 'open sans' !important; margin-top:0;">Product Price + Shipping Price</h5>
+                                                {% get_product_cost_multiple product.stockrecords.last as data %}
+                                                {% get_price_whole_details product.stockrecords.last as base_price %}
+                                                {% get_shipping_price_total product.stockrecords.last as data1 %}
+                                                <h5 class="colors timeo" style="font-family: 'open sans' !important; margin-top:0; "><span id="total_cal" class="price-family">{% if product.product_cost_type == 'Multiple' and data %}₹ {{data}} {% else %}₹ {{base_price}} {% endif %} {% if data1 %}+  {{data1}} {% else %}+ ₹ 0.00 {% endif %} </span></h5>
+
+                                            </div>
+                                        {% endif %}
+
+                                        {% if product.is_deposite_applicable and product.deposite_amount %}
+                                            <div class="row mr-l-0 mr-t-10">
+                                                <h5 class="colors timeo" style="font-family: 'open sans' !important; margin-top:0;">Total Deposite Amount:<span>&nbsp;</span>
+                                                    <span  id="deposite_amount">₹ {{ product.deposite_amount }} </span>
+                                                </h5>
+                                            </div>
+                                        {% endif %}
+                                        {% endif %}
+
+                                        <div class="row mr-l-0">
+
+                                            <div class="action" style="display:flex;">
+                                                {% include "catalogue/partials/add_to_basket_new.html" %}
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <!-- product variants -->
+
+                                </div>
+                                <!-- product details -->
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="nz-clearfix" id="id_service_provide">
+                            <div id="{{product.id}}"></div>
+                        </div>
+
+                    <div class="woocommerce-tabs wc-tabs-wrapper" style="margin-top:0;">
+
+                        <ul class="tabs wc-tabs">
+                            {% if product.product_class.id == 4 %}
+                                <li class="description_tab service-tab">
+                                    <a href="#tab-description">Description</a>
+                                </li>
+                                <li class="reviews_tab service-tab">
+                                    <a href="#tab-reviews">Reviews</a>
+                                </li>
+                            {% else %}
+                                <li class="description_tab">
+                                    <a href="#tab-description">Description</a>
+                                </li>
+                                <li class="additional_information_tab">
+                                    <a href="#tab-additional_information">Product Details</a>
+                                </li>
+                                <li class="reviews_tab">
+                                    <a href="#tab-reviews">Reviews</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+
+                        <div class="panel entry-content wc-tab" id="tab-description">
+                            <h2>Product Description</h2>
+                            <p>{{ product.description|safe }}</p>
+                        </div>
+
+                        <div class="panel entry-content wc-tab" id="tab-additional_information">
+                            <h2>Product Details</h2>
+
+                            {% block product_info %}
+                            <table class="shop_attributes" style="color:#000;">
+                                {% if product.upc %}
+                                <tr class="">
+                                    <th>UPC</th>
+                                    <td class="product_weight">
+                                        {{ product.upc }}
+                                    </td>
+                                </tr>
+                                {% endif %}
+
+                                <tr class="alt">
+                                    <th>Product Type</th>
+                                    <td class="product_dimensions">{{ product.get_product_class.name }}</td>
+                                </tr>
+
+                                {% purchase_info_for_product request product as session %}
+                                {% if session.price.exists %}
+                                {% if session.price.is_tax_known %}
+                                <tr class="alt">
+                                    {% if product.get_product_class.name == 'Sale' %}
+                                    <th>Sale Price</th>
+                                    {% elif product.get_product_class.name == 'Rent' %}
+                                    <th>Rent Price</th>
+                                    {% elif product.get_product_class.name == 'Professional' %}
+                                    <th>Service Price</th>
+                                    {% elif product.get_product_class.name == 'Rent Or Sale' %}
+                                    <th>Unit Price</th>
+                                    {% endif %}
+                                    <td class="product_dimensions">
+                                        {% get_price_whole product.stockrecords.last as base_price %}
+                                        ₹ {{base_price}}
+                                    </td>
+                                </tr>
+                                {% endif %}
+
+                                {% if session.stockrecord.unit %}
+                                <tr class="alt">
+                                    <th>Unit</th>
+                                    <td class="product_dimensions">{{ session.stockrecord.unit }}</td>
+                                </tr>
+                                {% endif %}
+
+                                {% if product.get_product_class.name == 'Rent Or Sale' %}
+                                <tr class="alt">
+                                    <th>Rent Price</th>
+                                    <td class="product_dimensions">{% get_rent_price product.stockrecords.last as base_price %}
+                                        ₹ {{base_price}}
+                                    </td>
+                                </tr>
+                                {% endif %}
+                                {% if not is_freeze %}
+                                <tr class="alt">
+                                    <th>Availability</th>
+                                    <td class="product_dimensions">{{ session.availability.message}}</td>
+                                </tr>
+                                {% endif %}
+                                {% endif %}
+
+                                {% for av in product.attribute_values.all %}
+                                <tr class="alt">
+                                    <th>{{av.attribute.name}}</th>
+                                    <td class="product_dimensions">{{ av.value_as_html }}</td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                            {% endblock %}
+                        </div>
+
+                        {% iffeature "reviews" %}
+                                {% block product_review %}
+                                <div class="panel entry-content wc-tab" id="tab-reviews">
+                                    &nbsp;<div id="reviews">
+                                        {% if product.num_approved_reviews == 0 %}
+                                            <div>
+                                            {% if user.is_authenticated %}
+                                                {% if product|is_review_permitted:user %}
+                                                    {% url 'catalogue:reviews-add' product_slug=product.slug product_pk=product.id as add_review_url %}
+                                                        {% blocktrans %}
+                                                        <p class="woocommerce-noreviews" style="color:#000">This product does not have any reviews yet - </p>
+                                                        <span style="color:#000;">Be the first to write one</span>
+                                                        <a href="{{ add_review_url }}#addreview" style="color:#5f5fa1">Add review.</a>
+                                                    {% endblocktrans %}
+                                                {% endif %}
+                                            </div>
+                                            {% else %}
+                                                <div id="">
+
+                                                    <p class="woocommerce-noreviews" style="color:#000">Reviews</p>
+                                                    <p class="woocommerce-noreviews" style="color:#000">This product does not have any reviews yet - </p>
+                                                </div>
+                                            {% endif %}
+                                        {% else %}
+                                        <ol class="commentlist">
+                                            {% if request.user.is_active %}
+                                            {% if product|is_review_permitted:user %}
+                                                <li class="comment even thread-even depth-1">
+                                                    {% url 'catalogue:reviews-add' product_slug=product.slug product_pk=product.id as add_review_url %}
+                                                    {% blocktrans %}
+                                                        <span style="color:#000;">Please share your feedback.</span>
+                                                        <a href="{{ add_review_url }}#addreview" style="color:#5f5fa1">Add review.</a>
+                                                    {% endblocktrans %}
+                                                </li>
+                                            {% endif %}
+                                            {% endif %}
+                                            {% for review in product.reviews.approved.all|slice:":3" %}
+                                            <li class="comment even thread-even depth-1">
+                                                {% include 'catalogue/partials/review.html' %}
+                                            </li>
+                                            {% endfor %}
+                                        </ol>
+                                        {% endif %}
+
+                                        <div class="clear"></div>
+                                    </div>
+
+                                </div>
+                                {% endblock product_review %}
+                            {% endiffeature %}
+
+                        {% if product.combo_products.all %}
+                                            <div class="" style="border-radius:5px;padding-top:20px;padding-bottom:20px;color:#000; color: #000;background-color: #f1f1f1;padding: 20px;font-size: 20px;">
+                                                Combo Offer
+                                                <hr/>
+                                                Offer Title : {{product.combo_products.all.last.title}}
+                                                <hr/>
+
+                                                <ul>
+                                                    {% for combo_product in product.combo_products.all.last.combo_product.all %}
+                                                        <li style="display:inline;">
+
+                                                            {% with image=combo_product.primary_image %}
+                                                                {% thumbnail image.original "100x100" upscale=False as thumb %}
+                                                                    <img src="{{ thumb.url }}" alt="{{combo_product.title}}" style="width:100px; height: 100px !important;">
+                                                                {% endthumbnail %}
+                                                            {% endwith %}
+                                                             <span style="font-size:30px; color:#555; position: relative; top:-33px; margin:5px;">+</span>
+                                                        </li>
+                                                    {% endfor %}
+                                                    <li style="display:inline;">
+                                                        {% with image=product.primary_image %}
+                                                            {% thumbnail image.original "x155" upscale=False as thumb %}
+                                                                <img src="{{ thumb.url }}" alt="{{product.title}}" style="width:100px; height: 100px !important;">
+                                                            {% endthumbnail %}
+                                                        {% endwith %}
+                                                    </li>
+                                                    <li style="display:inline;">
+                                                        <strong>
+                                                            <span style="font-size:20px; color:#555; position: relative; top:-33px; margin:5px;">= ₹ {{product.combo_products.all.last.combo_price}}</span>
+                                                        </strong>
+                                                    </li>
+                                                </ul>
+
+                                                <ul hidden>
+                                                    {% for combo_product in product.combo_products.all.last.combo_product.all %}
+                                                        <li style="display:inline;">
+                                                            <strong>{{combo_product.title}}</strong> +
+                                                        </li>
+                                                    {% endfor %}
+                                                    <li style="display:inline;">
+                                                        <strong>{{product.title}}</strong>
+                                                    </li>
+                                                    <li style="display:inline;">
+                                                        <strong>= {{product.combo_products.all.last.combo_price}}</strong>
+                                                    </li>
+                                                </ul>
+                                                <button type="button">Add All {{product.combo_products.all.last.combo_product.all.count|add:1}} Combo Product</button>
+                                            </div>
+                                        {%  endif %}
+
+                    </div>
+                </section>
+
+                <aside class="sidebar" style="margin-top:85px;" hidden>
+                    <div class='shop-widget-area-single widget-area'>
+                        <div id="woocommerce_product_categories-2" class="widget woocommerce widget_product_categories">
+                            <h6 class="widget_title">Product Categories</h6>
+                            <select name='product_cat' class='dropdown_product_cat' onChange="window.location.href=this.value">
+                                <option value=""  selected='selected' selected="selected">Select a category</option>
+                                {% for c in all_category %}
+                                    <option class="level-0" value="{{c.get_absolute_url }}" style="text-transform: capitalize;">{{c.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div id="woocommerce_top_rated_products-2" class="widget woocommerce widget_top_rated_products">
+                            <h6 class="widget_title">Recently Viewed Products</h6>
+                            <ul class="product_list_widget">
+                                {% recently_viewed_products current_product=product %}
+                            </ul>
+                        </div>
+                    </div>
+                </aside>
+
+            </div>
+        </div>
+    </section>
+</div>
+<link rel="stylesheet" type="text/css" href="{% static 'core_assets/packages/jquery-toast-plugin-1/src/jquery.toast.css' %}"/>
+
+{% endblock content %}
+
+{% block extrascripts %}
+    {{block.super}}
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+
+    <!-- Include Date Range Picker -->
+    <script type="text/javascript" src="{% static 'core_assets/packages/boostrap-daterange-picker-3/2/daterangepicker.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'core_assets/packages/boostrap-daterange-picker-3/2/daterangepicker.css' %}"/>
+    <script type="text/javascript" src="{% static 'core_assets/packages/boostrap-daterange-picker-3/product.daterangepicker.js' %}"></script>
+    <script type="text/javascript" src="{% static 'oscar/js/product/product_details.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'core_assets/packages/jquery-toast-plugin-1/src/jquery.toast.js' %}"></script>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js" integrity="sha512-zlWWyZq71UMApAjih4WkaRpikgY9Bz1oXIW5G0fED4vk14JjGlQ1UmkGM392jEULP8jbNMiwLWdM8Z87Hu88Fw==" crossorigin="anonymous"></script>-->
+
+
+<script>
+$(document).ready(function () {
+    var product_class = '{{product.product_class.name}}';
+    var product_id = '{{product.id}}';
+    var product_booking_day = '{{product.product_booking_time_delay}}';
+    datepicker(product_id, product_class, product_booking_day)
+    var is_quantity_allowed = '{{product.is_quantity_allowed}}';
+    if(is_quantity_allowed == 'False')
+    {
+        $(".quantity-row").css({"display": "none"});
+
+    }
+});
+
+
+ function set_quantity(e){
+            $('#id_quantity').val(e.value);
+            var quantity = document.getElementById('id_quantity').value;
+            var product_id = document.getElementById('prod_id').value;
+            var startDate = $('#id_booking_start_date').val();
+            var endDate = $('#id_booking_end_date').val();
+            const oneDay = 24 * 60 * 60 * 1000;
+            startDate = new Date(startDate);
+            endDate = new Date(endDate);
+            var diffDays = Math.round(Math.abs((endDate - startDate) / oneDay));
+            diffDays = diffDays + 1;
+            quant = Number(quantity);
+            product_id = Number(product_id);
+            //alert(quantity);
+           // alert(product_id);
+
+           $.ajax({
+
+                type:'GET',
+                url : '/get_total_price/',
+                data : {
+                    quantity : quantity,
+                    product: product_id,
+                    diffDays : diffDays
+                },
+
+                success : function(data){
+                //alert(data.status);
+                console.log(data);
+                console.log("####");
+                if(data=='Ajax_Error'){
+                $.toast({
+                heading: 'Warning',
+                text: 'Something went wrong.',
+                icon: 'warning',
+                loader: true,
+                loaderBg: '#9EC600',
+                position: 'bottom-right',
+            });
+                   }
+                   else if(data == 200){
+                   $.toast({
+                heading: 'Warning',
+                text: 'Please enter quantity.',
+                icon: 'warning',
+                loader: true,
+                loaderBg: '#9EC600',
+                position: 'bottom-right',
+            });
+                   }
+                   else if(data == 201){
+                   $.toast({
+                heading: 'Warning',
+                text: 'Product is not present.',
+                icon: 'warning',
+                loader: true,
+                loaderBg: '#9EC600',
+                position: 'bottom-right',
+            });
+                   }
+                   else if(data == 202){
+                   $.toast({
+                heading: 'Warning',
+                text: 'Product has not amount in rate card.',
+                icon: 'warning',
+                loader: true,
+                loaderBg: '#9EC600',
+                position: 'bottom-right',
+            });
+                   }
+                   else if(data.status == 203){
+                   $.toast({
+                heading: 'Warning',
+                text: data.msg,
+                icon: 'warning',
+                loader: true,
+                loaderBg: '#9EC600',
+                position: 'bottom-right',
+            });
+                   }
+                   else if(data.status == 204){
+                    document.getElementById("total_cost").innerHTML = "₹ "+ data.total;
+                    document.getElementById("total_cal").innerHTML =  data.total_cal;
+                   $.toast({
+                heading: 'Warning',
+                text: data.msg,
+                icon: 'warning',
+                loader: true,
+                loaderBg: '#9EC600',
+                position: 'bottom-right',
+            });
+                   }
+                   else if(data.status == 500){
+                    document.getElementById("total_cost").innerHTML = "₹ "+ data.total;
+                    document.getElementById("total_cal").innerHTML = data.total_cal;
+                   }
+                }
+                })
+                }
+
+</script>
+<script>
+
+function check_date(e){
+    //alert(e.value);
+    console.log(e);
+    console.log(e.value);
+
+    var startDate = $('#id_booking_start_date').val();
+    var endDate = $('#id_booking_end_date').val();
+    const oneDay = 24 * 60 * 60 * 1000;
+    startDate = new Date(startDate);
+    endDate = new Date(endDate);
+    var diffDays = Math.round(Math.abs((endDate - startDate) / oneDay));
+    diffDays = diffDays + 1;
+    if(diffDays >= 2)
+    {
+       if(document.readyState === 'complete')
+       {
+        var r = confirm("You selected "+diffDays+" days for the event");
+        if (r == false) {
+        $('#id_booking_start_date').val('');
+        $('#id_booking_end_date').val('');
+        window.location.reload();
+        }
+        if(r == true)
+        {
+        var quantity = document.getElementById('id_quantity').value;
+            var product_id = document.getElementById('prod_id').value;
+            var startDate = $('#id_booking_start_date').val();
+            var endDate = $('#id_booking_end_date').val();
+            const oneDay = 24 * 60 * 60 * 1000;
+            startDate = new Date(startDate);
+            endDate = new Date(endDate);
+            var diffDays = Math.round(Math.abs((endDate - startDate) / oneDay));
+            diffDays = diffDays + 1;
+            quant = Number(quantity);
+            product_id = Number(product_id);
+            //alert(quantity);
+           // alert(product_id);
+
+           $.ajax({
+
+                type:'GET',
+                url : '/get_total_price/',
+                data : {
+                    quantity : quantity,
+                    product: product_id,
+                    diffDays : diffDays
+                },
+
+                success : function(data){
+                //alert(data.status);
+                console.log(data);
+                console.log("####");
+                if(data=='Ajax_Error'){
+                $.toast({
+                heading: 'Warning',
+                text: 'Something went wrong.',
+                icon: 'warning',
+                loader: true,
+                loaderBg: '#9EC600',
+                position: 'bottom-right',
+            });
+                   }
+                   else if(data == 200){
+                   $.toast({
+                heading: 'Warning',
+                text: 'Please enter quantity.',
+                icon: 'warning',
+                loader: true,
+                loaderBg: '#9EC600',
+                position: 'bottom-right',
+            });
+                   }
+                   else if(data == 201){
+                   $.toast({
+                heading: 'Warning',
+                text: 'Product is not present.',
+                icon: 'warning',
+                loader: true,
+                loaderBg: '#9EC600',
+                position: 'bottom-right',
+            });
+                   }
+                   else if(data == 202){
+                   $.toast({
+                heading: 'Warning',
+                text: 'Product has not amount in rate card.',
+                icon: 'warning',
+                loader: true,
+                loaderBg: '#9EC600',
+                position: 'bottom-right',
+            });
+                   }
+                   else if(data.status == 203){
+                   $.toast({
+                heading: 'Warning',
+                text: data.msg,
+                icon: 'warning',
+                loader: true,
+                loaderBg: '#9EC600',
+                position: 'bottom-right',
+            });
+                   }
+                   else if(data.status == 204){
+                    document.getElementById("total_cost").innerHTML = "₹ "+ data.total;
+                    document.getElementById("total_cal").innerHTML =  data.total_cal;
+                   $.toast({
+                heading: 'Warning',
+                text: data.msg,
+                icon: 'warning',
+                loader: true,
+                loaderBg: '#9EC600',
+                position: 'bottom-right',
+            });
+                   }
+                   else if(data.status == 500){
+                    document.getElementById("total_cost").innerHTML = "₹ "+ data.total;
+                    document.getElementById("total_cal").innerHTML = data.total_cal;
+                   }
+                }
+                })
+        }
+    }
+    }
+    else{
+    var quantity = document.getElementById('id_quantity').value;
+            var product_id = document.getElementById('prod_id').value;
+            var startDate = $('#id_booking_start_date').val();
+            var endDate = $('#id_booking_end_date').val();
+            const oneDay = 24 * 60 * 60 * 1000;
+            startDate = new Date(startDate);
+            endDate = new Date(endDate);
+            var diffDays = Math.round(Math.abs((endDate - startDate) / oneDay));
+            diffDays = diffDays + 1;
+            quant = Number(quantity);
+            product_id = Number(product_id);
+            //alert(quantity);
+           // alert(product_id);
+
+           $.ajax({
+
+                type:'GET',
+                url : '/get_total_price/',
+                data : {
+                    quantity : quantity,
+                    product: product_id,
+                    diffDays : diffDays
+                },
+
+                success : function(data){
+                //alert(data.status);
+                console.log(data);
+                console.log("####");
+                if(data=='Ajax_Error'){
+                $.toast({
+                heading: 'Warning',
+                text: 'Something went wrong.',
+                icon: 'warning',
+                loader: true,
+                loaderBg: '#9EC600',
+                position: 'bottom-right',
+            });
+                   }
+                   else if(data == 200){
+                   $.toast({
+                heading: 'Warning',
+                text: 'Please enter quantity.',
+                icon: 'warning',
+                loader: true,
+                loaderBg: '#9EC600',
+                position: 'bottom-right',
+            });
+                   }
+                   else if(data == 201){
+                   $.toast({
+                heading: 'Warning',
+                text: 'Product is not present.',
+                icon: 'warning',
+                loader: true,
+                loaderBg: '#9EC600',
+                position: 'bottom-right',
+            });
+                   }
+                   else if(data == 202){
+                   $.toast({
+                heading: 'Warning',
+                text: 'Product has not amount in rate card.',
+                icon: 'warning',
+                loader: true,
+                loaderBg: '#9EC600',
+                position: 'bottom-right',
+            });
+                   }
+                   else if(data.status == 203){
+                   $.toast({
+                heading: 'Warning',
+                text: data.msg,
+                icon: 'warning',
+                loader: true,
+                loaderBg: '#9EC600',
+                position: 'bottom-right',
+            });
+                   }
+                   else if(data.status == 204){
+                    document.getElementById("total_cost").innerHTML = "₹ "+ data.total;
+                    document.getElementById("total_cal").innerHTML =  data.total_cal;
+                   $.toast({
+                heading: 'Warning',
+                text: data.msg,
+                icon: 'warning',
+                loader: true,
+                loaderBg: '#9EC600',
+                position: 'bottom-right',
+            });
+                   }
+                   else if(data.status == 500){
+                    document.getElementById("total_cost").innerHTML = "₹ "+ data.total;
+                    document.getElementById("total_cal").innerHTML = data.total_cal;
+                   }
+                }
+                })
+                }
+}
+    // Open the Modal
+function openModal() {
+  document.getElementById("myModal").style.display = "block";
+}
+
+// Close the Modal
+function closeModal() {
+  document.getElementById("myModal").style.display = "none";
+}
+
+var slideIndex = 1;
+showSlides(slideIndex);
+
+// Next/previous controls
+function plusSlides(n) {
+  showSlides(slideIndex += parseInt(n));
+}
+
+// Thumbnail image controls
+function currentSlide(n) {
+  showSlides(slideIndex = parseInt(n));
+}
+
+function showSlides(n) {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("demo");
+  var captionText = document.getElementById("caption");
+  if (n > slides.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";
+  }
+  for (i = 0; i < dots.length; i++) {
+    dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";
+  dots[slideIndex-1].className += " active";
+  captionText.innerHTML = dots[slideIndex-1].alt;
+}
+</script>
+
+    <script>
+
+        function tost_me(){
+            $.toast({
+                heading: 'Warning',
+                text: 'Your response has been recorded successfully.',
+                icon: 'warning',
+                loader: true,
+                loaderBg: '#9EC600',
+                position: 'bottom-right',
+            });
+        }
+
+        $(document).ready(function () {
+
+            $('#messages').hide();
+
+            {% if messages %}
+              {% for message in messages %}
+                    var status = '{{message.tags}}';
+                    if (status == 'success'){
+                        $.toast({
+                            heading: 'Success',
+                            text: '{{message}}',
+                            icon: 'success',
+                            loader: true,
+                            html: true,
+                            loaderBg: '#9EC600',
+                            position: 'bottom-right',
+                        });
+                    }else{
+                        $.toast({
+                        heading: 'Warning',
+                        text: '{{message}}',
+                        icon: 'warning',
+                        loader: true,
+                        html: true,
+                        loaderBg: '#9EC600',
+                        position: 'bottom-right',
+                        });
+                    }
+                {% endfor %}
+
+            {% endif %}
+
+
+
+
+<!--            var product_class = '{{product.product_class.name}}';-->
+<!--            var product_id = '{{product.id}}';-->
+<!--            console.log("hello");-->
+<!--            datepicker(product_id, product_class)-->
+<!--                        console.log("hello hi");-->
+
+
+        });
+
+
+    </script>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/elevatezoom/3.0.8/jqueryElevateZoom.js"></script>
+    <link href="{% static 'rentshop/css/ubislider.css' %}" rel="stylesheet"/>
+
+    <script>
+
+        function review(){
+            var tab = 'tab-reviews';
+            $('#tab-description').hide();
+            $('.wc-tabs a[href="#' + tab + '"]').tab('show');
+            $('#tab-reviews').show();
+            href = $('.wc-tabs a[href="#' + tab + '"]');
+            $('html, body').animate({
+                scrollTop: $(href).offset().top
+            }, 'slow');
+        }
+
+        $(document).ready(function(){
+
+
+            $("#id_quantity_value").keypress(function (e) {
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    return false;
+                }
+            });
+
+            $('#zero-slider').ubislider({
+                arrowsToggle: true,
+                type: 'ecommerce',
+                hideArrows: true,
+                autoSlideOnLastClick: true,
+                modalOnClick: true,
+                position: 'vertical',
+                onTopImageChange: function(){
+                   $('#imageSlider img').elevateZoom();
+                }
+            });
+
+            $('.ubislider-image-container').on('click', function(){
+                $('.cart_div').css('z-index', '99')
+            })
+
+            $(document).click(function(){
+                if ($(".ubiModal").is(":visible")){
+                    $('.cart_div').css('z-index', '99')
+                }else{
+                    $('.cart_div').css('z-index', '9999')
+                }
+            })
+
+            $(".preview-thumbnail li").click(function() {
+                $(this).addClass('ub-active').siblings().removeClass('ub-active');
+                $('.ubislider-inner').css('top', '0px');
+
+            });
+
+        });
+    </script>
+
+{% endblock %}

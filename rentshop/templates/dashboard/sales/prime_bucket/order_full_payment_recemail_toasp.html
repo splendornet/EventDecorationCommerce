@@ -1,0 +1,19 @@
+{% extends "customer/emails/base.html" %}
+{% load currency_filters i18n %}
+
+{% block tbody %}
+    <tr>
+        <td class="content-block">
+            <h4 style="font-weight:300;">Dear {{allocated_obj.vendor_name}},</h4><br>
+            <h4 style="font-weight:300;">
+                I hereby confirm that the sum of #{{allocated_obj.order_number}} which is {{order.balance_amount}} has been paid by {{order.user.get_full_name}} and the funds will be with you shortly.
+            </h4>
+            <p>If you have any questions, suggestions or would just like to say hi - please simply mail us at <a href="mailto:hello@takerentpe.com" style="color: #4d4e4e;text-decoration: none;font-family: TahomaBold;font-weight:600;">hello@takerentpe.com</a>. We'll get back to you in no time, promise!</p>
+            <p><a href="{{domain}}/media/order_summary/order_summary_{{allocated_obj.order_number}}.pdf">order_summary</a> </p><br>
+            <p style="margin: 0;margin-top: 0.7rem;line-height: 18px;font-weight: 500;">So kindly follow up for 2nd step payment and be prepared for the event.</p><br>
+            <p style="color: #ee4d84;font-weight: 700;">Happy Celebranto!</p>
+
+        </td>
+    </tr>
+
+{% endblock %}

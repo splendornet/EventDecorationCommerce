@@ -1,0 +1,7 @@
+{% load i18n %}
+{% if cancelOrder %}
+    {% blocktrans with number=order.number %}Cancellation of order {{ number }}{% endblocktrans %}
+{% else %}
+    {% blocktrans with number=order.number %}Confirmation of order {{ number }}{% endblocktrans %}
+{% endif %}
+

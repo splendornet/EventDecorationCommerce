@@ -1,0 +1,65 @@
+{% if not product.rating %}
+<div class="rating">
+    <span class="rating-span">Rating:</span>
+    <label class="inline-label" for="stars-rating-5"><i class="fa fa-star text-danger text-fade"></i></label>
+    <label class="inline-label" for="stars-rating-4"><i class="fa fa-star text-danger text-fade"></i></label>
+    <label class="inline-label" for="stars-rating-3"><i class="fa fa-star text-danger text-fade"></i></label>
+    <label class="inline-label" for="stars-rating-2"><i class="fa fa-star text-danger text-fade"></i></label>
+    <label class="inline-label" for="stars-rating-1"><i class="fa fa-star text-danger text-fade"></i></label>
+</div>
+{% endif %}
+
+{% if product.rating >= 1 and product.rating < 2 and product.rating %}
+<div class="rating">
+    <span>Rating:</span>
+    <label class="inline-label" for="stars-rating-5"><i class="fa fa-star text-danger"></i></label>
+    <label class="inline-label" for="stars-rating-4"><i class="fa fa-star text-danger text-fade"></i></label>
+    <label class="inline-label" for="stars-rating-3"><i class="fa fa-star text-danger text-fade"></i></label>
+    <label class="inline-label" for="stars-rating-2"><i class="fa fa-star text-danger text-fade"></i></label>
+    <label class="inline-label" for="stars-rating-1"><i class="fa fa-star text-danger text-fade"></i></label>
+</div>
+{% endif %}
+
+{% if product.rating >= 2 and product.rating < 3 and product.rating %}
+<div class="rating">
+    <span class="rating-span">Rating:</span>
+    <label class="inline-label" for="stars-rating-5"><i class="fa fa-star text-danger"></i></label>
+    <label class="inline-label" for="stars-rating-4"><i class="fa fa-star text-danger"></i></label>
+    <label class="inline-label" for="stars-rating-3"><i class="fa fa-star text-danger text-fade"></i></label>
+    <label class="inline-label" for="stars-rating-2"><i class="fa fa-star text-danger text-fade"></i></label>
+    <label class="inline-label" for="stars-rating-1"><i class="fa fa-star text-danger text-fade"></i></label>
+</div>
+{% endif %}
+
+{% if product.rating >= 3 and product.rating < 4 and product.rating %}
+<div class="rating">
+    <span class="rating-span">Rating:</span>
+    <label class="inline-label" for="stars-rating-5"><i class="fa fa-star text-danger"></i></label>
+    <label class="inline-label" for="stars-rating-4"><i class="fa fa-star text-danger"></i></label>
+    <label class="inline-label" for="stars-rating-3"><i class="fa fa-star text-danger "></i></label>
+    <label class="inline-label" for="stars-rating-2"><i class="fa fa-star text-danger text-fade"></i></label>
+    <label class="inline-label" for="stars-rating-1"><i class="fa fa-star text-danger text-fade"></i></label>
+</div>
+{% endif %}
+
+{% if product.rating >= 4 and product.rating < 5 and product.rating %}
+<div class="rating">
+    <span class="rating-span">Rating:</span>
+    <label class="inline-label" for="stars-rating-5"><i class="fa fa-star text-danger"></i></label>
+    <label class="inline-label" for="stars-rating-4"><i class="fa fa-star text-danger"></i></label>
+    <label class="inline-label" for="stars-rating-3"><i class="fa fa-star text-danger "></i></label>
+    <label class="inline-label" for="stars-rating-2"><i class="fa fa-star text-danger "></i></label>
+    <label class="inline-label" for="stars-rating-1"><i class="fa fa-star text-danger text-fade"></i></label>
+</div>
+{% endif %}
+
+{% if product.rating >= 5 and product.rating %}
+<div class="rating">
+    <span class="rating-span">Rating:</span>
+    <label class="inline-label" for="stars-rating-5"><i class="fa fa-star text-danger"></i></label>
+    <label class="inline-label" for="stars-rating-4"><i class="fa fa-star text-danger"></i></label>
+    <label class="inline-label" for="stars-rating-3"><i class="fa fa-star text-danger "></i></label>
+    <label class="inline-label" for="stars-rating-2"><i class="fa fa-star text-danger "></i></label>
+    <label class="inline-label" for="stars-rating-1"><i class="fa fa-star text-danger"></i></label>
+</div>
+{% endif %}

@@ -1,0 +1,283 @@
+{% load i18n %}
+{% load common %}
+<style>
+    .new-label{
+        position: absolute;
+        bottom: auto;
+        top: 36px;
+        right: 0px;
+        z-index: 999;
+    }
+    .woocommerce label{
+        text-align:right;
+    }
+    .form-group .col8{
+        margin-bottom: 15px;
+    }
+    .sub-header{
+        padding-bottom: 9px;
+        border-bottom: 1px solid #ccc;
+    }
+    .navbar-nav{
+        border-bottom: 1px solid #ccc;
+    }
+    .navbar-nav li{
+        list-style-type: none;
+        padding:10px 15px;
+        font-size:20px;
+        display: inline;
+    }
+    .navbar-nav{
+        padding: 10px 15px;
+        padding-left: 3%;
+        /*margin-right: 3%;*/
+        background-color: #e3b674;
+    }
+    .navbar-nav li a{
+        color:#333;
+    }
+    .navbar-nav li a.active{
+        color:#fff;
+    }
+    .breadcrumb {
+        margin: 15px 0;
+        padding: 8px 0;
+        border-radius: 0;
+        border: 1px solid #e9e9e9;
+    }
+    .breadcrumb > li:after {
+        content: '';
+        display: block;
+        position: absolute;
+        top: -3px;
+        right: 0;
+        width: 27px;
+        height: 25px;
+        border-right: 1px solid #e9e9e9;
+        border-bottom: 1px solid #e9e9e9;
+        -moz-transform: rotate(-45deg);
+        -ms-transform: rotate(-45deg);
+        -o-transform: rotate(-45deg);
+        -webkit-transform: rotate(-45deg);
+        transform: rotate(-45deg);
+    }
+    .breadcrumb li a.active{
+        color:#000;
+    }
+    .breadcrumb > li {
+        padding: 0 30px;
+        position: relative;
+        white-space: nowrap;
+    }
+    .breadcrumb a {
+        display: inline-block;
+    }
+    .breadcrumb>li+li:before{
+        content:none;
+    }
+    .navbar-text {
+        margin-top: 0px;
+        margin-bottom: 0px;
+        font-size:18px;
+    }
+    .active-thx>.navbar-text{
+        display:block;
+    }
+    .active-thx>span{
+        display:none;
+    }
+    @media(max-width: 767px) {
+        .step-checkout-form.nav a span {
+            display: block;
+        }
+        .ship-container .well {
+            padding: 0px;
+        }
+        .step-checkout-form span.round-tab {
+            padding: 14px 14px;
+        }
+        .wizard {
+            width: 100%;
+        }
+        .ship-container .well .panel-body {
+           text-align: left;
+        }
+    }
+</style>
+
+     <div class="container">
+    <div class="wizard">
+        <div class="wizard-inner">
+        <div class="connecting-line"></div>
+        <ul class="nav nav-tabs step-checkout-form">
+            <li class="step1 active">
+                {% with data=request.META.HTTP_REFERER %}
+                {% check_end data as checked_data %}
+
+                <a href="{% if checked_data %}{% url 'checkout:billing_address' fill_form=0 %} {% else %} {% url 'checkout:billing_address' fill_form=1 %} {% endif %}" data-toggle="tooltip" data-placement="top" title="Billing Details">
+                        <span class="round-tab">
+                        <span class="glyphicon glyphicon-list-alt"></span>
+                        </span>
+                </a>
+
+            </li>
+            <li class="step2 disabled">
+                <a href="{% if checked_data %}#{% else %}{% url 'checkout:shipping-address' %}{% endif %}" data-toggle="tooltip" data-placement="top" title="Delivery Address">
+<!--                <span class="navbar-text">-->
+                    <span class="round-tab">
+                    <span class="glyphicon glyphicon-map-marker"></span>
+                    </span>
+<!--                </span>-->
+                </a>
+                {% endwith %}
+            </li>
+            <!--<li class="step3 disabled ">-->
+                <!--<span class="navbar-text active-checkout">3. Preview</span>-->
+            <!--</li>-->
+            <li class="step3 disabled">
+                <a href="#step3" data-toggle="tooltip" data-placement="top" title="Order Details">
+<!--                <span class="navbar-text">-->
+                    <span class="round-tab">
+                    <span class="glyphicon glyphicon-shopping-cart"></span>
+                    </span>
+<!--                </span>-->
+                </a>
+            </li>
+
+            <li class="step4 disabled active-thx">
+                <a href="#step4" data-toggle="tooltip" data-placement="top" title="Payment Method">
+<!--                <span class="navbar-text">-->
+
+<!--                <span class="navbar-text">-->
+                    <span class="round-tab">
+                <span class="glyphicon glyphicon-credit-card"></span>
+                    </span>
+<!--                </span>-->
+                                </a>
+            </li>
+
+        </ul>
+            </div>
+    </div>
+         </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<div class="navbar nav-checkout container">-->
+    <!--<ul class="nav navbar-nav" style="margin-bottom:0;">-->
+        <!--<li class="step1 visited ">-->
+            <!--<a href="{% url 'checkout:shipping-address' %}" class="id_shipping  active-shipping">-->
+                <!--<span class="visible-inline-sm icon-chevron-right"></span>-->
+                <!--<span>1. Shipping address</span>-->
+            <!--</a>-->
+        <!--</li>-->
+        <!--<li class="step2 ">-->
+            <!--<a href="{% url 'checkout:payment-details' %}" class="id_payment active-payment">-->
+                    <!--<span class="navbar-text">-->
+                        <!--2. Payment-->
+                    <!--</span>-->
+            <!--</a>-->
+        <!--</li>-->
+        <!--<li class="step3 disabled ">-->
+            <!--<span class="navbar-text active-checkout">3. Preview</span>-->
+        <!--</li>-->
+        <!--<li class="step4 disabled active-thx">-->
+                    <!--<span class="navbar-text">-->
+                        <!--4. Confirmation-->
+                    <!--</span>-->
+        <!--</li>-->
+    <!--</ul>&lt;!&ndash; /navbar-inner &ndash;&gt;-->
+<!--</div>-->
+
+<!--<div class="navbar navbar-static-top navbar-inverse nav-checkout">-->
+<!--<ul class="nav navbar-nav">-->
+<!--{% spaceless %}-->
+<!--<li class="step1 {% if step == 1 %}active{% else %}{% if step == 2 %}previous{% else %}{% if step > 1 %}visited{% else %}disabled{% endif %}{% endif %}{% endif %} ">-->
+<!--{% if step == 2 or step == 3 or step == 4 %}-->
+<!--<a href="{% url 'checkout:shipping-address' %}">-->
+<!--<span class="visible-inline-sm icon-chevron-right"></span>-->
+<!--<span>-->
+<!--{% trans "1. Shipping address" %}-->
+<!--</span>-->
+<!--</a>-->
+<!--{% else %}-->
+<!--<span class="navbar-text">-->
+<!--{%  trans "1. Shipping address" %}-->
+<!--</span>-->
+<!--{% endif %}-->
+<!--</li>-->
+
+<!--<li class="step2 {% if step == 2 %}active{% else %}{% if step == 3 %}previous{% else %}{% if step > 2 %}visited{% else %}disabled{% endif %}{% endif %}{% endif %} ">-->
+<!--{% if step == 3 or step == 4 %}-->
+<!--<a href="{% url 'checkout:shipping-method' %}">-->
+<!--<span class="visible-inline-sm icon-chevron-right"></span>-->
+<!--<span>-->
+<!--{% trans "2. Shipping method" %}-->
+<!--</span>-->
+<!--</a>-->
+<!--{% else %}-->
+<!--<span class="navbar-text">-->
+<!--{%  trans "2. Shipping method" %}-->
+<!--</span>-->
+<!--{% endif %}-->
+<!--</li>-->
+
+<!--<li class="step3 {% if step == 3 %}active{% else %}{% if step == 4 %}previous{% else %}{% if step > 3 %}visited{% else %}disabled{% endif %}{% endif %}{% endif %} ">-->
+<!--{% if step == 4 %}-->
+<!--<a href="{% url 'checkout:payment-details' %}">-->
+<!--<span class="visible-inline-sm icon-chevron-right"></span>-->
+<!--<span>-->
+<!--{% trans "3. Payment" %}-->
+<!--</span>-->
+<!--</a>-->
+<!--{% else %}-->
+<!--<span class="navbar-text">-->
+<!--{%  trans "3. Payment" %}-->
+<!--</span>-->
+<!--{% endif %}-->
+<!--</li>-->
+
+<!--<li class="step4 {% if step == 4 %}active{% else %}disabled{% endif %} ">-->
+<!--<span class="navbar-text">-->
+<!--{% trans "4. Preview" %}-->
+<!--</span>-->
+<!--</li>-->
+
+<!--<li class="step5 {% if step == 5 %}active{% else %}disabled{% endif %} ">-->
+<!--<span class="navbar-text">-->
+<!--{% trans "5. Confirmation" %}-->
+<!--</span>-->
+<!--</li>-->
+<!--{% endspaceless %}-->
+<!--</ul>&lt;!&ndash; /navbar-inner &ndash;&gt;-->
+<!--</div>&lt;!&ndash; /navbar &ndash;&gt;-->

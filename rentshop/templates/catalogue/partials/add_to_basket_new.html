@@ -1,0 +1,117 @@
+<style>
+    .dis{ background-color: #edab2e99; }
+</style>
+
+
+{% load basket_tags %}
+{% load display_tags %}
+{% load i18n %}
+{% load purchase_info_tags %}
+{% load common %}
+
+{% purchase_info_for_product request product as session %}
+
+{% if session.availability.is_available_to_buy %}
+    {% basket_form request product as basket_form %}
+{% line_item_checker request product as in_basket_obj %}
+{% if not in_basket_obj %}
+    <form id="add_to_basket_form" style="z-index:0;" action="{% url 'basket:add' pk=product.pk  %}" method="post" class="" >
+{% else %}
+     <form id="add_to_basket_form" style="z-index:0;" action="{% url 'basket:add' pk=product.pk  %}" method="post" class="" onsubmit="return confirm('Same product is already added in the cart');">
+         {% endif %}
+        {% csrf_token %}
+         <input type="hidden" name="product_type" id="id_product_type" value="{{product.product_class.name}}">
+         <input type="hidden" name="product_type" id="id_product_id" value="{{product.id}}">
+        {% include "partials/form_fields.html" with form=basket_form %}
+
+        {% if product.get_product_class.name == 'Rent Or Sale' %}
+            {% line_item_checker request product as in_basket_obj %}
+            {% if not in_basket_obj %}
+                <button type="submit"  class="add-to-cart" name="order_type" value="Rent" onclick="return find_blocked_date();">Rent</button>
+                <button type="submit" class="add-to-cart" name="order_type" value="Sale">&nbsp;&nbsp;Buy&nbsp;&nbsp;</button>
+            {% else %}
+                {% for i in in_basket_obj %}
+                    {% if i.order_type == 'Sale' %}
+                        <button type="submit" disabled  class="add-to-cart dis" name="order_type" value="Rent" onclick="return find_blocked_date();">Rent</button>
+                        <button type="submit"  class="add-to-cart" name="order_type" value="Sale">&nbsp;&nbsp;Buy&nbsp;&nbsp;</button>
+                    {% elif i.order_type == 'Rent' %}
+                        <button type="submit"   class="add-to-cart" name="order_type" value="Rent" onclick="return find_blocked_date();">Rent</button>
+                        <button type="submit" disabled class="add-to-cart dis" name="order_type" value="Sale">&nbsp;&nbsp;Buy&nbsp;&nbsp;</button>
+                    {% else %}
+                        <button type="submit" disabled  class="add-to-cart dis" name="order_type" value="Rent" onclick="return find_blocked_date();">Rent</button>
+                        <button type="submit" disabled class="add-to-cart dis" name="order_type" value="Sale">&nbsp;&nbsp;Buy&nbsp;&nbsp;</button>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% else %}
+            {% if product.get_product_class.name == 'Rent' %}
+                <button type="submit" class="add-to-cart" data-loading-text="{% trans 'Adding...' %}" name="order_type" value="Rent">
+                    {% trans "Rent" %}
+                </button>
+            {% elif product.get_product_class.name == 'Sale' %}
+                <button type="submit" class="add-to-cart" data-loading-text="{% trans 'Adding...' %}" name="order_type" value="Sale">
+                    {% trans "Sale" %}
+                </button>
+            {% elif product.get_product_class.name == 'Professional' %}
+                <button type="submit" class="add-to-cart" data-loading-text="{% trans 'Adding...' %}" name="order_type" value="Professional">
+                    {% trans "Rent" %}
+                </button>
+            {% elif product.get_product_class.name == 'Service' %}
+                <button class="add-to-cart btn-toogle" id="btn_id_{{product.id}}" onclick="serviceEnquiryForm({{product.id}})" type="button" style="margin: 0 0 15px;z-index: 0;">{% trans "Contact Us" %}</button>
+            {% else %}
+                <span class="add-to-cart disabled dis">{% trans "Add to basket" %}</span>
+            {% endif %}
+        {% endif %}
+    </form>
+
+    {% else %}
+        {% if product.get_product_class.name != 'Service' %}
+        <p style="color:black;">Product is not available in stock.</p>
+        {% endif %}
+        {% if has_active_alert %}
+            <p>{% trans "You have an active stock alert for this product." %}</p>
+        {% else %}
+            {% if product.get_product_class.name == 'Service' %}
+                <button class="add-to-cart" id="btn_id_{{product.id}}" onclick="serviceEnquiryForm({{product.id}})" type="button" style="margin: 0 0 15px;z-index: 0;">{% trans "Contact Us" %}</button>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+
+    {% iffeature "wishlists" %}
+
+        {% load wishlist_tags %}
+        {% if user.is_authenticated %}
+            {% with wishlists=user.wishlists.all %}
+            {# Select wishlists that contains product #}
+            {% wishlists_containing_product wishlists product as product_wishlists %}
+                {% if wishlists %}
+                    {% for wishlist in wishlists %}
+                        {% if wishlist not in product_wishlists %}
+                            <a style="z-index:0;" href="{% url 'customer:wishlists-add-product' key=wishlist.key product_pk=product.pk %}" class="like" style="color:#fff;">
+                                {% blocktrans with name=wishlist.name %}
+                                    <i class="fa fa-heart" ></i>
+                                {% endblocktrans %}
+                            </a>
+                        {% else %}
+                            <a style="z-index:0;" class="like" style="color:#red;">
+                                {% blocktrans with name=wishlist.name %}
+                                    <i class="fa fa-heart" style="color:red"></i>
+                                {% endblocktrans %}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <form id="add_to_wishlist_form" style="z-index:0;" action="{% url 'customer:wishlists-add-product' product_pk=product.pk %}" method="post" class="btn-wishlist">
+                        {% csrf_token %}
+                        <button type="submit" class="like">
+                            <i class="fa fa-heart" ></i>
+                        </button>
+                    </form>
+                {% endif %}
+            {% endwith %}
+        {% else %}
+            <button class="like" type="button" style="z-index:0;" onclick="window.open('/accounts/login/')">
+                <i class="fa fa-heart" ></i>
+            </button>
+        {% endif %}
+    {% endiffeature %}

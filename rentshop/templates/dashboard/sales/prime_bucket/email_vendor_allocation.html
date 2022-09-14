@@ -1,0 +1,59 @@
+{% extends "customer/emails/base.html" %}
+{% load currency_filters i18n %}
+
+{% block tbody %}
+    <tr>
+        <td class="content-block">
+            <h4 style="font-weight:300;">Dear {{allocated_obj.vendor_name}},</h4>
+            <h4 style="font-weight:300;">
+                The Takerentpe sale team has allocated order #{{allocated_obj.order_number}} to you.
+            </h4>
+            <h4 style="font-weight:300;">Order details.</h4>
+            <br/>
+            <h4>Order Number : {{allocated_obj.order_number}}</h4>
+            <!--<h4>Product : {{allocated_obj.product_name}}</h4>-->
+            <!--<h4>Product Category : {{allocated_obj.product_category_name}}</h4>-->
+        </td>
+    </tr>
+    <tr>
+        <td class="content-block">
+            <table style="border-spacing:0px; border-collapse:collapse">
+                <tr>
+                    <th style="border:1px solid #000">Client Name</th>
+                    <th style="border:1px solid #000">Shipping Address</th>
+                    <th style="border:1px solid #000">Event Date</th>
+                </tr>
+
+                <tr>
+                    <td style="border:1px solid #000">{{allocated_obj.order.user.get_full_name}}</td>
+                    <td style="border:1px solid #000">
+                        {{allocated_obj.order.shipping_address|default:"-" }}
+                    </td>
+                    <td style="border:1px solid #000">{{allocated_obj.order_line.booking_start_date.date}} - {{allocated_obj.order_line.booking_end_date.date}}</td>
+                </tr>
+            </table>
+            <table style="border-spacing:0px; border-collapse:collapse">
+                <br/>
+                <tr>
+                    <th style="border:1px solid #000">UPC</th>
+                    <th style="border:1px solid #000">Product Name</th>
+                    <th style="border:1px solid #000">Images</th>
+                    <th style="border:1px solid #000">Product Description</th>
+                </tr>
+
+                <tr>
+                    <td style="border:1px solid #000">{{allocated_obj.product.upc}}</td>
+                    <td style="border:1px solid #000">{{allocated_obj.product}}</td>
+                    <td style="border:1px solid #000">
+                        {% if allocated_obj.product.images.first %}
+                            <img src="{{domain}}{{allocated_obj.product.images.first.original.url}}" alt="{{allocated_obj.order.number}}"/>
+                        {% else %}
+                            <img src="https://via.placeholder.com/150" alt="{{allocated_obj.order.number}}"/>
+                        {% endif %}
+                    </td>
+                    <td style="border:1px solid #000">{{allocated_obj.product.description|safe|default:'-'}}</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+{% endblock %}

@@ -1,0 +1,384 @@
+{% extends 'dashboard/layout.html' %}
+{% load currency_filters %}
+{% load i18n %}
+
+{% block body_class %}{{ block.super }} orders home{% endblock %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <meta http-equiv="refresh" content="300">
+{% endblock %}
+
+{% block breadcrumbs %}
+{% endblock %}
+
+{% block headertext %}
+{% if isVendor %}
+{% trans "Dashboard Vendor" %}
+{% else %}
+{% trans "Sliders" %}
+{% endif %}
+{% endblock %}
+
+{% block dashboard_content %}
+{% if slider_form.errors %}
+<div class="alert alert-success">
+  <p>{{slider_form.slider_image.errors.as_text}}</p>
+</div>
+{% endif %}
+<div class="table-header">
+    <i class="icon-pencil icon-large"></i>{% trans "Sliders" %}
+
+</div>
+<br/>
+<div class="row">
+    {% for slider_img in slider_obj %}
+        <div class="col col-md-3">
+
+            <img src="{{slider_img.slider_image.url}}" class="img img-thumbnail" style="height:300px; width:100%;"/>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label>Is path link</label>
+                            <input type="checkbox" name="is_provide_path_link" id="id_is_provide_path_link" {% if slider_img.is_provide_path_link %} checked {% endif%} disabled>
+                        <p class="color-red"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label>Mobile View Image</label>
+                        {{slider_img.mobile_view_image}}
+                        <p class="color-red"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="id_path_link">Path link</label>
+                            <input type="text" name="path_link" id="id_path_link" class="form-control" maxlength="256" style="display: block;" value="{{slider_img.path_link}}" disabled>
+                        <p class="color-red"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="id_cta_button_text">CTA button text</label>
+                            <input type="text" name="cta_button_text" id="id_cta_button_text" class="form-control" maxlength="256" style="display: block;"  value="{{slider_img.cta_button_text}}" disabled>
+                        <p class="color-red"></p>
+                    </div>
+                </div>
+            </div>
+
+            <a href="/update_slider/{{slider_img.id}}/" class="btn btn-warning text-center">Update</a>
+            <a href="/delete_slider/{{slider_img.id}}/" class="btn btn-primary text-center">Delete</a>
+        </div>
+    {% endfor %}
+    <input type="file" name="text" class="file" style="display:none;">
+</div>
+<br/>
+
+
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <a href="/slider/" class="pull-right">x</a>
+<!--                <button type="button" class="close" data-dismiss="modal">&times;</button>-->
+                <h4 class="modal-title">Update Image</h4>
+            </div>
+            <form method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                    {% csrf_token %}
+                    {% if slider_form.slider_image %} Currently: <a href="{{slider_form.slider_image.value.url}}">{{slider_form.slider_image.value.url}}</a>{% endif %}
+                    Change:
+                    <input type="file" name="slider_img_update1" id="id_update_image">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Is path link</label>
+                                    <input type="checkbox" name="is_provide_path_link" id="id_model_is_provide_path" {% if slider_form.is_provide_path_link.value %} checked{% endif %} class="model-path-link">
+                                <p class="color-red"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Mobile View Image</label>
+                                {{slider_form.mobile_view_image}}
+                                <p class="color-red">{{slider_form.errors.mobile_view_image.as_text}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="id_model_update_path">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Path link</label>
+                                {{slider_form.path_link}}
+                                <p class="color-red"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="id_model_update_button">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="id_cta_button_text">CTA button text</label>
+                                {{slider_form.cta_button_text}}
+                                <p class="color-red"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="id_update_submit_button">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% if slider_obj.count < 10 %}
+<div class="table-header">
+    <i class="icon-plus icon-large"></i>{% trans "Add new slider" %}
+    </div>
+<div class="content-block">
+    <form method="post" role="form" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{slider_form.slider_image}}<br>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label>Mobile View Image</label>
+                    {{slider_form.mobile_view_image}}
+                    <p class="color-red">{{slider_form.errors.mobile_view_image.as_text}}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label>Is path link</label>
+            <input type="checkbox" name="is_provide_path_link" id="id_is_provide_path" class="path" {% if slider_form.is_provide_path_link.value %} checked{% endif %}>
+                    <p class="color-red"></p>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="id_update_path">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label for="id_path_link">Path link</label>
+                    {{slider_form.path_link}}
+                    <p class="color-red"></p>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="id_update_button">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label for="id_cta_button_text">CTA button text</label>
+                    {{slider_form.cta_button_text}}
+                    <p class="color-red"></p>
+                </div>
+            </div>
+        </div>
+
+        <br/>
+        <button type="submit" class="btn btn-primary" id="id_save_btn">Upload</button>
+    </form>
+</div>
+{% endif %}
+ <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+<script>
+
+    $('document').ready(function(){
+        $('.btn-update').click(function(){
+
+           $('.file').click();
+           var img_id = this.value;
+           jQuery.noConflict();
+           formdata = new FormData();
+
+            $('.file').on('change',(function() {
+                var file = this.files[0];
+                if(formdata){
+                    formdata.append('file',file);
+                    //alert(formdata);
+                    $.ajax({
+                        type: 'POST',
+                        url: '/update_slider/',
+
+
+                        data :{
+                            img_id:img_id,
+                            formdata:formdata,
+                        },
+                       cache: false,
+                       contentType: false,
+                       processData: false,
+                        //data: form_data,
+                        headers: {'X-CSRFToken': '{{ csrf_token }}'},
+
+                        success:function(e){
+                            alert(e);
+                        },
+                        error:function(e){
+                            alert(e);
+                        }
+                    });
+                }
+
+            }));
+
+        });
+
+        {% if upload_id or request.path != '/slider/' %}
+
+        $('#myModal').modal('show');
+        {% endif %}
+
+        if($('input[class="model-path-link"]').prop('checked')==true)
+        {
+        $("#id_model_update_path").css("display", "block");
+        $("#id_model_update_button").css("display", "block");
+        }
+        else{
+        $("#id_model_update_path").css("display", "none");
+        $("#id_model_update_button").css("display", "none");
+        }
+
+    });
+
+    $("#id_update_path").css("display", "none");
+    $("#id_update_button").css("display", "none");
+    $("#mobile_view_image-clear_id").css("display", "none");
+
+
+    $("#id_is_provide_path").change(function(){
+        if($('input[class="path"]').prop('checked')==true)
+        {
+        $("#id_update_path").css("display", "block");
+        $("#id_update_button").css("display", "block");
+        }
+        else{
+        $("#id_update_path").css("display", "none");
+        $("#id_update_button").css("display", "none");
+        }
+    });
+
+    $("#id_model_is_provide_path").change(function(){
+        if($('input[class="model-path-link"]').prop('checked')==true)
+        {
+        $("#id_model_update_path").css("display", "block");
+        $("#id_model_update_button").css("display", "block");
+        }
+        else{
+        $("#id_model_update_path").css("display", "none");
+        $("#id_model_update_button").css("display", "none");
+        }
+    });
+
+    $("#id_slider_image").change(function () {
+        //Get reference of FileUpload.
+        var fileUpload = $("#id_slider_image")[0];
+
+        //Check whether the file is valid Image.
+        var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(.jpg|.png)$");
+        if (regex.test(fileUpload.value.toLowerCase())) {
+            if (typeof (fileUpload.files) != "undefined") {
+                var reader = new FileReader();
+                reader.readAsDataURL(fileUpload.files[0]);
+                reader.onload = function (e) {
+                    var image = new Image();
+                    image.src = e.target.result;
+                    image.onload = function () {
+                    //Determine the Height and Width.
+                        var height = this.height;
+                        var width = this.width;
+                        if (height < 1200 && width < 800) {
+                            $('#id_save_btn').prop('disabled', true);
+                            alert("Enter valid image size.");
+                            return false;
+                        }
+                        $('#id_save_btn').prop('disabled', false);
+                        //alert("Uploaded image has valid Height and Width.");
+                        return true;
+                    };
+                }
+            }
+            else {
+                $('#id_save_btn').prop('disabled', true);
+                alert("This browser does not support HTML5.");
+                return false;
+            }
+        }
+        else {
+            $('#id_save_btn').prop('disabled', true);
+            alert("Please select a valid Image file.");
+            return false;
+        }
+    });
+
+    $("#id_update_image").change(function () {
+    //Get reference of FileUpload.
+        var fileUpload = $("#id_update_image")[0];
+
+        //Check whether the file is valid Image.
+        var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(.jpg|.png)$");
+        if (regex.test(fileUpload.value.toLowerCase())) {
+            if (typeof (fileUpload.files) != "undefined") {
+                var reader = new FileReader();
+                reader.readAsDataURL(fileUpload.files[0]);
+                reader.onload = function (e) {
+                    var image = new Image();
+                    image.src = e.target.result;
+                    image.onload = function () {
+                    //Determine the Height and Width.
+                    var height = this.height;
+                    var width = this.width;
+                    if (height < 1200 && width < 800) {
+                        $('#id_update_submit').prop('disabled', true);
+                            alert("Enter valid image size.");
+                            $("#id_update_image").val("");
+                            return false;
+                        }
+                        $('#id_update_submit').prop('disabled', false);
+                        //alert("Uploaded image has valid Height and Width.");
+                        return true;
+                    };
+                }
+            }
+            else {
+                $('#id_update_submit').prop('disabled', true);
+                alert("This browser does not support HTML5.");
+                return false;
+            }
+        }
+        else {
+            $('#id_update_submit').prop('disabled', true);
+            alert("Please select a valid Image file.");
+            return false;
+        }
+    });
+</script>
+<script>
+     $('document').ready(function(){
+     if($('input[class="path"]').prop('checked')==true)
+        {
+        $("#id_update_path").css("display", "block");
+        $("#id_update_button").css("display", "block");
+        }
+        else{
+        $("#id_update_path").css("display", "none");
+        $("#id_update_button").css("display", "none");
+        }
+
+     });
+</script>
+
+{% endblock %}

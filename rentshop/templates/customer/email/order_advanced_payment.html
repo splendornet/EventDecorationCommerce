@@ -1,0 +1,15 @@
+{% extends "customer/emails/base.html" %}
+{% load currency_filters i18n %}
+
+{% block tbody %}
+    <tr>
+        <td class="content-block">
+            <p xmlns="http://www.w3.org/1999/html">Hello {{user.first_name}} ,</p>
+            <p>Just wanted to say a quick thank you for being our valued customer and for your advance payment for your order. If you ever need anything, give us a call.
+            </p>
+            <p>Happy celebranto,</p>
+            <p style="line-height: 0px;">Rutuja, Take Rent Pe.</p><br/>
+            
+        </td>
+    </tr>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'dashboard/layout.html' %}
+
+{% load i18n %}
+
+{% block title %}
+    Premium Product Delete | {{ block.super }}
+{% endblock %}
+
+{% block body_class %}{{ block.super }} create-page{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li>
+            <a href="{% url 'dashboard:taxation-index' %}">{% trans "Premium Product" %}</a>
+        </li>
+        <li class="active">Delete Premium Product</li>
+    </ul>
+{% endblock %}
+
+{% block headertext %}{{ title }}{% endblock %}
+
+{% block dashboard_content %}
+    <div class="table-header">
+        <h2>{{ title }}</h2>
+    </div>
+    <form action="{{ request.GET.urlencode }}" method="post" class="well" id="form">
+        {% csrf_token %}
+        <p style="font-size:18px;">Are you really want to delete this taxation?</p>
+        <div class="form-actions">
+            <input type="hidden" value="{{product.id}}" name="product_id">
+            <button type="button" onclick="confirm_taxation_delete()" class="btn btn-danger">{% trans "Delete" %}</button>
+            {% trans "or" %}
+            <a href="{% url 'dashboard:taxation-index' %}">{% trans "cancel" %}</a>
+        </div>
+    </form>
+{% endblock %}
+
+{% load static %}
+{% block extrascripts %}
+    {{ block.super }}
+    <script>
+        function confirm_taxation_delete(){
+            var is_confirm = confirm("Do you really want to delete the event.");
+            if (is_confirm == false){
+                return false;
+            }
+            $('#form').submit();
+        }
+    </script>
+{% endblock %}

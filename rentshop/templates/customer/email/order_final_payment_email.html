@@ -1,0 +1,18 @@
+{% extends "customer/emails/base.html" %}
+{% load currency_filters i18n %}
+
+{% block tbody %}
+{% autoescape off %}
+{% load static %}
+<tr>
+    <td class="content-block">
+        <p xmlns="http://www.w3.org/1999/html">Hello Admin,</p>
+        <p>Final payment for order number {{number}} is received from {{user.first_name}} {{user.last_name}}.</p>
+
+
+        <br/>
+    </td>
+</tr>
+
+{% endautoescape %}
+{% endblock %}

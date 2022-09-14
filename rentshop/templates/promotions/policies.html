@@ -1,0 +1,163 @@
+{% extends "layout_2_col.html" %}
+{% load i18n %}
+{% load thumbnail %}
+{% load currency_filters %}
+{% load purchase_info_tags %}
+{% load display_tags %}
+{% load reviews_tags %}
+{% load staticfiles %}
+{% load mathfilters %}
+{% load common %}
+
+{% load product_tags %}
+{% load purchase_info_tags %}
+
+{% block navigation %}
+    {% include "partials/nav_primary.html" with expand_dropdown=1 %}
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block column_left %}
+{% endblock %}
+{% block content %}
+<style>
+    .content{
+        padding-left:20px;
+        padding-right:15px;
+        font-size:14px;
+    }
+    .term{
+     margin-top: 165px;
+     }
+    .container{
+        margin-bottom:20px;
+
+    }
+    h2{
+        padding-left:20px;
+    }
+    .pr-p{color:#000;}
+
+</style>
+<div class="container term" style="color:#000 !important">
+    <h2 style="padding-left:0;">Policies</h2>
+    <br/><br/>
+     {% if obj.content %}
+    <p class="pr-p">
+                {{obj.content|safe}}
+    </p>
+    {% else %}
+    <p class="pr-p">
+        TAKERENTPE owns and operates <a href="http://www.takerentpe.com" target="_blank">http://www.takerentpe.com</a> understands how important your personal privacy is to you, and we want you to be aware of the kinds of information we collect, how we collect it, how we use it and with whom we share it. When you submit information to us through the Site, you acknowledge and agree to the terms and conditions of this Privacy Policy. We may revise this Privacy Policy from time to time by updating the information posted on the Site. Amendments to the Privacy Policy will be effective when posted. You should therefore periodically visit this page to review the current Privacy Policy, so that you are aware of any such revisions.
+This Privacy Policy covers the information for Take Rent Pe ("TakeRentPe" and/or "We") collects from the user(s) ("User(s)" and/or "You") of <a href="www.takerentpe.com">www.takerentpe.com</a> ("Website") This Privacy Policy should be read in conjunction and together with the User Agreement of the Website available on <a href="http://www.takerentpe.com/policies">http://www.takerentpe.com/policies</a> Personal Information of a User(s) is collected if the User(s) registers with the Website, accesses the Website or take any action on the Website. Here are our privacy principles:
+    </p>
+
+    <p class="pr-p">
+        <strong>1. Information collected-</strong>
+    </p>
+    <p class="pr-p">
+        Name <br/>
+Address <br/>
+E-mail address <br/>
+Phone number <br/>
+Venue address <br/>
+Timing <br/>
+Order pay-outs (except bank account confidential information)
+    </p>
+
+    <p class="pr-p">
+        <strong>2. Use of Information –</strong>
+    </p>
+    <p class="pr-p">
+        The information that you have provided when placing a quote request will be used in order to complete that request. Your information will not be shared with any third parties except to the extent necessary to complete your order. Your e-mail address will be used to communicate with you and to send rental quotes/reservations to you. You may also be added to our e-mail list in which you will receive promotions, newsletters or surveys. You can easily unsubscribe by clicking on the “unsubscribe” link when you receive our e-mail.
+        <ul>
+    <li style="font-size:18px;">
+        In our efforts to continually improve our product and service offerings, we collect and analyse demographic and profile data about our users' activity on our Website. <br/>
+ - We identify and use your IP address to help diagnose problems with our server, and to administer our Website. <br/>
+ - Your IP address is also used to help identify you and to gather broad demographic information. <br/>
+ - We will occasionally ask you to complete optional online surveys. These surveys may ask you for contact information and demographic information (like zip code, age, etc..). <br/>
+ - We use this data to tailor your experience at our Website, providing you with content that we think you might be interested in and to display content according to your preferences.</li>
+</ul>
+    </p>
+
+    <p class="pr-p">
+        <strong>3. Use of Cookies –</strong>
+    </p>
+    <p class="pr-p">
+        Cookies are small pieces of information that are stored by your Internet browser on your computer’s hard drive. Cookies can help a website recognize previous visitors and remember any preferences set during those visits. Cookies can securely store your profile, personalize your user experience, and help us understand the types of products or services you’re interested in.
+    </p>
+
+    <p class="pr-p">
+        <strong>4. Data Security –</strong>
+    </p>
+    <p class="pr-p">
+        We take every precaution to protect our user’s information. When sensitive and personal information is submitted on our website, we take every measure to ensure that your information is protected both online and off-line.
+
+    </p>
+
+    <p class="pr-p">
+        <strong>5. Payment Policy</strong>
+    </p>
+    <p class="pr-p">
+        At the time of booking Services, materials, performance, etc., it is compulsory for the client to pay 50% advance amount. After booking by ASP follow-up, it will be increased as an additional cost if the site needs to be surveyed, a visit, or a visit if some additional requirements arise in terms of services, materials, performance, etc. The remaining amount (if any) should be paid one day before to the ASP (Associate Service Provider) or at the time of the delivery/event. Client should have convenient payment method before the event starts. If there is any update regarding terms, will appear in writing and signed by takerentpe.com and, the client. The event company, organization, etc. fails to pay their invoice the client and point of contact agree to be personally responsible for the accountability due to takerentpe.com. If any charges are incurred during the event, an additional invoice will be forwarded to the renter. You are responsible for rental charges from the time the item(s) out as specified on the reverse side until it is returned, and for other charges under this contract.
+    </p>
+
+    <p class="pr-p">
+        <strong>6. Links to Other Sites / Financial Data</strong>
+    </p>
+    <p class="pr-p">
+        We provide links to other websites for your convenience and information. These sites may have their own privacy policies in place, which we recommend You review if You visit any linked websites. We are not responsible for the content of linked sites or any use of the sites.
+While transacting with other users of the Website, you may provide your financial information including without limitation your bank account details, credit card account details or your details pertaining to any payment settlement or pre-paid instrument service provider. You understand, agree and acknowledge that the Website and TakeRentPe never receives Your financial and payment information from these service providers. Your personal information, sensitive personal information and financial information will be handled by these service providers in accordance with their respective privacy policies and other terms and conditions and TakeRentPe and Website shall not be liable, accountable or responsible for your personal information, sensitive personal information and financial information which you provide to these service providers.
+        8. Your Consent
+By using the Website and/ or by providing your information, you consent to the collection and use of the information you disclose on the Website in accordance with this Privacy Policy, including but not limited to your consent for sharing your information as per this privacy policy. If we decide to change our privacy policy, we will post those changes on this page so that you are always aware of what information we collect, how we use it, and under what circumstances we disclose it.
+    </p>
+
+    <p class="pr-p">
+        <strong>7. Notification of changes –</strong>
+    </p>
+    <p class="pr-p">
+        If any changes are made to our privacy policy, those changes will be posted on our Privacy Policy page to inform our users regarding what information will be collected and how we use it. If at any point we decide to use personally identifiable in a manner different from what was stated at the time of collection, we will notify users via email. Users will have a choice to accept or decline any new method(s) of information use.
+    </p>
+
+    <p class="pr-p">
+        <strong>
+8. Personal information we collect from the people that visit our blog, website or app –</strong>
+    </p>
+    <p class="pr-p">
+        When ordering or registering on our site, enter your name, email address or other details to help you with your experience. When do we collect information? We collect information from you when you register on our site, place an order, fill out a form or enter information in our site.
+    </p>
+
+
+    <p class="pr-p">
+        <strong>9. Changes to this policy –</strong>
+    </p>
+    <p class="pr-p">
+        We reserve the right to modify this privacy policy at any time, so please review it frequently. Changes and clarifications will take effect immediately upon their posting on the website.
+From time to time we may update this Privacy Policy. Your continued subscription to our Services constitutes an acceptance of the then-current Privacy Policy and Terms of use so we encourage You to visit this page periodically to review any changes.
+    </p>
+
+
+    <p class="pr-p">
+        <strong>10. How to Contact Us –</strong>
+    </p>
+    <p class="pr-p">
+
+        If you have any question or comments about this privacy policy, or if you would like us to update information we have about you or your preferences, please contact us by
+<br/>
+
+Grievance Officer –
+
+        <br/>
+
+Name		:–	Miss. Mrunal Ashok Garve <br/>
+E-mail ID	:–	dgmtrp@gmail.com <br/>
+Time		:–	10:00 am to 06:00 pm <br/>
+
+    </p>
+{% endif %}
+
+    </div>
+
+{% endblock %}

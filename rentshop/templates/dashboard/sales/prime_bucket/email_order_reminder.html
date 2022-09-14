@@ -1,0 +1,19 @@
+{% extends "customer/emails/base.html" %}
+{% load currency_filters i18n %}
+
+{% block tbody %}
+    <tr>
+        <td class="content-block">
+            <h4 style="font-weight:300;">Dear {{allocated_obj.vendor_name}},</h4><br>
+            <h4 style="font-weight:300;">
+                This is a kind reminder to let you know that the #{{allocated_obj.order_number}} {{allocated_obj.product_name}} event date is two days away.
+            </h4>
+
+            <p><a href="{{domain}}/media/order_summary/order_summary_{{allocated_obj.order_number}}.pdf">order_summary</a> </p><br>
+            <p style="margin: 0;margin-top: 0.7rem;line-height: 18px;font-weight: 500;">So kindly follow up for 2nd step payment and be prepared for the event.</p><br>
+            <p style="color: #ee4d84;font-weight: 700;">Happy Celebranto!</p>
+
+        </td>
+    </tr>
+
+{% endblock %}

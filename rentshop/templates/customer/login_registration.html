@@ -1,0 +1,228 @@
+{% extends "layout.html" %}
+{% load i18n %}
+
+{% block title %}
+{% trans 'Login or register' %} | {{ block.super }}
+{% endblock %}
+
+
+
+
+
+
+{% block header %}{% endblock %}
+
+{% block content %}
+<style>
+    .forgot-link{
+        padding:11px 40px;
+    }
+    .req{
+        color:red;
+    }
+    .shop-layout-wrap{
+        margin-top:60px;
+    }
+</style>
+<div class="nz-breadcrumbs nz-clearfix">
+    <div class="container">
+        <a href="{{ homepage_url }}" rel="v:url" property="v:title">{% trans "Home" %}</a>
+        <span class="current">Login or register</span>
+    </div>
+</div>
+
+<div class="shop-layout-wrap" id="nz-target">
+    <section class='content nz-clearfix' data-rp="true" data-rpn="4">
+        <div class="container m-less-padding">
+
+            <div class="logmod__wrapper">
+                <div id="form logmod__container">
+                    <div>
+                        <div class="col-sm-12 form login">
+                            <!--<div id="userform">-->
+
+                            <ul class="logmod__tabs">
+                                <li class="{% if not registration_form.errors %}active{% endif %}  "><a href="#login" role="tab" data-toggle="tab">Login</a></li>
+                                <li class="{% if registration_form.errors %}active{% endif %}  "><a href="#signup" role="tab" data-toggle="tab">Sign Up</a></li>
+                            </ul>
+                            <div class=".logmod__tab-wrapper tab-content">
+                                <!--*************************** registration form code start ******************-->
+                                <div class="tab-pane fade {% if registration_form.errors %}active{% endif %}  in" id="signup">
+                                    <!--<form id="signup">-->
+                                    <form id="register_form" action="{{ request.get_full_path }}" method="post" role="form">                        <!-- <div class="col-xs-12 col-sm-6">-->
+                                        {% csrf_token %}
+                                        <div class="logmod__heading">
+                                            <span class="logmod__heading-subtitle">Enter your personal details <strong>to create an acount</strong></span>
+
+                                        </div>
+                                        <div class="logmod__form">
+                                            <div class="col-sm-12 sminputs username">
+                                                <div class="input full">
+                                                    <div class="col-sm-12 add-padding label-float" style="padding-left: 15px;padding-right: 15px;">
+                                                        <label>Email Id <span class="req">*</span></label>
+                                                        {{registration_form.email}}
+                                                        <b class="red-text">{{registration_form.errors.email.as_text}}</b>
+                                                        <!--<input type="text" id="signupform-username" class="string optional" name="SignupForm[username]" aria-required="true">-->
+
+                                                        <p class="help-block help-block-error"></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 sminputs">
+                                                <div class="input full">
+                                                    <div class="col-sm-6 label-float">
+                                                        <label>First Name <span class="req">*</span></label>
+                                                        {{registration_form.first_name}}
+                                                        <b class="red-text">{{registration_form.errors.first_name.as_text}}</b>
+                                                        <!--<input type="password" id="signupform-password" class="string optional" name="SignupForm[password]" aria-required="true">-->
+
+                                                        <p class="help-block help-block-error"></p>
+                                                    </div>
+                                                    <div class="col-sm-6 label-float">
+                                                        <label>Last Name <span class="req">*</span></label>
+                                                        {{registration_form.last_name}}
+                                                        <b class="red-text">{{registration_form.errors.first_name.as_text}}</b>
+                                                        <!--<input type="password" id="signupform-confirm_password" class="string optional" name="SignupForm[confirm_password]" aria-required="true">-->
+
+                                                        <p class="help-block help-block-error"></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 sminputs">
+                                                <div class="input full">
+                                                    <div class="col-sm-12 label-float">
+                                                        <label>Mobile Number <span class="req">*</span></label>
+                                                        {{registration_form.mobile_number}}
+                                                        <b class="red-text">
+                                                            {{registration_form.errors.mobile_number.as_text}}
+                                                        </b>
+                                                        <!--<input type="password" id="signupform-confirm_password" class="string optional" name="SignupForm[confirm_password]" aria-required="true">-->
+                                                        <p class="help-block help-block-error"></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 sminputs">
+                                                <div class="input full">
+                                                    <div class="col-sm-6 label-float">
+                                                        <label>Password <span class="req">*</span></label>
+                                                        {{registration_form.password1}}
+                                                        <!--<input type="password" id="signupform-password" class="string optional" name="SignupForm[password]" aria-required="true">-->
+
+                                                        <p class="help-block help-block-error"></p>
+                                                    </div>
+                                                    <div class="col-sm-6 label-float">
+                                                        <label>Confirm Password <span class="req">*</span></label>
+                                                        {{registration_form.password2}}
+                                                        <!--<input type="password" id="signupform-confirm_password" class="string optional" name="SignupForm[confirm_password]" aria-required="true">-->
+
+                                                        <p class="help-block help-block-error"></p>
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                         <b class="red-text">
+                                                    {{registration_form.errors.password2.as_text}}
+                                                </b>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                             <div class="col-sm-12 sminputs">
+                                                <div class="input full">
+                                                    <div class="col-sm-12 label-float">
+                                                        <label>Captcha <span class="req">*</span></label>
+                                                        {{registration_form.captcha}}
+                                                        <b class="red-text">
+                                                            {{registration_form.errors.captcha.as_text}}
+                                                        </b>
+
+                                                        <!--<input type="password" id="signupform-confirm_password" class="string optional" name="SignupForm[confirm_password]" aria-required="true">-->
+                                                        <p class="help-block help-block-error"></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-12 simform__actions">
+                            <button name="registration_submit" type="submit" value="Register" class="btn btn-yellow btn-red" data-loading-text="{% trans 'Registering...' %}">{% trans 'Register' %}</button>
+                                                <span class="simform__actions-sidetext">By creating an account you agree to our <a class="special" href="{% url 'terms-and-conditions' %}" target="_blank" role="link">Terms &amp; Privacy</a></span>
+                                            </div>
+
+                                        </div>
+
+                                    </form>                        <!--</form>-->
+                                </div>
+                                <!--*************************** registration form code end ******************-->
+
+                                <!--*************************** login form code start ******************-->
+                                <div class="tab-pane fade {% if not registration_form.errors %}active{% endif %} in" id="login" >
+
+                                         <form id="login_form" action="{{ request.get_full_path }}" method="post">
+                                              {% csrf_token %}
+                                        <div class="logmod__heading">
+                                        <span class="logmod__heading-subtitle">Enter your user name and password <strong>to Login</strong></span>
+                                            {% if login_form.errors %}
+                                            <b class="red-text">* Please enter valid username and password.</b>
+                                            {% endif %}
+                                    </div>
+                                        <div class="logmod__form">
+                                            <div class="col-sm-12 sminputs username">
+                                                <div class="input full">
+                                                    <div class="col-sm-12 add-padding label-float" style="padding-left: 15px;padding-right: 15px;">
+                                                        <label>Email Id <span class="req">*</span></label>
+                                                        {{login_form.username}}
+                                                        <!--<input type="text" id="loginform-username" class="string optional" name="LoginForm[username]" aria-required="true">-->
+
+                                                        <p class="help-block help-block-error"></p>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 sminputs pwd">
+                                                <div class="input full">
+                                                    <div class="col-sm-12 add-padding label-float" style="padding-left: 15px;padding-right: 15px;">
+                                                        <label>Password <span class="req">*</span></label>
+                                                        {{login_form.password}}
+                                                        <!--<input type="password" id="user-pw" class="string optional" name="LoginForm[password]" size="50" max-length="255" aria-required="true">-->
+
+                                                        <p class="help-block help-block-error"></p>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!--<div class="col-sm-12">-->
+
+                                                <!--<div class="checkbox">-->
+                                                    <!--<label for="loginform-rememberme">-->
+                                                        <!--<input type="hidden" name="LoginForm[rememberMe]" value="0"><input type="checkbox" id="loginform-rememberme" name="LoginForm[rememberMe]" value="1" checked>-->
+                                                        <!--Remember Me-->
+                                                    <!--</label>-->
+                                                    <!--<p class="help-block help-block-error"></p>-->
+
+                                                <!--</div>-->
+                                            <!--</div>-->
+
+                                            <div class="col-sm-12 simform__actions">
+                                                <p><a href="{% url 'password-reset' %}" class="pull-left forgot-link">{% trans "Forgot Password?" %}</a></p>
+                                                <button name="login_submit" type="submit" value="Log In" class="btn btn-yellow btn-red" data-loading-text="{% trans "Logging in..." %}">{% trans 'Log In' %}</button>
+                                            </div>
+                                        </div>
+                                        <!--</form>-->
+                                    </form>                    </div>
+                                <!--*************************** login form code end ******************-->
+                            </div>
+                            <!--</div>-->
+                        </div>
+                    </div>
+                    <!-- /.container -->
+                </div>
+            </div>
+            <button type="button" class="button buttonBlue">Subscribe
+                <div class="ripples buttonRipples"><span class="ripplesCircle"></span></div>
+            </button>
+        </div>
+    </section>
+</div>
+
+
+
+{% endblock content %}

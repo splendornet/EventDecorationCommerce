@@ -1,0 +1,30 @@
+{% load reviews_tags %}
+{% load i18n %}
+{% load mathfilters %}
+
+
+<div class="product-details">
+    <div class="product-rating">
+        <div class="star-rating" title="Rated 4 out of 5">
+            <span style="width:{% if product.rating %} {{review.score|div:5|mul:100}}% {% else %} 0% {% endif %}">
+            <strong class="rating">{{review.score|floatformat}}</strong> out of 5</span>
+        </div>
+    </div>
+</div>
+
+<h5 style="color:#000; font-size: 20px;    margin-top: 15px; ">{{review.title}}</h5>
+<h5 style="color:#000;font-size:16px;">{{ review.body|striptags }}</h5>
+
+<p style="color:#000;">
+    <small>
+        {% if review.user == user %}
+            {% blocktrans with review_date=review.date_created %}
+                Reviewed on {{ review_date }}
+            {% endblocktrans %}
+        {% else %}
+            {% blocktrans with name=review.reviewer_name review_date=review.date_created %}
+                Reviewed  on {{ review_date }}
+            {% endblocktrans %}
+        {% endif %}
+    </small>
+</p>

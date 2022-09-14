@@ -1,0 +1,147 @@
+{% extends 'dashboard/layout.html' %}
+{% load i18n %}
+
+{% block title %}
+    {% trans "Coupon Distributors" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li>
+            <a href="{% url 'dashboard:coupon-distributors' %}">Coupon Distributors</a>
+        </li>
+        <li class="active">{% trans "Add" %}</li>
+    </ul>
+{% endblock %}
+
+{% block headertext %}{{ title }}{% endblock %}
+{% block dashboard_content %}
+    <form action="." method="post" class="well form-stacked wysiwyg" >
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Personal Details</div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label>Full Name:{% if form.full_name.field.required %} <span>*</span>{% endif %}</label>
+                            {% for error in form.full_name.errors %}
+                                <span class="error-block"><i class="icon-exclamation-sign"></i> {{ error }}</span>
+                            {% endfor %}
+                            {{ form.full_name }}
+                        </div>
+                        <div class="form-group">
+                            <label>CDN:{% if form.cdn.field.required %} <span>*</span>{% endif %}</label>
+                            {% for error in form.cdn.errors %}
+                                <span class="error-block"><i class="icon-exclamation-sign"></i> {{ error }}</span>
+                            {% endfor %}
+                            {{ form.cdn }}
+                        </div>
+                        <div class="form-group">
+                            <label>UIN:{% if form.uin.field.required %} <span>*</span>{% endif %}</label>
+                            {% for error in form.uin.errors %}
+                                <span class="error-block"><i class="icon-exclamation-sign"></i> {{ error }}</span>
+                            {% endfor %}
+                            {{ form.uin }}
+                        </div>
+                        <div class="form-group">
+                            <label>Address:</label>
+                            {{ form.address }}
+                        </div>
+                        <div class="form-group">
+                            <label>Email ID:{% if form.email_id.field.required %} <span>*</span>{% endif %}</label>
+                            {% for error in form.email_id.errors %}
+                                <span class="error-block"><i class="icon-exclamation-sign"></i> {{ error }}</span>
+                            {% endfor %}
+                            {{ form.email_id }}
+                        </div>
+                        <div class="form-group">
+                            <label>Mobile Number:{% if form.mobile_number.field.required %} <span>*</span>{% endif %}</label>
+                            {{ form.mobile_number }}
+                            {% for error in form.mobile_number.errors %}
+                                <span class="error-block"><i class="icon-exclamation-sign"></i> {{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group">
+                            <label>Whatsapp Number:{% if form.whatsapp_number.field.required %} <span>*</span>{% endif %}</label>
+                            {{ form.whatsapp_number }}
+                            {% for error in form.whatsapp_number.errors %}
+                                <span class="error-block"><i class="icon-exclamation-sign"></i> {{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">Bank Details</div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label>Aadhar Number:{% if form.aadhar_number.field.required %} <span>*</span>{% endif %}</label>
+                            {{ form.aadhar_number }}
+                            {% for error in form.aadhar_number.errors %}
+                                <span class="error-block"><i class="icon-exclamation-sign"></i> {{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group">
+                            <label>PAN Number:{% if form.pan_number.field.required %} <span>*</span>{% endif %}</label>
+                            {{ form.pan_number }}
+                            {% for error in form.pan_number.errors %}
+                                <span class="error-block"><i class="icon-exclamation-sign"></i> {{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group">
+                            <label>Account Holder Name:{% if form.account_holder_name.field.required %} <span>*</span>{% endif %}</label>
+                            {{ form.account_holder_name }}
+                            {% for error in form.account_holder_name.errors %}
+                                <span class="error-block"><i class="icon-exclamation-sign"></i> {{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group">
+                            <label>Bank Name:{% if form.bank_name.field.required %} <span>*</span>{% endif %}</label>
+                            {{ form.bank_name }}
+                            {% for error in form.bank_name.errors %}
+                                <span class="error-block"><i class="icon-exclamation-sign"></i> {{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group">
+                            <label>Bank Address:</label>
+                            {{ form.bank_address }}
+                            {% for error in form.bank_address.errors %}
+                                <span class="error-block"><i class="icon-exclamation-sign"></i> {{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group">
+                            <label>Account Number:{% if form.account_number.field.required %} <span>*</span>{% endif %}</label>
+                            {{ form.account_number }}
+                            {% for error in form.account_number.errors %}
+                                <span class="error-block"><i class="icon-exclamation-sign"></i> {{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group">
+                            <label>Account Type:{% if form.account_type.field.required %} <span>*</span>{% endif %}</label>
+                            {{ form.account_type }}
+                            {% for error in form.account_type.errors %}
+                                <span class="error-block"><i class="icon-exclamation-sign"></i> {{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group">
+                            <label>IFSC Code:{% if form.ifsc_code.field.required %} <span>*</span>{% endif %}</label>
+                            {{ form.ifsc_code }}
+                            {% for error in form.ifsc_code.errors %}
+                                <span class="error-block"><i class="icon-exclamation-sign"></i> {{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button class="btn btn-lg btn-primary" type="submit" data-loading-text="{% trans 'Saving...' %}">{% trans "Save" %}</button>
+            {% trans "or" %} <a href="{% url 'dashboard:coupon-distributors' %}">{% trans "cancel" %}</a>.
+        </div>
+    </form>
+{% endblock dashboard_content %}
+

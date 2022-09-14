@@ -1,0 +1,49 @@
+{% extends 'dashboard/layout.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block body_class %}{{ block.super }} create-page{% endblock %}
+
+{% block title %}
+    {% trans "Delete partner" %} | {% trans "Partners" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li>
+            <a href="{% url 'dashboard:manage-menu-index' %}">{% trans "Menu Offers" %}</a>
+        </li>
+        <li class="active">{% trans "Delete Menu Offers" %}</li>
+    </ul>
+{% endblock %}
+
+
+
+{% block dashboard_content %}
+    <form action="." method="post" id="menu_delete_form">
+        {% csrf_token %}
+        <p style="font-size:16px">Are you sure you want to delete this <strong>{{menu}}</strong> ?</p>
+        <div class="form-actions">
+            <input type="text" value="{{menu.id}}" name="menu_pk" hidden>
+            <button class="btn btn-lg btn-danger" type="button" onclick="delete_confirmation_menu()">{% trans "Delete" %}</button> {% trans "or" %}
+            <a href="{% url 'dashboard:manage-menu-index' %}">{% trans "cancel" %}</a>
+        </div>
+    </form>
+{% endblock dashboard_content %}
+
+{% block extrascripts %}
+    {{ block.super }}
+    <script>
+        function delete_confirmation_menu(){
+            var is_confirm = confirm("Do you really want to delete this offer.");
+            if (is_confirm == false){
+                return false;
+            }else{
+                $('#menu_delete_form').submit()
+            }
+        }
+    </script>
+{% endblock %}

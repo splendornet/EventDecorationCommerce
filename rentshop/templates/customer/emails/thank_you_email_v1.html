@@ -1,0 +1,49 @@
+{% load common %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Thank you</title>
+    <link href="https://fonts.googleapis.com/css?family=Cinzel|Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i" rel="stylesheet">
+</head>
+<style>
+	@font-face { font-family: Tahoma; src: url('../../../CustomPromotion/promotions/static/rentshop/css/fonts/Tahoma Regular font.ttf'); }
+	@font-face { font-family: BankGothicBT; src: url('../../../CustomPromotion/promotions/static/rentshop/css/fonts/Bank Gothic Light.ttf'); }
+	@font-face { font-family: arialMT; src: url('../../../CustomPromotion/promotions/static/rentshop/css/fonts/ARIALMT.ttf'); }
+</style>
+<body>
+	<div style="max-width: 600px;margin-left: auto;margin-right: auto;">
+		<div style="font-family: Tahoma;font-weight:500;font-size: 21.1px;">
+			<div class="header" style="background-image: url('http://takerentpe-dev.progfeel.co.in/media/images/email_images/header-bg-1-transparent.png');height: 200px;background-repeat: no-repeat;background-size: 100% 100%;margin: 0;padding: 0;">
+			</div>
+			<div class="body" style="padding:0 6%;line-height: 40px;  color: #101010;font-family:Tahoma;">
+				<p style="margin-top: -20px;color: #c828a2;">Hello {{vendor.first_name}} {{vendor.last_name}}!</p>
+				<p>“WELCOME TO TAKE RENT PE FAMILY” </p>
+				<p>Thank you for being an Associated Business Partner(ASP) with Take Rent Pe Family. We founded Take Rent Pe because we wanted to create a trustworthy any inspirable platform for you and your services. </br>
+				</p>
+				<p>we truly appreciate you for the services you would be offering on our platform. As a ASP for the events we think we both know this business well so we will always be on the lookout for amazing things in future!</p>
+				<p style="color: #ee4d84;font-weight: 700;">Happy Celebranto!</p>
+<!--				<p><span style="margin-top: 0; color: #c828a2;">Once again thanks for putting your trust on us.</span></p>-->
+
+				<div style="margin-bottom: 0;margin-left: 3%;">
+
+					<div class="brandImg" style="max-width: 113px;height:100%;">
+						{% get_logo_url request as data %}
+						{% if data %}
+						<img src="{{data.logo_url}}" alt="" style="width: 100%;">
+						{% else %}
+						<img src="http://takerentpe-dev.progfeel.co.in/media/images/email_images/logo.png" alt="" style="width: 100%;">
+						{% endif %}
+					</div>
+					<div style="margin-top: -6px;font-size: 10px; font-family: arialMT;font-weight: 600;">
+						<a href="{{domain}}" style="color: #060808;text-decoration: none;">{{domain}}</a>
+					</div>
+				</div>
+			</div>
+			<div class="footer" style="background-image: url('http://takerentpe-dev.progfeel.co.in/media/images/email_images/footer-bg-1-transparent.png');height:135px;background-repeat: no-repeat;background-size: 100% 100%;width: 100%;float: left;margin: 0;">
+				<p style="color: #fff;width: 100%; font-family: Tahoma, Sans-serif;font-weight: 500;line-height: 24px;font-size: 14px;padding-top: 85px;margin-left: auto;margin-right: auto;text-align: center;">(C) 2018-2019, <a href="{{domain}}" style="text-decoration: none;color: #fff;">takerentpe.com</a>, or its affiliates</p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

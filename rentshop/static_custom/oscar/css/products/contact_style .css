@@ -1,0 +1,151 @@
+   
+       @import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import url('https://fonts.googleapis.com/css?family=Playball&display=swap');
+
+
+html {
+  font-family: Arial;
+  font-size: 16px;
+  
+}
+
+
+.main{
+border-top:1px solid #000000;
+
+  
+}
+
+.twitter {
+  
+  width: 100%;
+  float: right;
+   margin-left:100px;
+
+  
+  }
+  
+  .heading{
+ background-color:#FFCC33;
+
+  }
+  .heading1{
+    margin-left:225px;
+
+   margin-top:5px;
+  font-family: 'Playball', cursive;
+  color:#ffffff;
+  }
+    
+  
+  
+  
+  .container {
+
+    display: flex;
+    flex-direction: column;
+
+    
+	margin-top:15px;
+	
+  }
+
+.form-container {
+
+    position: relative;
+	padding-top:10px;
+	padding-left:28px;
+    overflow: hidden;
+    border-radius: .25rem;
+ 	width:65%;
+
+	
+}
+
+.form-group {
+    margin-bottom: 1.3rem;
+	
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+	
+}
+
+.col-2 {
+    flex: 0 0 100%;
+    max-width: 25%;
+}
+
+.col-10 {
+    flex: 0 0 100%;
+    max-width: 70%;
+}
+col-4{
+
+ flex: 0 0 100%;
+    max-width: 75%;
+}
+
+label {
+    display: inline-block;
+    margin-bottom: .5rem;
+	filter: drop-shadow(2px 2px 2px #CCCCCC);
+	
+}
+
+
+.form-control {
+    display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+	filter: drop-shadow(2px 2px 2px #CCCCCC);
+	
+}
+
+.btn {
+    display: inline-block;
+    color: #fff;
+	cursor: pointer;
+	text-align:top;
+  
+	font-size: 1rem;
+    border-radius: .25rem;
+    outline: 0;
+	margin-left:17%;
+}
+
+.btn-primary {background-color:#FFCC00;}
+
+/* Change Style when screen width is 576px or more */
+@media (max-width: 576px) {
+
+   .col-2 {
+        flex: 0 0 16.666667%;
+        max-width: 16.666667%;
+		
+    }
+    .col-10 {
+        flex: 0 0 83.333333%;
+        max-width: 83.333333%;
+		
+    }
+    label {
+        margin-bottom: 0;
+    }
+    .btn {
+        display: inline-block;
+        width: auto;
+    }
+	
+}

@@ -1,0 +1,376 @@
+{% extends 'dashboard/layout.html' %}
+{% load currency_filters %}
+{% load sorting_tags %}
+{% load i18n %}
+{% load widget_tweaks %}
+
+{% block body_class %}{{ block.super }} orders{% endblock %}
+
+{% block title %}
+    {% trans "Custom Orders" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li>
+            <a href="{% url 'dashboard:sales-custom-orders' %}">
+                {% trans "Custom Orders" %}
+            </a>
+        </li>
+        <li class="active">{% trans "Generate Custom Order" %}</li>
+    </ul>
+{% endblock %}
+
+{% block header %}
+    <div class="page-header">
+        <h1>{% trans "Generate Custom Order" %}</h1>
+    </div>
+{% endblock header %}
+
+{% block dashboard_content %}
+
+    <style>
+        .form-set-div{
+            margin-bottom: 15px;
+            border-bottom: 1px solid #777;
+            padding-bottom: 15px;
+        }
+        .tr_clone
+    {
+    display:none
+    }
+    .row-product{
+            border-bottom: 1px solid #666;
+    margin-bottom: 15px;
+    }
+    .head{    border: 1px solid;
+    padding: 5px;
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+    border-color: #bbbbbb;
+    text-align:right;
+    }
+    </style>
+
+    <div class="table-header">
+        <h3><span class="icon-shopping-cart icon-large"></span> {% trans "Create Order" %}</h3>
+    </div>
+
+    <div class="well">
+        <table class="table table-bordered" style="font-size:13px;">
+            <thead>
+                <tr>
+                    <th>Order Number</th>
+                    <th>Customer Name</th>
+                    <th>Customer Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>#{{basket.id}}</td>
+                    <td>{{customer.get_full_name}}</td>
+                    <td>{{customer.email}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="head">
+        <button class="btn btn-md btn-primary" onclick="add_product()">Add product</button>
+    </div>
+    <div class="well">
+        <div class="row product-tab" style="">
+
+        </div>
+    </div>
+
+    <form action="/dashboard/sales-team/custom-orders-create/" method="post" class="form-inline" id="search_form">
+        {% csrf_token %}
+        <input value="{{enquiry_id}}" name="enquiry_id" hidden>
+        <input id="cart_json" name="cart_json" style="width:100%;" hidden>
+        <input id="cart" value="{{basket.id}}" name="basket_temp" style="width:100%;" hidden>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <div id="product-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add product</h4>
+                </div>
+                <div class="modal-body">
+                    <p style="color:red; font-size:14px;background-color: #ddd; padding: 5px; border-radius: 3px;" id="error_message" hidden></p>
+                    <div class="form-group">
+                        <label for="sel1">Select Product:</label> <br/>
+                        <select class="form-control" id="product" style="width:100%;">
+                            <option value="">Select product</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="qty">Quantity:</label> <br/>
+                        <input type="number" class="form-control" value="1" id="qty" name="qty" style="width:100%;"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Date:</label> <br/>
+                        <input type="text" class="form-control" id="datepicker" name="daterange" style="width:100%;"/>
+                        <input type="hidden" class="form-control" id="id_booking_start_date" name="id_booking_start_date" style="width:100%;"/>
+                        <input type="hidden" class="form-control" id="id_booking_end_date" name="id_booking_end_date" style="width:100%;"/>
+                    </div>
+                    <div class="" id="bind">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="apply_bind()">Add Product</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock dashboard_content %}
+
+{% load static %}
+{% block extrascripts %}
+    {{ block.super }}
+
+    <!-- Include Date Range Picker -->
+    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="{% static 'core_assets/packages/boostrap-daterange-picker-3/2/daterangepicker.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'core_assets/packages/boostrap-daterange-picker-3/2/daterangepicker.css' %}"/>
+    <script type="text/javascript" src="{% static 'core_assets/packages/boostrap-daterange-picker-3/product.daterangepicker.js' %}"></script>
+    <script src="{% static 'oscar/js/dashboard/orders/order_details.js' %}"></script>
+
+
+    <script>
+
+        var cart_array = [];
+        var product_array = [];
+
+        function hide_error(){
+            $('#error_message').hide();
+            $('#error_message').html('');
+        }
+        function show_error(error){
+            $('#error_message').show();
+            $('#error_message').html(error);
+        }
+
+        function apply_bind(){
+
+            hide_error();
+
+            var product = $('#product').val();
+            var qty = $('#qty').val();
+            var id_booking_start_date = $('#id_booking_start_date').val();
+            var id_booking_end_date = $('#id_booking_end_date').val();
+            var order_type = $('#order-type').val();
+
+            var attributes = [];
+            $("select[name='attr[]']").each(function() {
+                var selected = $(this).find('option:selected');
+                var extra = selected.data('foo');
+                attributes.push(
+                    {
+                        'name': extra,
+                        'value': this.value,
+                    }
+                )
+            });
+
+            if (product == ''){
+                hide_error(); show_error('Please select product.');
+                return false;
+            }
+
+            if (qty == ''){
+                hide_error(); show_error('Please select quantity.');
+                return false;
+            }
+
+            if (id_booking_start_date == ''){
+                hide_error(); show_error('Please select booking date.');
+                return false;
+            }
+
+            if (id_booking_end_date == ''){
+                hide_error(); show_error('Please select booking date.');
+                return false;
+            }
+
+            if (id_booking_end_date == ''){
+                hide_error(); show_error('Please select booking date.');
+                return false;
+            }
+
+            if (order_type == ''){
+                hide_error(); show_error('Please select order type.');
+                return false;
+            }
+
+            var cart_product = {
+                'product': product,
+                'qty': qty,
+                'booking_start_date': id_booking_start_date,
+                'booking_end_date': id_booking_end_date,
+                'order_type': order_type,
+                'attributes': attributes
+            }
+
+            cart_array.push(cart_product)
+            $('#cart_json').val(JSON.stringify(cart_array));
+            var c = $('#cart_json').val();
+
+            product_array.push(product);
+            $('.product-tab').append('<div class="col-md-12 row-product" id='+product+'><div class="col-md-2 col-3-title"><label>Product</label><br/><p>'+$('#product option:selected').text()+'</p></div><div class="col-md-2 col-3-title"><label>Quantity</label><br/><p>'+qty+'</p></div><div class="col-md-2 col-3-title"><label>Date</label><br/><p>'+id_booking_start_date+', '+id_booking_end_date+'</p></div><div class="col-md-2 col-3-title"><label>Type</label><br/><p>'+order_type+'</p></div><div class="col-md-2 col-3-title"><label></label><br/><p><button type="button" onclick="remove_product('+product+')" class="btn btn-xs btn-danger">Remove</button></p></div></div>')
+            $('#product-modal').modal('toggle');
+        }
+
+        function remove_product(product){
+
+            $('#'+product).remove();
+            product_array.pop(product);
+            var product = product;
+            $.each(cart_array, function (i) {
+                if(cart_array[i]){
+                    if (cart_array[i].product == product){
+                        delete cart_array[i]
+                    }
+                }
+            });
+
+            var filter_cart_array = cart_array.filter(function (el) {
+                return el != null;
+            });
+
+            $('#cart_json').val(JSON.stringify(filter_cart_array));
+            var c = $('#cart_json').val();
+
+        }
+
+        function bind_product(product){
+            $.ajax({
+                type:'GET',
+                url : '/get_product_attribute/',
+                data : {
+                    product_id: product,
+                },
+                success : function(data){
+                    var div = '#bind';
+                    var div_obj = $(div);
+                    div_obj.show();
+                    div_obj.html(data);
+
+                },
+                failure : function(result){
+                },
+            });
+            $.ajax({
+                type:'GET',
+                url : '/get_product_attribute/',
+                data : {
+                    product_id: product,
+                    call_type: '1'
+                },
+                success : function(data){
+                    datepicker(product, data)
+                },
+                failure : function(result){
+                },
+            });
+        }
+
+        function reset_modal(){
+            $('#product').val('');
+            $('#qty').val('1');
+            $('#bind').html('');
+        }
+
+        function add_product(){
+
+            reset_modal()
+            $('#product-modal').modal('show');
+
+            $('#product').select2({
+
+                minimumInputLength: 2,
+                ajax: {
+                    url: '/get_products_order',
+                    dataType: 'json',
+                    type: "GET",
+                    data: function (term) {
+                        return {
+                            term: term,
+                            exclude: product_array
+                        };
+                    },
+                    processResults: function (response) {
+                        return {
+                            results: $.map(response, function (item) {
+
+                                return {
+                                    text: item.itemName,
+                                    id: item.id
+                                }
+                            })
+                        };
+                    },
+                }
+            });
+
+            $('#product').on('change', function(){
+                bind_product(this.value);
+
+            });
+
+        }
+
+        $( document ).ready(function() {
+            $('.dt-picker').daterangepicker({});
+        });
+
+        $('.custom-order-product').on('change', function(){
+            //alert(this.value);
+        });
+
+        function product_change(e, row){
+            product_id = e.value
+            $.ajax({
+                type:'GET',
+                url : '/get_product_attribute/',
+                data : {
+                    product_id: product_id,
+                    row: row
+                },
+
+                success : function(data){
+                    //var attributes = JSON.parse(data);
+                    var attr_select = [];
+                    var div = '#attribute_'+row;
+                    var div_obj = $(div);
+                    div_obj.show();
+
+                    div_obj.html(data);
+
+                },
+                failure : function(result){
+                },
+            });
+        }
+
+    </script>
+
+{% endblock %}
+
+{% block onbodyload %}
+    {{ block.super }}
+    oscar.dashboard.orders.initTable();
+    oscar.dashboard.search.init();
+
+{% endblock onbodyload %}

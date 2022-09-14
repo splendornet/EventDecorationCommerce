@@ -1,0 +1,106 @@
+{% load currency_filters %}
+{% load i18n %}
+{% load purchase_info_tags %}
+{% load common %}
+
+<style>
+    .form-control:focus {
+        border-color: #eb5578 !important;
+        outline: 0;
+        -webkit-box-shadow: none !important;
+        box-shadow: none !important;
+    }
+</style>
+
+<div class="panel-group" id="accordion">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+                    Offer Range
+                </a>
+            </h4>
+        </div>
+        <div id="collapse1" class="panel-collapse collapse in">
+            <div class="panel-body">
+                <div class="form-group full-input">
+                    <label for="sel1">Select price range:</label>
+                    {{search_form.price_range}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
+                    Select Category
+                </a>
+            </h4>
+        </div>
+        <div id="collapse2" class="panel-collapse collapse in">
+            <div class="panel-body">
+                <div class="form-group full-input">
+                    <label for="sel1">Select category:</label>
+                    {{search_form.category}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!--    <div class="panel panel-default">-->
+<!--        <div class="panel-heading">-->
+<!--            <h4 class="panel-title">-->
+<!--                <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">-->
+<!--                    Select Event-->
+<!--                </a>-->
+<!--            </h4>-->
+<!--        </div>-->
+<!--        <div id="collapse3" class="panel-collapse collapse in">-->
+<!--            <div class="panel-body">-->
+<!--                <div class="form-group full-input">-->
+<!--                    <label for="sel1">Select events:</label>-->
+<!--                    {{search_form.event}}-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+    {% get_category_wise_filter category as filter_data %}
+    {% if filter_data %}
+    {% for attr , values in filter_data.items %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
+                    Select {{attr|title}} :
+                </a>
+            </h4>
+        </div>
+        <div id="collapse2" class="panel-collapse collapse in">
+            <div class="panel-body">
+                <div class="form-group full-input">
+                    <label for="sel1">Select {{attr}} :</label>
+                    <select name="control_att" id="id_filter_list_{{attr}}" data-original-title='{{attr}}' class="form-control" onchange="trigger_filter_select(this, '{{attr}}')" id="id_{{attr}}_mapping_set-{{forloop.counter0}}-attribute" style="margin:-3px 1px;">
+                        <option value="" selected="">---------</option>
+                        {% for value in values %}
+                        {% check_selected_filter value request.GET.filter_list as selected_value %}
+                        {% if selected_value %}
+                                <option value="{{value}}" selected>{{value}}</option>
+                            {% else %}
+                                <option value="{{value}}">{{value}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+    <input type="hidden" id="id_filter_list" name="filter_list" value="{% if request.GET.filter_list %} {{request.GET.filter_list}} {% endif %}">
+    <div class="col-md-12 text-center">
+        <button class="btn-trp applay-filter" type="submit">Apply Filter</button>
+        <a  href="{{ request.path }}"><button class="btn-trp applay-filter" type="button">Reset</button></a>
+    </div>
+</div>
+

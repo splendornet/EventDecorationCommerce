@@ -1,0 +1,92 @@
+{% load currency_filters %}
+{% load category_tags %}
+{% load common %}
+{% load staticfiles %}
+{% load i18n %}
+{% universe as setting %}
+    <footer>
+      <div class="trp-footer-wrapper pb-70 pt-70">
+        <div class="row trp-row">
+          <div class="col-md-3 ">
+            <h3 class="trp-foot-sec-title">Useful Links</h3>
+            <div class="row trp-row" >
+              <div class="col-md-6 col-sm-3 col-xs-6">
+                <ul class="trp-quick-links">
+                  <li><a href="{% url 'about_us' %}" target="_blank">About us </a></li>
+                  <li><a href="{% url 'faq' %}" target="_blank">FAQ’s </a></li>
+                  <li><a href="#id_trp-how-to-rent">How to rent </a></li>
+                  <!-- <li><a href="#">Gallery </a></li> -->
+                  <li><a href="https://blog.takerentpe.com/" target="_blank">Blog</a></li>
+
+                </ul>
+              </div>
+              <div class="col-md-6 col-sm-3 col-xs-6">
+                <ul class="trp-quick-links">
+                  {% header_tag as header_obj %}
+                  {% for head_menu in header_obj %}
+                  {% if head_menu.title == "My Offers" %}
+                  {% offers_url as offer_link %}
+                {% if offer_link %}
+                  <li class="trp-foot-has-icon"><a href="{{ offer_link }}" target="_blank"><img src="{% static 'new_design/assets/images/offer-icon.svg' %}" alt=""> <span> Offers</span></a></li>
+                {% else %}
+                  <li class="trp-foot-has-icon"><a href="{% url 'catalogue:header_category_product' pk=head_menu.id %}" target="_blank"><img src="{% static 'new_design/assets/images/offer-icon.svg' %}" alt=""> <span> Offers</span></a></li>
+                {% endif %}
+                  {% endif %}
+                  {% if head_menu.title == "Corporate Offers" %}
+                  <li><a href="{% url 'catalogue:header_category_manage_product' pk=head_menu.id %}" target="_blank">Corporate</a></li>
+                  {% endif %}
+                  {% if head_menu.title == "Exhibitions Offers" %}
+                  <li><a href="{% url 'catalogue:header_category_product' pk=head_menu.id %}" target="_blank">Exhibitions</a></li>
+                  {% endif %}
+                  {% endfor %}
+                  <li><a href="{% url 'register-vendor' %}" target="_blank">ASP Register </a></li>
+                  <li><a href="{% url 'terms-and-conditions' %}" target="_blank">Terms & conditions </a></li>
+                  <li><a href="{% url 'policies' %}" target="_blank">Policies</a></li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+          <div class="col-md-6">
+            <h3 class="trp-foot-sec-title">Quick Links</h3>
+            <div class="row trp-row" >
+              {% split_to_4_columns as categories_list %}
+              {% if categories_list %}
+              {% for category_li in categories_list %}
+              <div class="col-md-3 col-sm-3 col-xs-6">
+                <ul class="trp-quick-links">
+                  {% for category in category_li %}
+                  <li><a href="{{category.get_absolute_url}}" target="_blank">{{category.name}}</a></li>
+                  {% endfor %}
+                </ul>
+              </div>
+              {% endfor %}
+              {% endif %}
+
+            </div>
+          </div>
+          <div class="col-md-3 trp-mob-padding-15">
+            <h3 class="trp-foot-sec-title trp-contact-p-0">Contact us</h3>
+            <ul class="trp-quick-links trp-foot-contact">
+              <li class="trp-foot-has-icon"><a href="mailto:{{setting.SUPPORT_EMAIL}}"><img src="{% static 'new_design/assets/images/foot-icon-mail.svg' %}" alt=""><span>  {{setting.SUPPORT_EMAIL}}</span></a></li>
+              <li class="trp-foot-has-icon"><a href="tel:+917378989996"><img src="{% static 'new_design/assets/images/foot-icon-phone.svg' %}" alt=""><span>  {{setting.SUPPORT_NUMBER}}</span></a></li>
+            </ul>
+            <ul class="trp-quick-links trp-foot-social">
+              {% get_social_link request as data %}
+              <li><a href="{% if data.fb_link %} {{data.fb_link}} {% else %} https://www.facebook.com/Take-Rent-Pe-101019151839514 {% endif %}" target="_blank"><img src="{% static 'new_design/assets/images/social-facebook.svg' %}" alt="facebook"></a></li>
+              <li><a href="{% if data.twitter_link %} {{data.twitter_link}} {% else %} https://twitter.com/take_rent_pe {% endif %}" target="_blank"><img src="{% static 'new_design/assets/images/social-twitter.svg' %}" alt="twitter"></a></li>
+              <li><a href="{% if data.youtube_link %} {{data.youtube_link}} {% else %}https://www.youtube.com/channel/UCW7mHue2nbWxqE7xCAKi2VQ {% endif %}" target="_blank"><img src="{% static 'new_design/assets/images/social-yt.svg' %}" alt="youtube"></a></li>
+              <li><a href="{% if data.insta_link %} {{data.insta_link}} {% else %}https://www.instagram.com/takerentpe/ {% endif %}" target="_blank"><img src="{% static 'new_design/assets/images/social-instagram.svg' %}" alt="instagram"></a></li>
+              <li><a href="https://wa.me/+917378989996" target="_blank"><img src="{% static 'new_design/assets/images/social-whatsapp.svg' %}" alt="whatsapp"></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+      <div class="trp-copyright text-center">
+        <p class="text-center">COPYRIGHT © 2021 TAKE RENT PE, ALL RIGHTS RESERVED</p>
+      </div>
+    </footer>
+
+
+

@@ -1,0 +1,142 @@
+{% extends "customer/baseaccountpage.html" %}
+{% load i18n %}
+{% load currency_filters %}
+{% load staticfiles %}
+
+{% block tabcontent %}
+
+    <style>
+        body {
+	    margin: 0;
+	    font-family: "Arial", sans-serif;
+    }
+
+    .addr {
+        margin-left: 5%;
+        margin-top: 5px;
+        ;
+    }
+
+    .h6 {
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: bold;
+        font-size: 1vw;
+        color: #edab00;
+    }
+
+    .Table_product {
+        display: table;
+        font-family: 'Arial';
+        font-size: 1.1vw;
+        border-collapse: collapse;
+        width: 85%;
+        margin-left: 5%;
+        margin-top: 25px;
+        border: 1px solid #CCCCCC;
+        text-align: center;
+        color: #000000;
+    }
+
+    .Headings {
+        display: table-row;
+        background-color: #edab00;
+        width: 17%;
+        border: 1px solid #CCCCCC;
+        color: #ffffff;
+        font-weight: lighter;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .Rows {
+        display: table-row;
+        border: 1px solid #CCCCCC;
+        vertical-align: middle;
+    }
+
+    .Cells {
+        display: table-cell;
+        padding: 10px;
+        width: 17%;
+        border: 1px solid #CCCCCC;
+        vertical-align: middle;
+    }
+
+    .Cells a img {
+        cursor: pointer;
+        width: 50%;
+        height: 25%;
+    }
+
+    .Cells img {
+        cursor: pointer;
+        width: 50%;
+        height: 25%;
+    }
+    .Cells a:link { color: #0000EE; }
+    .Cells a:visited{ color: #551A8B; }
+    .Cells a:active { color: #EE0000;}
+    </style>
+
+<h3 class="heading"> My Orders </h3>
+
+<div class="addr">
+    <!--<h6>Customer Address</h6>-->
+    <!--<h7> Rahul Park , Warje</h7>-->
+</div>
+
+<div style="overflow-x:auto;">
+    {% if orders %}
+
+    <div class="Table_product">
+
+        <div class="Headings">
+            <div class="Cells"><p>Order Number</p></div>
+            <div class="Cells"><p>Quantity</p></div>
+            <div class="Cells"><p>Order Date</p></div>
+            <div class="Cells"><p>Total</p></div>
+        </div>
+
+        {% for order in orders %}
+            <div class="Rows">
+                <div class="Cells">
+                    <a href="{% url 'customer:order' order_number=order.number %}">
+                        <p style="text-decoration: underline;">{{order.number}}</p>
+                    </a>
+                </div>
+
+                <div class="Cells">
+                    <p>{{order.num_items}}</p>
+                </div>
+                <div class="Cells">
+                    <p>{{ order.date_placed |date:"d/m/Y"}}</p>
+                </div>
+
+                <div class="Cells">
+                    <p>
+                        {{order.total_incl_tax|currency:order.currency}}
+                    </p>
+                </div>
+            </div>
+        {% endfor %}
+
+
+    </div>
+    {% else %}
+        <h4 style="text-align: center; color: #edab2e; font-size: 28px; margin-top: 3em;">No orders</h4>
+    {% endif %}
+</div>
+
+<script>
+    var element = document.getElementById("my_order_link");
+    element.classList.add("active");
+</script>
+
+
+{% endblock tabcontent %}
+
+{% block extrascripts %}
+{{ block.super }}
+<script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+{% endblock %}
+

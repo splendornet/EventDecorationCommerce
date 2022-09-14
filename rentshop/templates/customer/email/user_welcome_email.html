@@ -1,0 +1,18 @@
+{% extends "customer/emails/base.html" %}
+{% load currency_filters i18n %}
+
+{% block tbody %}
+    <tr>
+        <td class="content-block">
+            <h4>Welcome to TakeRentPe</h4>
+            <hr/>
+            <p>Hi {{first_name}}, </p>
+            <p>Thank you so much for experiencing the shine of events. Our associate service providers (ASP’s) will put a lot of creativity and efforts into your event.</p>
+ <p>We want to ensure that you get the most out of it, if you need any additional assistance, please reply to this email and let us know. Your satisfaction is our top priority and we will make things right for you.
+</p>
+            <p>Happy celebranto,</p>
+            <p style="line-height: 0px;">Rutuja, Take Rent Pe.</p>
+        </td>
+
+    </tr>
+{% endblock %}

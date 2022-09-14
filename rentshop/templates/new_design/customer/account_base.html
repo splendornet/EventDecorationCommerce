@@ -1,0 +1,19 @@
+{% extends 'new_design/base.html' %}
+{% load static %}
+{% load common %}
+{% block content %}
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@100;300;400;500;600;700;800&display=swap" rel="stylesheet">
+     <section class="trp-account-dashboard-sec mt-30 mb-80">
+        <div class="container">
+            <div class="row trp-row trp-aligned-row">
+                <!-- side bar -->
+                {% include "new_design/customer/partials/side_nav.html" %}
+                {% block tabcontent %}
+                {% endblock %}
+            </div>
+        </div>
+    </section>
+    {% block extrascripts %}
+
+    {% endblock %}
+{% endblock %}

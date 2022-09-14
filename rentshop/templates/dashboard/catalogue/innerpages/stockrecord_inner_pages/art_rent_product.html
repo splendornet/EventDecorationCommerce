@@ -1,0 +1,106 @@
+<!--<div class="panel panel-default">-->
+<!--    <div class="panel-heading">-->
+<!--        <h4 class="panel-title">-->
+<!--            Stock Information (Artificial Flower)-->
+<!--      </h4>-->
+<!--    </div>-->
+<!--    <div class="panel-body">-->
+<!--        &lt;!&ndash; unit &ndash;&gt;-->
+<!--        <div class="form-group" style="margin-bottom:10px;">-->
+<!--            <p class="control-label">Unit</p>-->
+<!--            {% include "dashboard/partials/form_field.html" with field=stockrecord_form.unit nolabel=True %}-->
+<!--        </div>-->
+<!--        &lt;!&ndash; unit &ndash;&gt;-->
+
+<!--        &lt;!&ndash; min quantity &ndash;&gt;-->
+<!--        <div class="form-group" style="margin-bottom:10px;">-->
+<!--            <p class="control-label">Minimum Quantity</p>-->
+<!--            {% include "dashboard/partials/form_field.html" with field=stockrecord_form.minimum_qty nolabel=True %}-->
+<!--        </div>-->
+<!--        &lt;!&ndash; min quantity &ndash;&gt;-->
+<!--    </div>-->
+<!--</div>-->
+
+<div class="panel panel-default art_panel">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            Rent Pricing (Real Flower)
+      </h4>
+    </div>
+    <div class="panel-body">
+        <div class="form-group" style="margin-bottom:10px;">
+            <p class="control-label">Price Currency</p>
+            {% include "dashboard/partials/form_field.html" with field=stockrecord_form.price_currency nolabel=True %}
+        </div>
+        <!-- rent market price -->
+        <div class="form-group market_price" style="margin-bottom:10px;">
+            <p class="control-label">Market Price <span class="badge sm-badge">Rent</span></p>
+            {% include "dashboard/partials/form_field.html" with field=stockrecord_form.art_rent_market_price nolabel=True %}
+        </div>
+        <!-- rent market price -->
+
+        <!-- rent price without tax -->
+        <div class="form-group for_tax" style="margin-bottom:10px;">
+            <p class="control-label">Rent Price <span class="badge sm-badge">Excluding tax</span></p>
+            {% include "dashboard/partials/form_field.html" with field=stockrecord_form.art_rent_price nolabel=True %}
+        </div>
+        <!-- rent price without tax -->
+
+        <!-- tax percentage -->
+<!--        <div class="form-group for_tax" style="margin-bottom:10px;>-->
+<!--            <p class="control-label">Tax Percentage %</p>-->
+<!--            {% include "dashboard/partials/form_field.html" with field=stockrecord_form.tax_percentage nolabel=True %}-->
+<!--        </div>-->
+        <!-- tax percentage -->
+
+        <!-- rent saving price -->
+        <div class="form-group" style="margin-bottom:10px;">
+            <p class="control-label">Total Saving <span class="badge sm-badge">Rent</span></p>
+            {% include "dashboard/partials/form_field.html" with field=stockrecord_form.art_rent_total_saving nolabel=True %}
+        </div>
+        <!-- rent saving price -->
+
+    </div>
+</div>
+
+<div class="panel panel-default art_panel">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            Rent Pricing (Auto Calculated) (Real Flower)
+      </h4>
+    </div>
+    <div class="panel-body">
+        <!-- rent price with tax -->
+        <div class="form-group" style="margin-bottom:10px;">
+            <p class="control-label">Rent Price <span class="badge sm-badge">Including tax</span></p>
+            {% include "dashboard/partials/form_field.html" with field=stockrecord_form.art_rent_price_with_tax nolabel=True %}
+        </div>
+        <!-- rent price with tax -->
+
+        <!-- rent round off -->
+        <div class="form-group" style="margin-bottom:10px;">
+            <p class="control-label">Round Off <span class="badge sm-badge">Rent</span></p>
+            {% include "dashboard/partials/form_field.html" with field=stockrecord_form.art_rent_round_off_price nolabel=True %}
+        </div>
+        <!-- rent round off -->
+    </div>
+</div>
+
+<!--<div class="panel panel-default art-shipping-price art_panel">-->
+<!--    <div class="panel-heading">-->
+<!--        <h4 class="panel-title">-->
+<!--           Rent Shipping Price (Artificial Flower)-->
+<!--      </h4>-->
+<!--    </div>-->
+<!--    <div class="panel-body">-->
+<!--        &lt;!&ndash; rent_transportation_cost &ndash;&gt;-->
+<!--        <div class="form-group" style="margin-bottom:10px;">-->
+<!--            <p class="control-label">Rent Transportation Cost</p>-->
+<!--            {% include "dashboard/partials/form_field.html" with field=stockrecord_form.art_rent_transportation_price nolabel=True %}-->
+<!--        </div>-->
+<!--        &lt;!&ndash; rent_transportation_cost &ndash;&gt;-->
+
+
+<!--    </div>-->
+<!--</div>-->
+

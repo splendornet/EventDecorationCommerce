@@ -1,0 +1,248 @@
+{% extends 'dashboard/layout.html' %}
+{% load sorting_tags %}
+{% load i18n %}
+
+{% block body_class %}{{ block.super }} create-page partners{% endblock %}
+{% block title %}
+    {{ partner.name }} | {% trans "Partners" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li>
+            <a href="{% url 'dashboard:partner-list' %}">ASP</a>
+        </li>
+        <li class="active">{{ partner.name }}</li>
+    </ul>
+{% endblock %}
+
+{% block headertext %}{{ partner.name }}{% endblock %}
+
+{% block dashboard_content %}
+    <style>
+        .select2-selection--multiple{width:100%;}
+        .select2-container {width:100%  !important;}
+    </style>
+
+            <div class="table-header">
+                <h2>{{ title }}</h2>
+            </div>
+            <form method="post" class="well" enctype="multipart/form-data">
+                {% csrf_token %}
+                <br/>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label>Business Name</label>
+                            {{form.business_name}}
+                            <p class="color-red">{{form.errors.business_name.as_text}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label>Name</label>
+                            {{form.name}}
+                            <p class="color-red">{{form.errors.name.as_text}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label>Email Id</label> <br/>
+                            {{form.email_id}}
+                            <p class="color-red">{{form.errors.email_id.as_text}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Mobile Number</label>
+                            {{form.telephone_number}}
+                            <p class="color-red">{{form.errors.telephone_number.as_text}}</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Alternate Mobile Number</label>
+                            {{form.alternate_mobile_number}}
+                            <p class="color-red">{{form.errors.alternate_mobile_number.as_text}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Address 1</label>
+                            {{form.address_line_1}}
+                            <p class="color-red">{{form.errors.address_line_1.as_text}}</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Address 2</label>
+                            {{form.address_line_2}}
+                            <p class="color-red">{{form.errors.address_line_2.as_text}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label>Country</label>
+                            {{form.country}}
+                            <p class="color-red">{{form.errors.country.as_text}}</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label>State</label>
+                            {{form.state}}
+                            <p class="color-red">{{form.errors.state.as_text}}</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label>City</label>
+                            {{form.city}}
+                            <p class="color-red">{{form.errors.city.as_text}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label>Pin Code</label>
+                            {{form.pincode}}
+                            <p class="color-red">{{form.errors.pincode.as_text}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label>Digital Signature</label>
+                            {{form.digital_signature}}
+                            <p class="color-red">{{form.errors.digital_signature.as_text}}</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label>PAN Number</label>
+                            {{form.pan_number}}
+                            <p class="color-red">{{form.errors.pan_number.as_text}}</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label>GST Number</label>
+                            {{form.gst_number}}
+                            <p class="color-red">{{form.errors.gst_number.as_text}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label>Active/Inactive</label> <br>
+                            {% if userIsActive %}
+                                <input type="checkbox" id="id_user_active" name="user_active" checked>
+                            {% else %}
+                                <input type="checkbox" id="id_user_active" name="user_active">
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <button type="submit" class="btn btn-md btn-primary">Update</button>
+                <a href="/dashboard/partners" class="btn btn-md btn-default">Cancel</a>
+            </form>
+
+
+
+
+    <!--<div class="row">-->
+        <!--<div class="col-md-12">-->
+            <!--<table class="table table-striped table-bordered table-hover table-responsive">-->
+                <!--<caption><i class="icon-user icon-large"></i>Vendor Information</caption>-->
+                <!--<tbody>-->
+                <!--<tr>-->
+                    <!--<th>Vendor Name</th>-->
+                    <!--<th>Business Name</th>-->
+                    <!--<th>Email Address</th>-->
+                    <!--<th>Contact Number</th>-->
+                    <!--<th>Alternate Number</th>-->
+                    <!--<th>Address</th>-->
+                    <!--<th>City</th>-->
+                    <!--<th>State</th>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                    <!--<td>{{partner.name}}</td>-->
+                    <!--<td>{{partner.business_name}}</td>-->
+                    <!--<td>{{partner.email_id}}</td>-->
+                    <!--<td>{{partner.telephone_number}}</td>-->
+                    <!--<td>{{partner.alternate_mobile_number}}</td>-->
+                    <!--<td>{{partner.address_line_1}}, {{partner.address_line_2}} - {{partner.pincode}}</td>-->
+                    <!--<td>{{partner.city}}</td>-->
+                    <!--<td>{{partner.state}}</td>-->
+                <!--</tr>-->
+                <!--</tbody>-->
+            <!--</table>-->
+        <!--</div>-->
+    <!--</div>-->
+
+    <!--<div class="row">-->
+        <!--<div class="col-md-12">-->
+        <!--<h2>{% trans "Users" %}</h2>-->
+        <!--{% if users %}-->
+            <!--<table class="table table-striped table-bordered">-->
+                <!--<thead>-->
+                    <!--<tr>-->
+                        <!--<th>{% trans 'Email' %}</th>-->
+                        <!--<th>{% trans 'First name' %}</th>-->
+                        <!--<th>{% trans 'Last name' %}</th>-->
+                        <!--<th>&nbsp;</th>-->
+                    <!--</tr>-->
+                <!--</thead>-->
+                <!--<tbody>-->
+                    <!--{% for user in users %}-->
+                        <!--<tr>-->
+                            <!--<td><a href="{% url 'dashboard:partner-user-update' partner_pk=partner.pk user_pk=user.id %}">{{ user.email }}</a></td>-->
+                            <!--<td>{{ user.first_name|default:"-" }}</td>-->
+                            <!--<td>{{ user.last_name|default:"-" }}</td>-->
+                            <!--<td>-->
+                                <!--<form action="{% url 'dashboard:partner-user-unlink' partner_pk=partner.id user_pk=user.id %}" method="post">-->
+                                    <!--{% csrf_token %}-->
+                                    <!--<button type="submit" class="btn btn-danger" data-loading-text="{% trans 'Unlinking...' %}">{% trans 'Unlink user' %}</button>-->
+                                <!--</form>-->
+                            <!--</td>-->
+                        <!--</tr>-->
+                    <!--{% endfor %}-->
+                <!--</tbody>-->
+            <!--</table>-->
+        <!--{% else %}-->
+            <!--<p>{% trans "No users linked." %}</p>-->
+        <!--{% endif %}-->
+        <!--<div class="form-group">-->
+            <!--<a class="btn btn-info" href="{% url 'dashboard:partner-user-create' partner_pk=partner.pk %}" >{% trans "Link a new user" %}</a>-->
+            <!--<a class="btn btn-info" href="{% url 'dashboard:partner-user-select' partner_pk=partner.pk %}" >{% trans "Link an existing user" %}</a>-->
+        <!--</div>-->
+    <!--</div>-->
+
+
+{% endblock dashboard_content %}

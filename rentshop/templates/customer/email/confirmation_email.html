@@ -1,0 +1,17 @@
+{% extends "customer/emails/base.html" %}
+{% load currency_filters i18n %}
+
+{% block tbody %}
+    <tr>
+        <td class="content-block">
+            <p xmlns="http://www.w3.org/1999/html">Hello {{user.first_name}} ,</p>
+            <p>This is Rutuja from Take Rent Pe. Thank you so much for experiencing services from Take Rent Pe. We follow the protocols to make sure that our service is made of the best quality and fulfill your expectations.
+            </p>
+            <p>We will follow up with you soon to make sure everything is going well with your new product. If you do have any questions or issues, make sure to contact us at:</p>
+            <a href="{{domain}}{% url 'contact-us'%}"> {{domain}}{% url 'contact-us'%}</a><br/>
+
+            <p>Happy celebranto,</p>
+            <p style="line-height: 0px;">Rutuja, Take Rent Pe.</p><br/>
+        </td>
+    </tr>
+{% endblock %}

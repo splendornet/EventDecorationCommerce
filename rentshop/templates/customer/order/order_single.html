@@ -1,0 +1,332 @@
+{% extends "customer/baseaccountpage.html" %}
+{% load currency_filters %}
+{% load display_tags %}
+{% load i18n %}
+{% load reviews_tags %}
+{% load static %}
+
+{% block tabcontent %}
+
+<style>
+
+body {
+	margin: 0;
+	font-family: "Arial", sans-serif;
+}
+
+.addr {
+	margin-left: 6%;
+	margin-top: 5px;
+	font-family: 'Arial';
+	font-size: 1.1vw;
+	border-collapse: collapse;
+	width: 85%;
+	text-align: left;
+	color: #edab00;
+}
+
+.first {
+	float: left;
+	width: 20%;
+	border: none;
+	text-align: left;
+	font-size: 1vw;
+	color: #1c080a;
+}
+
+.second {
+	float: left;
+	width: 20%;
+	border: none;
+	text-align: center;
+	font-size: 1vw;
+	color: #1c080a;
+}
+
+.third {
+	float: left;
+	width: 20%;
+	border: none;
+	text-align: center;
+	font-size: 1vw;
+	color: #1c080a;
+}
+
+.fourth {
+	float: left;
+	width: 20%;
+	border: none;
+	text-align: center;
+	font-size: 1vw;
+	color: #1c080a;
+}
+
+p {
+	font-family: Arial;
+	font-weight: bold;
+	font-size: 0.9vw;
+	color: #1c080a;
+}
+
+p a {
+	font-family: Arial;
+	font-weight: bold;
+	font-size: 0.9vw;
+	color: #1c080a;
+	text-decoration: underline;
+}
+
+p a:hover {
+	text-decoration: none;
+	color: #000000;
+}
+
+h6 {
+	font-family: Arial;
+	font-weight: bold;
+	font-size: 1vw;
+	color: #f1bc19;
+}
+
+h6 a {
+	font-family: Arial;
+	font-weight: bold;
+	font-size: 1vw;
+	color: #f1bc19;
+	text-decoration: underline;
+}
+
+h6 a:hover {
+	text-decoration: none;
+	color: #f1bc19;
+}
+
+h7 {
+	color: #000000;
+	font-size: 0.9vw;
+}
+
+.table2 {
+	width: 70%;
+	height: 70%;
+	border: 1px solid #CCCCCC;
+	margin-top: 10px;
+	margin-left: 5%;
+	font-family: 'Arial';
+	font-size: 1.1vw;
+	padding: 10px;
+	color: #000000;
+}
+
+.first-block {
+	float: left;
+	width: 35%;
+}
+
+.second-block {
+	float: left;
+	width: 35%;
+}
+
+.third-block {
+	float: left;
+	width: 25%;
+}
+
+.Table {
+	display: table;
+	margin-top: 10px;
+}
+
+.Title {
+	display: table-caption;
+	text-align: center;
+	font-weight: bold;
+	font-size: larger;
+}
+
+.Row {
+	display: table-row;
+}
+
+.Cell {
+	display: table-cell;
+	height: 5px;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.table2 td {
+	text-align: left;
+	font-size: 1vw;
+	color: #000000;
+	width: 17%;
+	border: none;
+	height: 90px;
+}
+
+a {
+	cursor: pointer;
+}
+
+.checked {
+	color: orange;
+}
+
+</style>
+
+<h3 class="heading"> My Product Details </h3>
+
+<div class="addr" style="overflow-x:auto;">
+    <div class="addr_table">
+
+        <div class="first">
+            <h6>Product Name</h6>
+            <h7>{{product}}</h7>
+        </div>
+
+        <div class="second" >
+            <h6>Star Rating</h6>
+
+            {% if product.rating|floatformat == '1' %}
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
+            {% elif product.rating|floatformat == '2' %}
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
+            {% elif product.rating|floatformat == '3' %}
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
+            {% elif product.rating|floatformat == '4' %}
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star"></span>
+            {% elif product.rating|floatformat == '5' %}
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+            {% else %}
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
+            {% endif %}
+        </div>
+
+        <div class="third" >
+            <h6>Order Number</h6>
+            <h7>{{order.number}}</h7><br /><br />
+        </div>
+
+        <div class="fourth" >
+            <h6><a href="#0">Invoice <i class="fa fa-chevron-circle-down" aria-hidden="true"></i></a></h6>
+        </div>
+
+    </div>
+</div><!--addr-->
+<br />
+
+<div class="table2">
+    <div class="first-block">
+        <p>Shipping Address</p>
+        <h7>
+            {{order.shipping_address.line1}}, {{order.shipping_address.line2}}
+            {{order.shipping_address.line3}}, {{order.shipping_address.state}},
+            {{order.shipping_address.postcode}}
+        </h7>
+    </div>
+
+    <div class="second-block" >
+        <p hidden>Referal Code</p>
+        <h7 hidden> Abcd1234</h7><br /><br />
+        <p><a href="{{product.get_absolute_url}}    ">Write A Review</a></p>
+    </div>
+
+    <div class="third-block">
+
+        <p>Order Summary</p>
+
+        <div class="Table">
+
+            <div class="Row">
+                <div class="Cell">
+                    <h7>Qty:</h7>
+                </div>
+                <div class="Cell">
+
+                </div>
+                <div class="Cell">
+                    <h7>{{line.quantity}}</h7>
+                </div>
+            </div>
+
+            <div class="Row">
+                <div class="Cell">
+                    <h7>Cost:</h7>
+                </div>
+                <div class="Cell">
+
+                </div>
+                <div class="Cell">
+                    <h7>{{line.unit_price_excl_tax|currency:order.currency }}</h7>
+                </div>
+            </div>
+
+
+            <div class="Row">
+                <div class="Cell">
+                    <h7>SubTotal:</h7>
+                </div>
+                <div class="Cell">
+
+                </div>
+                <div class="Cell">
+                    <h7>{{line.line_price_excl_tax|currency:order.currency }}</h7>
+                </div>
+            </div>
+            <br />
+
+            <div class="Row">
+                <div class="Cell">
+
+                    <p>GrandTotal:</p>
+                </div>
+                <div class="Cell">
+
+                </div>
+                <div class="Cell">
+                    <p>{{order.basket_total_incl_tax|currency:order.currency }}</p>
+                </div>
+            </div>
+
+        </div>
+
+    </div><!--thirdblock-->
+
+
+</div><!--table2-->
+
+
+<script>
+    var element = document.getElementById("my_order_link");
+    element.classList.add("active");
+</script>
+
+
+{% endblock tabcontent %}
+
+

@@ -1,0 +1,97 @@
+{% extends "customer/baseaccountpage.html" %}
+{% load i18n %}
+{% load currency_filters %}
+{% load staticfiles %}
+
+{% block tabcontent %}
+
+    <style>
+        body {
+	    margin: 0;
+	    font-family: "Arial", sans-serif;
+    }
+
+    .addr {
+        margin-left: 5%;
+        margin-top: 5px;
+        ;
+    }
+
+    .h6 {
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: bold;
+        font-size: 1vw;
+        color: #edab00;
+    }
+
+    .Table_product {
+        display: table;
+        font-family: 'Arial';
+        font-size: 1.1vw;
+        border-collapse: collapse;
+        width: 85%;
+        margin-left: 5%;
+        margin-top: 25px;
+        border: 1px solid #CCCCCC;
+        text-align: center;
+        color: #000000;
+    }
+
+    .Headings {
+        display: table-row;
+        background-color: #edab00;
+        width: 17%;
+        border: 1px solid #CCCCCC;
+        color: #ffffff;
+        font-weight: lighter;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .Rows {
+        display: table-row;
+        border: 1px solid #CCCCCC;
+        vertical-align: middle;
+    }
+
+    .Cells {
+        display: table-cell;
+        padding: 10px;
+        width: 17%;
+        border: 1px solid #CCCCCC;
+        vertical-align: middle;
+    }
+
+    .Cells a img {
+        cursor: pointer;
+        width: 50%;
+        height: 25%;
+    }
+
+    .Cells img {
+        cursor: pointer;
+        width: 50%;
+        height: 25%;
+    }
+    </style>
+
+<h3 class="heading"> My Coupons </h3>
+
+<div style="overflow-x:auto;">
+    {% if coupons %}
+    {% else %}
+        <h4 style="text-align: center; color: #edab2e; font-size: 28px; margin-top: 3em;">
+            Coming soon
+        </h4>
+    {% endif %}
+</div>
+
+<script>
+    var element = document.getElementById("my_coupon_link");
+    element.classList.add("active");
+</script>
+
+
+{% endblock tabcontent %}
+
+

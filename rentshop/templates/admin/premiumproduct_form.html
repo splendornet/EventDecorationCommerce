@@ -1,0 +1,28 @@
+{% extends "admin/change_form.html" %}
+
+
+{% block content %}
+{{ block.super }}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+
+<script>
+function get_products(){
+            var category_id = $('#id_category').val();
+            django.jQuery.ajax({
+                url: '/load_products',
+                data: {
+                  'category_id': category_id
+                },
+                success: function (data) {
+                    django.jQuery("#id_product_from").html(data);
+                }
+            });
+        }
+</script>
+
+{% endblock %}
+{% block extra_script %}
+
+
+{% endblock %}

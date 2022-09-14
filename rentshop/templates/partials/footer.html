@@ -1,0 +1,614 @@
+{% load i18n %}
+{% load category_tags %}
+{% load common %}
+{% universe as uni %}
+{% footer_text as foot %}
+{% contact_info as cn_info %}
+{% review_list as reviews %}
+{% load static %}
+
+<style>
+
+.so-ul {
+    padding:0;
+    list-style: none;
+    margin-left:0px !important;
+}
+.footer-social-icons {
+    width: 350px;
+    display:block;
+    margin: 0 auto;
+}
+.social-icon {
+    color: #fff;
+}
+ul.social-icons {
+    margin-top: 10px;
+
+}
+.social-icons li {
+    vertical-align: top;
+    display: inline;
+    height: 100px;
+}
+.social-icons a {
+    color: #fff;
+    text-decoration: none;
+}
+.fa-facebook {
+    padding:10px 14px;
+    -o-transition:.5s;
+    -ms-transition:.5s;
+    -moz-transition:.5s;
+    -webkit-transition:.5s;
+    transition: .5s;
+    background-color: #322f30;
+}
+.fa-facebook:hover {
+    background-color: #3d5b99;
+}
+.fa-twitter {
+    padding:10px 12px;
+    -o-transition:.5s;
+    -ms-transition:.5s;
+    -moz-transition:.5s;
+    -webkit-transition:.5s;
+    transition: .5s;
+    background-color: #322f30;
+}
+.fa-twitter:hover {
+    background-color: #00aced;
+}
+
+.fa-instagram {
+    padding:10px 12px;
+    -o-transition:.5s;
+    -ms-transition:.5s;
+    -moz-transition:.5s;
+    -webkit-transition:.5s;
+    transition: .5s;
+    background-color: #322f30;
+}
+.fa-instagram:hover {
+    background-color: #00aced;
+}
+
+.fa-rss {
+    padding:10px 14px;
+    -o-transition:.5s;
+    -ms-transition:.5s;
+    -moz-transition:.5s;
+    -webkit-transition:.5s;
+    transition: .5s;
+    background-color: #322f30;
+}
+.fa-rss:hover {
+    background-color: #eb8231;
+}
+.fa-youtube {
+    padding:10px 14px;
+    -o-transition:.5s;
+    -ms-transition:.5s;
+    -moz-transition:.5s;
+    -webkit-transition:.5s;
+    transition: .5s;
+    background-color: #322f30;
+}
+.fa-youtube:hover {
+    background-color: #e64a41;
+}
+.fa-linkedin {
+    padding:10px 14px;
+    -o-transition:.5s;
+    -ms-transition:.5s;
+    -moz-transition:.5s;
+    -webkit-transition:.5s;
+    transition: .5s;
+    background-color: #322f30;
+}
+.fa-linkedin:hover {
+    background-color: #0073a4;
+}
+.fa-github {
+    padding:10px 14px;
+    -o-transition:.5s;
+    -ms-transition:.5s;
+    -moz-transition:.5s;
+    -webkit-transition:.5s;
+    transition: .5s;
+    background-color: #322f30;
+}
+.fa-github:hover {
+    background-color: #5a32a3;
+}
+
+.carousel-indicators .active {
+    width: 12px;
+    height: 12px;
+    margin: 0;
+    background-color: #a55e5e;
+}
+.carousel-indicators{
+    bottom:-41px
+}
+
+.carousel-indicators li{
+    border-color:red !important;
+}
+
+h1.testimonials-header{
+    font-family: "Univers57-Condensed", sans-serif;
+    font-size: 18pt;
+    line-height: 1.1;
+    text-transform: uppercase;
+    font-weight: normal;
+    padding: 6px;
+}
+section#home-reviews{
+	margin: 50px 6px 70px 6px;
+	padding: 100px 0;
+	font-family: "Univers57-Condensed", sans-serif;
+    color: #5d564f;
+    background: #f7f7f7;
+}
+section#home-reviews h2{
+	font-size: 1.75rem;
+	text-transform: uppercase;
+	margin-bottom: 50px;
+}
+.fa-quote-left{
+	padding-right: 10px;
+}
+.fa-quote-right{
+	padding-left: 10px;
+}
+section#home-reviews p{
+	font-size: 13pt;
+}
+.stars{
+	color: #BB8B41;
+}
+
+.review-body{
+    font-size: 15px; line-height: 1.4;
+}
+.review-name{
+    font-size: 15px; line-height: 1.4;
+}
+.review-inner{
+    font-size:14px;
+    //padding:5px;
+    //border:1px solid #000;
+    text-align: left !important;
+}
+
+.rv_title>h6{
+    font-size:16px;
+}
+.rv_body > h6{
+    font-size:13px;
+}
+.rv_user > p {
+    font-size:12px;
+    font-style: italic;
+}
+.no-review > h6{
+    font-size:16px;
+    padding-top: 12px;
+}
+.checked {
+  color: orange;
+}
+
+@media only screen and (max-width: 767px) {
+    .footer_box {
+        margin-top: 0;
+        margin-bottom: 40px;
+    }
+    .rv_title>h6{
+    font-size:14px;
+}
+.rv_body > h6{
+    font-size:12px;
+}
+.rv_user > p {
+    font-size:12px;
+    font-style: italic;
+}
+.no-review > h6{
+    font-size:14px;
+    padding-top: 12px;
+}
+}
+
+
+.carousel-indicators {
+    bottom: -41px;
+    margin-bottom: 18px;
+}
+
+.list-unstyled > li > a:focus{
+    color:#927267 !important
+}
+
+</style>
+
+<footer style="padding-top:0;">
+    <div class="footer-line"></div>
+    <div class="col-sm-12 m-less-padding m-container">
+        <div class="contain-footer">
+
+            <style>
+                #rev_slider_1_1_2 .tp-bullets {
+                    top: 130% !important;
+                    bottom: 0 !important;
+                }
+                #rev_slider_1_1_2 .uranus .tp-bullet {
+                    border-radius: 0%;
+                    box-shadow: 0 0 0 2px #a7a7a7b8;
+                    -webkit-transition: box-shadow 0.3s ease;
+                    transition: box-shadow 0.3s ease;
+                    background: transparent;
+                    width: 10px;
+                    height: 10px;
+                    width: 7px;
+                    height: 7px;
+                }
+                #rev_slider_1_1_2 .uranus .tp-bullet.selected, #rev_slider_1_1_2 .uranus .tp-bullet:hover {
+                    box-shadow: 0 0 0 2px #E3B673;
+                    border: none;
+                    border-radius: 0%;
+                    background: transparent;
+                }
+                #rev_slider_1_1_2 .uranus .tp-bullet.selected .tp-bullet-inner, #rev_slider_1_1_2 .uranus .tp-bullet:hover .tp-bullet-inner {
+                    transform: scale(0.4);
+                    background-color: rgb(251, 251, 251);
+                }
+                .tp-overflow-hidden {
+                    overflow: inherit;
+                }
+                #rev_slider_1_1_2 .tp-leftarrow, .tp-rightarrow{
+                    //display:none;
+                }
+
+            </style>
+
+            <div class="col-lg-6 col-md-6 col-sm-6 remove-padding-mobile">
+                <div class="footer_box">
+                    <h5 data-equal-group="2" style="">
+                        <div class="box_inner">{% trans 'Customer Review' %}</div>
+                    </h5>
+                    <div class="review-box">
+                        {% if reviews %}
+                            
+                            <div id="myCarousel" class="carousel slide" style="min-height: 245px;" data-ride="carousel">
+                                <ol hidden class="carousel-indicators" style="bottom:0; border:0px solid #000">
+                                    {% for r_ol in reviews %}
+                                        <li data-target="#myCarousel" data-slide-to="{{forloop.counter0}}" class="{% if forloop.first %}active{% endif %}"></li>
+                                    {% endfor %}
+                                </ol>
+
+                                <!-- slider -->
+
+
+                                <div id="" class="rev_slider_wrapper fullwidthbanner-container"
+                                     style="margin:0px auto;background-color:#000000;padding:0px;margin-top:0px;margin-bottom:0px;;background-repeat:repeat;background-size:normal;background-position:left top;">
+                                    <div id="rev_slider_1_1_2" class="rev_slider tp-overflow-hidden" style="height: 175px; display:none;" data-version="5.2.4.1">
+                                        <ul class="rev_slider_1_1_2_ul" style="height:119%;">
+                                            {% for r_ol in reviews %}
+                                            {% if r_ol.status == 1 %}
+                                            <li>
+                                                <div class="review-inner">
+                                                    <br/>
+                                                    <div class="rv_title">
+                                                        <h6>{{r_ol.title}}</h6>
+                                                    </div>
+                                                    <div class="rv_body">
+                                                        <h6>{{r_ol.body|striptags|truncatechars:120 }}</h6>
+                                                        {% if r_ol.score == 1 %}
+                                                            <span class="fa fa-star checked"></span>
+                                                            <span class="fa fa-star"></span>
+                                                            <span class="fa fa-star"></span>
+                                                            <span class="fa fa-star"></span>
+                                                            <span class="fa fa-star"></span>
+                                                        {% elif r_ol.score == 2 %}
+                                                            <span class="fa fa-star checked"></span>
+                                                            <span class="fa fa-star checked"></span>
+                                                            <span class="fa fa-star"></span>
+                                                            <span class="fa fa-star"></span>
+                                                            <span class="fa fa-star"></span>
+                                                        {% elif r_ol.score == 3 %}
+                                                            <span class="fa fa-star checked"></span>
+                                                            <span class="fa fa-star checked"></span>
+                                                            <span class="fa fa-star checked"></span>
+                                                            <span class="fa fa-star"></span>
+                                                            <span class="fa fa-star"></span>
+                                                        {% elif r_ol.score == 4 %}
+                                                            <span class="fa fa-star checked"></span>
+                                                            <span class="fa fa-star checked"></span>
+                                                            <span class="fa fa-star checked"></span>
+                                                            <span class="fa fa-star checked"></span>
+                                                            <span class="fa fa-star"></span>
+                                                        {% elif r_ol.score == 5 %}
+                                                            <span class="fa fa-star checked"></span>
+                                                            <span class="fa fa-star checked"></span>
+                                                            <span class="fa fa-star checked"></span>
+                                                            <span class="fa fa-star checked"></span>
+                                                            <span class="fa fa-star checked"></span>
+                                                        {% else %}
+                                                            <span class="fa fa-star"></span>
+                                                            <span class="fa fa-star"></span>
+                                                            <span class="fa fa-star"></span>
+                                                            <span class="fa fa-star"></span>
+                                                            <span class="fa fa-star"></span>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="rv_user">
+                                                        <p>{{r_ol.user.first_name}} {{r_ol.user.last_name}}</p>
+                                                    </div>
+                                                </div>
+
+                                            </li>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </ul>
+                                        <div class="tp-bannertimer" style="height: 5px; background-color: rgba(255, 255, 255, 0.15);"></div>
+                                    </div>
+                                </div>
+
+                                <!-- slider -->
+
+                                <!-- Wrapper for slides -->
+                                <div class="carousel-inner" hidden>
+                                    {% for r_ol in reviews %}
+                                        <div class="item {% if forloop.first %}active{% endif %}">
+                                            <div class="review-inner">
+                                                <br/>
+                                                <div class="rv_title">
+                                                   <h6>{{r_ol.title}}</h6>
+                                               </div>
+                                                <div class="rv_body">
+                                                   <h6>{{r_ol.body}}</h6>
+                                                    {% if r_ol.score == 1 %}
+                                                        <span class="fa fa-star checked"></span>
+                                                        <span class="fa fa-star"></span>
+                                                        <span class="fa fa-star"></span>
+                                                        <span class="fa fa-star"></span>
+                                                        <span class="fa fa-star"></span>
+                                                    {% elif r_ol.score == 2 %}
+                                                        <span class="fa fa-star checked"></span>
+                                                        <span class="fa fa-star checked"></span>
+                                                        <span class="fa fa-star"></span>
+                                                        <span class="fa fa-star"></span>
+                                                        <span class="fa fa-star"></span>
+                                                    {% elif r_ol.score == 3 %}
+                                                        <span class="fa fa-star checked"></span>
+                                                        <span class="fa fa-star checked"></span>
+                                                        <span class="fa fa-star checked"></span>
+                                                        <span class="fa fa-star"></span>
+                                                        <span class="fa fa-star"></span>
+                                                    {% elif r_ol.score == 4 %}
+                                                        <span class="fa fa-star checked"></span>
+                                                        <span class="fa fa-star checked"></span>
+                                                        <span class="fa fa-star checked"></span>
+                                                        <span class="fa fa-star checked"></span>
+                                                        <span class="fa fa-star"></span>
+                                                    {% elif r_ol.score == 5 %}
+                                                        <span class="fa fa-star checked"></span>
+                                                        <span class="fa fa-star checked"></span>
+                                                        <span class="fa fa-star checked"></span>
+                                                        <span class="fa fa-star checked"></span>
+                                                        <span class="fa fa-star checked"></span>
+                                                    {% else %}
+                                                        <span class="fa fa-star"></span>
+                                                        <span class="fa fa-star"></span>
+                                                        <span class="fa fa-star"></span>
+                                                        <span class="fa fa-star"></span>
+                                                        <span class="fa fa-star"></span>
+                                                    {% endif %}
+                                               </div>
+                                               <div class="rv_user">
+                                                   <p>{{r_ol.user.first_name}} {{r_ol.user.last_name}}</p>
+                                               </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="no-review">
+                                <h6>No reviews yet</h6>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="footer-line2"></div>
+            <div class="col-lg-3 col-md-3 col-sm-3 remove-padding-mobile">
+                <div class="footer_box">
+                    <h5 data-equal-group="2"><div class="box_inner">Information</div></h5>
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="{% url 'about_us' %}" target="_blank">About Us</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'terms-and-conditions' %}" target="_blank">Terms & Conditions</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'faq' %}" target="_blank">FAQ</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'policies' %}" target="_blank">Policies</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'how_it_works' %}" target="_blank">How it works</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'register-vendor' %}" target="_blank">ASP register</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-line3"></div>
+            <div class="col-lg-3 col-md-3 col-sm-3" hidden>
+                <div class="footer_box">
+                    <h5 data-equal-group="2"><div class="box_inner">My Account</div></h5>
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="{% url 'customer:profile-view' %}" target="_blank">My Account</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'customer:order-list' %}" target="_blank">Order History</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'customer:wishlists-list' %}" target="_blank">Wish List</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-line4"></div>
+            <div class="col-lg-3 col-md-3 col-sm-3 remove-padding-mobile">
+                <div class="footer_box">
+                    <h5 data-equal-group="2">
+                        <div class="box_inner">Client Support Desk</div>
+                    </h5>
+                    <ul class="list-unstyled">
+                        <li>
+                            <style>
+                                .cn-a{
+                                    color:#927267 !important;
+                                }
+                                .cn-a:hover{
+                                    color:#000 !important;
+                                }
+                            </style>
+                            <a href="{% url 'contact-us' %}" class="cn-a" target="_blank">Contact Us</a>
+                        </li>
+                        <li>
+                            Call Us : {{cn_info.number}}
+                        </li>
+                        <li>
+                            <a href="mailto:admin@takerentpe.com">
+                                Email : <span style="text-transform:lowercase;">admin@takerentpe.com</span>
+                            </a>
+                        </li>
+                        <li>
+                            <div class="footer-social-icons">
+                            <ul class="social-icons so-ul">
+                                {% get_social_link request as data %}
+                                <li><a href="{% if data.fb_link %} {{data.fb_link}} {% else %} https://www.facebook.com/Take-Rent-Pe-101019151839514 {% endif %}" class="social-icon" target="_blank"> <i class="fa fa-facebook"></i></a></li>
+                                <li><a href="{% if data.twitter_link %} {{data.twitter_link}} {% else %} https://twitter.com/take_rent_pe {% endif %}" class="social-icon" target="_blank"> <i class="fa fa-twitter"></i></a></li>
+                                <li><a href="{% if data.youtube_link %} {{data.youtube_link}} {% else %}https://www.youtube.com/channel/UCW7mHue2nbWxqE7xCAKi2VQ {% endif %}" class="social-icon" target="_blank"> <i class="fa fa-youtube"></i></a></li>
+                                <li><a href="{% if data.insta_link %} {{data.insta_link}} {% else %}https://www.instagram.com/takerentpe/ {% endif %}" class="social-icon" target="_blank">
+<!--                                    <img style="margin-top: 5px; position: relative; top:-24px;" alt="takerentpe" src="{% static 'oscar/site_logo/social_icon/images.png' %}">-->
+                                    <i class="fa fa-instagram"></i></a></li>
+
+                            </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <div class="col-sm-12 footer-logo-line bg21">
+    </div>
+    <div class="col-sm-12 logo-footer bg21">
+        <div class="logo-div">
+            <a href="/">
+                {% logo_url request as logourl %}
+                    {% if logourl %}
+                    <img style="margin-top: 5px; position: relative; top:-24px;" alt="takerentpe" src="{% static logourl %}">
+                    {% else %}
+                    <img src="{% static 'oscar/images/header_icons/logo500.png' %}" title="Take Rent Pe" alt="Take Rent Pe" class="img-responsive">
+                    {% endif %}            </a>
+        </div>
+    </div>
+    <div class="col-sm-12 copyright bg21">
+        <div class="container m-header m-less-padding">
+            {{foot}}
+        </div>
+    </div>
+</footer>
+
+
+<footer style="padding-top:0" hidden>
+    <div class="footer-line"></div>
+    <div class="col-sm-12 m-less-padding m-container">
+        <div class="contain-footer">
+            <div class="col-lg-3 col-md-3 col-sm-3">
+                <div class="footer_box">
+                    <h5 data-equal-group="2" style=""><div class="box_inner">Categories</div></h5>
+                    <ul class="list-unstyled">
+                        {% category_tree depth=1 as tree_categories %}
+                        {% for tree_category, info in tree_categories|slice:"5" %}
+                            <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-129">
+                                <a href="{{tree_category.get_absolute_url}}" target="_blank">{{tree_category.name}}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-line2"></div>
+            <div class="col-lg-3 col-md-3 col-sm-3">
+                <div class="footer_box">
+                    <h5 data-equal-group="2"><div class="box_inner">Information</div></h5>
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="{% url 'about_us' %}" target="_blank">About Us</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'terms-and-conditions' %}" target="_blank">Terms & Conditions</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-line3"></div>
+            <div class="col-lg-3 col-md-3 col-sm-3">
+                <div class="footer_box">
+                    <h5 data-equal-group="2"><div class="box_inner">My Account</div></h5>
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="{% url 'customer:profile-view' %}" target="_blank">My Account</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'customer:order-list' %}" target="_blank">Order History</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'customer:wishlists-list' %}" target="_blank">Wish List</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-line4"></div>
+            <div class="col-lg-3 col-md-3 col-sm-3">
+                <div class="footer_box">
+                    <h5 data-equal-group="2"><div class="box_inner">Client Support Desk</div></h5>
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="{% url 'contact-us' %}" target="_blank">Contact Us</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <div class="col-sm-12 footer-logo-line bg21">
+    </div>
+    <div class="col-sm-12 logo-footer bg21">
+        <div class="logo-div">
+            <a href="/">
+                <img src="{% static 'oscar/images/logo/footerlogo.png' %}" title="Take Rent Pe" alt="Take Rent Pe" class="img-responsive"/>
+            </a>
+        </div>
+    </div>
+    <div class="col-sm-12 copyright bg21">
+        <div class="container m-header m-less-padding">
+            {{foot}}
+        </div>
+    </div>
+</footer>
+

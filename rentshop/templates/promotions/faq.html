@@ -1,0 +1,139 @@
+{% extends "layout_2_col.html" %}
+{% load i18n %}
+{% load thumbnail %}
+{% load currency_filters %}
+{% load purchase_info_tags %}
+{% load display_tags %}
+{% load reviews_tags %}
+{% load staticfiles %}
+{% load mathfilters %}
+{% load common %}
+
+{% load product_tags %}
+{% load purchase_info_tags %}
+
+{% block navigation %}
+    {% include "partials/nav_primary.html" with expand_dropdown=1 %}
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block column_left %}
+{% endblock %}
+{% block content %}
+<style>
+    .content{
+        padding-left:20px;
+        padding-right:15px;
+        font-size:14px;
+    }
+    .term{
+    margin-top: 165px;
+    }
+    .container{
+        margin-bottom:20px;
+}
+    }
+    h2{
+        padding-left:20px;
+    }
+    .li-f{
+        font-size:18px;
+        //color:#333;
+    }
+    .ul-x li::marker {
+  content: "\2022";
+  color: #000;
+  font-weight: bold;
+  display: inline-block;
+  width: 1em;
+  margin-left: -1em;
+  font-size:20px;
+}
+</style>
+<div class="container term" style="color:#000 !important">
+    <h2 style="padding-left:0;">FAQ</h2>
+    <h3>About Take Rent Pe</h3>
+    <br/><br/>
+    {% if obj.content %}
+    <ul class="ul-x">
+        <li>
+            {{obj.content|safe}}
+        </li>
+
+    {% else %}
+    <ul class="ul-x">
+        <li>
+            <strong class="li-f">What is Take Rent Pe?</strong>
+            <p class="li-p">Take rent pe is an online platform that allows its users to connect to decorators and create a plan for their event. Its platform enables its clients to create accounts and browse for any kind of event-related material. The company utilizes decorators, professionals, etc.
+ takerentpe.com</p>
+        </li>
+        <li>
+            <strong class="li-f">How does TakeRentPe works?</strong>
+            <p class="li-p">If you need any products/services on rent, you can either browse our categories or search for a product. After selecting the products/services, choose the event date for which you want to book the products/ services, choose the payment and delivery options and takerentpe.com will get the products/ services delivered and collected as per your requirements.</p>
+        </li>
+        <li>
+            <strong class="li-f">How am I assured of the quality?</strong>
+            <p class="li-p">Before we deliver the products/services, we do a thorough quality check process. </p>
+        </li>
+        <li>
+            <strong class="li-f">Will I get the exact same product that I see on takerentpe.com</strong>
+            <p class="li-p">The photos of products/ services on takerentpe.com are only indicative of the kind of product available.</p>
+        </li>
+        <li>
+            <strong class="li-f">Is registration compulsory?</strong>
+            <p class="li-p">Yes, Registration is compulsory. We do this to ensure each and every customer is authentic. You will be auto registered the first time around. Your email ID will be your username and you can always reset your password when required.</p>
+        </li>
+        <li>
+            <strong class="li-f">Do I have to pay a security deposit for the product?</strong>
+            <p class="li-p">Yes, we need to ensure the security of the products. Refundable security deposit is applicable for the specific products.</p>
+        </li>
+        <li>
+            <strong class="li-f">What if I have special requirements or instructions?</strong>
+            <p class="li-p">Click on Get Best Quote for more and convenient way to get the best quotes as per your requirements.</p>
+        </li>
+        <li>
+            <strong class="li-f">How and when will I have to pay for my order?</strong>
+            <p class="li-p">We request a booking deposit (minimum 50%) to confirm your order. At the time of rental or before delivery. We accept payment by Visa, MasterCard.</p>
+        </li>
+        <li>
+            <strong class="li-f">Now, where your services are available?</strong>
+            <p class="li-p">Currently, we are providing our services in Pune and Pimpri-Chinchwad boundaries only and gradually we are exploring our roots everywhere.  </p>
+        </li>
+        <li>
+            <strong class="li-f">Cancellation Policy?</strong>
+            <p class="li-p">If you are willing to cancel your Product/ service, you can get refund of deposit amount you have paid while booking the product/ service.</p>
+            <p>
+            <table class="table table-bordered">
+                <tbody>
+                <tr>
+                    <td>Before One Month</td>
+                    <td>30%</td>
+                </tr>
+                <tr>
+                    <td>Before 15 Days</td>
+                    <td>50%</td>
+                </tr>
+                <tr>
+                    <td>Before 5 Days</td>
+                    <td>70%</td>
+                </tr>
+                <tr>
+                    <td>On the Event Date</td>
+                    <td>80%</td>
+                </tr>
+                </tbody>
+            </table>
+            </p>
+        </li>
+        <li>
+            <strong class="li-f">How do I take a product on rent once I have found it?</strong>
+            <p class="li-p">Once you have found one or more products/services to be taken on rent by the procedure given below: <br/>
+Select your products / services >> Add to Cart >> Click on Proceed to Checkout >>  Enter your billing details >> Enter Event Location address (Shipping Details) >> Pay advance amount and book requirements.</p>
+        </li>
+    </ul>
+    {% endif %}
+</div>
+
+{% endblock %}

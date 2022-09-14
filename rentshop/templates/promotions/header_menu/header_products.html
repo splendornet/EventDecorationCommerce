@@ -1,0 +1,201 @@
+{% extends "layout_2_col.html" %}
+
+{% load basket_tags %}
+{% load category_tags %}
+{% load product_tags %}
+{% load i18n %}
+{% load static %}
+{% block title %}
+    {% if summary %}{{ summary }} |{% endif %} {{ block.super }}
+{% endblock %}
+
+
+
+ {% block alert %}
+    {% include "partials/alert_messages.html" %}
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'oscar/css/products/product_main.css' %}" type="text/css" media="screen">
+
+<style>
+    .item-slide {
+    position: relative;
+    overflow: hidden;
+    transition: all .1s ease;
+    -moz-transition: all .5s ease;
+    -webkit-transition: all .1s ease;
+    margin: 0 10px;
+    width: 295px;
+    height: 200px;
+}
+.box-img{
+width: 295px;
+    height: 200px;
+    float: left;
+    -moz-border-radius: 7px;
+    border-radius: 7px;
+    -webkit-border-radius: 7px;
+    overflow: hidden;
+}
+
+.box-img:hover {
+    -webkit-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    -o-transform: scale(1.1);
+    transform: scale(1.2);
+    transition: all 2s ease;
+}
+
+ .image:hover .text-wrap{bottom:-100%;}
+.ne-img {
+    max-width: 100%;
+    max-height: 200px;
+}
+span.hot {
+    background-color: #a90329;
+}
+span.tag2 {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    padding: 10px 0;
+    color: #fff;
+    font-size: 11px;
+    text-align: center;
+}
+.text-wrap {
+
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    color: #fff !important;
+    background: rgba(0, 0, 0, .5);
+    z-index: 9;
+    transition: all .1s ease;
+    -moz-transition: all .1s ease;
+    -webkit-transition: all .1s ease;
+}
+.text-wrap h4 {
+    color:#fff;
+    margin-top:10px;
+    margin-bottom:10px;
+    padding: 0 5px;
+}
+.text-wrap .desc {
+    width: 50%;
+    float: left;
+    padding: 0 5px;
+}
+.book-now-c {
+    float: right;
+    padding: 20px;
+    color: #FFFFFF;
+    margin-bottom: 20px;
+}
+
+.book-now-d {
+    float: right;
+    padding: 20px;
+    text-decoration: none;
+    margin-bottom: 20px;
+}
+
+.book-now-c a {
+    background: #f1bc19;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    margin-top: 0px;
+    float: left;
+    min-width: 101px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+    margin-right: 50px;
+}
+.book-now-d a {
+    background: #ffffff;
+    border: 1px solid #f1bc19;
+    color: #f1bc19;
+    padding: 5px;
+    border-radius: 5px;
+    margin-top: 0px;
+    float: left;
+    min-width: 50px;
+    text-align: center;
+    font-size: 15px;
+}
+.item-slide:hover .box-img .text-wrap{bottom:-100%; transition: all 2s ease;}
+</style>
+
+<style>
+    .shop-layout-wrap{
+        margin-top:115px !important;
+    }
+    .shop-layout-wrap{
+        margin-top:150px;
+    }
+</style>
+<!--<div class="nz-breadcrumbs nz-clearfix">-->
+<!--    <div class="container">-->
+<!--        <a href="{{ homepage_url }}" rel="v:url" property="v:title">{% trans "Home" %}</a>-->
+<!--        <span class="current">{{offer_title}}</span>-->
+<!--    </div>-->
+<!--</div>-->
+
+<div class="shop-layout-wrap" id="nz-target">
+
+
+    <div class="loop">
+        <div class="container product_con">
+            <section class="content lazy shop-layout animation-false nz-clearfix">
+                <form action="." method="get">
+
+
+                <div class="col-md-12">
+
+                </div>
+                    </form>
+                {% if products %}
+                    <!-- catelog browser -->
+                    <div class="col-md-12 col-12-pd infinite-container remove-padding-mobile">
+                        <div class="woocommerce-products " id="product_list">
+                            <ul class="products infinite-item">
+                                {% for product in products %}
+                                    <div class="col-md-3">
+                                        {% render_product product %}
+                                    </div>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    {% include "partials/pagination.html" %}
+                {% else %}
+                    <div class="col-md-9 col-9-pd infinite-container">
+                        <div class="product-category-body" style="margin-top:7px;">
+                            <div class="product-category-content">
+                                <h4 class="product-category-title">No Products</h4>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </section>
+
+            <div class="row text-center">
+                <div class="loading loader" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+{% endblock %}

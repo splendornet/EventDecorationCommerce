@@ -1,0 +1,12 @@
+{% extends "customer/emails/base.html" %}
+{% load currency_filters i18n %}
+
+{% block tbody %}
+    <tr>
+        <td class="content-block">
+            <p xmlns="http://www.w3.org/1999/html">Hello {{user.first_name}} {{user.last_name}},</p>
+            <p>Your order placed successfully.</p>
+            <br/>
+        </td>
+    </tr>
+{% endblock %}

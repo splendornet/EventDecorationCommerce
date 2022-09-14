@@ -1,0 +1,38 @@
+<div class="product-data" id="{{row}}" style="margin-bottom:10px;">
+    <div class="row">
+        <div class="col-md-12">
+            {% if product.product_class.name == 'Sale' %}
+            <div class="radio">
+                <label><input type="radio" id="order-type" value="Sale" name="order-type" checked> Sale</label>
+            </div>
+            {% endif %}
+            {% if product.product_class.name == 'Rent' or  product.product_class.name == 'Professional' %}
+            <div class="radio">
+                <label><input type="radio" id="order-type" value="Rent" name="order-type" checked> Rent</label>
+            </div>
+            {% endif %}
+            {% if product.product_class.name == 'Rent Or Sale' %}
+            <div class="radio">
+                <label><input type="radio" id="order-type" value="Rent" name="order-type" checked> Rent</label>
+            </div>
+            <div class="radio">
+                <label><input type="radio" id="order-type" value="Sale" name="order-type"> Sale</label>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% if attrs_list %}
+        <div class="row" style="margin-bottom:10px;">
+            {% for attr in attrs_list %}
+                <div class="col-md-3">
+                    <lable><strong>{{attr.name}}</strong></lable>
+                    <select class="form-control" name="attr[]">
+                        {% for value in attr.values %}
+                            <option value="{{value}}" data-foo="{{attr.name}}">{{value}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>

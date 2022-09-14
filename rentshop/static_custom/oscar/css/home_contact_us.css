@@ -1,0 +1,19 @@
+.contact-us-heading{
+    margin-top:20px;
+    margin-bottom:30px;
+}
+
+.contact-us-map-box{
+    border: 1px solid #999;
+    padding: 1px;
+    border-radius: 3px;
+}
+
+.cn-wrapper{
+    padding-bottom:50px;
+}
+
+.error-span{
+    color:red;
+}
+

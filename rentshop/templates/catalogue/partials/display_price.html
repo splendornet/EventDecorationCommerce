@@ -1,0 +1,33 @@
+{% load currency_filters %}
+{% load i18n %}
+{% load purchase_info_tags %}
+{% purchase_info_for_product request product as session %}
+{% load common %}
+
+
+<style>
+    .price-family{
+        font-family: "Open Sans", sans-serif !important;
+        color:black;
+        
+    }
+</style>
+
+{% get_price_whole_details product.stockrecords.last as base_price %}
+<span class="price-family">
+
+    {% if product.product_class.name  != 'Service' %}
+    {% get_product_cost_multiple product.stockrecords.last as data %}
+
+    {% if product.product_cost_type == 'Multiple' and data %}
+
+        ₹ {{data}} &nbsp {{product.stockrecords.last.unit|default:''}}
+
+    {% else %}
+
+        {% if base_price %}
+        ₹ {{base_price}} &nbsp {{product.stockrecords.last.unit|default:''}} {% endif %}
+
+    {% endif %}
+    {% endif %}
+</span>

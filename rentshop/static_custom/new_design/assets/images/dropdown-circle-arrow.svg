@@ -1,0 +1,10 @@
+<svg version="1.2" baseProfile="tiny-ps" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" width="18" height="18">
+	<title>New Project</title>
+	<defs>
+		<image  width="19" height="19" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAMAAABFjsb+AAAAAXNSR0IB2cksfwAAAEJQTFRFAAAAJBhJKhdQLBhPKxlQIBBQKxlQLBlQKRZQMB5TeGyPSjlpgHWWsaq+xL/OZ1mBubPFYFJ7vLbHLx1T0czZvrjJRxZAZQAAABZ0Uk5TABVttOwQkP9Q/////////////////wbNfZsAAAB9SURBVHicdZBbEoAgCEVJTXpKau1/qwUxvYbuB4xngIsA/KpxPgTvmpu0EVWxVdQFvBS6s+qBDiiVEV+KPB4/Oowc5/58SnIAnvMwchwnjh5AHOZEiJQWcVGWSyJKJSuT3kplXQtV7RUPrHnbsiD2sHaxdjb/Zt3AvNX3pjuCBwf67ydnSQAAAABJRU5ErkJggg=="/>
+	</defs>
+	<style>
+		tspan { white-space:pre }
+	</style>
+	<use id="Icon ionic-ios-arrow-down (2)" href="#img1" x="-1" y="-1" />
+</svg>

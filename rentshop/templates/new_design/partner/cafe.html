@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+{% load static %}
+{% load common %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'new_design/assets/images/favicon.png' %}" type="image/x-icon">
+    <title>Take Rent Pe</title>
+    <link rel="stylesheet" href="{% static 'new_design/assets/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'new_design/assets/css/bootstrap-theme.min.css' %}">
+    <!-- css -->
+    <link rel="stylesheet" href="{% static 'new_design/assets/css/spacing-helper.css' %}">
+    <link rel="stylesheet" href="{% static 'new_design/assets/css/style.css' %}">
+    <!-- fonts -->
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Vollkorn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body class="trp-register-page ">
+    <section class="trp-form-section pt-40 pb-20 trp-aspRegistration-form">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="trp-form-img text-center">
+                        <img src="{% static 'new_design/assets/images/form-images/from-head-img.svg' %}" alt="">
+                    </div>
+                    <div class="col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2">
+                        <div class="trp-form-wrapper mt-20">
+                            <div class="trp-form-header text-center">
+                                <img src="{% static 'new_design/assets/images/logo.png' %}" alt="Take Remt Pe" class="trp-form-logo">
+                                <h1 class="trp-form-header-title">Create Account</h1>
+                            </div>
+                            <div class="trp-form">
+                                <form role="form" id="partner_form" method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="businessName">Business Name</label>
+                                                {{form.business_name}}
+<!--                                                <input class="form-control" type="text" name="business_name" id="id_business_name" maxlength="50" placeholder="Enter business name" required>-->
+                                                {% if form.errors.business_name %}
+                                                <b class="snt-red-text">{{form.errors.business_name.as_text}}</b>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="ownerName">Owner Name</label>
+                                                {{form.name}}
+<!--                                                <input class="form-control" type="text" name="name" id="id_name" maxlength="50" placeholder="Enter owner name" required>-->
+                                                {% if form.errors.name %}
+                                                <b class="snt-red-text">{{form.errors.name.as_text}}</label>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="email">Email</label>
+                                                <input class="form-control" type="email" name="email" id="email" maxlength="254" placeholder="Enter your email" required>
+                                                {% if form_user.errors.email %}
+                                                <b class="snt-red-text">{{form_user.errors.email.as_text}}</b>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="mobile">Mobile</label>
+                                                {{form.telephone_number}}
+<!--                                                <input class="form-control" type="text" name="telephone_number" id="mno" maxlength="10" placeholder="Enter your mobile" required>-->
+                                                {% if form.errors.telephone_number %}
+                                                <b class="snt-red-text">{{form.errors.telephone_number.as_text}}</b>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="alternateMobile">Alternate Mobile Number</label>
+                                                 {{form.alternate_mobile_number}}
+<!--                                                <input class="form-control" type="tel" name="alternate_mobile_number" id="alternateMobile" maxlength="10" placeholder="Enter alternate mobile number" required>-->
+                                                {% if form.errors.alternate_mobile_number %}
+                                                <b class="snt-red-text">{{form.errors.alternate_mobile_number.as_text}}</b>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+<!--                                        <div class="col-md-6">-->
+<!--                                            <div class="form-group">-->
+<!--                                                <label for="mobile2">Mobile</label>-->
+<!--                                                <input class="form-control" type="tel" name="mobile2" id="mobile2" placeholder="Enter your mobile" required>-->
+<!--                                                {% if form.errors.name %}-->
+<!--                                                <b class="snt-red-text">{{form.errors.name.as_text}}</b>-->
+<!--                                                {% endif %}-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+                                        <div class="col-md-12">
+                                            <div class="trp-devider2 mt-15 mb-20"></div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="address1">Address 1</label>
+                                                 {{form.address_line_1}}
+<!--                                                <input class="form-control" type="text" name="address_line_1" id="address1" maxlength="100" placeholder="Enter address line 1" required>-->
+                                                {% if form.errors.address_line_1 %}
+                                                <label class="snt-red-text">{{form.errors.address_line_1.as_text}}</label>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="address2">Address 2</label>
+                                                {{form.address_line_2}}
+<!--                                                <input class="form-control" type="text" name="address_line_2" id="address2" maxlength="100" placeholder="Enter address line 2" required>-->
+                                                {% if form.errors.address_line_2 %}
+                                                <b class="snt-red-text">{{form.errors.address_line_2.as_text}}</b>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="city">City</label>
+                                                {{form.city}}
+                                                {% if form.errors.city %}
+                                                <b class="snt-red-text">{{form.errors.city.as_text}}</b>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="state">State</label>
+                                                {{form.state}}
+                                                {% if form.errors.state %}
+                                                <b class="snt-red-text">{{form.errors.state.as_text}}</b>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="country">Country</label>
+                                                {{form.country}}
+                                                {% if form.errors.country %}
+                                                <b class="snt-red-text">{{form.errors.country.as_text}}</b>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="pinCode">Pin Code</label>
+                                                <input class="form-control" type="text" name="pincode" maxlength="6" id="pinCode"  required>
+                                                {% if form.errors.pincode %}
+                                                <b class="snt-red-text">{{form.errors.pincode.as_text}}</b>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="trp-devider2 mt-15 mb-20"></div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="panNumber">PAN Number</label>
+                                                {{form.pan_number}}
+<!--                                                <input class="form-control" type="text" name="pan_number" id="panNumber" maxlength="20" placeholder="Enter PAN number" >-->
+                                                {% if form.errors.pan_number %}
+                                                <b class="snt-red-text">{{form.errors.pan_number.as_text}}</b>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="gstNumber">GST Number</label>
+                                                {{form.gst_number}}
+<!--                                                <input class="form-control" type="text" name="gst_number" id="gstNumber" maxlength="20" placeholder="Enter GST number" >-->
+                                                {% if form.errors.gst_number %}
+                                                <b class="snt-red-text">{{form.errors.gst_number.as_text}}</b>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label >Digital Signature</label>
+                                            <div class="trp-file-uploade">
+                                                <label for="digitalSignature" class="digitalSignature">Choose File</label>
+                                                <input class="trp-input-file" type="file" name="digital_signature" id="digitalSignature">
+                                                {% if form.errors.digital_signature %}
+                                                <b class="snt-red-text">{{form.errors.digital_signature.as_text}}</b>
+                                                {% endif %}
+                                            </div>
+                                            <span class="uploade-file">No file chosen</span>
+                                        </div>
+                                         {% if not form.errors or not form_user.errors %}
+                                        <div class="col-md-12">
+                                            <div class="form-group mt-15">
+                                                <label for="otpNumber">OTP</label>
+                                                <div class="digit-group" data-group-name="digits" data-autosubmit="false" autocomplete="off">
+                                                    <input type="text" id="digit-1" name="digit-1" data-next="digit-2" required/>
+                                                    <input type="text" id="digit-2" name="digit-2" data-next="digit-3" data-previous="digit-1" required/>
+                                                    <input type="text" id="digit-3" name="digit-3" data-next="digit-4" data-previous="digit-2" required/>
+                                                    <span class="splitter">&ndash;</span>
+                                                    <input type="text" id="digit-4" name="digit-4" data-next="digit-5" data-previous="digit-3" required/>
+                                                    <input type="text" id="digit-5" name="digit-5" data-next="digit-6" data-previous="digit-4" required/>
+                                                    <input type="text" id="digit-6" name="digit-6" data-previous="digit-5" required/>
+
+                                                </div>
+                                                <input type="button" value="Get OTP" id="getOtp" class="trp-form-submit margin-top trp-otp-btn-1" disabled>
+                                                <input type="button" value="'Verify OTP" id="verifyOtp" class="trp-form-submit margin-top trp-otp-btn-1 trp-display-none">
+                                                <div class="trp-otp-msg">
+                                                    <p class="otphint">You will receive an SMS shortly. If you didn't receive any SMS try resend OTP</p>
+                                                </div>
+                                                <div class="snt-otp-msg">
+                                                <p class="otpverified trp-display-none" id="snt-otp-responce">OTP match, please proceed</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    {% if not form.errors or not form_user.errors %}
+                                    <input type="submit" value="Continue" id="submit" class="trp-form-submit" disabled>
+                                    {% else %}
+                                    <input type="submit" value="Continue" id="submit" class="trp-form-submit" >
+                                    {% endif %}
+                                </form>
+                                <div class="text-center mt-10">
+                                    <p class="trp-form-link">Already have an account? <a href="/accounts/login/">Login</a></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="trp-form-social text-cetner mt-30">
+                            {% get_social_link request as data %}
+                            <ul>
+                                <li><a href="{% if data.fb_link %} {{data.fb_link}} {% else %} https://www.facebook.com/Take-Rent-Pe-101019151839514 {% endif %}"><img src="{% static 'new_design/assets/images/form-images/navy-facebook-icon.svg' %}" alt=""></a></li>
+                                <li><a href="{% if data.twitter_link %} {{data.twitter_link}} {% else %} https://twitter.com/take_rent_pe {% endif %}"><img src="{% static 'new_design/assets/images/form-images/navy-twitter-icon.svg' %}" alt=""></a></li>
+                                <li><a href="{% if data.youtube_link %} {{data.youtube_link}} {% else %}https://www.youtube.com/channel/UCW7mHue2nbWxqE7xCAKi2VQ {% endif %}"><img src="{% static 'new_design/assets/images/form-images/navy-youtube-icon.svg' %}" alt=""></a></li>
+                                <li><a href="{% if data.insta_link %} {{data.insta_link}} {% else %}https://www.instagram.com/takerentpe/ {% endif %}"><img src="{% static 'new_design/assets/images/form-images/navy-insta-icon.svg' %}" alt=""></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
+        <script src="{% static 'new_design/assets/js/bootstrap.min.js' %}"></script>
+        <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+        <script>
+            document.querySelector("html").classList.add('js');
+
+                var fileInput  = document.querySelector( ".trp-input-file" ),
+                    button     = document.querySelector( ".digitalSignature" ),
+                    the_return = document.querySelector(".uploade-file");
+                button.addEventListener( "keydown", function( event ) {
+
+                    if ( event.keyCode == 13 || event.keyCode == 32 ) {
+                        fileInput.focus();
+                    }
+                });
+                button.addEventListener( "click", function( event ) {
+                fileInput.focus();
+                return false;
+                });
+                fileInput.addEventListener( "change", function( event ) {
+                    the_return.innerHTML = this.value;
+                });
+        </script>
+        <!--Hide menu   -->
+        <script>
+            $(document).ready(function () {
+                $(document).click(function (event) {
+                    var clickover = $(event.target);
+                    var _opened = $(".navbar-collapse").hasClass("collapse in");
+                    // alert(_opened)
+                    if (_opened === true && !clickover.hasClass("navbar-toggle")) {
+                        $("button.navbar-toggle").click();
+                    }
+                });
+                $('#id_telephone_number').change(function (){
+                 mobile_number = $('#id_telephone_number').val();
+            if(!mobile_number){
+            $('#getOtp').attr('disabled','disabled');
+            }
+            else{
+            $('#getOtp').removeAttr('disabled');
+            }
+                 })
+                 mobile_number = $('#mno').val();
+            if(!mobile_number){
+            $('#getOtp').attr('disabled','disabled');
+            }
+            else{
+            $('#getOtp').removeAttr('disabled');
+            }
+            });
+          </script>
+
+        <!-- OTP -->
+        <script>
+
+            var counter = 60;
+            var otp_verified = false ;
+
+            $('#getOtp').on('click',function(e){
+            mobile_number = $('#id_telephone_number').val();
+            id_alternate_mobile_number = $('#id_alternate_mobile_number').val();
+            email = $('#email').val();
+            var status = false;
+            var frm = $('#partner_form');
+
+            if(!email || !id_alternate_mobile_number)
+            {
+            alert('Please enter email and alternate number fields');
+            return false;
+            }
+            $.ajax({
+            type:'GET',
+            url : '/get_vendor_otp/',
+            data : {
+                mobile_number : mobile_number,
+                id_alternate_mobile_number : id_alternate_mobile_number,
+                email : email,
+                form : frm.serialize(),
+            },
+            success : function(data) {
+
+            if(data.status == 'already exist') {
+                 status = true;
+                 console.log('status 1'+status)
+                alert('mobile number already exist, please enter another number');
+
+            }
+            else if(data.status == 'email exist') {
+                 status = true;
+                 console.log('status 1'+status)
+                alert('Email id already exist, please enter another.');
+
+            }
+            else if(data.status == "exceed"){
+                status = true;
+                 console.log('status 1'+status)
+                alert('You have excceded number of attempt.');
+            }
+            },
+            async: false,
+            });
+            console.log('status '+status)
+            if(status == true)
+            {
+            return false;
+            }
+            $('.digit-group').show();
+            $('.trp-otp-msg').show();
+
+            //$('#getOtp').val('Detecting OTP').addClass('disabled trp-otp-btn-1');
+            $('#getOtp').val('Detecting OTP').addClass('trp-display-none');
+           $('#verifyOtp').val('Verify OTP').removeClass('trp-display-none');
+            $('.otphint').append('<div class="dmsg" />');
+            var timer = setInterval(function(){
+            $('.dmsg').html(' in '+counter-- +' seconds');
+
+            if (counter == -1){
+                console.log('otp'+otp_verified)
+                if(otp_verified != true){
+                $('.otphint a').removeClass('disabled');
+                $('#getOtp').val('Resend OTP').removeClass('disabled trp-display-none');
+                $('#digit-1').val('');
+                $('#digit-2').val('');
+                $('#digit-3').val('');
+                $('#digit-4').val('');
+                $('#digit-5').val('');
+                $('#digit-6').val('');
+                $('#verifyOtp').val('Verify OTP').addClass('trp-display-none');
+                $('.dmsg').remove();
+                }
+                counter = 60;
+                clearInterval(timer);
+            }
+            },1000);
+            e.preventDefault();
+            });
+
+
+
+
+            $('.digit-group').find('input').each(function() {
+	            $(this).attr('maxlength', 1);
+	            $(this).on('keyup', function(e) {
+		        var parent = $($(this).parent());
+
+		        if(e.keyCode === 8 || e.keyCode === 37) {
+			        var prev = parent.find('input#' + $(this).data('previous'));
+
+			            if(prev.length) {
+				        $(prev).select();
+			        }
+		        } else if((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 96 && e.keyCode <= 105) || e.keyCode === 39) {
+			        var next = parent.find('input#' + $(this).data('next'));
+
+			        if(next.length) {
+				        $(next).select();
+			        } else {
+				        // if(parent.data('autosubmit')) {
+				        // 	parent.submit();
+				    // }
+			    }
+                }
+            });
+        });
+        </script>
+        <script>
+            $('#verifyOtp').on('click',function(e){
+
+mobile_number = $('#id_telephone_number').val();
+digit_1 = $('#digit-1').val();
+digit_2 = $('#digit-2').val();
+digit_3 = $('#digit-3').val();
+digit_4 = $('#digit-4').val();
+digit_5 = $('#digit-5').val();
+digit_6 = $('#digit-6').val();
+
+            $.ajax({
+            type:'GET',
+            url : '/verify_otp/',
+            data : {
+                mobile_number : mobile_number,
+                digit_1 : digit_1,
+                digit_2 : digit_2,
+                digit_3 : digit_3,
+                digit_4 : digit_4,
+                digit_5 : digit_5,
+                digit_6 : digit_6,
+            },
+            success : function(data) {
+            //alert(data.status);
+            if((data.status == '400')|| (data.status == '401')){
+            console.log('in if');
+                alert('Please enter valid OTP');
+            }
+            else if(data.status == '501'){
+            console.log('in if');
+                alert('You have exceeded the number of allowed OTP attempts. Please try again later.');
+            }
+            else if(data.status == '502'){
+            console.log('in if');
+                alert('OTP is expried');
+            }
+            else if(data.status == '200'){
+                        console.log('in else if');
+            $('#otpverified').removeClass('trp-display-none');
+            $('#submit').removeAttr('disabled');
+            $('#getOtp').addClass('trp-display-none');
+            $('#snt-otp-responce').removeClass('trp-display-none');
+            $('#verifyOtp').addClass('trp-display-none');
+            $('.trp-otp-msg').hide();
+            otp_verified = true;
+            console.log('timer'+counter);
+            }
+            else{
+                        console.log('in else');
+            }
+            }
+            });
+});
+        </script>
+        <script>
+            $('#id_state').on('change', function(){
+            //$('#id_state').val($("#id_state option:selected").text());
+            $('#id_city').empty().append('<option selected="selected" value="">Select City</option>');
+            $.ajax({
+                type:'GET',
+                url : '/city_ajax/',
+                data : {
+                    state_name: $(this).val(),
+                },
+                success : function(data){
+                    $.each(data, function(i, value) {
+                        console.log(value)
+                        $('#id_city').append($('<option>').text(value.text).attr('value', value.id));
+                    });
+                },
+                failure : function(result){
+                },
+            });
+        });
+        </script>
+    </footer>
+</body>
+</html>

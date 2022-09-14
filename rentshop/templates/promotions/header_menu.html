@@ -1,0 +1,82 @@
+{% extends "layout_2_col.html" %}
+{% load i18n %}
+{% load basket_tags %}
+{% load category_tags %}
+{% load product_tags %}
+{% load thumbnail %}
+{% block title %}
+    {% if summary %}{{ summary }} |{% endif %} {{ block.super }}
+{% endblock %}
+{% block content %}
+
+<style>
+    .shop-layout-wrap{
+        margin-top:60px;
+    }
+</style>
+
+<!--<div class="nz-breadcrumbs nz-clearfix">-->
+<!--    <div class="container">-->
+<!--        <a href="{{ homepage_url }}" rel="v:url" property="v:title">{% trans "Home" %}</a>-->
+<!--        <span class="current">{% if summary == 'All products' %}{{ summary }}{% else %}{{title}} {% endif %}</span>-->
+<!--    </div>-->
+<!--</div>-->
+
+<div class="shop-layout-wrap" id="nz-target">
+    <div class="loop">
+        <div class="container">
+            <section class="content lazy shop-layout infinite-container animation-false nz-clearfix">
+                {% if category %}
+                    <div class="woocommerce-products " id="product_list">
+                        <ul class="products infinite-item">
+                            {% for product in category %}
+                                <li class="mix product nz-clearfix" data-groups='["all", "alcoholic-drinks"]' data-grid="ninzio_01">
+                                    <div class="product-body">
+                                        {% block product_image %}
+                                            <div class="nz-thumbnail">
+                                                {% with image=product.image_menu %}
+                                                    <a href="{% url 'catalogue:category_product' pk=product.id %}" target="_blank">
+                                                        <img src="{{ product.menu_image.url }}" alt="{{ product.get_title }}">
+                                                    </a>
+                                                {% endwith %}
+                                            </div>
+                                        {% endblock %}
+                                        <div class="product-details">
+                                            <div class="product-title nz-clearfix">
+                                                <h3>
+                                                    <a href="{% url 'catalogue:category_product' pk=product.id %}" target="_blank">
+                                                        {{product}}
+                                                    </a>
+                                                </h3>
+                                            </div>
+                                            <div class="cart-wrap nz-clearfix">
+                                                <div class="btn-group">
+                                                    <a href="{% url 'catalogue:category_product' pk=product.id %}" class="btn btn-red m-btn" style="background-color: #f4b800;color:#fff;" target="_blank">View Details</a>
+                                                </div>
+                                                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% include "partials/pagination.html" %}
+                {% else %}
+                    <div class="product-category-body">
+                        <div class="product-category-content">
+                            <h4 class="product-category-title">No Products</h4>
+                        </div>
+                    </div>
+                {% endif %}
+
+            </section>
+            <div class="row text-center">
+                <div class="loading loader" style="display: none;">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,480 @@
+{% extends "customer/baseaccountpage.html" %}
+{% load i18n %}
+{% load common %}
+
+{% block tabcontent %}
+
+<style>
+    .btn-edit-vendor{
+        font-size:14px !important;
+    }
+    .btn-edit-vendor:hover{
+        background-color: #e91d4a;
+        color: #fff !important;
+    }
+    .button{
+        padding:10px 24px;
+    }
+</style>
+
+{% if request.user.is_staff %}
+
+<style>
+    .outer_table {
+        width:90%;
+        border:1px solid #CCCCCC;
+        box-shadow: 0 4px 10px 0 rgba(0,0,0,0.07), 0 4px 10px 0 rgba(0,0,0,0.07);
+        margin-left:5%;
+        padding-top:15px;
+        padding-bottom:15px;
+    }
+    p {
+        font-size:16px;
+    }
+    .alert-x {
+      padding: 20px;
+      background-color: #eb5578;
+      color: white;
+      border-radius:5px;
+      margin-bottom:20px;
+      width:90%;
+      margin-left:5%;
+}
+
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.sidebar{
+    height:auto;
+}
+
+.vendor-space{
+    width:3em;
+}
+
+.Cell_profile>p{
+    font-size:14px !important;
+}
+
+.sidebar {  min-height: 100vh !important;    height: auto;}
+ .twitter {  min-height: 50vh !important;  height: auto;}
+
+.btn-edit-vendor.edit-profile-btn {
+    color: #fff;
+    text-transform: capitalize;
+    font-size: 14px !important;
+    padding: 6px 24px;
+    background-color: #f1bc19;
+    max-width: 180px;
+    width: 100%;
+}
+
+.btn-edit-vendor.edit-profile-btn:hover{
+background-color: #e91d4a;
+}
+.Row_profile .Cell_profile>p {
+    font-size: 14px !important;
+    font-family: "Open Sans", sans-serif;
+        white-space: nowrap;
+}
+</style>
+
+{% get_vendor request.user.id as vendor %}
+
+<h3 class="heading"> Associated Service Provider</h3>
+
+<div style="overflow-x:auto;">
+
+    {% if messages %}
+        {% for message in messages|slice:":1" %}
+            <div class="alert-x" id="profile_alert">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                {{message}}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if not vendor %}
+        <h4 style="margin-left:5%">ASP details not found.</h4>
+    {% else %}
+
+    <div class="outer_table">
+
+        <div class="Table_profile">
+
+            <!-- row 1 -->
+            <div class="Row_profile">
+                <div class="Cell_profile" style="width:25%;" >
+                    <p>Business Name</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>:-</p>
+                </div>
+                <div class="Cell_profile" style="width:26%;">
+                    <p>{{vendor.business_name}}</p>
+                </div>
+                <div class="vendor-space"></div>
+                <div class="Cell_profile" style="width:26%;">
+                    <p>Address 1</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>:-</p>
+                </div>
+                <div class="Cell_profile" style="width:26%;">
+                    <p>{{vendor.address_line_1|default:"-"}}</p>
+                </div>
+            </div>
+            <!-- row 1 -->
+
+            <!-- row 2 -->
+            <div class="Row_profile">
+                <div class="Cell_profile" >
+                    <p>Owner Name</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>:-</p>
+                </div>
+                <div class="Cell_profile" >
+                    <p>{{request.user.get_full_name}}</p>
+                </div>
+                <div class="vendor-space"></div>
+                <div class="Cell_profile" >
+                    <p>Address 2</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>:-</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>{{vendor.address_line_2|default:"-"}}</p>
+                </div>
+            </div>
+            <!-- row 2 -->
+
+            <!-- row 3 -->
+            <div class="Row_profile">
+                <div class="Cell_profile">
+                    <p>Email Address</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>:-</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>{{request.user.email}}</p>
+                </div>
+                <div class="vendor-space"></div>
+                <div class="Cell_profile">
+                    <p>Country</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>:-</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>India</p>
+                </div>
+            </div>
+            <!-- row 3 -->
+
+            <!-- row 4 -->
+            <div class="Row_profile">
+                <div class="Cell_profile">
+                    <p>Mobile Number</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>:-</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>{{vendor.telephone_number|default:"-"}}</p>
+                </div>
+                <div class="vendor-space"></div>
+                <div class="Cell_profile">
+                    <p>State</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>:-</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>{{vendor.state|default:"-"}}</p>
+                </div>
+            </div>
+            <!-- row 4 -->
+
+            <!-- row 5 -->
+            <div class="Row_profile">
+                <div class="Cell_profile">
+                    <p>Alternative Mobile Number</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>:-</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>{{vendor.alternate_mobile_number|default:"-"}}</p>
+                </div>
+                <div class="vendor-space"></div>
+                <div class="Cell_profile">
+                    <p>City</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>:-</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>{{vendor.city|default:"-"}}</p>
+                </div>
+            </div>
+            <!-- row 5 -->
+
+            <!-- row 6 -->
+            <div class="Row_profile">
+                <div class="Cell_profile">
+                    <p>Pin Code</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>:-</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>{{vendor.pincode|default:"-"}}</p>
+                </div>
+                <div class="vendor-space"></div>
+                <div class="Cell_profile">
+                    <p>Shop Act Number</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>:-</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>{{vendor.shop_act_number|default:"-"}}</p>
+                </div>
+            </div>
+            <!-- row 6 -->
+
+            <!-- row 7 -->
+            <div class="Row_profile">
+                <div class="Cell_profile">
+                    <p>Pan Card Number</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>:-</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>{{vendor.pan_number|default:"-"}}</p>
+                </div>
+                <div class="vendor-space"></div>
+                <div class="Cell_profile">
+                    <p>GST Number</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>:-</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>{{vendor.gst_number|default:"-"}}</p>
+                </div>
+            </div>
+            <!-- row 7 -->
+
+            <!-- row 8 -->
+            <div class="Row_profile">
+                <div class="Cell_profile">
+                    <p>Registration Date</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>:-</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>{{user.date_joined}}</p>
+                </div>
+                <div class="vendor-space"></div>
+                <div class="Cell_profile">
+                    <p>Aadhar Card Number</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>:-</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>{{vendor.aadhar_number|default:"-"}}</p>
+                </div>
+            </div>
+            <!-- row 8 -->
+
+
+            <div class="Row_profile">
+
+                <div class="Cell_profile">
+                    <br/>
+                    <a href="{% url 'vendor-update' vendor_id=vendor.id %}" class="btn-edit-vendor button button1 edit-profile-btn">
+                        Edit Profile
+                    </a>
+                    <br/>
+                </div>
+
+                <div class="Cell_profile"></div>
+                <div class="Cell_profile"></div>
+                <div class="Cell_profile"></div>
+                <div class="Cell_profile"></div>
+                <div class="Cell_profile"></div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+    {% endif %}
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+
+        var element = document.getElementById("my_vendor_profile_link");
+        element.classList.add("active");
+
+        $(function() {
+            setTimeout(function() {
+                $("#profile_alert").hide('blind', {}, 500)
+            }, 5000);
+        });
+
+    </script>
+
+
+</div>
+
+{% else %}
+
+<style>
+    .alert-x {
+      padding: 20px;
+      background-color: #eb5578;
+      color: white;
+      border-radius:5px;
+      margin-bottom:20px;
+      width:90%;
+      margin-left:5%;
+}
+</style>
+
+<!-- main header -->
+<h3 class="heading">Customer Details </h3>
+<!-- main header -->
+
+<div style="overflow-x:auto;">
+
+    {% if messages %}
+        {% for message in messages|slice:":1" %}
+            <div class="alert-x" id="profile_alert">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                {{message}}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="Table_profile">
+
+        <!-- name -->
+        <div class="Row_profile">
+            <div class="Cell_profile" style="width:25%;">
+                <p>Name</p>
+            </div>
+            <div class="Cell_profile">
+                <p>:-</p>
+            </div>
+            <div class="Cell_profile">
+                <p>
+                    {{user.get_full_name|default:'-' }}
+                </p>
+            </div>
+        </div>
+        <!-- name -->
+
+        <!-- Email -->
+        <div class="Row_profile">
+            <div class="Cell_profile">
+                <p>Email Address</p>
+            </div>
+            <div class="Cell_profile">
+                <p>:-</p>
+            </div>
+            <div class="Cell_profile">
+                <p>
+                    {{user.email}}
+                </p>
+            </div>
+        </div>
+        <!-- Email -->
+
+        <!-- Number -->
+        <div class="Row_profile">
+            <div class="Cell_profile">
+                <p>Mobile Number</p>
+            </div>
+            <div class="Cell_profile">
+                <p>:-</p>
+            </div>
+            <div class="Cell_profile">
+                <p>
+                    {{user.profile_user.mobile_number }}
+                </p>
+            </div>
+        </div>
+        <!-- Number -->
+
+        <!-- DR -->
+        <div class="Row_profile">
+            <div class="Cell_profile">
+                <p>Date Registered</p>
+            </div>
+            <div class="Cell_profile">
+                <p>:-</p>
+            </div>
+            <div class="Cell_profile">
+                <p>
+                    {{user.date_joined}}
+                </p>
+            </div>
+        </div>
+        <!-- DR -->
+
+        <br />
+        <div class="Row_profile">
+            <div class="Cell_profile">
+                <a href="{% url 'customer:profile-update' %}">
+                    <button class="button button1" style="">Edit Profile</button>
+                </a>
+            </div>
+            <div class="Cell_profile">
+
+            </div>
+            <div class="Cell_profile">
+                <a href="{% url 'customer:change-password' %}">
+                    <button class="button button2">Change Password</button>
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+    var element = document.getElementById("my_profile_link");
+    element.classList.add("active");
+
+    $(function() {
+        setTimeout(function() {
+            $("#profile_alert").hide('blind', {}, 500)
+        }, 5000);
+    });
+
+</script>
+
+{% endif %}
+
+{% endblock %}

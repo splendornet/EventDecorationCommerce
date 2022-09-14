@@ -1,0 +1,24 @@
+{% load i18n %}
+
+<div class="panel panel-default" id="product_package_panel">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            Package Products
+      </h4>
+    </div>
+    <div class="panel-body">
+        <!-- unit -->
+        <div class="form-group" style="margin-bottom:10px;">
+            <p class="control-label">Products</p>
+            {% include "dashboard/partials/form_field.html" with field=form.product_package nolabel=True %}
+        </div>
+        {% if form.errors.product_package %}
+                <p class="color-red">* Enter a valid offer products.</p>
+            {% endif %}
+        <!-- unit -->
+
+        <!-- min quantity -->
+
+    </div>
+</div>
+

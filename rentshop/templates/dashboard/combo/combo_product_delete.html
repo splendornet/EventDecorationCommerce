@@ -1,0 +1,49 @@
+{% extends 'dashboard/layout.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block body_class %}{{ block.super }} create-page{% endblock %}
+
+{% block title %}
+    {% trans "Delete partner" %} | {% trans "Partners" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li>
+            <a href="{% url 'dashboard:combo-index' %}">{% trans "Combo" %}</a>
+        </li>
+        <li class="active">{% trans "Delete Combo" %}</li>
+    </ul>
+{% endblock %}
+
+
+
+{% block dashboard_content %}
+    <form action="." method="post" id="combo_delete_form">
+        {% csrf_token %}
+        <p style="font-size:16px">Are you sure you want to delete this <strong>{{combo}}</strong> ?</p>
+        <div class="form-actions">
+            <input type="text" value="{{product.id}}" name="product_pk" hidden>
+            <button class="btn btn-lg btn-danger" type="button" onclick="delete_confirmation_combo()">{% trans "Delete" %}</button> {% trans "or" %}
+            <a href="{% url 'dashboard:combo-index' %}">{% trans "cancel" %}</a>
+        </div>
+    </form>
+{% endblock dashboard_content %}
+
+{% block extrascripts %}
+    {{ block.super }}
+    <script>
+        function delete_confirmation_combo(){
+            var is_confirm = confirm("Do you really want to delete this unit.");
+            if (is_confirm == false){
+                return false;
+            }else{
+                $('#combo_delete_form').submit()
+            }
+        }
+    </script>
+{% endblock %}

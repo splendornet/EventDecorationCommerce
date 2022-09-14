@@ -1,0 +1,88 @@
+
+<div class="trp-comment-rating mb-10">
+                <div class="trp-star-rating-below-title ">
+                    {% if product.rating|floatformat:"0" == '1' %}
+    <div class="star-rating text-left" >
+                    <input type="radio" id="1-stars"  value="5" disabled/>
+                    <label for="1-stars" class="star">&#9733;</label>
+                    <input type="radio" id="2-stars"  value="4" disabled/>
+                    <label for="2-stars" class="star">&#9733;</label>
+                    <input type="radio" id="3-stars"  value="3"  disabled />
+                    <label for="3-stars" class="star">&#9733;</label>
+                    <input type="radio" id="4-stars"  value="2" disabled/>
+                    <label for="4-stars" class="star">&#9733;</label>
+                    <input type="radio" id="5-star" value="1" checked/>
+                    <label for="5-star" class="star">&#9733;</label>
+                  </div>
+{% elif product.rating|floatformat:"0" == '2' %}
+    <div class="star-rating text-left" >
+                    <input type="radio" id="1-stars"  value="5" disabled/>
+                    <label for="1-stars" class="star">&#9733;</label>
+                    <input type="radio" id="2-stars"  value="4" disabled/>
+                    <label for="2-stars" class="star">&#9733;</label>
+                    <input type="radio" id="3-stars"  value="3"  disabled />
+                    <label for="3-stars" class="star">&#9733;</label>
+                    <input type="radio" id="4-stars"  value="2" checked/>
+                    <label for="4-stars" class="star">&#9733;</label>
+                    <input type="radio" id="5-star" value="1" disabled/>
+                    <label for="5-star" class="star">&#9733;</label>
+                  </div>
+{% elif product.rating|floatformat:"0" == '3' %}
+    <div class="star-rating text-left" >
+                    <input type="radio" id="1-stars"  value="5" disabled />
+                    <label for="1-stars" class="star">&#9733;</label>
+                    <input type="radio" id="2-stars"  value="4" disabled/>
+                    <label for="2-stars" class="star">&#9733;</label>
+                    <input type="radio" id="3-stars"  value="3"  checked />
+                    <label for="3-stars" class="star">&#9733;</label>
+                    <input type="radio" id="4-stars"  value="2" disabled/>
+                    <label for="4-stars" class="star">&#9733;</label>
+                    <input type="radio" id="5-star" value="1" disabled/>
+                    <label for="5-star" class="star">&#9733;</label>
+                  </div>
+{% elif product.rating|floatformat:"0" == '4' %}
+    <div class="star-rating text-left" >
+                    <input type="radio" id="1-stars"  value="5" disabled />
+                    <label for="1-stars" class="star">&#9733;</label>
+                    <input type="radio" id="2-stars"  value="4" checked/>
+                    <label for="2-stars" class="star">&#9733;</label>
+                    <input type="radio" id="3-stars"  value="3"  disabled />
+                    <label for="3-stars" class="star">&#9733;</label>
+                    <input type="radio" id="4-stars"  value="2" disabled/>
+                    <label for="4-stars" class="star">&#9733;</label>
+                    <input type="radio" id="5-star" value="1" disabled/>
+                    <label for="5-star" class="star">&#9733;</label>
+                  </div>
+{% elif product.rating|floatformat:"0" == '5' %}
+    <div class="star-rating text-left" >
+                    <input type="radio" id="1-stars"  value="5" checked/>
+                    <label for="1-stars" class="star">&#9733;</label>
+                    <input type="radio" id="2-stars"  value="4" disabled/>
+                    <label for="2-stars" class="star">&#9733;</label>
+                    <input type="radio" id="3-stars"  value="3"  checked />
+                    <label for="3-stars" class="star">&#9733;</label>
+                    <input type="radio" id="4-stars"  value="2" disabled/>
+                    <label for="4-stars" class="star">&#9733;</label>
+                    <input type="radio" id="5-star" value="1" disabled/>
+                    <label for="5-star" class="star">&#9733;</label>
+                  </div>
+{% else %}
+ <div class="star-rating text-left" >
+                    <input type="radio" id="1-stars"  value="5" disabled/>
+                    <label for="1-stars" class="star">&#9733;</label>
+                    <input type="radio" id="2-stars"  value="4" disabled/>
+                    <label for="2-stars" class="star">&#9733;</label>
+                    <input type="radio" id="3-stars"  value="3"  disabled />
+                    <label for="3-stars" class="star">&#9733;</label>
+                    <input type="radio" id="4-stars"  value="2" disabled/>
+                    <label for="4-stars" class="star">&#9733;</label>
+                    <input type="radio" id="5-star" value="1" disabled/>
+                    <label for="5-star" class="star">&#9733;</label>
+                  </div>
+{% endif %}
+
+
+                {% if product.reviews.approved.all.count >= 0 %}  <a href="#snt-desc-section" onclick=" activaTab('reviews');" class="trp-product-discount-amount" >( {{product.reviews.approved.all.count}} Reviews )</a> {% endif %}
+                </div>
+
+            </div>

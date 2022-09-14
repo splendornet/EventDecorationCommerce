@@ -1,0 +1,304 @@
+{% extends "dashboard/base.html" %}
+
+{% load category_tags %}
+{% load dashboard_tags %}
+{% load i18n %}
+{% load staticfiles %}
+{% load common %}
+
+{% block styles %}
+    {% if use_less %}
+        <link rel="stylesheet/less" type="text/css" href="{% static "oscar/less/dashboard.less" %}" />
+    {% else %}
+        <link rel="stylesheet" type="text/css" href="{% static "oscar/css/dashboard.css" %}" />
+    {% endif %}
+{% endblock %}
+
+{% block extrastyles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static "oscar/js/select2/select2.min.css" %}" />
+    <link rel="stylesheet" href="{% static "oscar/css/select2-bootstrap.min.css" %}" />
+    <link rel="stylesheet" href="{% static "oscar/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" %}" />
+    <link rel="stylesheet" href="{% static "oscar/css/datetimepicker.css" %}" />
+    <style>
+        .form-control{
+            color: black !important;
+        }
+        .circlex {
+            border-radius: 50%;
+            width: 10px;
+            height: 10px;
+            padding: 5px;
+            background: #fff;
+            border: 3px solid #000;
+            color: #000;
+            text-align: center;
+            font: 10px Arial, sans-serif;
+        }
+        .navbar-header{
+            position:absolute;
+            z-index: 1000;
+        }
+        .loader {
+            display:    none;
+            position:   fixed;
+            z-index:    1000;
+            top:        0;
+            left:       0;
+            height:     100%;
+            width:      100%;
+            background: rgba( 255, 255, 255, .8 )
+            url('/static/loader.gif')
+            50% 50%
+            no-repeat;
+        }
+        body.loading .loader {
+            overflow: hidden;
+        }
+        body.loading .loader {
+            display: block;
+        }
+
+    </style>
+{% endblock %}
+
+{% block title %}
+    {% trans "Dashboard" %} | {{ block.super }}
+{% endblock %}
+
+{% block layout %}
+
+    {% block navbar %}
+        <style>
+            html{ //min-height: 100%; } .footer{ clear: both; position: relative; position: absolute; bottom:0; z-index: 10; height: 3em; margin-top: -3em;} .navbar-brand-1 { //text-indent: -9999px; display: block; width: 60px; height: 38px; padding: 0; margin-left: 0; margin-top: 5px; color:#fff; font-size:24px; } html { height: 100%; box-sizing: border-box; } *, *:before, *:after { box-sizing: inherit; } body { position: relative; margin: 0; padding-bottom: 6rem; min-height: 100%; } /** * Footer Styles */ .footer { position: absolute; right: 0; bottom: 0; left: 0; background-color: #101010; color:#fff; font-size:13px; text-align: center; } #mceu_6-button,#mceu_25{display:none;} .color-red{color:red;}
+        </style>
+        <nav class="navbar navbar-static-top navbar-inverse navbar-accounts">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".nav-accounts">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <span class="navbar-brand-1">TakeRentPe</span>
+                </div>
+                <div class="collapse navbar-collapse nav-accounts">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><span>{% trans "Welcome" %} <em>{{ user.get_full_name|default:request.user.email }}</em></span></li>
+                        <li><a href="{{ homepage_url }}"><i class="icon-home"></i> {% trans "Return to site" %}</a></li>
+
+                        {% if request.user.is_superuser %}
+                            {% get_tomorrows_notes request as data %}
+                            {% if data %}
+                                <li class="notification">
+                                    <a href="#">
+                                        <!--<em class="icon-bell"></em>-->
+                                        {% trans "Notification" %}
+                                        <strong class="circle" style="background-color: #FF9800;
+                                            border-radius: 50%;
+                                            padding: 5px 9px;
+                                            color: #000;top: -10px;
+                                            position: relative;
+                                            left: -5px;">
+                                            <blink>{{data.count}}</blink>
+                                        </strong>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+
+                        <li><a href="{% url 'dashboard:logout' %}"><i class="icon-signout"></i> {% trans "Log out" %}</a></li>
+                    </ul>
+                </div>
+            </div><!-- /navbar-inner -->
+        </nav><!-- /navbar -->
+    {% endblock navbar %}
+
+    {% block dashboard_nav %}
+        {% dashboard_navigation user as nav_items %}
+
+        <nav class="navbar navbar-static-top navbar-inverse navbar-primary">
+            <div class="container-fluid dashboard">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".nav-primary">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+
+                <div class="collapse navbar-collapse nav-primary">
+                    <ul class="nav navbar-nav dashboard">
+                        {% for item in nav_items %}
+                        <li class="dropdown">
+                            {% if item.is_heading %}
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                {% if item.icon %}<i class="{{ item.icon }}"></i>{% endif %}
+                                {{ item.label }} <b class="caret"></b>
+                            </a>
+                            {% else %}
+                            <a href="{{ item.url }}">
+                                {% if item.icon %}<i class="{{ item.icon }}"></i>{% endif %}
+                                {{ item.label }}
+                            </a>
+                            {% endif %}
+                            {% if item.has_children %}
+                            <ul class="dropdown-menu">
+                                {% for subitem in item.children %}
+                                <li>
+                                    <a href="{{ subitem.url }}">
+                                    {% if subitem.icon %}<i class="{{ subitem.icon }}"></i>{% endif %}
+                                    {{ subitem.label }}
+                                    </a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    {% endblock %}
+
+    <div class="container-fluid dashboard">
+        {% block breadcrumbs %}
+        <ul class="breadcrumb">
+            <li><a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a></li>
+        </ul>
+        {% endblock %}
+
+        <div class="content">
+            {% include 'dashboard/partials/alert_messages.html' %}
+            {% block header %}
+            <div class="page-header action">
+                <h1>{% block headertext %}{% endblock %}</h1>
+            </div>
+            {% endblock %}
+            <div class="page-content">
+                {% block content %}
+                    {% block dashboard_content %}{% endblock dashboard_content %}
+                {% endblock content %}
+            </div>
+        </div>
+    </div><!-- /container -->
+
+
+<div id="note_alert" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            {% get_tomorrows_notes request as data1 %}
+            {% if data1 %}
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"> All Notes</h4>
+            </div>
+            <div class="modal-body" style="min-height: 400px; height: 200px; overflow-y: scroll;">
+                {% for data in data1 %}
+                    <div class="alert alert-success">
+                        <p class="note_heading" style="font-size:14px; margin-bottom:10px;">Important Note for {{data.start_date}} is {{data.note}}. </p>
+                        <a href="{% url 'deactivate_note' data.id %}" class="btn btn-xs btn-warning"> Dismiss</a>
+                    </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+
+<div class="footer">
+    {% footer_text as foot %}
+    <p>{{foot}}</p>
+</div>
+
+<div class="loader"></div>
+
+{% endblock %}
+
+{# Local scripts #}
+{% block scripts %}
+    <!-- Twitter Bootstrap -->
+    <!-- Oscar -->    <script src="{% static "oscar/js/bootstrap3/bootstrap.min.js" %}"></script>
+
+    <script src="{% static "oscar/js/oscar/ui.js" %}"></script>
+{% endblock %}
+
+{% block extrascripts %}
+    {{ block.super }}
+
+    {# jQuery plugins #}
+    <script src="{% static "oscar/js/mousewheel/jquery.mousewheel.js" %}"></script>
+    <script src="{% static "oscar/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js" %}"></script>
+    <script src="{% static "oscar/js/bootstrap-datetimepicker/locales/bootstrap-datetimepicker.all.js" %}"></script>
+    <script src="{% static "oscar/js/inputmask/jquery.inputmask.bundle.js" %}"></script>
+<!--    <script src="{% static "oscar/js/select2/select2.min.js" %}"></script>-->
+    <script src="{% static "oscar/js/jquery-sortable/jquery-sortable-min.js" %}"></script>
+    <script src="{% static "oscar/js/oscar/dashboard.js" %}"></script>
+    <script src="{% static "oscar/js/oscar/custom_dashboard.js" %}"></script>
+    <script src="{% static "oscar/js/oscar/RelatedObjectLookups.js" %}"></script>
+    <script src="{% static "oscar/js/tinymce/tinymce.min.js" %}"></script>
+    <script src="{% static "oscar/js/tinymce/jquery.tinymce.min.js" %}"></script>
+
+
+    {{ form.media.js }}
+    {% if 'arrange' not in request.path %}
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.full.js"></script>
+    {% endif %}
+
+    <script>
+        $(document).ready(function () {
+            {% if system_error %}
+                console.log(system_error);
+                console.log('Something went wrong! Please try again');
+            {% endif %}
+        });
+        function inti_function(){
+            $("html,body").animate({ scrollTop: 0 });
+        }
+
+       $( document ).ready(function() {
+    $('.notification').on( "click", function() {
+           $("#note_alert").modal("show");
+
+        });
+        });
+$( document ).ready(function() {
+var today = new Date();
+if(today.getHours() >= 9 && today.getHours() < 19){
+ $('.notification').show();
+}
+else{
+ $('.notification').hide();
+}
+});
+
+    </script>
+
+
+
+
+{% endblock %}
+
+{% block onbodyload %}
+    {{ block.super }}
+
+    // Javascript to enable link to tab
+    var url = document.location.toString();
+    if (url.match('#')) {
+        $('.nav-list a[href="#' + url.split('#')[1] + '"]').tab('show');
+    }
+
+    // Change hash for page-reload
+    $('.nav-list a').on('shown.bs.tab', function (e) {
+        window.location.hash = e.target.hash;
+    });
+
+    options = {
+      'languageCode': '{{ LANGUAGE_CODE }}'
+    };
+    oscar.dashboard.init(options);
+{% endblock %}

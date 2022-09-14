@@ -1,0 +1,154 @@
+{% extends "layout_2_col.html" %}
+{% load i18n %}
+{% load thumbnail %}
+{% load currency_filters %}
+{% load purchase_info_tags %}
+{% load display_tags %}
+{% load reviews_tags %}
+{% load staticfiles %}
+{% load mathfilters %}
+{% load common %}
+
+{% load product_tags %}
+{% load purchase_info_tags %}
+
+{% block navigation %}
+    {% include "partials/nav_primary.html" with expand_dropdown=1 %}
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block column_left %}
+{% endblock %}
+
+{% block content %}
+
+<style>
+    html {
+        scroll-behavior: smooth !important;
+    }
+
+    .Sale { background-color:#F4B801 !important; } .Rent { background-color:#F4B801  !important; } .RentOrSale { background-color:#F4B801 !important; } .Service { background-color:#F4B801 !important; } .Professional{background-color:#F4B801 !important; } .Sale_after { border-color: transparent transparent #F4B801 transparent; } .Rent_after { border-color: transparent transparent #F4B801  transparent;} .RentOrSale_after { border-color: transparent transparent #F4B801 transparent; } .Service_after { border-color: transparent transparent #F4B801 transparent; } .Professional_after{border-color: transparent transparent #F4B801 transparent; } .Sale_before { border-color: transparent #F4B801 transparent transparent; } .Rent_before { border-color: transparent #F4B801  transparent transparent;} .RentOrSale_before { border-color: transparent #F4B801 transparent transparent; } .Service_before { border-color: transparent #F4B801 transparent transparent;} .Professional_before{border-color: transparent #F4B801 transparent  transparent; } .btn-link-red{ background-color: #f4b800; color: #fff !important; } .btn-link-red:hover{ background-color: #e91d4a; color: #fff !important; } .btn-gp{ margin-right:0 !important; }
+    .home-banner-img{
+     //   height:30em !important;
+    }
+    .banner-text-mr{
+      //  margin-top:-130px !important;;
+    }
+    .postid-2784 .btn-red {
+        width: auto;
+        margin-bottom: 0px !important;
+        margin-right: 10px;
+    }
+    .nz-content-box-2 .box-content {
+        margin-bottom: 0px !important;
+        height: auto !important;
+        padding-bottom: 0px !important;
+    }
+    .section-1-pr, .section-3-div{
+        padding-top:10px  !important;
+    }
+    @media only screen and (min-width: 768px) {
+        .woocommerce .products .product, .woocommerce .menu-group {
+            padding-right: 0px !important;
+            padding-left: 0px !important;
+        }
+    }
+    .mr-top-l1{
+        padding-top: 1rem !important;
+    }
+    #parallax_2{
+        margin-bottom:0px !important;
+    }
+    <!--.owl-controls{-->
+        <!--display: block !important;-->
+    <!--}-->
+    <!--.owl-pagination{-->
+        <!--display: none !important;-->
+    <!--}-->
+    <!--.css-animated > .owl-pagination{-->
+        <!--display: block !important;-->
+    <!--}-->
+    .owl-controls.clickable .owl-buttons .owl-prev, .owl-controls.clickable .owl-buttons .owl-next{
+    color:#fff;
+    }
+</style>
+
+
+
+
+<div id="nz-content" class='content nz-clearfix sidebar-none padding-false'>
+
+
+    <div class='page-full-width'>
+        <!-- post start -->
+        <div id="post-28" class="post-28 page type-page status-publish hentry">
+            <section class="page-content nz-clearfix">
+                <div id="nz-discover-menu" style="padding-bottom:0;" class="section-1-pr mr-top-l1 nz-section horizontal autoheight-false animate-false full-width-false " data-img-width="3" data-img-height="3" data-animation-speed="35000" data-parallax="false">
+                    <div class="container">
+                        <div class="nz-row">
+
+
+                            <!-- -->
+                            {% for all_categories_obj in list_obj  %}
+                            <div class="col vc_col-sm-12 col12  col-animate-true" style="margin-bottom:40px;" data-effect="fade-bottom" data-align="left" data-margin="false">
+                                <div class="col-inner" style="">
+
+                                    <h2 class="vc_custom_heading">{{all_categories_obj.offer_title}}</h2>
+                                    <p class="vc_custom_heading"></p>
+
+
+                                    <!-- -->
+
+                                    <div id="nz-carousel-1" class="lazy  animate-none" data-autoplay="true" data-columns="1" data-animate="false">
+                                        <div class="item animate-item nz-clearfix">
+
+                                            <!-- category name -->
+                                            <h3 class="product-category-title" style="text-align: center;">
+                                                {{all_categories_obj.name}}
+                                            </h3>
+                                            <!-- category name -->
+
+                                            {% include "promotions/partials/corporate_partial.html"%}
+
+                                            <div class="" style="text-center">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="" style="text-align: center;padding:15px; ">
+                                                <a href="{% url 'catalogue:all_manage_offer_product' pk=all_categories_obj.id %}" target="_blank" class="button button-ghost turquoise large round"  type="button" style="box-border:1px #e91d4a;     box-shadow:none;color: #00c1cf;background-color: #e91d4a;color: #fff;">
+                                                    View All {{all_categories_obj.offer_title }}
+                                                </a>
+                                            <div class="" style="text-center">
+
+                                            </div>
+                                        </div>
+
+
+                                    <!-- -->
+
+
+                                </div>
+                            </div>
+                            {% empty %}
+                            <h1 class="text-center" style="margin:10% auto;">No products.</h1>
+                            {% endfor %}
+
+                            <!-- -->
+
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block extrascripts %}
+{{block.super}}
+
+{% endblock %}

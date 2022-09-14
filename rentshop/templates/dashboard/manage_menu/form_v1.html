@@ -1,0 +1,363 @@
+{% extends 'dashboard/layout.html' %}
+{% load i18n %}
+{% load thumbnail %}
+{% load staticfiles %}
+{% load form_tags %}
+
+{% block body_class %}{{ block.super }} create-page catalogue{% endblock %}
+
+{% block title %}
+    Menu | {% trans "Products" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li>
+            <a href="{% url 'dashboard:manage-menu-index' %}">{% trans "Corporate Offers" %}</a>
+        </li>
+        <li class="active">
+            {% if type %}
+                Update Corporate Offers
+            {% else %}
+                Create Corporate Offers
+            {% endif %}
+        </li>
+    </ul>
+{% endblock %}
+
+{% block headertext %}{{ offer_title }}{% endblock %}
+
+{% block dashboard_content %}
+
+    <style>
+        {% if isVendor %}
+            .partner_class{
+                display: none !important;
+            }
+        {% endif %}
+        .seq-class{
+            margin-top: -15px;
+            margin-bottom: 5px;
+        }
+    </style>
+
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <style>
+        .box1{
+            border:1px solid #555;
+            border-radius:3px;
+            //padding:10px;
+            margin:5px;
+        }
+        .box-title{
+            background-color: #ddd;
+            padding: 1px;
+            text-align: center;
+        }
+        .box-title > h6{
+            margin:5px;
+        }
+        .box-body{
+            padding:20px;
+            text-align:center;
+        }
+        .plus-btn{
+            background-color: transparent;
+            border: 0;
+            font-size:26px;
+        }
+        .box-footer{
+            text-align: center;
+            padding: 5px;
+        }
+        .place-footer{
+            height:41px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            padding: 5px;
+        }
+    </style>
+
+
+    <form onsubmit="validate_final()" action="{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}" method="post" class="form-stacked wysiwyg fixed-actions {% if request.user.is_superuser %} admin_manage_form {% else %} vendor_manage_form {% endif %}" enctype="multipart/form-data" data-behaviour="affix-nav-errors" autocomplete="off">
+        {% csrf_token %}
+
+        <div class="row">
+
+            {% block tab_nav %}
+                <div class="col-md-3" hidden>
+                    <div data-spy="affix" class="affix-top" data-offset-top="200">
+                        <div class="table-header">
+                            <h3>{% trans "Sections" %}</h3>
+                        </div>
+                        <ul class="nav nav-list bs-docs-sidenav" id="product_update_tabs">
+                            {% block tabs %}
+                                <li class="active">
+                                    <a href="#product_details" data-toggle="tab">
+                                        {% trans 'Corporate Offers Offer Details' %}
+                                    </a>
+                                </li>
+                            {% endblock tabs %}
+                        </ul>
+                    </div>
+                </div>
+            {% endblock tab_nav %}
+
+            <div class="col-md-12">
+                <div class="tab-content">
+
+                    <h3>
+                        {% if type %}
+                            Update Menu
+                        {% else %}
+                            Create Menu
+                        {% endif %}
+                    </h3>
+                    {% block tab_content %}
+
+                        {% block product_details %}
+                            <div class="tab-pane active" id="product_details" >
+                                <div class="table-header">
+                                    <h3>{% trans "Menu" %}</h3>
+                                </div>
+                                <div hidden>{{manage_form.product}}</div>
+                                <div class="well product-details">
+                                    <div class="row">
+                                        <div class="form-group col-md-6" style="padding-left:15px; padding-right:15px; margin-bottom:10px;">
+                                            <p class="control-label"> <strong> Menu*</strong> </p>
+                                            {{manage_form.header_menu}}
+                                            {% if manage_form.errors.header_menu %}
+                                                <p class="color-red">
+                                                    {{manage_form.header_menu.errors.as_text}}
+                                                </p>
+                                            {% endif %}
+                                        </div>
+                                        <div class="form-group col-md-6" style="padding-left:15px; padding-right:15px; margin-bottom:10px;">
+                                            <p class="control-label"> <strong> Offer Title*</strong> </p>
+                                            {{manage_form.offer_title}}
+                                            {% if manage_form.errors.offer_title %}
+                                                <p class="color-red">
+                                                    {{manage_form.offer_title.errors.as_text}}
+                                                </p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="tab-pane active" id="product_details">
+                                <div class="table-header">
+                                    <h3>{% trans "Add Products" %}</h3>
+<!--                                    <button type="button" onclick="add_product_formset()" class="btn btn-xs btn-warning pull-right">Add Product</button>-->
+
+                                </div>
+
+                                <div class="well">
+                                    <div class="row">
+                                        <div class="form-group col-md-12" style="padding-left:15px; padding-right:15px; margin-bottom:10px;">
+                                            <p class="control-label"> <strong>Offer Products*</strong> </p>
+                                            {{manage_form.product}}
+                                            {% if manage_form.errors.product %}
+                                                <p class="color-red">* Enter a valid offer products.</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                    <!-- row -->
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="alert alert-success" id="dp_hide" hidden>
+                                                Please remove duplicate products.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        {{ manage_form_set.management_form }}
+                                        {% for i in manage_form_set %}
+                                        {% include "dashboard/partials/form_field.html" with field=i.id nolabel=True %}
+                                        <div class="col-md-3">
+                                            <div class="box1">
+                                                <div class="box-title">
+                                                    <h6>Product {{forloop.counter}}</h6>
+                                                </div>
+                                                <div class="box-body">
+                                                    {% if i.manage_product.value %}
+                                                    <button type="button" class="plus-btn" onclick="remove_product('{{forloop.counter0}}', '{{i.manage_product.value}}','{{i.manage_menu.value}}')">
+                                                        <em class="fa fa-minus-circle"></em>
+                                                    </button>
+                                                    {% else %}
+                                                    <button type="button" class="plus-btn" onclick="add_product('{{forloop.counter}}')">
+                                                        <em class="fa fa-plus-circle"></em>
+                                                    </button>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="box-footer">
+                                                    <div class="place-footer">
+                                                        {% if i.manage_product.value %}
+                                                        <div class="form-product" id="product-{{forloop.counter}}">
+                                                            {{i.manage_product}}
+                                                            <input class="set_product_id" type="hidden" value="{{i.manage_product.value}}"/>
+                                                        </div>
+                                                        {% else %}
+                                                        <span id="product-span-{{forloop.counter}}">No product</span>
+                                                        <div class="form-product" id="product-{{forloop.counter}}" style="display:none;">
+                                                            {{i.manage_product}}
+                                                        </div>
+                                                        {% endif %}
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+
+                                    <!-- row -->
+
+                                </div>
+                            </div>
+                        {% endblock product_details %}
+                    {% endblock tab_content %}
+                </div>
+            </div>
+        </div>
+
+        {% block fixed_actions_group %}
+            <div class="fixed-actions-group">
+                <div class="form-group">
+                    <div class="pull-right">
+                        <a href="{% url 'dashboard:combo-index' %}">
+                            {% trans "Cancel" %}
+                        </a>
+                        {% trans "or" %}
+                        <button class="btn btn-primary btn-lg" name="action" type="submit" value="save">
+                            {% trans "Save" %}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        {% endblock fixed_actions_group %}
+    </form>
+{% endblock dashboard_content %}
+
+{% block extrascripts %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" href="{% static 'oscar/css/products/common_select2.css' %}" type="text/css" media="screen">
+
+    <script>
+
+        function checkIfArrayIsUnique(myArray) {
+            return myArray.length === new Set(myArray).size;
+        }
+
+
+        function validate_final(){
+
+            $('#dp_hide').hide();
+            var product_array = [];
+
+            $('.manage_product').each(function() {
+                if(this.value){
+                    product_array.push($(this).val());
+                }
+            });
+
+            var is_unique =  checkIfArrayIsUnique(product_array)
+
+            if (is_unique == false){
+                $('#dp_hide').show();
+                alert('Please remove duplicate products')
+                event.preventDefault();
+                return false;
+            }
+        }
+
+
+
+
+        $(function() {
+
+            product_ids = []
+
+            // for each
+            $('.set_product_id').each(function(){
+                product_ids.push($(this).val());
+            })
+          //  alert(product_ids);
+            // on change method
+
+            $(".combo_product_l").on('change', function(){
+                if(jQuery.inArray(this.value, product_ids) != -1) {
+                    alert('Product already added.')
+                    $(this).val('');
+                } else {
+                    product_ids.push(this.value);
+                }
+
+            });
+
+        });
+
+    </script>
+
+    <script>
+
+        function add_product(cnt){
+            $('#product-span-'+cnt).hide();
+            $('#product-'+cnt).show();
+        }
+
+        function remove_product(cnt, id,form_id){
+
+            var is_confirm = confirm("Do you really want to remove product.");
+            if (is_confirm == false){
+                return false;
+            }
+
+            //var idx = $('#id_manage_product-'+cnt+'-id').val();
+           // alert(id);
+           // alert(form_id);
+            $.ajax({
+                type:'post',
+                url : '/delete_header_product/',
+                data : {
+                    'manage_product_id': id,
+                         'form_id':form_id,
+                },
+                success : function(data){
+                    if(data == 'IN_SERVER'){
+                        window.location.replace("/dashboard");
+                    }
+                    if (data == 'TRUE'){
+                        window.location.reload();
+                    }
+                },
+                failure : function(result){
+                },
+            });
+        }
+
+function add_product_formset(){
+    $('.show:last').nextAll().slice(0, 2).toggleClass('show hide_me');
+}
+
+    </script>
+<script>
+     $(document).ready(function() {
+               $('#id_header_menu').select2();
+               $('.manage_product').select2();
+        });
+</script>
+
+
+{% endblock %}

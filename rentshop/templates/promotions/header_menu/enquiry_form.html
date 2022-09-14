@@ -1,0 +1,305 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<style>
+    @import url('https://fonts.googleapis.com/css?family=Playball&display=swap');
+    .heading {
+        margin-left: 0px;
+        margin-top: 5px;
+        font-family: 'Playball', cursive;
+        color: #edab00;
+    }
+    #enquiry_form{
+        margin-top:45px;
+    }
+    label{
+       //filter: drop-shadow(2px 2px 2px #CCCCCC);
+       line-height: 1.5;
+       color: #212529;
+       font-size:2rem;
+       font-weight: 300;
+    }
+
+.form-control-qoute:focus {
+    color: #495057 !important;
+    background-color: #fff !important;
+    border-color: #80bdff !important;
+    outline: 0 !important;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25) !important;
+}
+.form-control-qoute{
+    display: block !important;
+    width: 100% !important;
+    height: calc(1.5em + .75rem + 2px) !important;
+    padding: .375rem .75rem !important;
+    font-size: 2rem !important;
+    font-weight: 400 !important;
+    line-height: 1.5 !important;
+    color: #495057 !important;
+    background-color: #fff !important;
+    background-clip: padding-box !important;
+    border: 1px solid #ced4da !important;
+    border-radius: .25rem !important;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;
+    filter: drop-shadow(2px 2px 2px #CCCCCC) !important;
+}
+
+
+.error_label{
+    color:red; font-size:14px;
+}
+.cm-label-check{
+    margin-left: 20px;
+}
+.to{
+    color:#000;
+    font-size:2rem;
+    margin-top:5px;
+}
+.btn-qoute{
+    color: #212529;
+    background-color: #ffc107;
+    border-color: #ffc107;
+    flex: 0 0 16.666667%;
+    max-width: 16.666667%;
+    display: inline-block;
+    font-weight: 400;
+    color: #212529;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    padding: .375rem 1.75rem;
+    font-size: 2rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.heading {
+        background-color: #FFCC33;
+        padding:0px !important;
+        margin-top:50px !important;
+    }
+    .heading1 {
+        margin-left: 225px;
+        margin-top: 5px;
+        font-family: 'Playball', cursive;
+        color: #ffffff;
+        height: 50px;
+        font-size: 30px;
+    }
+    .h3{
+        color: #000 !important;
+        font-size:26px;
+    }
+.x_label {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: 700;
+    font-size:14px;
+    margin-bottom:20px !important;
+    filter: drop-shadow(2px 2px 2px #CCCCCC) !important;
+}
+
+.y_label label{
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: 700;
+    font-size:14px;
+    margin-bottom:20px !important;
+    filter: drop-shadow(2px 2px 2px #CCCCCC) !important;
+}
+
+.form-control-qoute{
+
+filter: drop-shadow(2px 2px 2px #CCCCCC) !important;
+padding: 6px 12px !important;
+    font-size: 14px !important;
+    color :#555 !important;
+    height: 34px !important;
+}
+
+.xbtn {
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    padding: 6px 12px;
+    font-size: 15px;
+    line-height: 1.42857143;
+    border-radius: 4px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    flex: 0 0 100%  !important;
+    max-width: 35% !important;
+    width:30% !important;
+    text-transform: capitalize;
+
+}
+
+.xbtn-warning {
+    color: #fff;
+    background-color: #f0ad4e;
+    border-color: #eea236;
+    margin-top:20px !important;
+    margin-left:25%;
+}
+</style>
+
+<div class="shop-layout-wrap" id="nz-target" autofocus style="background-color:#fff;">
+    <section class='content nz-clearfix' data-rp="true" data-rpn="4" style="width:100%;">
+        <div class="heading"><h3 class="heading1">Get Best Quote</h3></div>
+        <div class="qoute-form-wrapper setup-content">
+        <main class="main">
+            <div class="col-md-1"></div>
+            <section class="twitter col-md-5">
+                <form role="form" id="enquiry_form" method="post">
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        <label for="id_email" class="x_label">Email Address:</label>
+                        {{form.email}}
+                        {% if form.errors.email %}
+                            <label class="error_label">{{form.errors.email.as_text}}</label>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_organization_name" class="x_label">Organisation Name:</label>
+                        {{form.organization_name}}
+                        {% if form.errors.organization_name %}
+                            <label class="error_label">{{form.errors.organization_name.as_text}}</label>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_person_name" class="x_label">Contact Person Name:</label>
+                        {{form.person_name}}
+                        {% if form.errors.person_name %}
+                            <label class="error_label">{{form.errors.person_name.as_text}}</label>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_telephone_number" class="x_label">Contact Mobile Number:</label>
+                        {{form.telephone_number}}
+                        {% if form.errors.telephone_number %}
+                            <label class="error_label">{{form.errors.telephone_number.as_text}}</label>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_enquiry_date" class="x_label">Event Date:</label>
+                        {{form.enquiry_date}}
+                        {% if form.errors.enquiry_date %}
+                            <label class="error_label">{{form.errors.enquiry_date.as_text}}</label>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_rental_duration" class="x_label">Rental Duration:</label>
+                        <div style="display:flex;">
+                            {% for item in form.rental_duration %}
+                            <label class="y_label {% if forloop.first %}{% else %}cm-label-check{% endif %}">
+                                {{item}}
+                                <span class="checkmark"></span>
+                            </label>
+                        {% endfor %}
+                        </div>
+
+                        {% if form.errors.rental_duration %}
+                            <label class="error_label">{{form.errors.rental_duration.as_text}}</label>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_event_date" class="x_label">*Budget:</label> <br/>
+                        <div style="display:flex; margin-top:-10px;">
+                            {{form.budget_from}}
+                        <label class="to">&nbsp;&nbsp;To&nbsp;&nbsp;</label>
+                        {{form.budget_to}}
+                        </div>
+                        <label class="error_label">{{form.errors.budget_from.as_text}}</label>
+                        <label class="error_label">{{form.errors.budget_to.as_text}}</label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_event_type" class="x_label">Event Type:</label>
+
+{% for value, text in form.event_type.field.choices %}
+  <div class="col-md-6">
+    <input id="id_event_type_{{ forloop.counter0 }}" name="{{ form.event_type.name }}" type="checkbox" value="{{ value }}"{% if value in checked_event_type %} checked="checked"{% endif %}>
+    <label style="display:inline;" class="x_label">{{ text }}</label>
+  </div>
+{% endfor %}
+
+                        {% if form.errors.event_type %}
+                            <label class="error_label">{{form.errors.event_type.as_text}}</label>
+                        {% endif %}
+                    </div>
+
+
+                    <div class="form-group text-center-x">
+                        <br/>
+                        <button type="submit" class="xbtn xbtn-warning col-2">Send</button>
+                    </div>
+
+                </form>
+
+            </section>
+        </main>
+    </div>
+    </section>
+</div>
+
+{% endblock %}
+
+{% block extrascripts %}
+
+    {% load static %}
+    {{block.super}}
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="{% static 'core_assets/packages/boostrap-daterange-picker-3/moment.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'core_assets/packages/boostrap-daterange-picker-3/daterangepicker.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'core_assets/packages/boostrap-daterange-picker-3/product.daterangepicker.js' %}"></script>
+
+    <style>
+        .ui-datepicker .ui-datepicker-title {
+            margin: 0 !important;
+            line-height: 1.8em;
+            text-align: center;
+            display: flex !important;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $('#id_enquiry_date').datepicker(
+                {
+                    format: 'mm/dd/yyyy',
+                    startDate: '-3d',
+                    minDate: 0,
+                    changeMonth: true,
+                    changeYear: true,
+                }
+            );
+        });
+
+    </script>
+
+{% endblock %}

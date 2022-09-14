@@ -1,0 +1,130 @@
+{% extends "customer/baseaccountpage.html" %}
+{% load currency_filters %}
+{% load display_tags %}
+{% load i18n %}
+{% load reviews_tags %}
+{% load static %}
+
+{% block tabcontent %}
+
+    <style>
+        body { margin: 0; font-family: "Arial", sans-serif; } .addr { margin-left: 5%; margin-top: 5px; ; } .h6 { font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size: 1vw; color: #edab00; } .Table_product { display: table; font-family: 'Arial'; font-size: 1.1vw; border-collapse: collapse; width: 85%; margin-left: 5%; margin-top: 25px; border: 1px solid #CCCCCC; text-align: center; color: #000000; } .Headings { display: table-row; background-color: #edab00; width: 17%; border: 1px solid #CCCCCC; color: #ffffff; font-weight: lighter; vertical-align: middle; text-align: center; } .Rows { display: table-row; border: 1px solid #CCCCCC; vertical-align: middle; } .Cells { display: table-cell; padding: 10px; width: 17%; border: 1px solid #CCCCCC; vertical-align: middle; } .Cells a img { cursor: pointer; width: 50%; height: 25%; } .Cells img { cursor: pointer; width: 50%; height: 25%; } .h6-ship{ font-size:2rem !important; color:#edab00; }
+    </style>
+
+<h3 class="heading"> My Orders details #{{order.number}}</h3>
+
+<div class="addr">
+    <h6 class="h6-ship">Customer Address</h6>
+    <h7 style="color:#000">
+        {{order.shipping_address.line1}}, {{order.shipping_address.line2}}
+        {{order.shipping_address.line3}}, {{order.shipping_address.state}},
+        {{order.shipping_address.postcode}}
+
+    </h7>
+</div>
+
+<div style="overflow-x:auto;">
+
+    <div class="Table_product">
+
+        <div class="Headings">
+            <div class="Cells"></div>
+            <div class="Cells"><p>Product Name</p></div>
+            <div class="Cells"><p>Quantity</p></div>
+            <div class="Cells"><p>Order Date</p></div>
+            <div class="Cells"><p>Cost</p></div>
+            <div class="Cells"><p>Total</p></div>
+            {% if order.status == 'Completed' %}<div class="Cells"><p>Action</p></div>{% endif %}
+        </div>
+
+        {% for line in order.lines.all %}
+            {% with product=line.product %}
+            <div class="Rows">
+                <div class="Cells">
+                    <a href="{% url 'customer:user-only-order' order_id=order.id product_id=product.id line_id=line.id %}">
+                        {% if product.images.first %}
+                            <img src="{{product.images.first.original.url}}" alt="{{order.number}}"/>
+                        {% else %}
+                            <img alt="{{line.product.title}}" src="{% static 'oscar/images/icons/no_image.png' %}"/>
+                        {% endif %}
+                    </a>
+                </div>
+
+                <div class="Cells">
+                    <p>{{line.description}}</p>
+                </div>
+
+                <div class="Cells">
+                    <p>{{line.quantity}}</p>
+                </div>
+
+                <div class="Cells">
+                    <p>{{ order.date_placed |date:"d/m/Y"}}</p>
+                </div>
+                <div class="Cells">
+                    <p>{{line.line_price_incl_tax}}</p>
+                </div>
+                <div class="Cells">
+                    <p>{{  line.line_price_incl_tax|currency:order.currency }}</p>
+                </div>
+                {% if order.status == 'Completed' %}
+                <div class="Cells">
+                    {% if line.product_invoice %}
+                        <a href="{{line.product_invoice}}" target="_blank" class="btn btn-dn btn-xs btn-primary">Download Invoice</a>
+                    {% else %}
+                        <button type="button" disabled class="btn btn-xs btn-primary btn-dn">Download Invoice</button>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+            {% endwith %}
+        {% endfor %}
+        <div class="Rows">
+
+            <div class="Cells"></div>
+            <div class="Cells"></div>
+            <div class="Cells"></div>
+            <div class="Cells"></div>
+            <div class="Cells" style="background-color:#edab00; color:#FFFFFF;">
+                <p>Grand Total</p>
+            </div>
+            <div class="Cells" style="background-color:#edab00; color:#FFFFFF;">
+                <p>
+                    {{order.basket_total_incl_tax|currency:order.currency }}
+                </p>
+            </div>
+
+    </div>
+
+
+</div>
+
+
+    <div class="addr">
+        <style>
+            .btn-dn{
+                background-color: #f4b800 !important;
+                border-color: #f4b800 !important;
+                color: #fff !important;
+                border-radius: 0px !important;
+                padding: 10px;
+            }
+        </style>
+        <div class="Cells cell-no" style="width:100%; border:0; padding:0;">
+            {% if order.get_order_summary %}
+                <a href="{{order.get_order_summary}}" target="_blank" class="btn btn-xs btn-primary btn-dn">Download Order Summary</a>
+            {% else %}
+                <button type="button" disabled class="btn btn-xs btn-primary btn-dn">Download Order Summary</button>
+            {% endif %}
+        </div>
+    </div>
+
+<script>
+    var element = document.getElementById("my_order_link");
+    element.classList.add("active");
+</script>
+
+
+{% endblock tabcontent %}
+
+

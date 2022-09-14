@@ -1,0 +1,65 @@
+{% load reviews_tags %}
+{% load i18n %}
+{% load static %}
+{% load common %}
+{% load mathfilters %}
+               <div class="tab-pane" id="reviews">
+                <div class="trp-comments">
+                  {% for review in product.reviews.approved.all %}
+                  <div class="trp-comment-list">
+                    <div class="trp-comment-item">
+                      <div class="trp-comment-media">
+                        <div class="trp-comment-avtar">
+                          <img src="{% static 'new_design/assets/images/user-profile.png' %}" alt="">
+                        </div>
+                        <div class="trp-comment-rating">
+                          <div class="star-rating">
+
+                            <input type="radio" id="1-stars"  value="5"  {% if review.score == 5 %} checked {% else %} disabled {% endif %}/>
+                            <label for="1-stars" class="star">&#9733;</label>
+                            <input type="radio" id="2-stars"  value="4" {% if review.score == 4 %} checked {% else %} disabled {% endif %}/>
+                            <label for="2-stars" class="star">&#9733;</label>
+                            <input type="radio" id="3-stars"  value="3" {% if review.score == 3 %} checked {% else %} disabled {% endif %}/>
+                            <label for="3-stars" class="star">&#9733;</label>
+                            <input type="radio" id="4-stars"  value="2" {% if review.score == 2 %} checked {% else %} disabled {% endif %}/>
+                            <label for="4-stars" class="star">&#9733;</label>
+                            <input type="radio" id="5-star" value="1" {% if review.score == 1 %} checked {% else %} disabled {% endif %}/>
+                            <label for="5-star" class="star">&#9733;</label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="trp-comment-content">
+                          <div class="trp-comment-name">
+                            <p>{% if review.name %}
+                              {{review.name}}
+                              {% elif review.user %}
+                              {{review.user}}
+                              {% else %}
+                              -
+                              {% endif %}
+                            </p>
+                          </div>
+                          <div class="trp-comment-message">
+                            <p>{{ review.body|striptags }}</p>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
+                 {% if request.user.is_active %}
+                  {% if product|is_review_permitted:user %}
+                <div class="trp-review-form-wrapper mt-40">
+                  <div class="row ">
+                    <div class="col-sm-12">
+                      <div class="review-form-title">
+                        <h3 class="review-title">Add a Review</h3>
+                      </div>
+                    </div>
+                  </div>
+                  {% include "new_design/catalogue/partials/review_form.html" %}
+                </div>
+                {% endif %}
+                 {% endif %}
+              </div>
+

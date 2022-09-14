@@ -1,0 +1,40 @@
+{% extends 'dashboard/layout.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block body_class %}{{ block.super }} create-page{% endblock %}
+
+{% block title %}
+    {% trans "Delete partner" %} | {% trans "Partners" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+
+        <li class="active">{% trans "Delete Unit ?" %}</li>
+    </ul>
+{% endblock %}
+
+{% block headertext %}
+    {{ partner.name }}
+{% endblock %}
+
+{% block dashboard_content %}
+    <form action="." method="post" id="unit_delete_form">
+        {% csrf_token %}
+        <p>{% trans "Are you sure you want to delete this unit?" %}</p>
+        <div class="form-actions">
+            <input type="text" value="{{pk}}" name="pk" hidden>
+            <button class="btn btn-lg btn-danger" type="button" onclick="delete_confirmation_unit()">{% trans "Delete" %}</button> {% trans "or" %}
+            <a href="{% url 'dashboard:product_unit' %}">{% trans "cancel" %}</a>
+        </div>
+    </form>
+{% endblock dashboard_content %}
+
+{% block extrascripts %}
+    {{ block.super }}
+    <script src="{% static 'oscar/js/dashboard/catalogue/unit.js' %}"></script>
+{% endblock %}

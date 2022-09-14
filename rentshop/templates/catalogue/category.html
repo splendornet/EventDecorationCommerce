@@ -1,0 +1,27 @@
+{% extends "catalogue/browse.html" %}
+
+{% load i18n %}
+
+{% block title %}
+    {{ category.name }} | {{ block.super }}
+{% endblock %}
+
+
+<!-- browse breadcrumbs -->
+
+<!-- product breadcrumbs -->
+
+
+
+
+
+{% block content %}
+<!--<div class="nz-breadcrumbs nz-clearfix">-->
+<!--    <div class="container m-less-padding">-->
+<!--        <a href="{{ homepage_url }}" rel="v:url" property="v:title">{% trans "Home" %}</a>-->
+<!--            <span class="current">{{ category.name }}</span>-->
+
+<!--    </div>-->
+<!--</div>-->
+    {{ block.super }}
+{% endblock %}

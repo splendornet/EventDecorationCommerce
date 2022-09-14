@@ -1,0 +1,18 @@
+{% load display_tags %}
+{% load i18n %}
+
+
+{% if paginator.num_pages > 1 %}
+<nav class="ninzio-nav-single nz-clearfix" style="display:none;">
+    {% if page_obj.has_previous %}
+    <a rel="prev"  href="?{% get_parameters page %}page={{ page_obj.previous_page_number }}">
+        Previous
+    </a>
+    {% endif %}
+    {% if page_obj.has_next %}
+    <a rel="next" class="infinite-more-link" href="?{% get_parameters page %}page={{ page_obj.next_page_number }}" title="" style="display:none;">
+        Next
+    </a>
+     {% endif %}
+</nav>
+{% endif %}

@@ -1,0 +1,16 @@
+{% extends "customer/emails/base.html" %}
+{% load currency_filters i18n %}
+
+{% block tbody %}
+{% autoescape off %}
+{% load static %}
+<tr>
+    <td class="content-block">
+        <p xmlns="http://www.w3.org/1999/html">Hello Admin</p>
+        <p>New asp registred.</p>
+        <p>Name : {{vendor.first_name}} {{vendor.last_name}}</p>
+        <p>Email : {{email_id}}</p>
+    </td>
+</tr>
+{% endautoescape %}
+{% endblock %}

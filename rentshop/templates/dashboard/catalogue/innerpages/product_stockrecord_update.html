@@ -1,0 +1,156 @@
+{% load i18n %}
+
+<style>
+    .sm-badge{
+        font-size:8px !important;
+    }
+</style>
+
+<div class="table-header">
+    <h3>{% trans "ASP Information" %}</h3>
+</div>
+
+{{ stockrecord_formset.management_form }}
+{{ stockrecord_formset.non_form_errors }}
+
+{% for stockrecord_form in stockrecord_formset %}
+
+    <div class="well product-details">
+
+        <div class="batch batch-1">
+            <!-- select vendor -->
+            <div class="form-group" style="margin-bottom:10px;">
+                <p class="control-label">ASP</p>
+                {% include "dashboard/partials/form_field.html" with field=stockrecord_form.partner nolabel=True %}
+            </div>
+            <!-- select vendor -->
+
+            <!-- vendor sku -->
+            <div class="form-group" style="margin-bottom:10px;">
+                <p class="control-label">SKU</p>
+                {% include "dashboard/partials/form_field.html" with field=stockrecord_form.partner_sku nolabel=True %}
+            </div>
+            <!-- vendor sku -->
+        </div>
+        {% include "dashboard/partials/form_field.html" with field=stockrecord_form.id nolabel=True %}
+    </div>
+    <div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            Tax Percentage
+      </h4>
+    </div>
+    <div class="panel-body">
+        <!-- unit -->
+
+        <div class="form-group for_tax" style="margin-bottom:10px;">
+            <p class="control-label"> Tax Percentage %</p>
+            {% include "dashboard/partials/form_field.html" with field=stockrecord_form.tax_percentage nolabel=True %}
+        </div>
+        {% if product_class.name == 'Rent Or Sale' %}
+        <div class="form-group for_tax" style="margin-bottom:10px;">
+            <p class="control-label"> Sale Tax Percentage %</p>
+            {% include "dashboard/partials/form_field.html" with field=stockrecord_form.sale_tax_percentage nolabel=True %}
+        </div>
+        {% endif %}
+        <!-- unit -->
+    </div>
+</div>
+
+<!-- Advance payment percentage -->
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            Advance Payment Percentage
+      </h4>
+    </div>
+    <div class="panel-body">
+        <!-- unit -->
+
+        <div class="form-group" style="margin-bottom:10px;">
+            <p class="control-label">Advance Payment Percentage %</p>
+            {% include "dashboard/partials/form_field.html" with field=stockrecord_form.advance_payment_percentage nolabel=True %}
+        </div>
+        {% if product_class.name == 'Rent Or Sale' %}
+        <div class="form-group" style="margin-bottom:10px;">
+            <p class="control-label">Sale Advance Payment Percentage %</p>
+            {% include "dashboard/partials/form_field.html" with field=stockrecord_form.sale_advance_payment_percentage nolabel=True %}
+        </div>
+        {% endif %}
+        <!-- unit -->
+    </div>
+</div>
+
+        <!-- Advance payment percentage -->
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            Stock Information
+      </h4>
+    </div>
+    <div class="panel-body">
+        <!-- unit -->
+        <div class="form-group" style="margin-bottom:10px;">
+            <p class="control-label">Unit</p>
+            {% include "dashboard/partials/form_field.html" with field=stockrecord_form.unit nolabel=True %}
+        </div>
+        <!-- unit -->
+
+        <!-- min quantity -->
+        <div class="form-group" style="margin-bottom:10px;">
+            <p class="control-label">Minimum Quantity</p>
+            {% include "dashboard/partials/form_field.html" with field=stockrecord_form.minimum_qty nolabel=True %}
+        </div>
+        <!-- min quantity -->
+        {% if stockrecord_form.num_in_stock %}
+        <div class="form-group" style="margin-bottom:10px;">
+            <p class="control-label">Num In Stock</p>
+            {% include "dashboard/partials/form_field.html" with field=stockrecord_form.num_in_stock nolabel=True %}
+        </div>
+        <!-- in stock -->
+        {% endif %}
+
+        <!-- number allocate -->
+        <div class="form-group" style="margin-bottom:10px;">
+            <p class="control-label">Num Allocated</p>
+            {{ stockrecord_form.instance.num_allocated|default:"-" }}
+        </div>
+        <!-- number allocate -->
+
+        <!-- low stock threshold -->
+        <div class="form-group" style="margin-bottom:10px;">
+            <p class="control-label">Low Stock Threshold</p>
+            {% include "dashboard/partials/form_field.html" with field=stockrecord_form.low_stock_threshold nolabel=True %}
+        </div>
+        <!-- low stock threshold -->
+    </div>
+</div>
+
+
+    {% if product_class.name == 'Sale' %}
+        {% include "dashboard/catalogue/innerpages/stockrecord_inner_pages/sale_product.html" %}
+    {% endif %}
+    {% if product_class.name == 'Rent' or product_class.name == 'Professional' %}
+        {% include "dashboard/catalogue/innerpages/stockrecord_inner_pages/rent_product.html" %}
+    {% endif %}
+
+    {% if product_class.name == 'Rent Or Sale' %}
+        {% include "dashboard/catalogue/innerpages/stockrecord_inner_pages/sale_product.html" %}
+        {% include "dashboard/catalogue/innerpages/stockrecord_inner_pages/rent_product.html" %}
+    {% endif %}
+
+    {% if product_class.name == 'Sale' %}
+        {% include "dashboard/catalogue/innerpages/stockrecord_inner_pages/art_sale_product.html" %}
+    {% endif %}
+    {% if product_class.name == 'Rent' or product_class.name == 'Professional' %}
+        {% include "dashboard/catalogue/innerpages/stockrecord_inner_pages/art_rent_product.html" %}
+    {% endif %}
+
+    {% if product_class.name == 'Rent Or Sale' %}
+        {% include "dashboard/catalogue/innerpages/stockrecord_inner_pages/art_sale_product.html" %}
+        {% include "dashboard/catalogue/innerpages/stockrecord_inner_pages/art_rent_product.html" %}
+    {% endif %}
+
+{% endfor %}
+

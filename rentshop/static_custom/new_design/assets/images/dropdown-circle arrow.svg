@@ -1,0 +1,12 @@
+<svg version="1.2" baseProfile="tiny-ps" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" width="18" height="18">
+	<title>New Project</title>
+	<defs>
+		<image width="9" height="6" id="img1" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5IiBoZWlnaHQ9IjUuMTQ2IiB2aWV3Qm94PSIwIDAgOSA1LjE0NiI+CiAgICA8cGF0aCBmaWxsPSIjZmZmIiBkPSJNMTAuNjg2IDEyLjhsLTMuNDAzIDMuNGEuNjQuNjQgMCAwIDEtLjkwOCAwIC42NDkuNjQ5IDAgMCAxIDAtLjkxMWwzLjg1Ni0zLjg1OWEuNjQyLjY0MiAwIDAgMSAuODg3LS4wMTlMMTUgMTUuMjlhLjY0My42NDMgMCAxIDEtLjkwOC45MTF6IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNi4xODggLTExLjI0NikiLz4KPC9zdmc+Cg=="/>
+	</defs>
+	<style>
+		tspan { white-space:pre }
+		.shp0 { fill: #2c1950 } 
+	</style>
+	<path id="Background" class="shp0" d="M9 18C4.02 18 0 13.98 0 9C0 4.02 4.02 0 9 0C13.98 0 18 4.02 18 9C18 13.98 13.98 18 9 18Z" />
+	<use id="Icon ionic-ios-arrow-down (2)" href="#img1" transform="matrix(0.889,0,0,0.889,5,6)"/>
+</svg>

@@ -1,0 +1,223 @@
+{% extends "customer/baseaccountpage.html" %}
+{% load i18n %}
+{% load static %}
+{% load common %}
+
+{% block tabcontent %}
+
+<style>
+    body {
+	    margin: 0;
+	    font-family: "Arial", sans-serif;
+    }
+
+    .addr {
+        margin-left: 5%;
+        margin-top: 5px;
+        ;
+    }
+
+    .h6 {
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: bold;
+        font-size: 1vw;
+        color: #edab00;
+    }
+
+    .Table_product {
+        display: table;
+        font-family: 'Arial';
+        font-size: 1.1vw;
+        border-collapse: collapse;
+        width: 85%;
+        margin-left: 5%;
+        margin-top: 25px;
+        border: 1px solid #CCCCCC;
+        text-align: center;
+        color: #000000;
+    }
+
+    .Headings {
+        display: table-row;
+        background-color: #edab00;
+        width: 17%;
+        border: 1px solid #CCCCCC;
+        color: #ffffff;
+        font-weight: lighter;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .Rows {
+        display: table-row;
+        border: 1px solid #CCCCCC;
+        vertical-align: middle;
+    }
+
+    .Cells {
+        display: table-cell;
+        padding: 10px;
+        width: 17%;
+        border: 1px solid #CCCCCC;
+        vertical-align: middle;
+    }
+
+    .Cells a img {
+        cursor: pointer;
+        width: 50%;
+        height: 25%;
+    }
+
+    .Cells img {
+        cursor: pointer;
+        width: 50%;
+        height: 25%;
+    }
+    .text-capital{
+        text-transform: capitalize;
+    }
+    .add-from-wish-a:hover{
+        color:#fff;
+        text-decoration:none;
+    }
+    .no-wish{
+        display: none;
+    }
+    .btn-a{
+        color:#fff !important;
+    }
+    .btn-a:hover{
+        background-color: #c9302c;
+        border-color: #ac2925;
+    }
+</style>
+
+<h3 class="heading"> My WishList </h3>
+
+<div style="overflow-x:auto;">
+    {% if wishlists %}
+        <div class="Table_product">
+            <div class="Headings">
+                <div class="Cells">
+                </div>
+                <div class="Cells">
+                    <p>Product Name</p>
+                </div>
+                <div class="Cells">
+                    <p>Price</p>
+                </div>
+
+                <div class="Cells">
+                    <p>Action</p>
+                </div>
+            </div>
+
+            {% for wishlist in wishlists %}
+                {% if not wishlist.lines.all %}
+                    <style>
+                        .Table_product{
+                            display:none;
+                        }
+                        .no-wish{
+                            display:block;
+                        }
+                    </style>
+                {% endif %}
+                {% for line in wishlist.lines.all %}
+                    {% if line.product.is_approved == 'Approved' and not line.product.is_deleted %}
+                    {% if line.product %}
+                        <div class="Rows">
+                            <div class="Cells">
+                                <a href="{{line.product.get_absolute_url}}" target="_blank">
+                                    {% if line.product.images.first %}
+                                        <img alt="{{line.product.title}}" src="{{line.product.images.first.original.url}}"/>
+                                    {% else %}
+                                        <img alt="{{line.product.title}}" src="{% static 'oscar/images/icons/no_image.png' %}"/>
+                                    {% endif %}
+                                </a>
+                            </div>
+                            <div class="Cells">
+                                <p>
+                                    <a href="{{line.product.get_absolute_url}}" target="_blank">
+                                        {{line.product.title}}
+                                    </a>
+                                </p>
+                            </div>
+                            <div class="Cells">
+                                <p>
+                                    {% wish_list_price request line.product.id as wish_list_obj %}
+                                    {% for i in wish_list_obj %}
+                                        {% if i.price_excl_tax %}
+                                            {{i.price_excl_tax}} &#x20b9; {% if i.rent_price %}
+                                            / {{i.rent_price}} &#x20b9;
+                                            {% endif %}
+                                        {% else %}
+                                            {{i.rent_price}} &#x20b9;
+                                        {% endif %}
+                                    {% endfor %}
+                                </p>
+                            </div>
+
+                            <div class="Cells">
+                                <p>
+
+                                    <a class="button btn-a text-capital button1 add-from-wish-a" href="{{line.product.get_absolute_url}}" target="_blank" style="width:160px;">
+                                        Add To Cart
+                                    </a>
+                                    <br /> <br />
+                                    <a class="button button1 btn-a text-capital add-from-wish-a" href="{% url 'customer:wishlists-remove-product' key=wishlist.key line_pk=line.pk %}" style="width:160px;">
+                                        Remove
+                                    </a>
+
+                                </p>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="Rows">
+                            <div class="Cells">
+                                {% if line.product.images.first %}
+                                    <img alt="{{line.product.title}}" src="{{line.product.images.first.original.url}}"/>
+                                {% else %}
+                                    <img alt="{{line.product.title}}" src="{% static 'oscar/images/icons/no_image.png' %}"/>
+                                {% endif %}
+                                </a>
+                            </div>
+                            <div class="Cells">
+                                <p>
+                                    Removed
+                                </p>
+                            </div>
+                            <div class="Cells">
+                                <p>
+                                    NA
+                                </p>
+                            </div>
+
+                            <div class="Cells">
+                                <p>
+                                    <a class="button button1 btn-a text-capital add-from-wish-a" href="{% url 'customer:wishlists-remove-product' key=wishlist.key line_pk=line.pk %}" style="width:160px;">
+                                        Remove
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% endif %}
+
+                {% endfor %}
+            {% endfor %}
+        </div>
+    {% else %}
+
+    {% endif %}
+    <h4 class="no-wish" style="text-align: center; color: #edab2e; font-size: 28px; margin-top: 3em;">No product in wishlist</h4>
+</div>
+
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+
+<script>
+    var element = document.getElementById("wishlist_link");
+    element.classList.add("active");
+</script>
+
+{% endblock tabcontent %}

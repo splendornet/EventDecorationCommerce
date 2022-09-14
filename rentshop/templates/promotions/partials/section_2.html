@@ -1,0 +1,113 @@
+{% load thumbnail %}
+{% load i18n %}
+{% load common %}
+
+
+{% if all_categories %}
+<div class="col vc_col-sm-12 col12  col-animate-true" style="" data-effect="fade-bottom" data-align="left" data-margin="false">
+    <div class="col-inner" style="">
+
+        <h2 class="vc_custom_heading">Products</h2>
+        <p class="vc_custom_heading"></p>
+
+        <div id="nz-carousel-1" class="lazy nz-carousel animate-none" data-autoplay="true" data-columns="1" data-animate="false">
+
+            {% for all_categories_obj in all_categories  %}
+                {% check_stock all_categories_obj.product_set.all as products_with_stock %}
+                {% if products_with_stock %}
+                    <div class="item animate-item nz-clearfix">
+
+                    <!-- category name -->
+                    <h3 class="product-category-title" style="text-align: center;">
+                        {{all_categories_obj.name}}
+                    </h3>
+                    <!-- category name -->
+
+                    <div id="nz-recent-products-1" data-animate="true" data-columns="2" class="lazy woocommerce nz-recent-products nz-clearfix">
+
+                        <!-- product listing -->
+                        <ul class="nz-product-posts products inner-carousel">
+
+                            {% for product in products_with_stock|order_by:"is_approved"|slice:":5" %}
+                                {% if product.is_approved == 'Approved' and product.stockrecords.all %}
+                                    <div class="col-md-3 col-sm-6 product-layout m-less-padding">
+                                        <li class="mix product nz-clearfix" data-grid="ninzio_01" style="width:100%">
+
+                                            <div class="shop-loader">&nbsp;</div>
+                                            <div class="nz-content-box-2 nz-clearfix animate-none" data-columns="4" data-animate="false">
+                                                <div id="" class="nz-box animate-item product-thumb" style="width:100%;">
+                                                    <a title="{{product.get_title }}" href="{{product.get_absolute_url}}" class="" target="_blank">
+                                                        <div class="box-inner">
+
+                                                            <!-- image -->
+                                                            <div class="nz-box-image " style="max-width:100% !important;">
+                                                                {% with image=product.primary_image %}
+                                                                {% thumbnail image.original "x155" upscale=False as thumb %}
+                                                                <a title="{{product.get_title }}" href="{{ product.get_absolute_url }}" target="_blank">
+                                                                    <img src="{{ thumb.url }}" alt="{{ product.get_title }}">
+                                                                </a>
+                                                                {% endthumbnail %}
+                                                                {% endwith %}
+                                                            </div>
+                                                            <!-- image -->
+
+                                                            <!-- title/price -->
+                                                            <div class="box-data">
+                                                                <div class="box-title name">
+                                                                    <a title="{{product.get_title}}">{{product.title |truncatechars:13}}</a>
+                                                                </div>
+                                                                <div class="box-content nz-clearfix" style="height:11em;">
+                                                                    <div class="price-box {% if product.get_product_class.name == 'Rent Or Sale' %}price-box-wrap{% endif %}" style="height:4.4em;">
+                                                                        {% include "catalogue/partials/stock_record.html" %}
+                                                                    </div>
+                                                                    <!-- small cart button -->
+                                                                    {% if product.get_product_class.name == 'Rent Or Sale' %}
+                                                                    <a href="{{product.get_absolute_url}}" target="_blank" class="btn btn-red btn-link-red btn-gp">
+                                                                        {% trans "Buy" %}
+                                                                    </a>
+                                                                    <a href="{{product.get_absolute_url}}" target="_blank" class="btn btn-red btn-link-red btn-gp">
+                                                                        {% trans "Rent" %}
+                                                                    </a>
+                                                                    {% else %}
+                                                                    <a href="{{product.get_absolute_url}}" target="_blank" class="btn btn-red btn-link-red">
+                                                                        {% if product.get_product_class.name == 'Rent' %}
+                                                                            {% trans "Rent" %}
+                                                                        {% elif product.get_product_class.name == 'Sale' %}
+                                                                            {% trans "Buy" %}
+                                                                        {% elif product.get_product_class.name == 'Professional' %}
+                                                                            {% trans "Rent" %}
+                                                                        {% elif product.get_product_class.name == 'Service' %}
+                                                                            {% trans "View Details" %}
+                                                                        {% else %}
+                                                                            {% trans "Add to basket" %}
+                                                                        {% endif %}
+                                                                    </a>
+                                                                    {% endif %}
+                                                                    <!-- small cart button -->
+                                                                </div>
+                                                            </div>
+                                                            <!-- title/price -->
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                        <!-- product listing -->
+
+                    </div>
+                    <div class="" style="text-center">
+                        <a href="{{all_categories_obj.get_absolute_url}}" target="_blank" class="button button-ghost turquoise large round"  type="button" style="box-border:1px #e91d4a;     box-shadow:none;color: #00c1cf;background-color: #e91d4a;color: #fff;">
+                            View All {{all_categories_obj}}
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}

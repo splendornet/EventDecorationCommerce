@@ -1,0 +1,41 @@
+{% extends 'dashboard/layout.html' %}
+{% load i18n %}
+
+{% block body_class %}{{ block.super }} create-page{% endblock %}
+
+{% block title %}
+    {% trans "Delete partner" %} | {% trans "Partners" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li>
+            <a href="{% url 'dashboard:partner-list' %}">{% trans "Partners" %}</a>
+        </li>
+
+        <li class="active">{% trans "Delete?" %}</li>
+    </ul>
+{% endblock %}
+
+{% block headertext %}
+    {{ partner.name }}
+{% endblock %}
+
+{% block dashboard_content %}
+
+        <p>{% trans "Are you sure you want to delete this event?" %}</p>
+        <div class="form-actions">
+            <button type="button" class="btn btn-md btn-danger" onclick="confirm_event_delete('{% url 'dashboard:vendor-calender-delete-confirm' pk=event.id %}')">Confirm</button>
+            <a href="{% url 'dashboard:vendor-calender-list' %}">{% trans "cancel" %}</a>
+        </div>
+{% endblock dashboard_content %}
+
+{% load static %}
+{% block extrascripts %}
+    {{ block.super }}
+    <script src="{% static 'oscar/js/dashboard/calendar_events/events.js' %}"></script>
+{% endblock %}
+

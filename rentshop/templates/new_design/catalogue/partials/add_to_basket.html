@@ -1,0 +1,118 @@
+{% load basket_tags %}
+{% load display_tags %}
+{% load i18n %}
+{% load purchase_info_tags %}
+{% load common %}
+{% load staticfiles %}
+
+{% purchase_info_for_product request product as session %}
+{% if session.availability.is_available_to_buy %}
+    {% basket_form request product as basket_form %}
+    {% line_item_checker request product as in_basket_obj %}
+    <div class="trp-display-inline-block">
+     <form id="add_to_basket_form" style="z-index:0;" action="{% url 'basket:add' pk=product.pk  %}" method="post" class="" {% if in_basket_obj %} onsubmit="return confirm('Same product is already added in the cart');" {% endif %}>
+         {% csrf_token %}
+         <input type="hidden" name="product_type" id="id_product_type" value="{{product.product_class.name}}">
+         <input type="hidden" name="product_type" id="id_product_id" value="{{product.id}}">
+        {% include "partials/form_fields.html" with form=basket_form %}
+
+        {% if product.get_product_class.name == 'Rent Or Sale' %}
+            {% line_item_checker request product as in_basket_obj %}
+            {% if not in_basket_obj %}
+                <div class="trp-whitePink-btn trp-display-inline-block mr-15 snt-sale-price">
+                    <button class="add-to-cart" type="submit" name="add_to_cart" value="Sale">Add to Cart</button>
+                </div>
+                <div class="trp-pink-btn trp-display-inline-block mr-15 snt-sale-price">
+                    <button  class="add-to-cart" name="order_type" value="Sale" type="submit">Buy Now</button>
+                </div>
+                <div class="trp-whitePink-btn trp-display-inline-block mr-15 snt-rent-price">
+                    <button class="add-to-cart" onclick="return find_blocked_date();" type="submit" name="add_to_cart" value="Rent">Add to Cart</button>
+                </div>
+                <div class="trp-pink-btn trp-display-inline-block mr-15 snt-rent-price">
+                    <button  class="add-to-cart" name="order_type" value="Rent" type="submit">For Rent</button>
+                </div>
+            {% else %}
+                {% for i in in_basket_obj %}
+                {% if i.order_type == 'Sale' %}
+                <div class="trp-whitePink-btn trp-display-inline-block mr-15 snt-sale-price">
+                    <button class="add-to-cart" type="submit" name="add_to_cart" value="Sale">Add to Cart</button>
+                </div>
+                <div class="trp-pink-btn trp-display-inline-block mr-15 snt-sale-price">
+                    <button  class="add-to-cart" name="order_type" value="Sale" type="submit">Buy Now</button>
+                </div>
+                <div class="trp-whitePink-btn trp-display-inline-block mr-15 snt-rent-price">
+                    <button class="add-to-cart" onclick="return find_blocked_date();" type="submit" name="add_to_cart" value="Rent">Add to Cart</button>
+                </div>
+                <div class="trp-pink-btn trp-display-inline-block mr-15 snt-rent-price">
+                    <button  class="add-to-cart" name="order_type" value="Rent" type="submit">For Rent</button>
+                </div>
+                {% elif i.order_type == 'Rent' %}
+                <div class="trp-whitePink-btn trp-display-inline-block mr-15 snt-sale-price">
+                    <button class="add-to-cart" type="submit" name="add_to_cart" value="Sale">Add to Cart</button>
+                </div>
+                <div class="trp-pink-btn trp-display-inline-block mr-15 snt-sale-price">
+                    <button  class="add-to-cart" name="order_type" value="Sale" type="submit">Buy Now</button>
+                </div>
+                <div class="trp-whitePink-btn trp-display-inline-block mr-15 snt-rent-price">
+                    <button class="add-to-cart" onclick="return find_blocked_date();" type="submit" name="add_to_cart" value="Rent">Add to Cart</button>
+                </div>
+                <div class="trp-pink-btn trp-display-inline-block mr-15 snt-rent-price">
+                    <button  class="add-to-cart" name="order_type" value="Rent" type="submit">For Rent</button>
+                </div>
+                {% else %}
+                <div class="trp-whitePink-btn trp-display-inline-block mr-15 snt-sale-price">
+                    <button class="add-to-cart" type="submit" name="add_to_cart" value="Sale">Add to Cart</button>
+                </div>
+                <div class="trp-pink-btn trp-display-inline-block mr-15 snt-sale-price">
+                    <button  class="add-to-cart" onclick="return find_blocked_date();" name="order_type" value="Sale" type="submit">Buy Now</button>
+                </div>
+                <div class="trp-whitePink-btn trp-display-inline-block mr-15 snt-rent-price">
+                    <button class="add-to-cart" onclick="return find_blocked_date();" type="submit" name="add_to_cart" value="Rent">Add to Cart</button>
+                </div>
+                <div class="trp-pink-btn trp-display-inline-block mr-15 snt-rent-price">
+                    <button  class="add-to-cart"  name="order_type" value="Rent" type="submit">For Rent</button>
+                </div>
+                {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% else %}
+            {% if product.get_product_class.name == 'Rent' %}
+                <div class="trp-whitePink-btn trp-display-inline-block mr-15">
+                    <button type="submit" name="add_to_cart" value="Rent" class="add-to-cart" >Add to Cart</button>
+                </div>
+                <div class="trp-pink-btn trp-display-inline-block mr-15">
+                    <button class="add-to-cart" name="order_type" value="Rent" type="submit">For Rent</button>
+                </div>
+            {% elif product.get_product_class.name == 'Sale' %}
+                <div class="trp-whitePink-btn trp-display-inline-block mr-15">
+                    <button type="submit" name="add_to_cart" value="Sale" class="add-to-cart" >Add to Cart</button>
+                </div>
+                <div class="trp-pink-btn trp-display-inline-block mr-15">
+                    <button class="add-to-cart" name="order_type" value="Sale" type="submit">Buy Now</button>
+                </div>
+            {% elif product.get_product_class.name == 'Professional' %}
+                <div class="trp-whitePink-btn trp-display-inline-block mr-15">
+                    <button type="submit" name="add_to_cart" value="Professional" class="add-to-cart" >Add to Cart</button>
+                </div>
+                <div class="trp-pink-btn trp-display-inline-block mr-15">
+                    <button type="submit"  name="order_type" value="Professional" class="add-to-cart">For Rent</button>
+                </div>
+            {% else %}
+                <div class="trp-whitePink-btn mr-15">
+                    <button type="submit" name="add_to_cart" value="Sale" class="add-to-cart" >Add to Cart</button>
+                </div>
+            {% endif %}
+        {% endif %}
+    </form>
+    </div>
+
+    {% else %}
+{% if product.get_product_class.name != 'Service' %}
+{% basket_form request product as basket_form %}
+        {% include "partials/form_fields.html" with form=basket_form %}
+<span class="trp-product-shipping-label">Product is not available in stock</span>
+  {% endif %}
+    {% endif %}
+    {% include "new_design/catalogue/partials/add_to_wishlist.html" %}
+
+

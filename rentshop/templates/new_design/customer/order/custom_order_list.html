@@ -1,0 +1,63 @@
+{% extends 'new_design/customer/account_base.html' %}
+{% load static %}
+{% load common %}
+{% block tabcontent %}
+    <div class="col-md-9">
+        <div class="trp-acc-mainContent-wrapper">
+            {% if enquiry %}
+                <div class="trp-acc-mainContent-title-wrapper mb-0">
+                    <h1 class="trp-acc-mainContent-title m-0">My Custom Orders</h1>
+                </div>
+                <div class="trp-acc-detail-wrapper trp-acc-order-table-wrapper">
+                    <table class="table table-striped trp-acc-order-table">
+                        <thead>
+                            <tr>
+                                <th class="col-sm-7">Order Number</th>
+                                <th class="col-sm-2 text-center">Total</th>
+                                <th class="col-sm-3 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for en in enquiry %}
+                                <tr>
+                                    <td class="col-sm-2" data-title="Order Number">
+                                        {{en.basket_instance.id|add:"100000"}}
+                                    </td>
+                                    <td class="col-sm-2 text-center" data-title="Total">
+                                        ₹{{en.basket_instance.cart_total_without_tax}}
+                                    </td>
+                                    <td class="col-sm-6 text-center">
+                                        <div>
+                                            <a href="{% url 'customer:user-custom-order-place' %}?basket_id={{en.basket_instance.id}}" class="trp-acc-wishlist-addCart"
+                                               aria-label="Add to cart" data-product_id="" target="_blank">Place Order</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+            <h1 class="trp-acc-mainContent-title m-0">No Custom Order Found</h1>
+            {% endif %}
+        </div>
+    </div>
+
+{% block extrascripts %}
+    {{ block.super }}
+    <script>
+        document.getElementById("my_order_link").classList.remove("active");
+        document.getElementById("wishlist_link").classList.remove("active");
+        document.getElementById("my_coupon_link").classList.remove("active");
+        document.getElementById("faq_link").classList.remove("active");
+        if(document.getElementById("my_vendor_profile_link")){
+            document.getElementById("my_vendor_profile_link").classList.remove("active");
+        }
+        if(document.getElementById("my_profile_link")){
+            document.getElementById("my_profile_link").classList.remove("active");
+        }
+        var element = document.getElementById("my_custom_order_link");
+        element.classList.add("active");
+    </script>
+{% endblock %}
+{% endblock %}

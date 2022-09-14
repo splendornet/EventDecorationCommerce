@@ -1,0 +1,258 @@
+{% load currency_filters %}
+{% load category_tags %}
+{% load common %}
+{% load staticfiles %}
+{% load i18n %}
+{% universe as setting %}
+
+<header class="trp-header" id="trp-header">
+    <nav class="navbar navbar-default trp-navbar-custom-global">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed trp-nav-toggel" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+              <img src="{% static 'new_design/assets/images/hamburger-menu-icon.svg' %}" alt="">
+            </button>
+            
+            <a class="navbar-brand" href="/"><img class="logo" src="{% static 'new_design/assets/images/logo.png' %}" alt=""></a>
+
+            <div class="trp-responsve-cta">
+              <ul class="nav navbar-nav">
+                <li class="trp-dropdown dropdown trp-dropdown-large"><a href="#" class="trp-droplink dropdown-toggle" data-toggle="dropdown">Rental catalogue <span class="trp-caret"></span></a>
+                  <ul class="trp-dropdown-content dropdown-menu trp-dropdown-menu-large row">
+                    {% split_all_to_4_columns as categories_list %}
+              {% if categories_list %}
+              {% for category_li in categories_list %}
+                    <li class="col-sm-12">
+                      <ul>
+                        {% for category in category_li %}
+                           {% if category == 'end' %}
+                      <li class="trp-divider"></li>
+                        {% else %}
+                        {% if category.get_children_count > 0 and category.show_on_frontside %}
+                        <li class="trp-dropdown-header"><a href="{{category.get_absolute_url}}" target="_blank">
+                            {% if category.icon %}
+                        <img src="{{ category.icon.url }}" alt="">
+                        {% else %}
+                        <img src="{% static 'new_design/assets/images/nav-icons/nav-Decoration.svg' %}" alt="">
+                        {% endif %}
+                            {{category.name}}</a></li>
+                        {% else %}
+                        <li><a href="{{category.get_absolute_url}}" target="_blank">{{category.name}}</a></li>
+                        {% endif %}
+                        {% endif %}
+                        {% endfor%}
+                      </ul>
+                    </li>
+                    {% endfor %}
+              {% endif %}
+                    <li class="col-sm-12">
+                        {% get_non_child_category as non_child_cat_list %}
+                  {% if non_child_cat_list %}
+                      <ul class="trp-dropdown-header-only">
+                          {% for category in non_child_cat_list %}
+                        <li class="trp-dropdown-header"><a href="{{category.get_absolute_url}}" target="_blank">
+                            {% if category.icon %}
+                        <img src="{{ category.icon.url }}" alt="">
+                        {% else %}
+                        <img src="{% static 'new_design/assets/images/nav-icons/nav-1.svg' %}" alt="">
+                        {% endif %}
+                            {{category.name}} </a></li>
+                          {% endfor %}
+                      </ul>
+                        {% endif %}
+                    </li>
+                    </ul>
+                 </li>
+               <li class="trp-wishList">
+                   <a href="/accounts/wishlists/" target="_blank"><img class="trp-imgnav-icon" src="{% static 'new_design/assets/images/wishlist-icon.svg' %}"></a>
+               </li>
+                  {% if request.path != '/basket/' %}
+                <li class="trp-cart">
+                    <a href="{% url 'basket:summary' %}" target="_blank">
+                        <img class="trp-imgnav-icon" src="{% static 'new_design/assets/images/cart-icon.svg' %}" alt="">
+                        {% if request.basket.lines %}
+                        <span class="cart-count">{{request.basket.lines.count}}</span>
+                        {% endif %}
+                    </a>
+                </li>
+                  {% endif %}
+                <li> 
+                  <a href="https://wa.me/+917378989996" target="_blank" class="trp-tab-below-show">
+                    <img class="trp-call-icon" src="{% static 'new_design/assets/images/mobile-call-icon.svg' %}" alt="">
+                  </a>
+              </li>
+              
+              </ul>
+          </div>
+          </div>
+          <!-- search for desktop -->
+          <form class="trp-header-search" name="search_sudo" method="get" action="#0">
+            <div class="search-boxhd">
+              <input required="" type="text" name="q" class="trp-search-input" placeholder="" onsubmit="header_search()" id="q" autocomplete="off">
+                <button id="trp-searchdata" class="trp-search-btn" type="submit"  onclick="header_search()"> Search</button>
+            </div>
+          </form>
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav trp-navbar-center">
+             <li class="trp-dropdown dropdown trp-dropdown-large"><a href="#" class="trp-droplink dropdown-toggle" data-toggle="dropdown">Rental catalogue <span class="trp-caret"></span></a>
+              <ul class="trp-dropdown-content dropdown-menu trp-dropdown-menu-large row">
+                {% split_all_to_4_columns as categories_list %}
+              {% if categories_list %}
+              {% for category_li in categories_list %}
+                  {% if forloop.first %}
+                <li class="col-sm-3">
+                  <ul>
+                    {% for category in category_li %}
+                      {% if category == 'end' %}
+                      <li class="trp-divider"></li>
+                        {% else %}
+                    {% if category.get_children_count > 0 and category.show_on_frontside and category.depth == 1 %}
+                    <li class="trp-dropdown-header"><a href="{{category.get_absolute_url}}" target="_blank">
+                        {% if category.icon %}
+                        <img src="{{ category.icon.url }}" alt="">
+                        {% else %}
+                        <img src="{% static 'new_design/assets/images/nav-icons/nav-Decoration.svg' %}" alt="">
+                        {% endif %}
+                        {{category.name}}</a></li>
+                    {% else %}
+                    <li><a href="{{category.get_absolute_url}}" target="_blank">{{category.name}}</a></li>
+                    {% endif %}
+                    {% endif %}
+                        {% endfor%}
+                  </ul>
+                </li>
+                  {% else %}
+                  <li class="col-sm-2">
+                  <ul>
+                    {% for category in category_li %}
+                       {% if category == 'end' %}
+                      <li class="trp-divider"></li>
+                        {% else %}
+                    {% if category.get_children_count > 0 and category.show_on_frontside and category.depth == 1 %}
+                    <li class="trp-dropdown-header"><a href="{{category.get_absolute_url}}" target="_blank">
+                        {% if category.icon %}
+                        <img src="{{ category.icon.url }}" alt="">
+                        {% else %}
+                        <img src="{% static 'new_design/assets/images/nav-icons/nav-Decoration.svg' %}" alt="">
+                        {% endif %}
+                        {{category.name}}</a></li>
+                    {% else %}
+                    <li><a href="{{category.get_absolute_url}}" target="_blank">{{category.name}}</a></li>
+                    {% endif %}
+                    {% endif %}
+                        {% endfor%}
+                  </ul>
+                  </li>
+                  {% endif %}
+                 {% endfor %}
+              {% endif %}
+                <li class="col-sm-3">
+                  {% get_non_child_category as non_child_cat_list %}
+                  {% if non_child_cat_list %}
+                  <ul class="trp-dropdown-header-only">
+                      {% for category in non_child_cat_list %}
+                    <li class="trp-dropdown-header"><a href="{{category.get_absolute_url}}" target="_blank">
+                        {% if category.icon %}
+                        <img src="{{ category.icon.url }}" alt="">
+                        {% else %}
+                        <img src="{% static 'new_design/assets/images/nav-icons/nav-1.svg' %}" alt="">
+                        {% endif %}
+                        {{category.name}} </a></li>
+                      {% endfor %}
+                  </ul>
+                  {% endif %}
+                </li>
+                </ul>
+             </li>
+             <!-- search for tab and mobile -->
+             <li class="trp-mobile-search">
+              <form method="get" class="trp-header-search-mob" action="#0">
+                <div class="search-boxhd">
+                  <input required="" type="text" name="q" class="trp-search-input" placeholder="" onsubmit="header_search()" id="mobileq" autocomplete="off">
+                    <button id="trp-searchdata" class="trp-search-btn" type="submit" onclick="header_search()"> Search</button>
+                </div>
+              </form>
+
+            </li>
+              <li><a href="#id_trp-how-to-rent">How to rent</a></li>
+              {% header_tag as header_obj %}
+              {% for head_menu in header_obj %}
+              {% if head_menu.title == "Corporate Offers" %}
+              <li><a href="{% url 'catalogue:header_category_manage_product' pk=head_menu.id %}" target="_blank">Corporate</a></li>
+                {% endif %}
+              {% endfor %}
+                {% for head_menu in header_obj %}
+              {% if head_menu.title == "Dress Rental" %}
+              <li><a href="{% url 'catalogue:header_get_best_quote' pk=head_menu.id %}" target="_blank">Get a quote</a></li>
+                {% endif %}
+              {% endfor %}
+                {% for head_menu in header_obj %}
+              {% if head_menu.title == "My Offers" %}
+                <li><span class="trp-offer"></span>
+                {% offers_url as offer_link %}
+                {% if offer_link %}
+                    <a href="{{ offer_link }}" target="_blank"><img class="trp-offer-icon" src="{% static 'new_design/assets/images/offer-icon.svg' %}" alt=""> Offers</a>
+                {% else %}
+                    <a href="{% url 'catalogue:header_category_product' pk=head_menu.id %}" target="_blank"><img class="trp-offer-icon" src="{% static 'new_design/assets/images/offer-icon.svg' %}" alt=""> Offers</a>
+                {% endif %}
+
+<!--                  <span class="trp-caret"></span>-->
+              </li>
+                {% endif %}
+              {% endfor %}
+              <li class="trp-call-nav nav-display-none"> 
+                <a href="https://wa.me/+917378989996" target="_blank" class="trp-tab-below-hide">
+                  <img class="trp-call-icon" src="{% static 'new_design/assets/images/call-icon.svg' %}" alt=""> {{setting.SUPPORT_NUMBER}}
+                </a>
+                <a href="https://wa.me/+917378989996" target="_blank" class="trp-tab-below-show">
+                  <img class="trp-call-icon trp-nav-tab-icon" src="{% static 'new_design/assets/images/mobile-call-icon.svg' %}" alt="">
+                </a>
+              </li>
+              <li class="trp-mail-nav nav-display-none">
+                <a href="mailto:{{setting.SUPPORT_EMAIL}}">
+                  <img class="trp-email-icon trp-nav-tab-icon" src="{% static 'new_design/assets/images/email-icon.svg' %}" alt="">
+                </a>
+              </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right trp-nav-account-block">
+                {% if user.is_authenticated %}
+              <li class="trp-account-name nav-display-none">
+                  {% if user.is_superuser %}
+                  <a href="{% url 'dashboard:index' %}" target="_blank">{% trans 'Hi,' %} Admin</a>
+                  {% else %}
+                  <a href="{% url 'customer:profile-view' %}" target="_blank">{% trans 'Hi,' %} {{user.get_full_name|title|default:user.email}}</a>
+                  {% endif %}
+              </li>
+                {% if not user.is_superuser and user.is_staff %}
+                <li class="trp-account-name nav-display-none">
+                  <a href="{% url 'dashboard:index' %}" target="_blank">{% trans 'ASP Dashboard' %}</a></li>
+                {% endif %}
+              <li class="trp-account-logout"><a href="{% url 'customer:logout' %}" target="_blank" class="bold">Logout</a></li>
+                {% else %}
+                <li>
+                  <a href="{% url 'customer:login' %}" target="_blank">{% trans 'Login' %}</a>
+                </li>
+              {% endif %}
+
+              <li class="trp-search nav-display-none trp-img-hover" id="trp-search-icon">
+                  <a id="snt-search-a1" style="cursor: pointer;">
+                      <img class="trp-imgnav-icon " data-hover="{% static 'new_design/assets/images/search-icon-hover.svg' %}" src="{% static 'new_design/assets/images/search-icon.svg' %}" data-src="{% static 'new_design/assets/images/search-icon.svg' %}" alt="" id="snt-search-img1">
+                  </a>
+              </li>
+
+              <li class="trp-wishList nav-display-none"><a href="/accounts/wishlists/" target="_blank"><img class="trp-imgnav-icon" src="{% static 'new_design/assets/images/wishlist-icon.svg' %}"></a></li>
+
+                {% if request.path != '/basket/'  %}
+              <li class="trp-cart"><a href="{% url 'basket:summary' %}" target="_blank">
+                  <img class="trp-imgnav-icon" src="{% static 'new_design/assets/images/cart-icon.svg' %}" alt="">
+                  {% if request.basket.lines %}
+                  <span class="cart-count">{{request.basket.lines.count}}</span>
+                  {% endif %}
+              </a>
+              </li>
+                {% endif %}
+            </ul>
+          </div><!-- /.navbar-collapse -->
+       </nav>
+       
+       </header>

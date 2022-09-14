@@ -1,0 +1,540 @@
+{% extends 'new_design/base.html' %}
+{% load staticfiles %}
+{% load thumbnail %}
+{% load common %}
+{% load humanize %}
+{% block content %}
+
+       <!-- Desktop banner section -->
+     <section class="trp-home-banner trp-mobile-hidden">
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+          <!-- Indicators -->
+          <ol class="carousel-indicators">
+              {% for slider_img_obj in slider_images %}
+              {% if forloop.first %}
+            <li data-target="#myCarousel" data-slide-to="{{forloop.counter0}}" class="active"></li>
+              {% else %}
+            <li data-target="#myCarousel" data-slide-to="{{forloop.counter0}}"></li>
+              {% endif %}
+              {% endfor %}
+          </ol>
+
+          <!-- Wrapper for slides -->
+            {% if slider_images %}
+            <div class="carousel-inner">
+                {% for slider_img_obj in slider_images %}
+                {% if forloop.counter == 1 %}
+            <div class="item active">
+              <img src="{% if slider_img_obj.slider_image %}{{slider_img_obj.slider_image.url}}{% else %}{% static 'new_design/assets/images/banner-image.jpg' %}{% endif %}" alt="banner-image">
+              <div class="carousel-caption trp-carousel-caption">
+                <div class="row trp-banner-vertical-center">
+                  <div class="col-md-4 col-sm-5">
+                    <div class="trp-banner-sup-wrapper">
+                      <span class="trp-banner-sup"></span>
+                    </div>
+                    <h1 class="trp-banner-title"> <span></span>
+                        <span class="trp-banner-heading-underline"></span>
+                        <img class="trp-banner-heading-underline" src="#" alt="">
+                    </h1>
+                    <p class="trp-banner-sub-title"></p>
+                    <h2 class="trp-banner-offer "></h2>
+                    <p class="trp-banner-offer-text"></p>
+                    <div class="trp-banner-btn mt-30" >
+                      <a href="{% if slider_img_obj.path_link %}{{slider_img_obj.path_link}}{% else %} #{% endif %}">{% if slider_img_obj.cta_button_text %} {{slider_img_obj.cta_button_text}} {% else %}Explore Now{% endif %}</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+                {% else %}
+                <div class="item">
+              <img src="{% if slider_img_obj.slider_image %}{{slider_img_obj.slider_image.url}}{% else %}{% static 'new_design/assets/images/banner-image.jpg' %}{% endif %}" alt="banner-image">
+              <div class="carousel-caption trp-carousel-caption">
+                <div class="row trp-banner-vertical-center">
+                  <div class="col-md-4 col-sm-5">
+                    <div class="trp-banner-sup-wrapper">
+                      <span class="trp-banner-sup"></span>
+                    </div>
+                    <h1 class="trp-banner-title">  <span></span>
+                        <span class="trp-banner-heading-underline"></span>
+                        <img class="trp-banner-heading-underline" src="#" alt="">
+                    </h1>
+                    <p class="trp-banner-sub-title"></p>
+                    <h2 class="trp-banner-offer "></h2>
+                    <p class="trp-banner-offer-text"></p>
+                    <div class="trp-banner-btn mt-30" >
+                      <a href="{% if slider_img_obj.path_link %}{{slider_img_obj.path_link}}{% else %} #{% endif %}" target="_blank">{% if slider_img_obj.cta_button_text %} {{slider_img_obj.cta_button_text}} {% else %}Explore Now{% endif %}</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+                {% endif %}
+                {% endfor %}
+
+          </div>
+            {% else %}
+          <div class="carousel-inner">
+            <div class="item active">
+              <img src="{% static 'new_design/assets/images/banner-image.jpg' %}" alt="banner-image" style="width:100%;">
+              <div class="carousel-caption trp-carousel-caption">
+                <div class="row trp-banner-vertical-center">
+                  <div class="col-md-4 col-sm-5">
+                    <div class="trp-banner-sup-wrapper">
+                      <span class="trp-banner-sup">SPECIAL OFFER</span>
+                    </div>
+                    <h1 class="trp-banner-title">Valentine’s  <span>Day</span> <img class="trp-banner-heading-underline" src="{% static 'new_design/assets/images/underline.png' %}" alt=""></h1>
+                    <p class="trp-banner-sub-title">DECORATION OFFERS</p>
+                    <h2 class="trp-banner-offer ">20% OFF</h2>
+                    <p class="trp-banner-offer-text">LIMITED OFFER ONLY</p>
+                    <div class="trp-banner-btn mt-30" >
+                      <a href="#">Explore Now</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+             <div class="item">
+              <img src="{% static 'new_design/assets/images/banner-image.jpg' %}" alt="banner-image" style="width:100%;">
+              <div class="carousel-caption trp-carousel-caption">
+                <div class="row trp-banner-vertical-center">
+                  <div class="col-md-4">
+                    <div class="trp-banner-sup-wrapper">
+                      <span class="trp-banner-sup">SPECIAL OFFER</span>
+                    </div>
+                    <h1 class="trp-banner-title">Valentine’s  <span>Day</span> <img class="trp-banner-heading-underline" src="{% static 'new_design/assets/images/underline.png' %}" alt=""></h1>
+                    <p class="trp-banner-sub-title">DECORATION OFFERS</p>
+                    <h2 class="trp-banner-offer ">20% OFF</h2>
+                    <p class="trp-banner-offer-text">LIMITED OFFER ONLY</p>
+                    <div class="trp-banner-btn mt-30" >
+                      <a href="#">Explore Now</a>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="item">
+              <img src="{% static 'new_design/assets/images/banner-image.jpg' %}" alt="banner-image" style="width:100%;">
+              <div class="carousel-caption trp-carousel-caption">
+                <div class="row trp-banner-vertical-center">
+                  <div class="col-md-4">
+                    <div class="trp-banner-sup-wrapper">
+                      <span class="trp-banner-sup">SPECIAL OFFER</span>
+                    </div>
+                    <h1 class="trp-banner-title">Valentine’s  <span>Day</span> <img class="trp-banner-heading-underline" src="{% static 'new_design/assets/images/underline.png' %}" alt=""></h1>
+                    <p class="trp-banner-sub-title">DECORATION OFFERS</p>
+                    <h2 class="trp-banner-offer ">20% OFF</h2>
+                    <p class="trp-banner-offer-text">LIMITED OFFER ONLY</p>
+                    <div class="trp-banner-btn mt-30" >
+                      <a href="#">Explore Now</a>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+            {% endif %}
+        </div>
+        <div class="trp-banner-scroll">
+          <a href="#first-section"><div class="trp-banner-scroll-img-wrapper">
+           <img src="{% static 'new_design/assets/images/arrow-down-red.svg' %}" alt="">
+          </div></a>
+        </div>
+     </section>
+
+     <!-- Mobile banner section -->
+     <section class="trp-home-banner trp-desktop-hidden">
+
+      <div id="myCarousel-mobile" class="carousel slide" data-ride="carousel">
+        <!-- Indicators -->
+
+        <ol class="carousel-indicators">
+            {% for slider_img_obj in slider_images %}
+              {% if forloop.first %}
+          <li data-target="#myCarousel-mobile" data-slide-to="{{forloop.counter0}}" class="active"></li>
+            {% else %}
+          <li data-target="#myCarousel-mobile" data-slide-to="{{forloop.counter0}}"></li>
+            {% endif %}
+            {% endfor %}
+        </ol>
+
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner">
+            {% for slider_img_obj in slider_images %}
+            {% if forloop.counter == 1 %}
+          <div class="item active">
+            <img src="{% if slider_img_obj.mobile_view_image %}{{slider_img_obj.mobile_view_image.url}}{% else %}{% static 'new_design/assets/images/mobile-banner.jpg' %}{% endif %}" alt="banner-image">
+            <div class="carousel-caption trp-carousel-caption">
+              <div class="row trp-banner-vertical-center">
+                <div class="col-md-4 col-sm-5">
+                  <div class="trp-banner-sup-wrapper">
+                    <span class="trp-banner-sup"></span>
+                  </div>
+                  <h1 class="trp-banner-title"><span></span> <img class="trp-banner-heading-underline" src="#" alt=""></h1>
+                  <p class="trp-banner-sub-title"></p>
+                  <h2 class="trp-banner-offer "></h2>
+                  <p class="trp-banner-offer-text"></p>
+                  <div class="trp-banner-btn mt-30" >
+                    <a href="{% if slider_img_obj.path_link %}{{slider_img_obj.path_link}}{% else %} #{% endif %}" target="_blank">{% if slider_img_obj.cta_button_text %} {{slider_img_obj.cta_button_text}} {% else %}Explore Now{% endif %}</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+            {% else %}
+            <div class="item">
+            <img src="{% if slider_img_obj.mobile_view_image %}{{slider_img_obj.mobile_view_image.url}}{% else %}{% static 'new_design/assets/images/mobile-banner.jpg' %}{% endif %}" alt="banner-image">
+            <div class="carousel-caption trp-carousel-caption">
+              <div class="row trp-banner-vertical-center">
+                <div class="col-md-4 col-sm-5">
+                  <div class="trp-banner-sup-wrapper">
+                    <span class="trp-banner-sup"></span>
+                  </div>
+                  <h1 class="trp-banner-title">  <span></span> <img class="trp-banner-heading-underline" src="#" alt=""></h1>
+                  <p class="trp-banner-sub-title"></p>
+                  <h2 class="trp-banner-offer "></h2>
+                  <p class="trp-banner-offer-text"></p>
+                  <div class="trp-banner-btn mt-30" >
+                    <a href="{% if slider_img_obj.path_link %}{{slider_img_obj.path_link}}{% else %} #{% endif %}" target="_blank">{% if slider_img_obj.cta_button_text %} {{slider_img_obj.cta_button_text}} {% else %}Explore Now{% endif %}</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+      </div>
+
+   </section>
+
+     <section id="first-section" class="trp-home-about pt-65 pb-65">
+       <div class="row trp-row">
+         <div class="col-md-12">
+           <h3 class="trp-sec-heading text-center mb-0 mt-0">Rent the Best Event Decoration Supplies</h3>
+           <p class="trp-sec-sub-heading text-center">
+             <span>25+ Years Experience</span>
+             <span class="trp-dot"></span><span>Event Venues</span>
+             <span class="trp-dot"></span>Event Decorations</span>
+             <span class="trp-dot"></span><span>Pune</span></p>
+         </div>
+       </div>
+     </section>
+
+     <section class="trp-best-deals-sec pt-50 pb-105">
+      <div class="row trp-row">
+        <div class="col-md-12">
+          <h3 class="trp-sec-heading text-center mb-20">Best Deals</h3>
+        </div>
+      </div>
+       {% if best_deals %}
+        <div class="slider trp-best-deals">
+          {% for category in best_deals %}
+          <div class="trp-clip">
+            <a href="{{category.get_absolute_url}}" target="_blank">
+              <div class="trp-offer-card text-center">
+                {% if category.image %}
+                <img class="trp-best-deals-img" src="{{ category.image.url }}" alt="Insperation">
+                {% else %}
+                <img class="trp-best-deals-img" src="{% static 'new_design/assets/images/bestDeals/bestDeals-1.jpg' %}" alt="Insperation">
+                {% endif %}
+
+                <p class="trp-best-deals-img-title" title="{{category.name}}">
+                {{category.name}}
+
+
+<!--                  <img src="{% static 'new_design/assets/images/pink-left-arrow.svg' %}" alt="">-->
+                </p>
+                {% if category.get_precentage %}<span class="trp-offer-badge">{{category.get_precentage}}%<span>OFF</span></span>{% endif %}
+              </div>
+            </a>
+          </div>
+          {% endfor %}
+        </div>
+       {% endif %}
+        <div class="row trp-row">
+          <div class="col-md-12">
+            <div class="trp-whitePink-btn mt-50 trp-view-btn" >
+              {% get_decoration_category as dec_category %}
+              {% if dec_category %}
+              <a href="{{dec_category.get_absolute_url}}" target="_blank">View All</a>
+              {% else %}
+              <a href="/catalogue/category/offers/wedding-decoration-offers_255/" target="_blank">View All</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+     </section>
+
+
+
+     <section class="trp-what-we-0ffer-sec pt-50 pb-85">
+      <div class="row trp-row trp-aligned-row">
+        <div class="col-md-12">
+          <h3 class="trp-sec-heading text-center mb-25">What We Offer</h3>
+        </div>
+      </div>
+       {% if what_we_offer %}
+        <div class="row trp-row trp-aligned-row" id="trp-responsive-slider">
+        {% for category in what_we_offer %}
+        <div class="col-md-2 col-sm-4">
+          <div class="text-center trp-what-we-0ffer-card">
+            <a href="{{category.get_absolute_url}}" target="_blank">
+              <div class="trp-pos-relative">
+                {% if category.image %}
+                <img class="trp-what-we-0ffer-img" src="{{ category.image.url }}" alt="Wedding Venues">
+                {% else %}
+                <img class="trp-what-we-0ffer-img" src="{% static 'new_design/assets/images/what-we-offer/Wedding-Venues.png' %}" alt="Wedding Venues">
+                {% endif %}
+                {% if category.show_in_icons %}
+                <span class="trp-what-we-0ffer-badge"><img src="{{ category.show_in_icons.url }}" alt=""></span>
+                {% else %}
+                <span class="trp-what-we-0ffer-badge"><img src="{% static 'new_design/assets/images/weddingvenues-icon.svg' %}" alt=""></span>
+                {% endif %}
+              </div>
+              <p class="trp-what-we-0ffer-img-title">{{category.name}}</p>
+
+            </a>
+          </div>
+        </div>
+          {% endfor %}
+        </div>
+       {% endif %}
+
+        <div class="row trp-row">
+          <div class="col-md-12">
+            <div class="trp-whitePink-btn mt-15" >
+              {% get_professional_category as prof_category %}
+              {% if prof_category %}
+              <a href="{{prof_category.get_absolute_url}}" target="_blank">View All</a>
+              {% else %}
+              <a href="/catalogue/category/professional_16/" target="_blank">View All</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+     </section>
+
+     <section class="trp-featured-products-sec pt-50 pb-85">
+      <div class="row trp-row">
+        <div class="col-md-12">
+          <h3 class="trp-sec-heading text-center mb-20">Featured Products</h3>
+        </div>
+      </div>
+       {% if featured_prod_obj %}
+      <div class="slider trp-we-0ffer">
+          {% for product in featured_prod_obj %}
+          <div class="trp-clip">
+              <div class="trp-offer-card text-center mt-10 pb-20 trp-same-height">
+                {% if product.primary_image.original.url %}
+                {% with image=product.primary_image %}
+                {% thumbnail image.original "70x70" upscale=False as thumb %}
+                  <a href="{{product.get_absolute_url}}" target="_blank"><img class="trp-best-deals-img" src="{{ image.original.url }}" alt="Featured Products"></a>
+                {% empty %}
+                  <a href="{{product.get_absolute_url}}" target="_blank"><img class="trp-best-deals-img" src="{{ image.original.url }}" alt="Featured Products"></a>
+                {% endthumbnail %}
+                {% endwith %}
+                {% else %}
+                <img class="trp-best-deals-img" src="{% static 'new_design/assets/images/product-images/product-img-1.jpg' %}" alt="Featured Products">
+                {% endif %}
+                <div class="trp-offer-card-header">
+                  <a href="{{product.categories.all.last.get_absolute_url}}" target="_blank"> <p class="trp-product-img-title"> {{product.categories.all.last.name}} </p> </a>
+                  <a href="{{product.get_absolute_url}}" target="_blank"><p class="trp-product-catogery">{{product.title}}</p></a>
+                </div>
+
+                <p class="trp-product-price">
+                    {% if product.product_class.name == 'Rent' or product.product_class.name == 'Professional' %}
+                        <span class="trp-rent-price">
+                            <span class="trp-rent-decorationCategorytitle">Rent:</span> ₹ {{product.stockrecords.last.rent_base_price}} {% if product.stockrecords.all.last.rent_market_price %}<small class="snt-product-mrp" style="text-decoration-line: line-through;">(₹ {{product.stockrecords.all.last.rent_market_price|intcomma}})</small>{% endif %}
+                        </span><br>
+                    {% elif product.product_class.name == 'Sale' %}
+                        <span class="trp-sale-price">
+                            <span class="trp-rent-decorationCategorytitle">Sale:</span> ₹ {{product.stockrecords.last.sale_base_price}} {% if product.stockrecords.all.last.sale_market_price %}<small class="snt-product-mrp" style="text-decoration-line: line-through;">(₹ {{product.stockrecords.all.last.sale_market_price|intcomma}})</small>{% endif %}
+                        </span>
+                    {% elif product.product_class.name == 'Rent Or Sale' %}
+                        <span class="trp-rent-price">
+                            <span class="trp-rent-price-title">Rent:</span> ₹ {{product.stockrecords.last.rent_base_price}} {% if product.stockrecords.all.last.rent_market_price %}<small class="snt-product-mrp" style="text-decoration-line: line-through;">(₹ {{product.stockrecords.all.last.rent_market_price|intcomma}})</small>{% endif %}
+                        </span><br>
+                        <span class="trp-sale-price">
+                            <span class="trp-rent-price-title">Sale:</span> ₹ {{product.stockrecords.last.sale_base_price}} {% if product.stockrecords.all.last.sale_market_price %}<small class="snt-product-mrp" style="text-decoration-line: line-through;">(₹ {{product.stockrecords.all.last.sale_market_price|intcomma}})</small>{% endif %}
+                        </span>
+                    {% endif %}
+                </p>
+                {% if product.get_perc %}<span class="trp-offer-badge">{{product.get_perc}}%<span>OFF</span></span>{% endif %}
+                  {% load wishlist_tags %}
+                  {% if user.is_authenticated %}
+                  {% with wishlists=user.wishlists.all %}
+                  {# Select wishlists that contains product #}
+                  {% wishlists_containing_product wishlists product as product_wishlists %}
+                  {% if wishlists %}
+                  {% for wishlist in wishlists %}
+                  <span class="trp-wishlist-badge">
+                        <a href="{{product.get_absolute_url}}" target="_blank">
+                            {% if wishlist not in product_wishlists %}
+                                <img data-src="{% static 'new_design/assets/images/product-wishlist-icon-white.svg' %}" data-hover="{% static 'new_design/assets/images/product-wishlist-fill-icon.svg' %}" src="{% static 'new_design/assets/images/product-wishlist-icon-white.svg' %}" alt="">
+                            {% else %}
+                                <img data-src="{% static 'new_design/assets/images/product-wishlist-fill-icon.svg' %}" data-hover="{% static 'new_design/assets/images/product-wishlist-fill-icon.svg' %}" src="{% static 'new_design/assets/images/product-wishlist-fill-icon.svg' %}" alt="">
+                            {% endif %}
+                        </a>
+                </span>
+                  {% endfor %}
+                  {% endif %}
+                  {% endwith %}
+                  {% endif %}
+                {% if product.product_class.name != 'Service' %}<p class="trp-freeShipping-tag"><img src="{% static 'new_design/assets/images/shipping-icon.svg' %}" alt="Free Shipping' %}"> {% if not product.is_transporation_available %}Free Shipping {% else %} {% get_shipping_price product.stockrecords.last as shipping_price %}{% if shipping_price %}{{shipping_price}} {% else %}Free Shipping {% endif %} {% endif %}</p> {% endif %}
+                <div class="trp-product-list-btn mt-30 " >
+                  <a class ="trp-display-inline-block trp-rent-btn" href="{{product.get_absolute_url}}">View Details</a>
+
+<!--                  {% if product.product_class.name == 'Sale' or product.product_class.name == 'Rent Or Sale' %}-->
+<!--                  <a class ="trp-display-inline-block trp-buy-btn" href="{{product.get_absolute_url}}" target="_blank">Buy Now</a>-->
+<!--                  {% endif %}-->
+<!--                   {% if product.product_class.name == 'Rent' or product.product_class.name == 'Rent Or Sale' or product.product_class.name == 'Professional' %}-->
+<!--                  <a class ="trp-display-inline-block trp-rent-btn" href="{{product.get_absolute_url}}" target="_blank">For Rent</a>-->
+<!--                  {% endif %}-->
+<!--                    {% if product.product_class.name == 'Service' %}-->
+<!--                    <a class ="trp-display-inline-block trp-rent-btn" href="{{product.get_absolute_url}}" target="_blank">Contact Us</a>-->
+<!--                    {% endif %}-->
+                </div>
+              </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+        <div class="row trp-row">
+          <div class="col-md-12">
+            <div class="trp-whitePink-btn mt-45 trp-view-btn" >
+              <a href="#" class="mr-5 trp-display-none">View All Products</a>
+                {% get_photoandvideo_category as photo_category %}
+              {% if photo_category %}
+              <a href="{{photo_category.get_absolute_url}}" target="_blank">View All Products</a>
+              {% else %}
+              <a href="/catalogue/category/photographer_119/" target="_blank">View All Products</a>
+                {% endif %}
+
+
+            </div>
+          </div>
+        </div>
+     </section>
+
+     <section class="trp-inspiration-sec pt-50 pb-90">
+      <div class="row trp-row">
+        <div class="col-md-12">
+          <h3 class="trp-sec-heading text-center mb-20 text-white">Offers</h3>
+        </div>
+      </div>
+         {% if my_offer %}
+        <div class="slider trp-inspiration">
+                     {% for product in my_offer %}
+          <div class="trp-clip">
+            <div class="trp-overlay"></div>
+              {% with image=product.menu_image %}
+              {% if product.menu_image %}
+            <img class="trp-inspiration-img" src="{{ product.menu_image.url }}" alt="Insperation">
+              {% else %}
+              <img class="trp-inspiration-img" src="/media/image_not_found.jpg" alt="Insperation">
+              {% endif %}
+              {% endwith %}
+            <span class="trp-inspiration-img-title">{{product}}</span>
+          </div>
+            {% endfor %}
+        </div>
+         {% endif %}
+        <div class="row trp-row">
+          <div class="col-md-12">
+            <div class="trp-white-btn trp-view-btn  mt-50" >
+                {% header_tag as header_obj %}
+                {% for head_menu in header_obj %}
+              {% if head_menu.title == "My Offers" %}
+                {% offers_url as offer_link %}
+                {% if offer_link %}
+              <a href="{{ offer_link }}" target="_blank">View More</a>
+               {% else %}
+              <a href="{% url 'catalogue:header_category_product' pk=head_menu.id %}" target="_blank">View More</a>
+                {% endif %}
+              {% endif %}
+                {% endfor %}
+            </div>
+          </div>
+        </div>
+     </section>
+
+
+     <section class="trp-happy-customer-sec pt-80 pb-70">
+      <div class="row trp-row">
+        <div class="col-md-12">
+          <div class="text-center">
+            <img class="text-center" src="{% static 'new_design/assets/images/Happy-Customer-icon.svg' %}" alt="Happy Customer">
+          </div>
+          <h3 class="trp-sec-heading text-center mb-20 mt-5">Happy Customer’s</h3>
+        </div>
+
+      <div class="col-md-12">
+        {% review_list as reviews %}
+
+        {% if reviews %}
+        <div class="slider trp-happy-customer">
+          {% for r_ol in reviews %}
+          <div class="trp-clip">
+              <div class="trp-happy-card">
+                <p class="trp-happy-customer-title">{{r_ol.title}}</p>
+                <p class="trp-happy-customer-content">{{r_ol.body|striptags|truncatechars:120 }}</p>
+                <div class="trp-review-star">
+                  {% if r_ol.score == 1 %}
+                  <span class="trp-star-1"><img src="{% static 'new_design/assets/images/review-star-icon.svg' %}" alt=""></span>
+                  <span class="trp-star-2"><span class="fa fa-star rating"></span></span>
+                  <span class="trp-star-3"><span class="fa fa-star rating"></span></span>
+                  <span class="trp-star-4"><span class="fa fa-star rating"></span></span>
+                  <span class="trp-star-5"><span class="fa fa-star rating"></span></span>
+                   {% elif r_ol.score == 2 %}
+                  <span class="trp-star-1"><img src="{% static 'new_design/assets/images/review-star-icon.svg' %}" alt=""></span>
+                  <span class="trp-star-2"><img src="{% static 'new_design/assets/images/review-star-icon.svg' %}" alt=""></span>
+                  <span class="trp-star-3"><span class="fa fa-star rating"></span></span>
+                  <span class="trp-star-4"><span class="fa fa-star rating"></span></span>
+                  <span class="trp-star-5"><span class="fa fa-star rating"></span></span>
+                   {% elif r_ol.score == 3 %}
+                  <span class="trp-star-1"><img src="{% static 'new_design/assets/images/review-star-icon.svg' %}" alt=""></span>
+                  <span class="trp-star-2"><img src="{% static 'new_design/assets/images/review-star-icon.svg' %}" alt=""></span>
+                  <span class="trp-star-3"><img src="{% static 'new_design/assets/images/review-star-icon.svg' %}" alt=""></span>
+                  <span class="trp-star-4"><span class="fa fa-star rating"></span></span>
+                  <span class="trp-star-5"><span class="fa fa-star rating"></span></span>
+                   {% elif r_ol.score == 4 %}
+                  <span class="trp-star-1"><img src="{% static 'new_design/assets/images/review-star-icon.svg' %}" alt=""></span>
+                  <span class="trp-star-2"><img src="{% static 'new_design/assets/images/review-star-icon.svg' %}" alt=""></span>
+                  <span class="trp-star-3"><img src="{% static 'new_design/assets/images/review-star-icon.svg' %}" alt=""></span>
+                  <span class="trp-star-4"><img src="{% static 'new_design/assets/images/review-star-icon.svg' %}" alt=""></span>
+                  <span class="trp-star-5"><span class="fa fa-star rating"></span></span>
+                   {% elif r_ol.score == 5 %}
+                  <span class="trp-star-1"><img src="{% static 'new_design/assets/images/review-star-icon.svg' %}" alt=""></span>
+                  <span class="trp-star-2"><img src="{% static 'new_design/assets/images/review-star-icon.svg' %}" alt=""></span>
+                  <span class="trp-star-3"><img src="{% static 'new_design/assets/images/review-star-icon.svg' %}" alt=""></span>
+                  <span class="trp-star-4"><img src="{% static 'new_design/assets/images/review-star-icon.svg' %}" alt=""></span>
+                  <span class="trp-star-5"><img src="{% static 'new_design/assets/images/review-star-icon.svg' %}" alt=""></span>
+                   {% else %}
+                  <span class="trp-star-1"><span class="fa fa-star rating"></span></span>
+                  <span class="trp-star-2"><span class="fa fa-star rating"></span></span>
+                  <span class="trp-star-3"><span class="fa fa-star rating"></span></span>
+                  <span class="trp-star-4"><span class="fa fa-star rating"></span></span>
+                  <span class="trp-star-5"><span class="fa fa-star rating"></span></span>
+                  {% endif %}
+                  <p class="trp-review-client-name">{{r_ol.user.first_name}} {{r_ol.user.last_name}}</p>
+                </div>
+              </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+        </div>
+     </section>
+
+     {% include "new_design/partials/how_to_rent.html" %}
+
+{% endblock %}
+

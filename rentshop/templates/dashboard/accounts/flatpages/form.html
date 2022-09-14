@@ -1,0 +1,79 @@
+{% extends 'dashboard/layout.html' %}
+{% load currency_filters %}
+{% load i18n %}
+
+{% block body_class %}{{ block.super }} create-page{% endblock %}
+
+{% block title %}
+{% trans "Pages" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<ul class="breadcrumb">
+    <li>
+        <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+    </li>
+    <li class="active">{% trans "Pages" %}</li>
+</ul>
+{% endblock %}
+
+{% block headertext %}Pages{% endblock %}
+
+{% block dashboard_content %}
+<table class="table table-striped table-bordered table-hover">
+    <caption>
+        <h3 class="pull-left">
+            All Pages
+        </h3> &nbsp;
+    </caption>
+
+    <thead>
+    <tr>
+        <th class="order_first">Page Name</th>
+        <th class="order_first">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+<!--    <tr>-->
+<!--        <td>Legal Documents</td>-->
+<!--        <td>-->
+<!--            <a href="{% url 'dashboard:accounts-legal-page-v1' %}?type=0" class="btn btn-sm btn-primary">Edit</a>-->
+<!--        </td>-->
+<!--    </tr>-->
+    <tr>
+        <td>Policies</td>
+        <td>
+            <a href="{% url 'dashboard:accounts-legal-page-v1' %}?type=1" class="btn btn-sm btn-primary"  target="_blank">Edit</a>
+        </td>
+    </tr>
+    <tr>
+        <td>Terms and Conditions</td>
+        <td>
+            <a href="{% url 'dashboard:accounts-legal-page-v1' %}?type=2" class="btn btn-sm btn-primary"  target="_blank">Edit</a>
+        </td>
+    </tr>
+    <tr>
+        <td>FAQ</td>
+        <td>
+            <a href="{% url 'dashboard:accounts-legal-page-v1' %}?type=3" class="btn btn-sm btn-primary"  target="_blank">Edit</a>
+        </td>
+    </tr>
+    <tr>
+        <td>About Us</td>
+        <td>
+            <a href="{% url 'dashboard:accounts-legal-page-v1' %}?type=4" class="btn btn-sm btn-primary"  target="_blank">Edit</a>
+        </td>
+    </tr>
+    <tr>
+        <td>How It Works</td>
+        <td>
+            <a href="{% url 'dashboard:accounts-legal-page-v1' %}?type=5" class="btn btn-sm btn-primary" target="_blank">Edit</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+{% endblock dashboard_content %}
+
+{% block extrascripts %}
+    {{ block.super }}
+{% endblock %}

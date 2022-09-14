@@ -1,0 +1,50 @@
+{% extends "customer/emails/base.html" %}
+{% load currency_filters i18n %}
+
+{% block tbody %}
+
+
+    <tr>
+        <td class="content-block">
+            <p xmlns="http://www.w3.org/1999/html">Hello,</p>
+            <p>Following product has low stock</p>
+        </td>
+    </tr>
+
+    <tr>
+        <td class="content-block">
+            <table class="order">
+                <tbody>
+
+                <tr>
+                    <td>
+                        <table class="order-items" cellpadding="0" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <b>Product</b>
+                                    </td>
+                                    <td>
+                                        <b>In Stock</b>
+                                    </td>
+                                    <td>
+                                        <b>Low Stock Threshold</b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>{{product}}</td>
+                                    <td>{{net_stock}}</td>
+                                    <td>{{threshold}}</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody></table>
+        </td>
+    </tr>
+
+
+
+{% endblock %}

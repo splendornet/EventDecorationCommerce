@@ -1,0 +1,107 @@
+{% load history_tags %}
+{% load basket_tags %}
+{% load currency_filters %}
+{% load thumbnail %}
+{% load i18n %}
+{% load staticfiles %}
+{% if request.basket.num_lines %}
+    {% for line in request.basket.all_lines %}
+        <li>
+            <div>
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        {% with image=line.product.primary_image %}
+                        <td class="text-center img-td">
+                            <div class="image">
+                                {% thumbnail image.original "100x100" upscale=False as thumb %}
+                                <a href="{{ line.product.get_absolute_url }}">
+                                    <img src="{{ thumb.url }}"
+                                         alt="{{ thumb.url }}" title="{{ thumb.url }}" class="img-thumbnail">
+                                </a>
+                                {% endthumbnail %}
+                            </div>
+                        </td>
+                        {% endwith %}
+                        <td class="text-left">
+                            <div class="name">
+                                <a href="">
+                                  {{line.description}}
+                                </a>
+                            </div>
+                            <div> x {{line.quantity }}
+                                <span class="price-cart">{{line.unit_price_incl_tax|currency:request.basket.currency }}</span>
+                            </div>
+                        </td>
+                        <td class="text-right"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </li>
+    {% endfor %}
+    {% else %}
+            <li><p class="text-center remove-margin">{% trans "Your basket is empty." %}</p></li>
+    {% endif %}
+    {% if request.basket.num_lines %}
+    <li>
+        <div>
+            <table class="table total">
+                <tbody>
+                <tr>
+                    <td class="text-right"><strong>Total</strong></td>
+                    {% if request.basket.is_tax_known %}
+                        <td class="text-right">{{request.basket.total_incl_tax|currency:request.basket.currency}}</td>
+                    {% else %}
+                        <td class="text-right">{{request.basket.total_excl_tax|currency:request.basket.currency}}</td>
+                    {% endif %}
+                </tr>
+                </tbody>
+            </table>
+            <p class="text-right remove-margin">
+                <a href="{% url 'basket:summary' %}" class="btn btn-yellow">View Cart</a>
+                <!--<a href="{% url 'checkout:index' %}" class="btn btn-yellow">Checkout</a>-->
+            </p>
+        </div>
+	</li>
+    {% endif %}
+
+
+
+
+<!--<ul class="cart_list product_list_widget ">-->
+    <!--{% if request.basket.num_lines %}-->
+        <!--{% for line in request.basket.all_lines %}-->
+    <!--<li class="mini_cart_item">-->
+
+         <!--{% with image=line.product.primary_image %}-->
+            <!--{% thumbnail image.original "100x100" upscale=False as thumb %}-->
+                <!--<a href="{{ line.product.get_absolute_url }}"><img class="attachment-shop_thumbnail size-shop_thumbnail wp-post-image" src="{{ thumb.url }}" alt="{{ line.product.get_title }}"></a>-->
+            <!--{% endthumbnail %}-->
+        <!--{% endwith %}-->
+
+        <!--<span class="quantity">{{line.quantity }} × <span class="amount">{{line.unit_price_excl_tax|currency:request.basket.currency }}</span></span>-->
+    <!--</li>-->
+    <!--{% endfor %}-->
+    <!--{% else %}-->
+        <!--<li><p>{% trans "Your basket is empty." %}</p></li>-->
+    <!--{% endif %}-->
+<!--</ul>-->
+<!--<p class="total">-->
+    <!--{% if request.basket.is_tax_known %}-->
+        <!--<strong>Total:</strong>-->
+        <!--<span class="amount">{{request.basket.total_incl_tax|currency:request.basket.currency}} </span>-->
+    <!--{% else %}-->
+        <!--<strong>Total:</strong>-->
+        <!--<span class="amount">{{request.basket.total_excl_tax|currency:request.basket.currency}} </span>-->
+    <!--{% endif %}-->
+<!--</p>-->
+<!--<p class="buttons">-->
+    <!--<a href="{% url 'basket:summary' %}" class="button wc-forward">View Cart</a>-->
+    <!--<a href="{% url 'checkout:index' %}" class="button checkout wc-forward">Checkout</a>-->
+<!--</p>-->
+
+
+
+
+

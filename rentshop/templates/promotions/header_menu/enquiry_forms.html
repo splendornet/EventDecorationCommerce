@@ -1,0 +1,223 @@
+{% extends "layout_2_col.html" %}
+{% load i18n %}
+{% load thumbnail %}
+{% load currency_filters %}
+{% load purchase_info_tags %}
+{% load display_tags %}
+{% load reviews_tags %}
+{% load staticfiles %}
+{% load mathfilters %}
+{% load common %}
+
+{% load product_tags %}
+{% load purchase_info_tags %}
+
+{% block navigation %}
+    {% include "partials/nav_primary.html" with expand_dropdown=1 %}
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block column_left %}
+{% endblock %}
+
+{% block content %}
+
+<style>
+    html {
+        scroll-behavior: smooth !important;
+    }
+
+    .Sale { background-color:#F4B801 !important; } .Rent { background-color:#F4B801  !important; } .RentOrSale { background-color:#F4B801 !important; } .Service { background-color:#F4B801 !important; } .Professional{background-color:#F4B801 !important; } .Sale_after { border-color: transparent transparent #F4B801 transparent; } .Rent_after { border-color: transparent transparent #F4B801  transparent;} .RentOrSale_after { border-color: transparent transparent #F4B801 transparent; } .Service_after { border-color: transparent transparent #F4B801 transparent; } .Professional_after{border-color: transparent transparent #F4B801 transparent; } .Sale_before { border-color: transparent #F4B801 transparent transparent; } .Rent_before { border-color: transparent #F4B801  transparent transparent;} .RentOrSale_before { border-color: transparent #F4B801 transparent transparent; } .Service_before { border-color: transparent #F4B801 transparent transparent;} .Professional_before{border-color: transparent #F4B801 transparent  transparent; } .btn-link-red{ background-color: #f4b800; color: #fff !important; } .btn-link-red:hover{ background-color: #e91d4a; color: #fff !important; } .btn-gp{ margin-right:0 !important; }
+    .home-banner-img{
+     //   height:30em !important;
+    }
+    .banner-text-mr{
+      //  margin-top:-130px !important;;
+    }
+    .postid-2784 .btn-red {
+        width: auto;
+        margin-bottom: 0px !important;
+        margin-right: 10px;
+    }
+    .nz-content-box-2 .box-content {
+        margin-bottom: 0px !important;
+        height: auto !important;
+        padding-bottom: 0px !important;
+    }
+    .section-1-pr, .section-3-div{
+        padding-top:10px  !important;
+    }
+    @media only screen and (min-width: 768px) {
+        .woocommerce .products .product, .woocommerce .menu-group {
+            padding-right: 0px !important;
+            padding-left: 0px !important;
+        }
+    }
+    .mr-top-l1{
+        padding-top: 1rem !important;
+    }
+    #parallax_2{
+        margin-bottom:0px !important;
+    }
+    .btn-qoute{
+    color: #212529;
+    background-color: #ffc107;
+    border-color: #ffc107;
+    flex: 0 0 16.666667%;
+    max-width: 16.666667%;
+    display: inline-block;
+    font-weight: 400;
+    color: #212529;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    padding: .375rem 1.75rem;
+    font-size: 2rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+</style>
+
+
+
+<div id="nz-content" class='content nz-clearfix sidebar-none padding-false'>
+
+
+    <div class='page-full-width'>
+        <!-- post start -->
+         <div id="post-2386" class="post-2386 page type-page status-publish hentry">
+             <div class="shop-layout-wrap" id="nz-target">
+
+              <section class="page-content nz-clearfix">
+                  <br/>
+                  <h4>Enquiry Form</h4>
+                  <div class="item animate-item nz-clearfix">
+                      <form role="form" id="enquiry_form" method="post">
+                          {% csrf_token %}
+                          {% if form.non_field_errors %}
+                          {% for error in form.non_field_errors %}
+                          <div class="alert alert-danger form-group has-error">
+                              <span class="help-inline"><i class="icon-exclamation-sign"></i> {{ error }}</span>
+                          </div>
+                          {% endfor %}
+                          {% endif %}
+
+                                        <div class="row setup-content" id="">
+                                            <div class="col vc_col-xs-12">
+                                                <div class="vc_col-md-12">
+                                                    <div class="vc_container">
+                                                        <div class="container">
+                                                            <div class="vc_col-sm-6 col-sm-6 ">
+                                                                <div class="form-group">
+                                                                    <label for="id_organization_name">Organization Name</label>
+                                                                    {{form.organization_name}}
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label for="id_person_name">Person Name</label>
+                                                                    {{form.person_name}}
+                                                                    {% if form.errors.person_name %}
+                                                                        <label class="error_label">{{form.errors.person_name.as_text}}</label>
+                                                                    {% endif %}
+                                                                </div>
+
+
+
+                                                                <div class="form-group">
+                                                                    <label for="id_email">Email Address</label>
+                                                                    {{form.email}}
+                                                                    {% if form.errors.email %}
+                                                                        <label class="error_label">{{form.errors.email.as_text}}</label>
+                                                                    {% endif %}
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label for="id_telephone_number">Mobile Number</label>
+                                                                    {{form.telephone_number}}
+                                                                    {% if form.errors.telephone_number %}
+                                                                        <label class="error_label">{{form.errors.telephone_number.as_text}}</label>
+                                                                    {% endif %}
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label for="id_city">City</label>
+                                                                    {{form.city}}
+                                                                    {% if form.errors.city %}
+                                                                        <label class="error_label">{{form.errors.city.as_text}}</label>
+                                                                    {% endif %}
+                                                                </div>
+
+                                                                <div class="form-group" id="datetimepicker1">
+                                                                    <label for="id_event_date">Event Date</label>
+                                                                    {{form.event_date}}
+                                                                    {% if form.errors.event_date %}
+                                                                        <label class="error_label">{{form.errors.event_date.as_text}}</label>
+                                                                    {% endif %}
+                                                                </div>
+
+
+                                                                <!--<div class="form-group">-->
+                                                                    <!--<label for="id_alternate_mobile_number">Categories</label>-->
+                                                                    <!--{{form.categories}}-->
+                                                                <!--</div>-->
+                                                            </div>
+                                                            <div class="vc_col-sm-6 col-sm-6">
+
+
+                                                                <div class="form-group">
+                                                                    <label for="id_rental_duration}">Rental duration</label>
+                                                                    {{form.rental_duration}}
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label for="id_budget_from">Budget From</label>
+                                                                    {{form.budget_from}}
+
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label for="id_budget_to">Budget To</label>
+                                                                    {{form.budget_to}}
+                                                                    {% if form.errors.budget_to %}
+                                                                        <label class="error_label">{{form.errors.budget_to.as_text}}</label>
+                                                                    {% endif %}
+
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label for="id_enquiry_text">Enquiry Text</label>
+                                                                    {{form.enquiry_text}}
+                                                                </div>
+
+
+                                                                                                                            </div>
+                                                            <!--</form>-->
+                                                        </div>
+                                                        <br/>
+                                                        <div class="row text-center">
+                                                            <div class="col vc_col-md-12">
+                                                            <button type="submit" class="btn btn-red btn-yellow">Submit</button>
+                                                                <a href="/" type="" class="btn btn-yellow btn-red upper">Cancel</a>
+                                                        </div>
+                                                        </div>
+                                                        <br/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+              </section>
+             </div>
+         </div>
+    </div>
+</div>
+
+{% endblock %}

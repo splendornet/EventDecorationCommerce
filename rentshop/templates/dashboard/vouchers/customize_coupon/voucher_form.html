@@ -1,0 +1,162 @@
+{% extends 'dashboard/layout.html' %}
+{% load i18n %}
+{% load static %}
+{% load common %}
+
+{% block body_class %}{{ block.super }} create-page{% endblock %}
+
+{% block title %}
+    {{ title }} | {% trans "Ranges" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li>
+            <a href="{% url 'dashboard:voucher-list1' %}">Coupons</a>
+        </li>
+        {% if range %}
+            <li class="active">Update Coupon</li>
+        {% else %}
+            <li class="active">Create Coupon</li>
+        {% endif %}
+    </ul>
+{% endblock %}
+
+{% block headertext %}
+    {% if range %}{{ range.name }}{% else %}{% trans "Create Primary Coupon" %}{% endif %}
+{% endblock %}
+
+{% block dashboard_content %}
+<style>
+    .tr_clone
+    {
+        display:none
+    }
+
+</style>
+<link rel="stylesheet" href="{% static 'oscar/css/products/common_select2.css' %}" type="text/css" media="screen">
+
+    <form action="." method="post" class="form-stacked well wysiwyg">
+        {% csrf_token %}
+        {{ formset.management_data }}
+        {{range_formset.management_data}}
+        <div class="form-group" style="margin-bottom:10px;">
+    <label for="id_distributor_name">UIN</label>
+    {{range_formset.0.coupon_distibutor}}
+            <br/>
+    <p class="color-red">
+        {{range_formset.0.errors.coupon_distibutor.as_text}}
+    </p>
+</div>
+
+        <div class="form-group" style="margin-bottom:10px;">
+            <label for="id_distributor_name">Name</label><br/>
+            <input type="text" class="form-control" name="distributor_name" id="id_distributor_name" value="{{range_formset.0.coupon_distibutor.full_name}}" disabled>
+        </div>
+        <div class="form-group" style="margin-bottom:10px;">
+            <label for="id_distributor_cdn">CDN</label><br/>
+            <input type="text" class="form-control"  name="distributor_name" id="id_distributor_cdn" value=" " disabled>
+        </div>
+        <div class="form-group" style="margin-bottom:10px;">
+    <label for="id_distributor_name">Usage</label>
+    {{formset.0.usage}}
+            <br/>
+    <p class="color-red">
+        {{range_formset.0.errors.usage.as_text}}
+    </p>
+</div>
+        <div class="form-group" style="margin-bottom:10px;">
+    <label for="id_distributor_name">Description</label>
+    {{range_formset.0.description}}
+            <br/>
+    <p class="color-red">
+        {{range_formset.0.errors.description.as_text}}
+    </p>
+</div>
+
+        <table class="table table-hover" id="item_table">
+        <thead>
+            <tr role="row">
+                <th>Category</th>
+                <th>Coupon Code</th>
+                <th>Coupon Count</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <input type="hidden" name="form-TOTAL_FORMS" value="1" id="id_form-TOTAL_FORMS">
+            <input type="hidden" name="form-INITIAL_FORMS" value="0" id="id_form-INITIAL_FORMS">
+            <input type="hidden" name="form-MIN_NUM_FORMS" value="0" id="id_form-MIN_NUM_FORMS">
+            <input type="hidden" name="form-MAX_NUM_FORMS" value="10" id="id_form-MAX_NUM_FORMS">
+            {% create_zip formset range_formset as zip_com %}
+            {% for frm,rfrm in zip_com %}
+                <tr id="{{ frm.prefix }}-row" class="{% if frm.price_rng.value == '' and forloop.counter0 > 0 or frm.price_rng.value is None and forloop.counter0 > 0 %}tr_clone{% else %}empty{% endif %}">
+                    <td>
+                        {{rfrm.included_categories}}
+<!--                        {% if forloop.counter0 == 0 and action == 'add' %}-->
+<!--                        {{ form.category }}-->
+<!--                         <input type="hidden" name="form-{{forloop.counter0}}-category" class="category-input" id="id-{{forloop.counter0}}-category">-->
+<!--                        {% else %}-->
+<!--                            {% if forloop.counter0 == 0 %}-->
+<!--                                {{category.name}}-->
+<!--                            {% endif %}-->
+<!--                        {% endif %}-->
+<!--                        {{ frm.id}}-->
+                    </td>
+                    <td>
+                        {{frm.code}}
+                    </td>
+                    <td>
+                        <input type="number" min="1" value="1">
+                    </td>
+                    <td>
+                        {{ frm.start_datetime }}
+                    </td>
+                    <td>
+                        {{ frm.end_datetime }}
+                    </td>
+
+                    <td>
+                        <button type="button" class="btn btn-warning" onclick="add_formset()">Add Row</button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+        {% block form_actions %}
+            <div class="form-actions">
+                <button class="btn btn-primary btn-lg" type="submit" data-loading-text="{% trans 'Saving...' %}">{% trans "Save" %}</button> {# This is an input so we distinguish between which button was pressed #}
+                <!--<input class="btn btn-primary btn-lg" type="submit" name="action" value="{% trans "Save and edit products" %}"/>-->
+                {% trans "or" %}
+                <a class="btn btn-primary btn-lg" href="{% url 'dashboard:range-list' %}">{% trans "cancel" %}</a>
+            </div>
+        {% endblock form_actions %}
+    </form>
+{% endblock dashboard_content %}
+
+{% block extrascripts %}
+    {{ block.super }}
+<script>
+
+
+</script>
+ <script>
+        function add_formset(){
+            $('.empty:last').nextAll().slice(0, 1).toggleClass('empty tr_clone');
+        }
+        $("#id_form-0-coupon_distibutor").change(function(){
+            if($("#id_form-0-coupon_distibutor").val() != '')
+            {
+            $("#id_distributor_name").val('name')
+            $("#id_distributor_cdn").val('name')
+            }
+        });
+
+    </script>
+{% endblock %}

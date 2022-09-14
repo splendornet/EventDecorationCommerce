@@ -1,0 +1,172 @@
+
+
+<!-- formset error -->
+{% for field in form.hidden_fields %}
+    {{ field }}
+{% endfor %}
+<!-- formset error -->
+<div class="form-group" style="margin-bottom:10px;">
+    <p class="control-label">Title</p>
+    {{form.title}}
+    {% if form.errors.title %}
+        <p class="color-red">* Enter a valid product name.</p>
+    {% endif %}
+</div>
+
+<div class="form-group" style="margin-bottom:10px;">
+    <p class="control-label">UPC</p>
+    {{form.upc}} <br/>
+    <p class="color-red">
+        {{form.errors.upc.as_text}}
+    </p>
+</div>
+
+<div class="form-group" style="margin-bottom:10px;">
+    <p class="control-label">Description</p>
+    {{form.description}}
+</div>
+<!--<div id="toolbar-container"></div>-->
+<!--<div class="form-group" style="border:1px solid black; margin-bottom:10px; " id="product-description">-->
+<!--    <p class="control-label">Description</p>-->
+<!--    {{form.description}}-->
+<!--</div>-->
+<div class="row">
+<div class="form-group col-md-4" style="margin-bottom:10px;">
+    <p class="control-label"> Is discountable? </p>
+    {{form.is_discountable}}
+</div>
+{% if product.product_class.name != 'Rent Or Sale' %}
+<div class="form-group col-md-4 snt-art" style="margin-bottom:10px;">
+    <p class="control-label"> Artificial Flower </p>
+    {{form.is_artificial_flower}}
+</div>
+<div class="form-group col-md-4 snt-real" style="margin-bottom:10px;">
+    <p class="control-label"> Real Flower </p>
+    {{form.is_real_flower}}
+</div>
+    {% endif %}
+</div>
+<hr/>
+
+<div class="form-group" style="margin-bottom:10px;">
+    {% if not isVendor %}
+        <p class="control-label"> Is approved * </p>
+        {{form.is_approved}}
+    {% endif %}
+</div>
+
+<hr/>
+
+<div class="row">
+    <div class="form-group col-md-4" style="margin-bottom:10px;">
+        <p class="control-label"> Is Available For Combo * </p>
+        {{form.is_combo_product}}
+    </div>
+    <div class="form-group col-md-4" style="margin-bottom:10px;">
+        <p class="control-label"> Is Transportation Available * </p>
+        {{form.is_transporation_available}}
+    </div>
+    <div class="form-group col-md-4" style="margin-bottom:10px;">
+        <p class="control-label">Product Costing Type * </p>
+        {{form.product_cost_type}}
+    </div>
+</div>
+<div class="row">
+    {% if product_class.name == 'Rent' or product_class.name == 'Rent Or Sale' or product_class.name == 'Professional' or product_class.name == 'Service' %}
+    <div class="form-group col-md-6" style="margin-bottom:10px;">
+        <p class="control-label"> Daily Capacity </p>
+        {{form.daily_capacity}}
+        {% if form.errors.daily_capacity %}
+            <p class="color-red">{{form.errors.daily_capacity.as_text}}</p>
+        {% endif %}
+    </div>
+    {% endif %}
+    <div class="form-group col-md-6" style="margin-bottom:10px;">
+        <p class="control-label"> Is Package </p>
+        {{form.is_package}}
+    </div>
+</div>
+<div class="row">
+    <div class="form-group col-md-6" style="margin-bottom:10px;">
+        <p class="control-label"> Is Deposite Appilcable </p>
+        {{form.is_deposite_applicable}}
+        {% if form.errors.is_deposite_applicable %}
+            <p class="color-red">{{form.errors.is_deposite_applicable.as_text}}</p>
+        {% endif %}
+    </div>
+        <div class="form-group col-md-6" style="margin-bottom:10px;display: none" id="dip_amount">
+        <p class="control-label"> Deposite Amount </p>
+        {{form.deposite_amount}}
+        {% if form.errors.deposite_amount %}
+            <p class="color-red">{{form.errors.deposite_amount.as_text}}</p>
+        {% endif %}
+    </div>
+</div>
+<div class="row">
+    <div class="form-group col-md-4" style="margin-bottom:10px;">
+        <p class="control-label">Tax Type</p>
+        {{form.product_tax_type}}
+        {% if form.errors.product_tax_type %}
+            <p class="color-red">{{form.errors.product_tax_type.as_text}}</p>
+        {% endif %}
+    </div>
+    {% if product_class.name != 'Service' %}
+    <div class="form-group col-md-4" style="margin-bottom:10px;">
+        <p class="control-label">Quantity Box Allowed</p>
+        {{form.is_quantity_allowed}}
+        {% if form.errors.is_quantity_allowed %}
+            <p class="color-red">{{form.errors.is_quantity_allowed.as_text}}</p>
+        {% endif %}
+    </div>
+    <div class="form-group col-md-4">
+        <p class="control-label">Booking Day's Restriction(In Hours)</p>
+        {{form.product_booking_time_delay}}
+        {% if form.errors.product_booking_time_delay %}
+            <p class="color-red">*{{form.errors.product_booking_time_delay.as_text}}.</p>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+
+<div class="row">
+    <div class="form-group col-md-12" style="margin-bottom:10px;">
+    <p class="control-label">Title</p>
+    {{form.product_title_meta}}
+    {% if form.errors.product_title_meta %}
+        <p class="color-red">*{{form.errors.product_title_meta.as_text}}.</p>
+    {% endif %}
+</div>
+</div>
+<div class="row">
+    <div class="form-group col-md-12" style="margin-bottom:10px;">
+    <p class="control-label">Meta Data</p>
+    {{form.meta_description}}
+    {% if form.errors.meta_description %}
+        <p class="color-red">*{{form.errors.meta_description.as_text}}.</p>
+    {% endif %}
+</div>
+</div>
+<!--<div class="row">-->
+<!--    <div class="form-group col-md-12" style="margin-bottom:10px;">-->
+<!--    <p class="control-label">Youtube Video Link</p>-->
+<!--    {{form.youtube_video_link}}-->
+<!--    {% if form.errors.youtube_video_link %}-->
+<!--        <p class="color-red">*{form.errors.youtube_video_link.as_text}}.</p>-->
+<!--    {% endif %}-->
+<!--</div>-->
+<!--</div>-->
+<div class="row">
+    <div class="form-group col-md-12" style="margin-bottom:10px;">
+    <p class="control-label">Youtube Video Link</p>
+    {{form.video}}
+    {% if form.errors.video %}
+        <p class="color-red">*{{form.errors.video.as_text}}.</p>
+    {% endif %}
+</div>
+</div>
+
+    <input type="hidden" name="product_type" id="id_product_type" value="{{product_class.name}}">
+
+
+

@@ -1,0 +1,15 @@
+{% extends "customer/emails/base.html" %}
+{% load currency_filters i18n %}
+
+{% block tbody %}
+    <tr>
+        <td class="content-block">
+            <p xmlns="http://www.w3.org/1999/html">{% trans 'Hello,' %}</p>
+            <p>{% blocktrans %}
+                Thanks you for registration. <br/>
+                Congratulations and welcome in our family!{% endblocktrans %}</p>
+        </td>
+    </tr>
+
+
+{% endblock %}

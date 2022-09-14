@@ -1,0 +1,17 @@
+{% extends "customer/emails/base.html" %}
+{% load currency_filters i18n %}
+
+{% block tbody %}
+{% autoescape off %}
+{% load static %}
+<tr>
+    <td class="content-block">
+        <p xmlns="http://www.w3.org/1999/html">Hello {{ vendor.first_name }} {{ vendor.last_name }},</p>
+        <p>Your asp account has been activated successfully.</p>
+
+        <p style="font-size:16px;"><a href="{{domain}}/accounts/login">Click Here To Login</a> </p>
+    </td>
+</tr>
+
+{% endautoescape %}
+{% endblock %}

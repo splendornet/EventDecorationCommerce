@@ -1,0 +1,121 @@
+{% load i18n %}
+{% load currency_filters %}
+{% load shipping_tags %}
+
+<style>
+    .span-br{
+        font-size:12px !important;
+    }
+    .col-50{
+        width:50%;
+    }
+    .col-10{
+        width:10%;
+    }
+    .col-40{
+            width:40%;
+    }
+    .col-50-r{
+        text-align:right;
+        font-weight:400;
+    }
+</style>
+
+{% with offer_discounts=basket.offer_discounts voucher_discounts=basket.grouped_voucher_discounts %}
+
+
+<!--    <dl class="dlist-align" >-->
+<!--        <dt class="col-6 col-50 col-50-l">Cart Total</dt>-->
+<!--        <dt class="col-6 col-10 col-50-c">:</dt>-->
+<!--        <dt class="col-6 col-40 col-50-r">{{ basket.cart_total_without_tax|currency:basket.currency }}</dt>-->
+<!--    </dl>-->
+
+<!--    <dl class="dlist-align" >-->
+<!--        <dt class="col-6 col-50 col-50-l">Advance Payout</dt>-->
+<!--        <dt class="col-6 col-10 col-50-c">:</dt>-->
+<!--        <dt class="col-6 col-40 col-50-r">{{ basket.advance_payment_price|currency:basket.currency }}</dt>-->
+<!--    </dl>-->
+
+<!--    <dl class="dlist-align" >-->
+<!--        <dt class="col-6 col-50 col-50-l">Deposit</dt>-->
+<!--        <dt class="col-6 col-10 col-50-c">:</dt>-->
+<!--        <dt class="col-6 col-40 col-50-r">{{ basket.cart_deposit|currency:basket.currency }}</dt>-->
+<!--    </dl>-->
+
+<!--    <dl class="dlist-align" >-->
+<!--        <dt class="col-6 col-50 col-50-l">Balance Amount</dt>-->
+<!--        <dt class="col-6 col-10 col-50-c">:</dt>-->
+<!--        <dt class="col-6 col-40 col-50-r">{{ basket.balance_amount_price|currency:basket.currency }}</dt>-->
+<!--    </dl>-->
+
+<!--    <dl class="dlist-align" >-->
+<!--        <dt class="col-6 col-50 col-50-l">Payable Amount</dt>-->
+<!--        <dt class="col-6 col-10 col-50-c">:</dt>-->
+<!--        <dt class="col-6 col-40 col-50-r">{{ basket.payable_amount|currency:basket.currency }}</dt>-->
+<!--    </dl>-->
+
+<!--    {% with offer_discounts=basket.offer_discounts voucher_discounts=basket.grouped_voucher_discounts %}-->
+<!--        {% if offer_discounts or voucher_discounts %}-->
+<!--            {% for discount in voucher_discounts %}-->
+<!--                <dl class="dlist-align" >-->
+<!--                    <dt class="col-6 col-50 col-50-l">Discount Amount</dt>-->
+<!--                    <dt class="col-6 col-10 col-50-c">:</dt>-->
+<!--                    <dt class="col-6 col-40 col-50-r">-->
+<!--                        {{discount.discount|currency:basket.currency}}-->
+<!--                        <span class="badge">{{ discount.voucher.code }}</span>-->
+<!--                    </dt>-->
+<!--                </dl>-->
+<!--            {% endfor %}-->
+<!--        {% endif %}-->
+<!--    {% endwith %}-->
+
+    <dl class="dlist-align" >
+        <dt class="col-6 col-50 col-50-l">Cart Total</dt>
+        <dt class="col-6 col-10 col-50-c">:</dt>
+        <dt class="col-6 col-40 col-50-r">{{ basket.cart_total_without_tax|currency:basket.currency }}</dt>
+    </dl>
+
+    <dl class="dlist-align" >
+        <dt class="col-6 col-50 col-50-l">Deposit</dt>
+        <dt class="col-6 col-10 col-50-c">:</dt>
+        <dt class="col-6 col-40 col-50-r">{{ basket.cart_deposit|currency:basket.currency }}</dt>
+    </dl>
+
+    <dl class="dlist-align" >
+        <dt class="col-6 col-50 col-50-l">Shipping Cost</dt>
+        <dt class="col-6 col-10 col-50-c">:</dt>
+        <dt class="col-6 col-40 col-50-r">{{ basket.get_shipping_total|currency:basket.currency }}</dt>
+    </dl>
+
+    <dl class="dlist-align" >
+        <dt class="col-6 col-50 col-50-l">Advance Payout</dt>
+        <dt class="col-6 col-10 col-50-c">:</dt>
+        <dt class="col-6 col-40 col-50-r">{{ basket.advance_payment_price|currency:basket.currency }}</dt>
+    </dl>
+    {% with offer_discounts=basket.offer_discounts voucher_discounts=basket.grouped_voucher_discounts %}
+        {% if offer_discounts or voucher_discounts %}
+            {% for discount in voucher_discounts %}
+                <dl class="dlist-align" >
+                    <dt class="col-6 col-50 col-50-l">Coupon Discount</dt>
+                    <dt class="col-6 col-10 col-50-c">:</dt>
+                    <dt class="col-6 col-40 col-50-r">
+                        {{discount.discount|currency:basket.currency}}
+                        <span class="badge">{{ discount.voucher.code }}</span>
+                    </dt>
+                </dl>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <dl class="dlist-align" >
+        <dt class="col-6 col-50 col-50-l">Balance Amount</dt>
+        <dt class="col-6 col-10 col-50-c">:</dt>
+        <dt class="col-6 col-40 col-50-r">{{ basket.balance_amount_price|currency:basket.currency }}</dt>
+    </dl>
+    <dl class="dlist-align" >
+        <dt class="col-6 col-50 col-50-l">Payable Amount</dt>
+        <dt class="col-6 col-10 col-50-c">:</dt>
+        <dt class="col-6 col-40 col-50-r">{{ basket.advance_payment_price|currency:basket.currency }}</dt>
+    </dl>
+
+
+{% endwith %}

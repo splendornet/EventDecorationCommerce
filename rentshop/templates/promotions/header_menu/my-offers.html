@@ -1,0 +1,213 @@
+{% extends "layout_2_col.html" %}
+{% load i18n %}
+{% load basket_tags %}
+{% load category_tags %}
+{% load product_tags %}
+{% load thumbnail %}
+{% block title %}
+    {% if summary %}{{ summary }} |{% endif %} {{ block.super }}
+{% endblock %}
+{% block content %}
+
+<style>
+    .shop-layout-wrap{
+        margin-top:148px;
+    }
+    .cards {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.cards__item {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    padding: 1rem;
+    height: auto;
+}
+
+.card {
+    background-color: white;
+    border-radius: 0.25rem;
+    box-shadow: 0 20px 40px -14px rgba(0, 0, 0, 0.25);
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    overflow: hidden;
+}
+.card__image--fence {
+   // background-image: url('https://via.placeholder.com/650x500');
+}
+.card__image {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    -webkit-filter: contrast(70%);
+    filter: contrast(70%);
+    overflow: hidden;
+    position: relative;
+    -webkit-transition: -webkit-filter 0.5s cubic-bezier(0.43, 0.41, 0.22, 0.91);
+    transition: -webkit-filter 0.5s cubic-bezier(0.43, 0.41, 0.22, 0.91);
+    transition: filter 0.5s cubic-bezier(0.43, 0.41, 0.22, 0.91);
+    transition: filter 0.5s cubic-bezier(0.43, 0.41, 0.22, 0.91), -webkit-filter 0.5s cubic-bezier(0.43, 0.41, 0.22, 0.91);
+}
+.card__image::before {
+    content: "";
+    display: block;
+   // padding-top: 56.25%;
+}
+
+.img-prod{
+
+    height: 250px !important;
+    width: 100%;
+}
+
+.card__content {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-flex: 1;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    padding: 1rem;
+    padding-top:1px;
+    padding-bottom:20px;
+}
+.card__title{color: black;
+    font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    letter-spacing: 0;
+    padding: 1rem;
+    font-size: 16px;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;}
+    .card__btn:hover{
+        background-color: #f4b800 !important;
+    }
+    .card__btn{
+        color:#fff !important;
+    }
+    .card__btn{
+        color:#fff !important;
+        text-transform: capitalize;
+    }
+    .card__btn:hover{
+        color:#000 !important;
+    }
+    @media(max-width: 767px) {
+        .product-offer-wrapper .cards .cards__item {
+            width: 100%;
+        }
+        .cards__item .card .card__image {
+           width: 100% !important;
+        }
+        .top-menu-wrapper .row {
+            padding-right: 0px;
+        }
+    }
+    .card:hover .card__image {
+    -webkit-filter: contrast(100%);
+    filter: contrast(100%);
+}
+</style>
+
+<div class="shop-layout-wrap product-offer-wrapper" id="nz-target">
+    <div class="loop">
+        <div class="container">
+            <section class="content lazy shop-layout infinite-container animation-false nz-clearfix">
+                {% if category %}
+                    <div class="woocommerce-products " id="product_list">
+                        <ul class="cards">
+                            {% for product in category %}
+                            <li class="cards__item col-md-4">
+                                <div class="card">
+                                    <div class="card__image card__image--fence" style="width:400px; ">
+                                        {% with image=product.menu_image %}
+                                            {% if product.menu_image %}
+                                                <img class="img-prod" alt="{{product}}" src="{{ product.menu_image.url }}"/>
+                                            {% else %}
+                                                <img class="img-prod" alt="{{product}}" src="/media/image_not_found.jpg"/>
+                                            {% endif %}
+                                        {% endwith %}
+
+                                    </div>
+                                    <div class="card__content">
+                                        <div class="card__title">{{product}}</div>
+                                        <div><br></div>
+                                        <button type="button" class="btn btn--block card__btn"  onclick="window.open('{% url 'catalogue:category_product' pk=product.id %}', '_blank')">
+                                            View All
+                                        </button>
+                                    </div>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        <!--<ul class="products infinite-item">-->
+                            <!--{% for product in category %}-->
+                                <!--<li class="mix product nz-clearfix" data-groups='["all", "alcoholic-drinks"]' data-grid="ninzio_01">-->
+                                    <!--<div class="product-body">-->
+                                        <!--{% block product_image %}-->
+                                            <!--<div class="nz-thumbnail">-->
+                                                <!--{% with image=product.image_menu %}-->
+                                                    <!--<a href="{% url 'catalogue:category_product' pk=product.id %}" target="_blank">-->
+                                                        <!--<img src="{{ product.menu_image.url }}" alt="{{ product.get_title }}">-->
+                                                    <!--</a>-->
+                                                <!--{% endwith %}-->
+                                            <!--</div>-->
+                                        <!--{% endblock %}-->
+                                        <!--<div class="product-details">-->
+                                            <!--<div class="product-title nz-clearfix">-->
+                                                <!--<h3>-->
+                                                    <!--<a href="{% url 'catalogue:category_product' pk=product.id %}" target="_blank">-->
+                                                        <!--{{product}}-->
+                                                    <!--</a>-->
+                                                <!--</h3>-->
+                                            <!--</div>-->
+                                            <!--<div class="cart-wrap nz-clearfix">-->
+                                                <!--<div class="btn-group">-->
+                                                    <!--<a href="{% url 'catalogue:category_product' pk=product.id %}" class="btn btn-red m-btn" style="background-color: #f4b800;color:#fff;" target="_blank">View Details</a>-->
+                                                <!--</div>-->
+                                                <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</li>-->
+                            <!--{% endfor %}-->
+                        <!--</ul>-->
+                    </div>
+                    {% include "partials/pagination.html" %}
+                {% else %}
+                    <div class="product-category-body">
+                        <div class="product-category-content">
+                            <h4 class="product-category-title">No Products</h4>
+                        </div>
+                    </div>
+                {% endif %}
+
+            </section>
+            <div class="row text-center">
+                <div class="loading loader" style="display: none;">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

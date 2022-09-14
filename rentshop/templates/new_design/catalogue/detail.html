@@ -1,0 +1,1245 @@
+{% extends 'new_design/base.html' %}
+
+{% load reviews_tags %}
+{% load i18n %}
+{% load mathfilters %}
+{% load thumbnail %}
+{% load common %}
+{% load history_tags %}
+{% load currency_filters %}
+{% load reviews_tags %}
+{% load staticfiles %}
+{% load product_tags %}
+{% load display_tags %}
+{% load humanize %}
+{% load i18n %}
+{% load purchase_info_tags %}
+
+{% block content %}
+<section class="trp-breadcrumb-sec">
+    <ul class="breadcrumb">
+        <li><a href="/">Home</a></li>
+        <li><a href="/">Rental catalogue</a></li>
+        {% if product.categories.first.get_ancestors %}<li><a href="{{product.categories.first.get_ancestors.last.get_absolute_url}}">{{product.categories.first.get_ancestors.last.name}}</a></li>{% endif %}
+        <li><a href="{{product.categories.first.get_absolute_url}}">{{product.categories.first.name}}</a></li>
+        <li>{{product.title}}</li>
+    </ul>
+</section>
+ <!-- Product gallary section -->
+    <section class="trp-layout-detail-product">
+      <div class="row trp-row">
+          <div class="col-md-6 trp-product-left">
+                <div class="trp-product-gallary-wrapper">
+                    <div class="slider-container">
+                        {% with all_images=product.get_all_images %}
+                        <div class="trp-prduct-gallery-slider">
+                            {% for image in all_images %}
+                            <div class="item-slick">
+                                <!-- Smita Patil: Make changes when youtube video url field is added -->
+                                {% if product.video and forloop.last %}
+                                {% update_url product.video as video_link %}
+
+                                <a href='{{video_link}}' class="trp-gallery-video">
+                                    <img src="{{image.original.url}}" alt="Alt">
+                                </a>
+                                {% else %}
+                                <a href='{{image.original.url}}'>
+                                    <img src="{{image.original.url}}" alt="Alt">
+                              {% if image.caption %}<p class="text-center trp-product-gallary-img-overlay">{{image.caption}}</p> {% endif %}
+                                </a>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="slider-nav">
+                            {% for image in all_images %}
+                            <div class="item-slick">
+                            <img src="{{image.original.url}}" alt="Alt">
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endwith %}
+                    </div>
+                </div>
+          </div>
+          <div class="col-md-6 trp-product-right">
+            <div class="trp-product-meta">
+              <h1 class="trp-product-title mb-25 mt-0">{{ product.title }}</h1>
+                {% include "new_design/catalogue/partials/display_rating.html" %}
+              <div class="trp-devider"></div>
+              <!-- Single price -->
+              <div class="trp-veriable-price-wrapper mt-25">
+                <div class="row">
+                    {% if not product.is_artificial_flower and not product.is_real_flower %}
+                    {% if product.product_class.name != 'Rent Or Sale' %}
+                  <div class="col-sm-12 col-lg-12">
+                      <div class="trp-product-price-1">
+                        <label class="trp-radio-lable">
+                            <span class="trp-product-price">
+                                {% get_price_whole_details product.stockrecords.last as base_price %}
+                                ₹ {% if product.product_cost_type == 'Multiple' %}
+                                    {% get_product_cost_multiple product.stockrecords.last as data %}
+                                    {% if data %}
+                                    {{data}}
+                                    {% else %}
+                                    {{base_price}}
+                                    {% endif %}
+                                    {% else %}
+                                    {{base_price}}
+                                    {% endif %}
+                                    {% get_market_saving_price product product.stockrecords.last None as mt_price %}
+                                    {% if product.product_class.name != 'Rent Or Sale' %}
+                                    {% if mt_price.status %}
+                                <span class="trp-product-mrp">(₹ {{mt_price.market_price}} )</span>
+                                    {% endif %}
+                                {% if product.stockrecords.last.unit %} ({{product.stockrecords.last.unit}}) {% endif %}
+                            </span>
+                            {% if mt_price.status %}
+                            <span class="trp-product-discount-amount">Your Savings ( ₹ {{mt_price.total_saving}} Off)</span>
+                            {% endif %}
+                            {% else %}
+                            {% if mt_price.status %}
+                            <span class="trp-product-mrp">(₹ {{mt_price.market_price}}/ ₹ {{mt_price.sale_market_price}} )</span>{% endif %}</span>
+                            {% if mt_price.status %}
+                            <span class="trp-product-discount-amount">Your Savings ( ₹ {{mt_price.total_saving}}/ ₹ {{mt_price.sale_total_saving}} Off)</span>
+                            {% endif %}
+                            {% endif %}
+                        </label>
+                      </div>
+                  </div>
+                    {% else %}
+                    {% get_price product.stockrecords.last as base_price %}
+                    {% get_market_saving_price product product.stockrecords.last None as mt_price %}
+                    <div class="col-sm-12 col-lg-12">
+                        <div class="trp-product-price-1 snt-rent-price">
+                        <label class="trp-radio-lable">
+                            <span class="trp-product-price">
+                                ₹ {{base_price.rent_price}}
+                                    {% if mt_price.status %}
+                                <span class="trp-product-mrp">(₹ {{mt_price.market_price}} )</span>
+                                    {% endif %}
+                                {% if product.stockrecords.last.unit %} ({{product.stockrecords.last.unit}}) {% endif %}
+                            </span>
+                            {% if mt_price.status %}
+                            <span class="trp-product-discount-amount">Your Savings ( ₹ {{mt_price.total_saving}} Off)</span>
+                            {% endif %}
+                        </label>
+                      </div>
+                      <div class="trp-product-price-1 snt-sale-price">
+                        <label class="trp-radio-lable">
+                            <span class="trp-product-price">
+                                ₹ {{base_price.sale_price}}
+                                    {% if mt_price.status %}
+                                <span class="trp-product-mrp">(₹ {{mt_price.sale_market_price}} )</span>
+                                    {% endif %}
+                                {% if product.stockrecords.last.unit %} ({{product.stockrecords.last.unit}}) {% endif %}
+                            </span>
+                            {% if mt_price.status %}
+                            <span class="trp-product-discount-amount">Your Savings ( ₹ {{mt_price.sale_total_saving}} Off)</span>
+                            {% endif %}
+                        </label>
+                      </div>
+                    </div>
+
+                    {% endif %}
+                    {% else %}
+                        {% if product.is_artificial_flower %}
+                         <div class="col-sm-12 col-lg-12" id="snt-art-price">
+                          <div class="trp-product-price-1">
+                            <label class="trp-radio-lable">
+                                <span class="trp-product-price">
+                                    {% get_total_price product product.stockrecords.last 'art' as base_price %}
+                                   ₹{% if product.product_class.name != 'Rent Or Sale' %} {{base_price}}{% else %} {{base_price.rent_price}} / ₹ {{base_price.sale_price}} {% endif %}
+                                    {% get_market_saving_price product product.stockrecords.last None as mt_price %}
+                                    {% if product.product_class.name != 'Rent Or Sale' %}
+                                    {% if mt_price.status %}
+                                    <span class="trp-product-mrp">
+                                        (₹ {{mt_price.market_price}} )
+                                    </span>
+                                    {% endif %}
+                                    {% if product.stockrecords.last.unit %} ({{product.stockrecords.last.unit}}) {% endif %}
+                                </span>
+                                {% if mt_price.status %}
+                                <span class="trp-product-discount-amount">Your Savings ( ₹ {{mt_price.total_saving}} Off)</span>
+                                {% endif %}
+                                    {% else %}
+                                {% if mt_price.status %}
+                                <span class="trp-product-mrp">
+                                        (₹ {{mt_price.market_price}}/ ₹ {{mt_price.sale_market_price}})
+                                    </span>
+                                {% endif %}
+                                {% if product.stockrecords.last.unit %} ({{product.stockrecords.last.unit}}) {% endif %}
+                                </span>
+                                {% if mt_price.status %}
+                                <span class="trp-product-discount-amount">Your Savings ( ₹ {{mt_price.total_saving}}/ ₹ {{mt_price.sale_total_saving}} Off)</span>
+                                {% endif %}
+                                    {% endif %}
+                            </label>
+                          </div>
+                      </div>
+                        {% endif %}
+                        {% if product.is_real_flower %}
+                         <div class="col-sm-12 col-lg-12" id="snt-real-price">
+                          <div class="trp-product-price-1">
+                            <label class="trp-radio-lable">
+                                {% get_total_price product product.stockrecords.last 'real' as base_price %}
+                                <span class="trp-product-price">
+                                    ₹{% if product.product_class.name != 'Rent Or Sale' %} {{base_price}}{% else %} {{base_price.rent_price}} / ₹ {{base_price.sale_price}} {% endif %}
+                                    {% get_market_saving_price product product.stockrecords.last 'real' as mt_price %}
+                                        {% if product.product_class.name != 'Rent Or Sale' %}
+                                    {% if mt_price.status %}
+                                    <span class="trp-product-mrp">(₹ {{mt_price.market_price}})</span>
+                                    {% endif %}
+                                  {% if product.stockrecords.last.unit %} ({{product.stockrecords.last.unit}}) {% endif %}
+                                </span>
+                                {% if mt_price.status %}
+                                <span class="trp-product-discount-amount">Your Savings ( ₹ {{mt_price.total_saving}} Off)</span>
+                                {% endif %}
+                                {% else %}
+                                {% if mt_price.status %}
+                                <span class="trp-product-mrp">(₹ {{mt_price.market_price}}/ ₹ {{mt_price.sale_market_price}})</span>
+                                {% endif %}
+                                {% if product.stockrecords.last.unit %} ({{product.stockrecords.last.unit}}) {% endif %}
+                                </span>
+                                {% if mt_price.status %}
+                                <span class="trp-product-discount-amount">Your Savings ( ₹ {{mt_price.total_saving}}/ ₹ {{mt_price.sale_total_saving}} Off)</span>
+                                {% endif %}
+                                {% endif %}
+                            </label>
+                          </div>
+                      </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+              </div>
+              <!--Variable price   -->
+                {% if product.is_artificial_flower or product.is_real_flower %}
+              <div class="trp-veriable-price-wrapper mt-25">
+                <div class="row">
+                     {% if product.is_artificial_flower %}
+                  <div class="col-sm-6 col-lg-5">
+                      <div class="trp-product-price-1 trp-radio-pink ">
+                        <input type="radio" id="price-1" name="radio-group" checked>
+                        <label class="trp-radio-lable" for="price-1">ARTIFICIAL FLOWERS
+                            {% get_total_price product product.stockrecords.last 'art' as art_base_price %}
+                            <span class="trp-product-price">₹ {% if product.product_class.name != 'Rent Or Sale' %} {{art_base_price}}{% else %} {{art_base_price.rent_price}} / ₹ {{art_base_price.sale_price}} {% endif %}
+                                {% get_market_saving_price product product.stockrecords.last None as art_mt_price %}
+                                {% if product.product_class.name != 'Rent Or Sale' %}
+                                {% if art_mt_price.status %}
+                                <span class="trp-product-mrp">(₹ {{art_mt_price.market_price}})</span>
+                                {% endif %}
+                            </span>
+                            {% if art_mt_price.status %}
+                            <span class="trp-product-discount-amount">Your Savings ( ₹ {{art_mt_price.total_saving}} Off)</span>
+                            {% endif %}
+                                {% else %}
+                            {% if art_mt_price.status %}
+                                <span class="trp-product-mrp">(₹ {{art_mt_price.market_price}}/ ₹ {{art_mt_price.sale_market_price}})</span>
+                            {% endif %}
+                            </span>
+                            {% if art_mt_price.status %}
+                            <span class="trp-product-discount-amount">Your Savings ( ₹ {{art_mt_price.total_saving}}/ ₹ {{art_mt_price.sale_total_saving}} Off)</span>
+                            {% endif %}
+                                {% endif %}
+                        </label>
+                      </div>
+                  </div>
+                    {% endif %}
+                     {% if product.is_real_flower %}
+                  <div class="col-sm-6 col-lg-5">
+                      <div class="trp-product-price-2 trp-radio-pink">
+                        <input type="radio" id="price-2" name="radio-group">
+                        <label class="trp-radio-lable" for="price-2">REAL FLOWERS
+                            {% get_total_price product product.stockrecords.last 'real' as real_base_price %}
+                            <span class="trp-product-price">₹ {% if product.product_class.name != 'Rent Or Sale' %} {{real_base_price}}{% else %} {{real_base_price.rent_price}} / ₹ {{real_base_price.sale_price}} {% endif %}
+                                {% get_market_saving_price product product.stockrecords.last 'real' as real_mt_price %}
+                                {% if product.product_class.name != 'Rent Or Sale' %}
+                                {% if real_mt_price.status %}
+                                <span class="trp-product-mrp">(₹ {{real_mt_price.market_price}})</span>
+                                {% endif %}
+                            </span>
+                            {% if real_mt_price.status %}
+                            <span class="trp-product-discount-amount">Your Savings ( ₹ {{real_mt_price.total_saving}} Off)</span>
+                            {% endif %}
+                                {% else %}
+                            {% if real_mt_price.status %}
+                                <span class="trp-product-mrp">(₹ {{real_mt_price.market_price}}/ ₹ {{real_mt_price.sale_market_price}})</span>
+                            {% endif %}
+                            </span>
+                            {% if real_mt_price.status %}
+                            <span class="trp-product-discount-amount">Your Savings ( ₹ {{real_mt_price.total_saving}}/ ₹ {{real_mt_price.sale_total_saving}} Off)</span>
+                            {% endif %}
+                                {% endif %}
+                        </label>
+                      </div>
+                    </div>
+                    {% endif %}
+                </div>
+              </div>
+                {% endif %}
+                {% if product.product_class.name == 'Rent Or Sale' %}
+                <div class="trp-veriable-price-wrapper mt-25">
+                <div class="row">
+                    {% if not product.is_artificial_flower and not product.is_real_flower %}
+                    {% get_rsprice_whole_int product.stockrecords.last as rsbase_price %}
+                    {% get_rsproduct_cost_multiple product.stockrecords.last as data %}
+                    {% get_market_saving_price product product.stockrecords.last None as mt_price %}
+                    <div class="col-sm-6 col-lg-5">
+                      <div class="trp-product-price-2 trp-radio-pink">
+                        <input type="radio" id="rsprice-2" name="rsradio-group" checked>
+                        <label class="trp-radio-lable" for="rsprice-2">FOR RENT<span class="trp-product-price">₹ {% if product.product_cost_type == 'Multiple' %}
+                                    {% if data.rent_price %}
+                                    {{data.rent_price|floatformat:2|intcomma}}
+                                    {% else %}
+                                    {{ rsbase_price.rent_price|floatformat:2|intcomma }}
+                                    {% endif %}
+                                    {% else %}
+                                    {{ rsbase_price.rent_price|floatformat:2|intcomma }}
+                                    {% endif %}
+                            {% if mt_price.status %}
+                                 <span class="trp-product-mrp">(₹ {{mt_price.market_price}})</span>{% endif %}</span>{% if mt_price.status %} <span class="trp-product-discount-amount">Your Savings ( ₹ {{mt_price.total_saving}} Off)</span>{% endif %}</label>
+                      </div>
+                    </div>
+                  <div class="col-sm-6 col-lg-5">
+                      <div class="trp-product-price-1 trp-radio-pink ">
+                        <input type="radio" id="rsprice-1" name="rsradio-group">
+                        <label class="trp-radio-lable" for="rsprice-1">FOR SELL<span class="trp-product-price">
+                               ₹ {% if product.product_cost_type == 'Multiple' %}
+                                    {% if data.sale_price %}
+                                    {{data.sale_price|floatformat:2|intcomma}}
+                                    {% else %}
+                                    {{ rsbase_price.sale_price|floatformat:2|intcomma }}
+                                    {% endif %}
+                                    {% else %}
+                                    {{ rsbase_price.sale_price|floatformat:2|intcomma }}
+                                    {% endif %}
+{% if mt_price.status %}<span class="trp-product-mrp">(₹ {{mt_price.sale_market_price}})</span>{% endif %}</span> {% if mt_price.status %}<span class="trp-product-discount-amount">Your Savings ( ₹ {{mt_price.sale_total_saving}} Off)</span>{% endif %}</label>
+                      </div>
+                  </div>
+
+                    {% else %}
+                    {% get_arprice_whole_int product.stockrecords.last as asbase_price %}
+                    {% get_market_saving_price product product.stockrecords.last None as mt_price %}
+                    {% get_market_saving_price product product.stockrecords.last 'real' as real_mt_price %}
+                    <div class="col-sm-6 col-lg-5">
+                      <div class="trp-product-price-1 trp-radio-pink ">
+                        <input type="radio" id="rsprice-1" name="rsradio-group" checked>
+                        <label class="trp-radio-lable" for="rsprice-1">FOR SELL<span class="trp-product-price">
+                               ₹ {% if product.is_artificial_flower and product.is_real_flower %}
+                                    {{ asbase_price.sale_price }} / ₹ {{ asbase_price.art_sale_price }}
+                                 {% else %}
+                                    {% if product.is_artificial_flower %}
+                                     {{ asbase_price.art_sale_price }}
+                                    {% else %}
+                                    {{ rsbase_price.sale_price }}
+                                    {% endif %}
+                                 {% endif %}
+                                {% if mt_price.status or real_mt_price.status %}
+                                <span class="trp-product-mrp">(₹
+                            {% if product.is_artificial_flower and product.is_real_flower %}
+                                    {{mt_price.sale_market_price}}/ ₹ {{real_mt_price.sale_market_price}}
+                             {% else %}
+                                    {% if product.is_artificial_flower %}
+                                    {{mt_price.sale_market_price}}
+                                    {% else %}
+                                    {{real_mt_price.sale_market_price}}
+                                    {% endif %}
+                              {% endif %})</span>{% endif %}
+                        </span>
+                            {% if mt_price.status or real_mt_price.status %}
+                            <span class="trp-product-discount-amount">
+                                Your Savings ( ₹
+                                {% if product.is_artificial_flower and product.is_real_flower %}
+                                {{mt_price.sale_total_saving}}/ ₹ {{real_mt_price.sale_total_saving}}
+                                {% else %}
+                                    {% if product.is_artificial_flower %}
+                                        {{mt_price.sale_total_saving}}
+                                    {% else %}
+                                        {{real_mt_price.sale_total_saving}}
+                                    {% endif %}
+                                {% endif %})</span>
+                            {% endif %} Off)</span>
+                           </label>
+                      </div>
+                  </div>
+                  <div class="col-sm-6 col-lg-5">
+                      <div class="trp-product-price-2 trp-radio-pink">
+                        <input type="radio" id="rsprice-2" name="rsradio-group">
+                        <label class="trp-radio-lable" for="rsprice-2">FOR RENT<span class="trp-product-price">₹ {% if product.is_artificial_flower and product.is_real_flower %}
+                                    {{ asbase_price.rent_price }} / ₹ {{ asbase_price.art_rent_price }}
+                                 {% else %}
+                                    {% if product.is_artificial_flower %}
+                                     {{ asbase_price.art_rent_price }}
+                                    {% else %}
+                                    {{ rsbase_price.rent_price }}
+                                    {% endif %}
+                                 {% endif %}
+                                {% if mt_price.status or real_mt_price.status %}
+                                <span class="trp-product-mrp">(₹
+                            {% if product.is_artificial_flower and product.is_real_flower %}
+                                    {{mt_price.market_price}}/ ₹ {{real_mt_price.market_price}}
+                             {% else %}
+                                    {% if product.is_artificial_flower %}
+                                    {{mt_price.market_price}}
+                                    {% else %}
+                                    {{real_mt_price.market_price}}
+                                    {% endif %}
+                              {% endif %})</span>{% endif %}
+                        </span>
+                            {% if mt_price.status or real_mt_price.status %}
+                            <span class="trp-product-discount-amount">
+                                Your Savings ( ₹
+                                {% if product.is_artificial_flower and product.is_real_flower %}
+                                {{mt_price.total_saving}}/ ₹ {{real_mt_price.total_saving}}
+                                {% else %}
+                                    {% if product.is_artificial_flower %}
+                                        {{mt_price.total_saving}}
+                                    {% else %}
+                                        {{real_mt_price.total_saving}}
+                                    {% endif %}
+                                {% endif %})</span>
+                            {% endif %} Off)</span></label>
+                      </div>
+                    </div>
+                    {% endif %}
+                </div>
+              </div>
+                {% endif %}
+
+              <div class="trp-booking-date mt-20">
+                <div class="row">
+                  <div class="col-sm-6 col-md-5 ">
+                    <p class="trp-booking-label mb-5">Select Booking Date</p>
+                      <input class="product-date-picker" id="id_daterange" type="text" name="daterange" value="" {% if product.product_class.name != 'Sale'  %} onchange="check_date(this)" {% endif %}/>
+                  </div>
+                </div>
+              </div>
+                {% include "new_design/catalogue/partials/display_attribute.html" %}
+                <div class="trp-product-count-wrapper mt-15">
+                <p class="trp-booking-label mb-5">Quantity</p>
+                <div class="trp-product-count">
+                  <button class="trp-button-count no-active" disabled >-</button>
+<!--                  <input type="text"  class="trp-number-product" value="1">-->
+                    {% if product.product_cost_type == 'Multiple' %}
+                    {% get_quantity_for_multiple product.stockrecords.last as quantity_value %}
+                    <input onchange="set_quantity(this)" class="trp-number-product" id="id_quantity_value" type="text" name="id_quantity_value" value="{{quantity_value}}"/>
+                    {% else %}
+                    <input onchange="set_quantity(this)" class="trp-number-product"  id="id_quantity_value" type="text" name="id_quantity_value" value="1"/>
+                    {% endif %}
+                    <input  class="time-text" id="prod_id" type="hidden" name="prod_id" value="{{product.id}}"/>
+                  <button class="trp-button-count">+</button>
+                </div>
+              </div>
+                <div class="trp-product-shipping mt-40">
+                <p class="trp-product-shipping-label">Product Price + Shipping Price</p>
+                  {% if not product.is_artificial_flower and not product.is_real_flower %}
+                    {% if product.product_class.name != 'Rent Or Sale' %}
+                <p class="trp-product-shipping-tprice">
+                    {% get_product_cost_multiple_with_quantity product.stockrecords.last as data %}
+                    {% get_price_whole_details product.stockrecords.last as base_price %}
+                    {% get_shipping_price_total product.stockrecords.last as data1 %}
+                  <span class="trp-product-wsprice" id="snt-normal-price">
+                      {% if product.product_cost_type == 'Multiple' and data %}
+                        ₹ {{data}}
+                      {% else %}
+                        ₹ {{base_price}}
+                      {% endif %}
+                  </span> + <span class="trp-product-shiping-cost" id="snt-normal-ship">{% if data1 %} {{data1}} {% else %} 0.00 {% endif %}</span>
+                  {% if not data1 %}<span class="trp-free-shiping-badge ml-5"><img src="{% static 'new_design/assets/images/shiping-truck-icon.svg' %}" alt="free shiping"> FREE SHIPPING</span>{% endif %}
+                  </p>
+                    {% else %}
+                    {% get_price product.stockrecords.last as base_price %}
+                    {% get_shipping_rsprice_total product.stockrecords.last as data1 %}
+                    <p class="trp-product-shipping-tprice snt-rent-price">
+                  <span class="trp-product-wsprice" id="snt-rent-normal-price">₹ {{base_price.rent_price}}</span> + <span class="trp-product-shiping-cost" id="snt-rent-normal-ship">{% if data1.status %} {{data1.rent_shipping}} {% else %} 0.00 {% endif %}</span>
+                  {% if not data1.status %}<span class="trp-free-shiping-badge ml-5"><img src="{% static 'new_design/assets/images/shiping-truck-icon.svg' %}" alt="free shiping"> FREE SHIPPING</span>{% endif %}
+                  </p>
+                <p class="trp-product-shipping-tprice snt-sale-price">
+                  <span class="trp-product-wsprice" id="snt-sale-normal-price">₹ {{base_price.sale_price}} </span> + <span class="trp-product-shiping-cost" id="snt-sale-normal-ship">{% if data1.status %} {{data1.sale_shipping}} {% else %} 0.00 {% endif %}</span>
+                  {% if not data1.status %}<span class="trp-free-shiping-badge ml-5"><img src="{% static 'new_design/assets/images/shiping-truck-icon.svg' %}" alt="free shiping"> FREE SHIPPING</span>{% endif %}
+                  </p>
+
+                    {% endif %}
+                  {% else %}
+                   {% if product.is_artificial_flower %}
+                   <p class="trp-product-shipping-tprice" id="art-total-cost">
+                       {% get_total_price product product.stockrecords.last 'art' as art_base_price %}
+                        {% get_art_rent_shipping_price product product.stockrecords.last 'real' as art_ship_price %}
+                  <span class="trp-product-wsprice" id="art-snt-normal-price">₹ {% if product.product_class.name != 'Rent Or Sale' %} {{art_base_price}}{% else %} {{art_base_price.rent_price}} / ₹ {{art_base_price.sale_price}} {% endif %}</span> + <span class="trp-product-shiping-cost" id="art-snt-normal-ship">₹ {% if product.product_class.name != 'Rent Or Sale' %} {{art_ship_price}}{% else %} {{art_ship_price.ship_rent_price}} / ₹ {{art_ship_price.ship_sale_price}} {% endif %}</span>
+                  {% if product.product_class.name != 'Rent Or Sale' %}
+                       {% if not art_ship_price %}<span class="trp-free-shiping-badge ml-5"><img src="{% static 'new_design/assets/images/shiping-truck-icon.svg' %}" alt="free shiping"> FREE SHIPPING</span>{% endif %}
+                       {% else %}
+                       {% if not art_ship_price.ship_rent_price and not art_ship_price.ship_sale_price %} <span class="trp-free-shiping-badge ml-5"><img src="{% static 'new_design/assets/images/shiping-truck-icon.svg' %}" alt="free shiping"> FREE SHIPPING</span>{% endif %}
+                       {% endif %}
+                  </p>
+                  {% endif %}
+                  {% if product.is_real_flower %}
+                   <p class="trp-product-shipping-tprice" id="real-total-cost">
+                       {% get_total_price product product.stockrecords.last 'real' as real_base_price %}
+                        {% get_art_rent_shipping_price product product.stockrecords.last 'real' as real_ship_price %}
+                  <span class="trp-product-wsprice" id="real-snt-normal-price">₹ {% if product.product_class.name != 'Rent Or Sale' %} {{real_base_price}}{% else %} {{real_base_price.rent_price}} / ₹ {{real_base_price.sale_price}} {% endif %}</span> + <span class="trp-product-shiping-cost" id="real-snt-normal-ship">₹ {% if product.product_class.name != 'Rent Or Sale' %} {{real_ship_price}}{% else %} {{real_ship_price.ship_rent_price}} / ₹ {{real_ship_price.ship_sale_price}} {% endif %}</span>
+                  {% if not real_ship_price %}<span class="trp-free-shiping-badge ml-5"><img src="{% static 'new_design/assets/images/shiping-truck-icon.svg' %}" alt="free shiping"> FREE SHIPPING</span>{% endif %}
+                  </p>
+                  {% endif %}
+                  {% endif %}
+              </div>
+              <div class="trp-product-btn mt-30">
+                  {% include "new_design/catalogue/partials/add_to_basket.html" %}
+              </div>
+
+              <div class="trp-how-to-rent-btn mt-35">
+                    <a href="#id_trp-how-to-rent"><img src="{% static 'new_design/assets/images/how-rent-icon.svg' %}" class="mr-10" alt="">How to
+                        Rent<img src="{% static 'new_design/assets/images/arrow-dwn-icon.svg' %}" class="ml-10" alt=""></a>
+                </div>
+            </div>
+          </div>
+
+      </div>
+    </section>
+<!--PRODUCT DESCRIPTION and review section  -->
+<section class="trp-product-detail-review-section pt-80 pb-10" id="snt-desc-section">
+    <div class="row trp-row">
+        <div class="col-md-12">
+            <div class="trp-product-detail-tab-wrapper">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#productDescription" data-toggle="tab">PRODUCT DESCRIPTION</a>
+                    </li>
+                    <li><a href="#productDetails" data-toggle="tab">PRODUCT DETAILS</a>
+                    </li>
+                    <li><a href="#reviews" data-toggle="tab">REVIEWS</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content ">
+                    <div class="tab-pane active" id="productDescription">
+                        {{ product.description|safe}}
+                    </div>
+                    <div class="tab-pane" id="productDetails">
+                        {% block product_info %}
+                            <table class="table table-bordered" style="color:#000;">
+                                {% if product.upc %}
+                                <tr class="">
+                                    <th>UPC</th>
+                                    <td class="product_weight">
+                                        {{ product.upc }}
+                                    </td>
+                                </tr>
+                                {% endif %}
+                                <tr class="alt">
+                                    <th>Product Type</th>
+                                    <td class="product_dimensions">{{ product.get_product_class.name }}</td>
+                                </tr>
+                                {% if product.stockrecords.last.unit %}
+                                <tr class="alt">
+                                    <th>Unit</th>
+                                    <td class="product_dimensions">{{ product.stockrecords.last.unit }}</td>
+                                </tr>
+                                {% endif %}
+                                {% purchase_info_for_product request product as session %}
+                                {% if session.price.exists %}
+                                {% if session.price.is_tax_known %}
+                                {% if product.get_product_class.name != 'Rent Or Sale' %}
+                                    <tr class="alt">
+                                        {% if product.get_product_class.name == 'Sale' %}
+                                            <th>Sell Price</th>
+                                        {% else %}
+                                            <th>Rent Price</th>
+                                        {% endif %}
+                                        <td class="product_dimensions">
+                                            {% get_price_whole product.stockrecords.last as base_price %}
+                                            ₹ {{base_price}}
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                <tr class="alt">
+                                    <th>Rent Price</th>
+                                    <td>{{product.stockrecords.last.rent_base_price}}</td>
+                                </tr>
+                                <tr class="alt">
+                                    <th>Sell Price</th>
+                                    <td>{{product.stockrecords.last.sale_base_price}}</td>
+                                </tr>
+                                {% endif %}
+                                {% endif %}
+                                {% if not is_freeze %}
+                                <tr class="alt">
+                                    <th>Availability</th>
+                                    <td class="product_dimensions">{{ session.availability.message}}</td>
+                                </tr>
+                                {% endif %}
+                                {% endif %}
+
+                                {% for av in product.attribute_values.all %}
+                                <tr class="alt">
+                                    <th>{{av.attribute.name}}</th>
+                                    <td class="product_dimensions">{{ av.value_as_html }}</td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        {% endblock %}
+                    </div>
+
+                    {% iffeature "reviews" %}
+                                {% block product_review %}
+                {% include "new_design/catalogue/partials/review.html" %}
+                    {% endblock product_review %}
+                    {% endiffeature %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<!-- How to rent section -->
+{% include "new_design/partials/how_to_rent.html" %}
+<!-- payment method section -->
+{% include "new_design/partials/payment_method_section.html" %}
+<link rel="stylesheet" type="text/css" href="{% static 'core_assets/packages/jquery-toast-plugin-1/src/jquery.toast.css' %}"/>
+{% endblock content %}
+{% block extrascripts %}
+    {{block.super}}
+<script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+
+<!--<script type="text/javascript" src="{% static 'core_assets/packages/boostrap-daterange-picker-3/2/daterangepicker.js' %}"></script>-->
+<!--    <link rel="stylesheet" href="{% static 'core_assets/packages/boostrap-daterange-picker-3/2/daterangepicker.css' %}"/>-->
+    <script type="text/javascript" src="{% static 'core_assets/packages/boostrap-daterange-picker-3/product.daterangepicker.js' %}"></script>
+
+<!--    <script type="text/javascript" src="{% static 'core_assets/packages/jquery-toast-plugin-1/src/jquery.toast.js' %}"></script>-->
+    <script type="text/javascript" src="{% static 'oscar/js/product/product_details.js' %}"></script>
+    <script type="text/javascript" src="{% static 'core_assets/packages/jquery-toast-plugin-1/src/jquery.toast.js' %}"></script>
+    <script type="text/javascript" src="{% static 'new_design/assets/js/daterangepicker.js' %}"></script>
+    <link rel="stylesheet" type="text/css" media="all" href="{% static 'new_design/assets/css/daterangepicker.css' %}" />
+
+{% if product.product_cost_type == 'Single' or product.is_artificial_flower or product.is_real_flower %}
+<script>
+    $(document).ready(function () {
+        var is_artificial_flower = '{{product.is_artificial_flower}}';
+        var is_real_flower = '{{product.is_real_flower}}';
+        if(is_artificial_flower == 'True') {
+            $('#id_flower_type').val('artificial');
+        }
+        else {
+            $('#id_flower_type').val('real');
+        }
+        if((is_artificial_flower == 'True') && (is_real_flower =='True')) {
+             $('#snt-real-price').addClass('trp-display-none');
+             $('#snt-art-price').removeClass('trp-display-none');
+             $('#real-total-cost').addClass('trp-display-none');
+             $('#art-total-cost').removeClass('trp-display-none');
+        }
+        else {
+            if(is_artificial_flower == 'True') {
+                $('#price-1').prop('checked', true);
+            }
+            if(is_real_flower =='True') {
+                $('#price-2').prop('checked', true);
+            }
+        }
+        var is_quantity_allowed = '{{product.is_quantity_allowed}}';
+        if(is_quantity_allowed == 'False') {
+            $(".trp-product-count-wrapper").css({"display": "none"});
+        }
+    });
+</script>
+{% endif %}
+
+{% if product.product_class.name == 'Rent Or Sale' %}
+<script>
+    $(document).ready(function () {
+        if($("#rsprice-1").is(":checked")) {
+            $('.snt-rent-price').addClass('trp-display-none');
+            $('.snt-sale-price').removeClass('trp-display-none');
+        }
+        if($("#rsprice-2").is(":checked")) {
+            $('.snt-sale-price').addClass('trp-display-none');
+            $('.snt-rent-price').removeClass('trp-display-none');
+        }
+    });
+    $('input[id="rsprice-1"]').click(function(){
+        if($("#rsprice-1").is(":checked")) {
+            $('.snt-rent-price').addClass('trp-display-none');
+            $('.snt-sale-price').removeClass('trp-display-none');
+        }
+    });
+    $('input[id="rsprice-2"]').click(function(){
+        if($("#rsprice-2").is(":checked")) {
+            $('.snt-sale-price').addClass('trp-display-none');
+            $('.snt-rent-price').removeClass('trp-display-none');
+        }
+    });
+</script>
+{% endif %}
+<script>
+    function set_quantity(e){
+        quantity = $('#id_quantity_value').val();
+        $('#id_quantity').val(quantity);
+         var is_multiple = '{{product.product_cost_type}}';
+
+            if(!$('#id_quantity').val()) {
+                quantity = $('#id_quantity_value').val();
+             }
+             else {
+                console.log('val'+$('#id_quantity').val())
+                var quantity = document.getElementById('id_quantity').value;
+            }
+            console.log('mult'+is_multiple);
+            if(is_multiple == 'Multiple')
+            {
+            quantity = $('#id_quantity_value').val();
+            }
+            var product_id = document.getElementById('prod_id').value;
+            if($('#id_flower_type').val()) {
+                var flower_type = document.getElementById('id_flower_type').value;
+            }
+            else {
+                var flower_type = ' ';
+            }
+            var startDate = $('#id_booking_start_date').val();
+            var endDate = $('#id_booking_end_date').val();
+            const oneDay = 24 * 60 * 60 * 1000;
+            console.log('startDate'+startDate)
+            console.log('endDate'+endDate)
+            console.log('oneDay'+oneDay)
+            startDate = new Date(startDate);
+            endDate = new Date(endDate);
+            var diffDays = Math.round(Math.abs((endDate - startDate) / oneDay));
+            diffDays = diffDays + 1;
+            console.log('dif'+diffDays)
+            quant = Number(quantity);
+            product_id = Number(product_id);
+            var is_artificial_flower = '{{product.is_artificial_flower}}';
+            var is_real_flower = '{{product.is_real_flower}}';
+           $.ajax({
+                type:'GET',
+                url : '/get_total_price_new/',
+                data : {
+                    quantity : quantity,
+                    product: product_id,
+                    diffDays : diffDays,
+                    flower_type : flower_type
+                },
+                success : function(data){
+                if(data=='Ajax_Error'){
+                    $.toast({
+                        heading: 'Warning',
+                        text: 'Something went wrong.',
+                        icon: 'warning',
+                        loader: true,
+                        loaderBg: '#9EC600',
+                        position: 'bottom-right',
+                    });
+                }
+                else if(data == 200){
+                    $.toast({
+                        heading: 'Warning',
+                        text: 'Please enter quantity.',
+                        icon: 'warning',
+                        loader: true,
+                        loaderBg: '#9EC600',
+                        position: 'bottom-right',
+                    });
+                }
+                else if(data == 201){
+                    $.toast({
+                        heading: 'Warning',
+                        text: 'Product is not present.',
+                        icon: 'warning',
+                        loader: true,
+                        loaderBg: '#9EC600',
+                        position: 'bottom-right',
+                    });
+                }
+                else if(data == 202){
+                    $.toast({
+                        heading: 'Warning',
+                        text: 'Product has not amount in rate card.',
+                        icon: 'warning',
+                        loader: true,
+                        loaderBg: '#9EC600',
+                        position: 'bottom-right',
+                    });
+                }
+                else if(data.status == 203){
+                    $.toast({
+                        heading: 'Warning',
+                        text: data.msg,
+                        icon: 'warning',
+                        loader: true,
+                        loaderBg: '#9EC600',
+                        position: 'bottom-right',
+                    });
+                }
+                else if(data.status == 204){
+                document.getElementById("snt-normal-price").innerHTML =  data.total_price;
+                document.getElementById("snt-normal-ship").innerHTML =  data.shipping_price;
+                    $.toast({
+                        heading: 'Warning',
+                        text: data.msg,
+                        icon: 'warning',
+                        loader: true,
+                        loaderBg: '#9EC600',
+                        position: 'bottom-right',
+                    });
+                }
+                else if(data.status == 507){
+                document.getElementById("snt-sale-normal-price").innerHTML =  data.total_price;
+                document.getElementById("snt-sale-normal-ship").innerHTML = data.shipping_price;
+                    $.toast({
+                        heading: 'Warning',
+                        text: data.msg,
+                        icon: 'warning',
+                        loader: true,
+                        loaderBg: '#9EC600',
+                        position: 'bottom-right',
+                    });
+                }
+                else if(data.status == 508){
+                document.getElementById("snt-rent-normal-price").innerHTML =  data.total_price;
+                document.getElementById("snt-rent-normal-ship").innerHTML = data.shipping_price;
+                    $.toast({
+                        heading: 'Warning',
+                        text: data.msg,
+                        icon: 'warning',
+                        loader: true,
+                        loaderBg: '#9EC600',
+                        position: 'bottom-right',
+                    });
+                }
+                else if(data.status == 500) {
+                    document.getElementById("snt-normal-price").innerHTML =  data.total_price;
+                    document.getElementById("snt-normal-ship").innerHTML = data.shipping_price;
+                }
+                else if(data.status == 502) {
+                    document.getElementById("art-snt-normal-price").innerHTML =  data.total_price;
+                    document.getElementById("art-snt-normal-ship").innerHTML = data.shipping_price;
+                }
+                else if(data.status == 503){
+                    if(is_real_flower == 'True') {
+                        document.getElementById("real-snt-normal-price").innerHTML =  data.total_price;
+                        document.getElementById("real-snt-normal-ship").innerHTML = data.shipping_price;
+                    }
+                    else {
+                        document.getElementById("snt-normal-price").innerHTML =  data.total_price;
+                        document.getElementById("snt-normal-ship").innerHTML = data.shipping_price;
+                    }
+                }
+                 else if(data.status == 506){
+
+                        document.getElementById("snt-rent-normal-price").innerHTML =  data.rent_total_price;
+                        document.getElementById("snt-rent-normal-ship").innerHTML = data.rent_shipping_price;
+
+                        document.getElementById("snt-sale-normal-price").innerHTML =  data.sale_total_price;
+                        document.getElementById("snt-sale-normal-ship").innerHTML = data.sale_shipping_price;
+
+                }
+                else if(data.status == 501) {
+                    document.getElementById("art-snt-normal-price").innerHTML =  data.art_total_price;
+                    document.getElementById("art-snt-normal-ship").innerHTML = data.art_shipping_price;
+                    document.getElementById("real-snt-normal-price").innerHTML = data.total_price;
+                    document.getElementById("real-snt-normal-ship").innerHTML = data.shipping_price;
+                }
+            }
+        })
+    }
+
+    $('input[id="price-1"]').click(function(){
+        if($("#price-1").is(":checked")) {
+            $('#snt-real-price').addClass('trp-display-none');
+            $('#snt-art-price').removeClass('trp-display-none');
+            $('#real-total-cost').addClass('trp-display-none');
+            $('#art-total-cost').removeClass('trp-display-none');
+            $('#id_flower_type').val('artificial');
+        }
+    });
+    $('input[id="price-2"]').click(function(){
+        if($("#price-2").is(":checked")) {
+            $('#snt-art-price').addClass('trp-display-none');
+            $('#snt-real-price').removeClass('trp-display-none');
+            $('#art-total-cost').addClass('trp-display-none');
+            $('#real-total-cost').removeClass('trp-display-none');
+            $('#id_flower_type').val('real');
+        }
+    });
+
+</script>
+<script>
+    $(".trp-img-hover-effect img").mouseover(function () {
+        $(this).attr('src', $(this).data("hover"));
+    }).mouseout(function () {
+    $(this).attr('src', $(this).data("src"));
+    });
+</script>
+<!-- tooltip -->
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+        var product_class = '{{product.product_class.name}}';
+        var product_id = '{{product.id}}';
+        var product_booking_day = '{{product.product_booking_time_delay}}';
+        datepicker(product_id, product_class, product_booking_day)
+    });
+   function check_date(e){
+        quantity = $('#id_quantity_value').val();
+        $('#id_quantity').val(quantity);
+         var is_multiple = '{{product.product_cost_type}}';
+
+            if(!$('#id_quantity').val()) {
+                quantity = $('#id_quantity_value').val();
+             }
+             else {
+                console.log('val'+$('#id_quantity').val())
+                var quantity = document.getElementById('id_quantity').value;
+            }
+            console.log('mult'+is_multiple);
+            if(is_multiple == 'Multiple')
+            {
+            quantity = $('#id_quantity_value').val();
+            }
+            var product_id = document.getElementById('prod_id').value;
+            if($('#id_flower_type').val()) {
+                var flower_type = document.getElementById('id_flower_type').value;
+            }
+            else {
+                var flower_type = ' ';
+            }
+            var startDate = $('#id_booking_start_date').val();
+            var endDate = $('#id_booking_end_date').val();
+            const oneDay = 24 * 60 * 60 * 1000;
+            console.log('startDate'+startDate)
+            console.log('endDate'+endDate)
+            console.log('oneDay'+oneDay)
+            startDate = new Date(startDate);
+            endDate = new Date(endDate);
+            var diffDays = Math.round(Math.abs((endDate - startDate) / oneDay));
+            diffDays = diffDays + 1;
+            console.log('dif'+diffDays)
+            quant = Number(quantity);
+            product_id = Number(product_id);
+            var is_artificial_flower = '{{product.is_artificial_flower}}';
+            var is_real_flower = '{{product.is_real_flower}}';
+           $.ajax({
+                type:'GET',
+                url : '/get_total_price_new/',
+                data : {
+                    quantity : quantity,
+                    product: product_id,
+                    diffDays : diffDays,
+                    flower_type : flower_type
+                },
+                success : function(data){
+                if(data=='Ajax_Error'){
+                    $.toast({
+                        heading: 'Warning',
+                        text: 'Something went wrong.',
+                        icon: 'warning',
+                        loader: true,
+                        loaderBg: '#9EC600',
+                        position: 'bottom-right',
+                    });
+                }
+                else if(data == 200){
+                    $.toast({
+                        heading: 'Warning',
+                        text: 'Please enter quantity.',
+                        icon: 'warning',
+                        loader: true,
+                        loaderBg: '#9EC600',
+                        position: 'bottom-right',
+                    });
+                }
+                else if(data == 201){
+                    $.toast({
+                        heading: 'Warning',
+                        text: 'Product is not present.',
+                        icon: 'warning',
+                        loader: true,
+                        loaderBg: '#9EC600',
+                        position: 'bottom-right',
+                    });
+                }
+                else if(data == 202){
+                    $.toast({
+                        heading: 'Warning',
+                        text: 'Product has not amount in rate card.',
+                        icon: 'warning',
+                        loader: true,
+                        loaderBg: '#9EC600',
+                        position: 'bottom-right',
+                    });
+                }
+                else if(data.status == 203){
+                    $.toast({
+                        heading: 'Warning',
+                        text: data.msg,
+                        icon: 'warning',
+                        loader: true,
+                        loaderBg: '#9EC600',
+                        position: 'bottom-right',
+                    });
+                }
+                else if(data.status == 204){
+                document.getElementById("snt-normal-price").innerHTML =  data.total_price;
+                document.getElementById("snt-normal-ship").innerHTML =  data.shipping_price;
+                    $.toast({
+                        heading: 'Warning',
+                        text: data.msg,
+                        icon: 'warning',
+                        loader: true,
+                        loaderBg: '#9EC600',
+                        position: 'bottom-right',
+                    });
+                }
+                else if(data.status == 507){
+                document.getElementById("snt-sale-normal-price").innerHTML =  data.total_price;
+                document.getElementById("snt-sale-normal-ship").innerHTML = data.shipping_price;
+                    $.toast({
+                        heading: 'Warning',
+                        text: data.msg,
+                        icon: 'warning',
+                        loader: true,
+                        loaderBg: '#9EC600',
+                        position: 'bottom-right',
+                    });
+                }
+                else if(data.status == 508){
+                document.getElementById("snt-rent-normal-price").innerHTML =  data.total_price;
+                document.getElementById("snt-rent-normal-ship").innerHTML = data.shipping_price;
+                    $.toast({
+                        heading: 'Warning',
+                        text: data.msg,
+                        icon: 'warning',
+                        loader: true,
+                        loaderBg: '#9EC600',
+                        position: 'bottom-right',
+                    });
+                }
+                else if(data.status == 500) {
+                    document.getElementById("snt-normal-price").innerHTML =  data.total_price;
+                    document.getElementById("snt-normal-ship").innerHTML = data.shipping_price;
+                }
+                else if(data.status == 502) {
+                    document.getElementById("art-snt-normal-price").innerHTML =  data.total_price;
+                    document.getElementById("art-snt-normal-ship").innerHTML = data.shipping_price;
+                }
+                else if(data.status == 503){
+                    if(is_real_flower == 'True') {
+                        document.getElementById("real-snt-normal-price").innerHTML =  data.total_price;
+                        document.getElementById("real-snt-normal-ship").innerHTML = data.shipping_price;
+                    }
+                    else {
+                        document.getElementById("snt-normal-price").innerHTML =  data.total_price;
+                        document.getElementById("snt-normal-ship").innerHTML = data.shipping_price;
+                    }
+                }
+                 else if(data.status == 506){
+
+                        document.getElementById("snt-rent-normal-price").innerHTML =  data.rent_total_price;
+                        document.getElementById("snt-rent-normal-ship").innerHTML = data.rent_shipping_price;
+
+                        document.getElementById("snt-sale-normal-price").innerHTML =  data.sale_total_price;
+                        document.getElementById("snt-sale-normal-ship").innerHTML = data.sale_shipping_price;
+
+                }
+                else if(data.status == 501) {
+                    document.getElementById("art-snt-normal-price").innerHTML =  data.art_total_price;
+                    document.getElementById("art-snt-normal-ship").innerHTML = data.art_shipping_price;
+                    document.getElementById("real-snt-normal-price").innerHTML = data.total_price;
+                    document.getElementById("real-snt-normal-ship").innerHTML = data.shipping_price;
+                }
+            }
+        })
+}
+</script>
+<!-- Product quantity -->
+<script>
+    $(document).ready(function () {
+        var num;
+        $('.trp-button-count:first-child').click(function(){
+            num = parseInt($('.trp-number-product').val());
+            if (num > 1) {
+                $('.trp-number-product').val(num - 1);
+                set_quantity(this);
+            }
+            if (num == 2) {
+                $('.trp-button-count:first-child').prop('disabled', true);
+            }
+            if (num == 10) {
+                $('.trp-button-count:last-child').prop('disabled', false);
+            }
+        });
+
+        $('.trp-button-count:last-child').click(function(){
+            num = parseInt($('.trp-number-product').val());
+            $('.trp-number-product').val(num + 1);
+            set_quantity(this);
+            if (num > 0){
+                $('.trp-button-count:first-child').prop('disabled', false);
+            }
+        });
+    });
+    $('#snt-sub-button').click(function (){
+})
+function getRating(el) {
+    $("#selected_rating").val(el.value);
+}
+function check_submit(e){
+    var rating_value = $('#selected_rating').val();
+    if(!rating_value) {
+        $("#score_error").text('This value is required');
+        return false;
+    }
+    return true;
+}
+</script>
+<script>
+$(document).ready(function () {
+    $('#messages').hide();
+    {% if messages %}
+        {% for message in messages %}
+            var status = '{{message.tags}}';
+            if (status == 'success'){
+                $.toast({
+                    heading: 'Success',
+                    text: '{{message}}',
+                    icon: 'success',
+                    loader: true,
+                    html: true,
+                    loaderBg: '#9EC600',
+                    position: 'bottom-right',
+                });
+            }
+            else {
+                $.toast({
+                    heading: 'Warning',
+                    text: '{{message}}',
+                    icon: 'warning',
+                    loader: true,
+                    html: true,
+                    loaderBg: '#9EC600',
+                    position: 'bottom-right',
+                });
+            }
+        {% endfor %}
+    {% endif %}
+});
+
+</script>
+<script>
+$(function() {
+    $('input[name="daterange"]').daterangepicker({
+        autoApply: true,
+        autoUpdateInput: false,
+        locale: {
+            cancelLabel: 'Clear'
+        }
+    });
+
+    $('input[name="daterange"]').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+    });
+
+    $('input[name="daterange"]').on('cancel.daterangepicker', function(ev, picker) {
+        $(this).val('');
+    });
+});
+</script>
+<script>
+$(function(){
+    $("#productDescription").removeAttr("style");
+    var children = $("#productDescription").find("*")
+    for(ind=0;ind<children.length;ind++){
+        children[ind].removeAttribute('style');
+    }
+});
+</script>
+<script>
+function activaTab(tab){
+    $('.nav-tabs a[href="#' + tab + '"]').tab('show');
+};
+</script>
+<script>
+function change_path(product_id){
+    var is_auth = '{{request.user.is_authenticated}}'
+    if(is_auth == 'True') {
+        var status = true;
+        var product_type = $('#id_product_type').val()
+        if(product_type == 'Rent Or Sale') {
+            status = find_blocked_date();
+            if(status == false) {
+                return false;
+            }
+        }
+        $("#add_to_basket_form").attr("action", "/create_new_cart/"+product_id+"/");
+        find_blocked_date()
+        return true;
+    }
+    else {
+        alert("Please login");
+        return false;
+    }
+}
+</script>
+<!-- product gallery slider -->
+       <script>
+        $(function() {
+          // Card's slider
+          var $carousel = $('.trp-prduct-gallery-slider');
+
+          $carousel
+              .slick({
+                  slidesToShow: 1,
+                  slidesToScroll: 1,
+                  arrows: false,
+                  autoplay: false,
+                  infinite: true,
+                  autoplaySpeed: 10000,
+                  asNavFor: '.slider-nav'
+              })
+
+          $('.slider-nav').slick({
+              slidesToShow: 5,
+              slidesToScroll: 1,
+              lazyLoad: 'ondemand',
+              asNavFor: '.trp-prduct-gallery-slider',
+              infinite: true,
+              dots: false,
+              arrows:true,
+              centerMode: false,
+              focusOnSelect: true,
+              prevArrow: '<button class="slick-prev trp-best-deals-btn-prev trp-what-we-offer-btn-prev"> <img src="{% static 'new_design/assets/images/white-red-arrow-left.svg' %}" alt=""> </button>',
+              nextArrow: '<button class="slick-next trp-best-deals-btn-next trp-what-we-offer-btn-next"> <img src="{% static 'new_design/assets/images/white-red-arrow-right.svg' %}" alt=""> </button>',
+              responsive: [
+    {
+      breakpoint: 900,
+      settings: {
+        slidesToShow: 5,
+        slidesToScroll: 1,
+        arrows: true,
+      }
+    },
+    {
+      breakpoint: 660,
+      settings: {
+        slidesToShow: 3,
+        slidesToScroll: 1,
+        arrows: true,
+      }
+    }
+    // {
+    //   breakpoint: 800,
+    //   settings: "unslick"
+    // }
+
+  ]
+
+          });
+
+      });
+      $('.trp-prduct-gallery-slider').slickLightbox({
+          itemSelector        : 'a',
+          navigateByKeyboard  : true
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,126 @@
+{% extends 'dashboard/layout.html' %}
+{% load i18n %}
+{% load thumbnail %}
+{% load staticfiles %}
+{% load form_tags %}
+
+{% block body_class %}{{ block.super }} create-page catalogue{% endblock %}
+
+{% block title %}
+    {% if form_type == '1' %}Create {% else %}Update {% endif %} | {% trans "Products" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li>
+            <a href="{% url 'dashboard:rate-card-products' %}">{% trans "Rate Card" %}</a>
+        </li>
+        <li class="active">{% if form_type == '1' %}Create {% else %}Update {% endif %} Rate Card / {{product.title}}</li>
+    </ul>
+{% endblock %}
+
+{% block headertext %}
+    {% if form_type == '1' %}Create {% else %}Update {% endif %}
+    Rate Card
+    {{product.title}}
+{% endblock %}
+
+{% block dashboard_content %}
+
+    <style>
+        .row-set{
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+        }
+        .form-set-error{
+            color:red;
+        }
+        .fr-mt{
+            margin-top:10px !important;
+        }
+    </style>
+
+    <form action="{% if request.GET.urlencode %}?{{ request.GET.urlencode }}{% endif %}" method="post" class="form-stacked wysiwyg fixed-actions {% if request.user.is_superuser %} admin_combo_form {% else %} vendor_combo_form {% endif %}" enctype="multipart/form-data" data-behaviour="affix-nav-errors" autocomplete="off">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Product Details</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Product:</label>
+                                    <input type="text" value="{{product.title}}" disabled class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Product UPC:</label>
+                                    <input type="text" value="{{product.upc}}" name="product_upc" disabled class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Product Cost</div>
+                    <div class="panel-body">
+                        {{ formset.management_form }}
+                        {{ formset.non_form_errors }}
+                        {% for form in formset %}
+                            <div class="row row-set">
+                                <div class="col-md-12">
+                                    {% if form.non_field_errors %}
+                                        <div class="alert alert-warning">
+                                            {{form.non_field_errors.as_text}}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="hidden-element" hidden>
+                                    {{form.product}}
+                                    {{form.id}}
+                                    <input type="hidden" name="form-{{forloop.counter0}}-product_upc" value="{{product.upc}}" id="id_form-{{forloop.counter0}}-product_upc" class="form-control" maxlength="255" />
+<!--                                    {{form.product_upc}}-->
+                                </div>
+<!--                                <input type="hidden" value="{{product.upc}}" name="upc" disabled class="form-control">-->
+
+                                {% if product.product_class.name == 'Sale' %}
+                                    {% include 'dashboard/rate_card/products/pages/sale_entry.html' %}
+                                {% endif %}
+                                {% if product.product_class.name == 'Rent' or product.product_class.name == 'Professional' %}
+                                    {% include 'dashboard/rate_card/products/pages/rent_entry.html' %}
+                                {% endif %}
+                                {% if product.product_class.name == 'Rent Or Sale' %}
+                                    {% include 'dashboard/rate_card/products/pages/sale_entry.html' %}
+                                    {% include 'dashboard/rate_card/products/pages/rent_entry.html' %}
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="panel-footer">
+                        <button type="submit" class="btn btn-primary">Save</button> or
+                        <a href="{% url 'dashboard:rate-card-products' %}">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+{% endblock %}
+
+{% block extrascripts %}
+    {{ block.super }}
+<script>
+  
+</script>
+{% endblock %}

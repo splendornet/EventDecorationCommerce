@@ -1,0 +1,50 @@
+{% extends 'new_design/customer/account_base.html' %}
+{% load static %}
+{% load common %}
+{% block tabcontent %}
+{% get_vendor request.user.id as vendor %}
+    <div class="col-md-9">
+        <div class="trp-acc-mainContent-wrapper">
+            <div class="trp-acc-mainContent-title-wrapper mb-25">
+                <h1 class="trp-acc-mainContent-title m-0">Profile Details</h1>
+            </div>
+            <div class="trp-acc-detail-wrapper">
+                <div class="row trp-aligned-row">
+                    {% if request.user.is_staff %}
+                        {% include "new_design/customer/partials/vendor_profile_fields.html" %}
+                    {% else %}
+                        {% include "new_design/customer/partials/user_profile_fields.html" %}
+                    {% endif %}
+                    <div class="col-xs-12">
+                        <div class="trp-acc-detail-btn mt-10" >
+                            <div class="trp-pink-btn text-left">
+                                <a href="{% url 'customer:profile-update' %}">Edit Profile</a>
+                            </div>
+                            {% if not request.user.is_staff %}
+                                <div class="trp-edit-link">
+                                    <a href="{% url 'customer:change-password' %}">Change Password</a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% block extrascripts %}
+        {{ block.super }}
+        <script>
+            document.getElementById("my_order_link").classList.remove("active");
+            document.getElementById("my_custom_order_link").classList.remove("active");
+            document.getElementById("my_coupon_link").classList.remove("active");
+            document.getElementById("faq_link").classList.remove("active");
+            document.getElementById("wishlist_link").classList.remove("active");
+            if(document.getElementById("my_vendor_profile_link")){
+                document.getElementById("my_vendor_profile_link").classList.add("active");
+            }
+            if(document.getElementById("my_profile_link")){
+                document.getElementById("my_profile_link").classList.add("active");
+            }
+        </script>
+    {% endblock %}
+{% endblock %}

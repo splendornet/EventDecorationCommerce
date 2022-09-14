@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% load thumbnail %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}
+    {% trans "Basket" %} | {{ block.super }}
+{% endblock %}
+{% block breadcrumbs %}
+
+{% endblock %}
+{% block content %}
+<!--<div class="nz-breadcrumbs nz-clearfix">-->
+<!--    <div class="container">-->
+<!--        <a href="{{ homepage_url }}" rel="v:url" property="v:title">{% trans "Home" %}</a>-->
+<!--        <span class="current">Basket</span>-->
+<!--    </div>-->
+<!--</div>-->
+
+{{ block.super }}
+    {% include 'basket/partials/basket_content.html' %}
+{% endblock content %}
+
+{% block onbodyload %}
+    {{ block.super }}
+    {# We pass in the URL to send AJAX requests to #}
+    var options = {
+        'basketURL': '{% url 'basket:summary' %}'
+    };
+    oscar.basket.init(options);
+{% endblock %}
+
+{% block extrascripts %}
+    {{block.super}}
+<link rel="stylesheet" type="text/css" href="{% static 'core_assets/packages/jquery-toast-plugin-1/src/jquery.toast.css' %}"/>
+    <script type="text/javascript" src="{% static 'core_assets/packages/jquery-toast-plugin-1/src/jquery.toast.js' %}"></script>
+<script>
+    $(document).ready(function () {
+
+            $('#messages').hide();
+
+            {% if messages %}
+              {% for message in messages %}
+                    var status = '{{message.tags}}';
+                    if (status == 'success'){
+                        $.toast({
+                            heading: 'Success',
+                            text: '{{message}}',
+                            icon: 'success',
+                            loader: true,
+                            html: true,
+                            loaderBg: '#9EC600',
+                            position: 'bottom-right',
+                            hideAfter : 5000
+                        });
+                    }else{
+                        $.toast({
+                        heading: 'Warning',
+                        text: '{{message}}',
+                        icon: 'warning',
+                        loader: true,
+                        html: true,
+                        loaderBg: '#9EC600',
+                        position: 'bottom-right',
+                        hideAfter : 5000
+                        });
+                    }
+                {% endfor %}
+
+            {% endif %}
+            });
+
+</script>
+{% endblock %}

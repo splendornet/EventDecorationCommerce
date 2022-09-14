@@ -1,0 +1,15 @@
+.select2.select2-container {
+            width:100% !important;
+        }
+
+#product_category {
+  select {
+    width: 350px !important;
+  }
+}
+.django-ckeditor-widget{
+width: 100% !important;
+}
+#cke_id_description, #cke_id_content{
+width: 100% !important;
+}

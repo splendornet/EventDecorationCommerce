@@ -1,0 +1,91 @@
+{% extends "checkout/checkout.html" %}
+{% load i18n %}
+{% load static %}
+{% block title %}
+    {% trans "Order preview" %} | {{ block.super }}
+{% endblock %}
+
+{% block checkout_nav %}
+    {% include 'checkout/nav1.html' with step=3 %}
+{% endblock %}
+
+{% block checkout_title %}
+    {% trans "Preview order" %}
+{% endblock %}
+
+{% block place_order %}
+<style>
+    .active-preview{
+        color:#000 !important;
+    }
+    .active-checkout{color:#e91d4a !important;}
+
+    .buttn button{
+    display:inline-block;
+}
+</style>
+<link rel="stylesheet" href="{% static 'oscar/css/products/shipping_address1_css.css' %}" type="text/css" media="screen">
+<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+
+    <form method="post" action="{% url 'checkout:preview' %}" id="place_order_form">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="place_order" />
+
+        {% comment %}
+            When submitting sensitive data on the payment details page (eg a bankcard)
+            we don't want to save the data and so we pass the bound form to the preview
+            template and render it in a hidden div.  Then the payment information will
+            get re-submitted when the user confirms the order.
+        {% endcomment %}
+        <div style="display:none">
+            {% block hiddenforms %}{% endblock %}
+        </div>
+
+<div class="list-inline pull-right">
+                <a href="{% url 'checkout:shipping-address'%}"> <button type="button" class="btn btn-default prev-step" id="prev-btn" style="margin-right:16px">Previous</button></a>
+
+
+
+
+                        <button id='place-order'  type="submit" class="btn btn-warning next-step" data-loading-text="{% trans 'Submitting...' %}">{% trans "Place order" %}</button>
+
+</div>
+    </form>
+{% endblock place_order %}
+
+
+
+{% block extrascripts %}
+
+    {{block.super}}
+
+
+
+    <script>
+    $(document).ready(function () {
+$('[data-toggle="tooltip"]').tooltip()
+
+    var previ = $('.wizard .wizard-inner .nav-tabs li.step1');
+                       // alert(previ);
+        previ.removeClass('active');
+        previ.addClass('disabled');
+        var previ = $('.tab-content div#step1');
+        previ.removeClass('active');
+        previ.addClass('disabled');
+
+
+        var $active = $('.wizard .wizard-inner .nav-tabs li.step3');
+                //alert($active);
+
+
+        $active.removeClass('disabled');
+        $active.addClass('active');
+                var $active = $('.tab-content div#step3');
+                 $active.removeClass('disabled');
+        $active.addClass('active');
+
+});
+
+    </script>
+{% endblock %}
+

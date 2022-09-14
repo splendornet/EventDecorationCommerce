@@ -1,0 +1,9 @@
+{% load staticfiles %}
+<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
+{% block content %}
+<div class="serviceblock">
+{% include "serviceOrders/serviceEnqForm.html" %}
+</div>
+{% endblock content %}
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script type='text/javascript' src="{% static 'serviceOrders/js/serviceOrder.js' %}"></script>

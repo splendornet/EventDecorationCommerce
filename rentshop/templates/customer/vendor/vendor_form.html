@@ -1,0 +1,491 @@
+{% extends "customer/baseaccountpage.html" %}
+{% load i18n %}
+
+{% block tabcontent %}
+
+
+<style>
+
+.sidebar{
+    //height: calc(100vh + 18vh ) !important;
+    height: auto;
+}
+
+.sidebar {  min-height: 100vh !important;    height: auto;}
+ .twitter {  min-height: 50vh !important;  height: auto;}
+
+.font-small{
+    font-size:1.1vw !important;
+}
+
+select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input{
+    color:#000 !important;
+    font-size:14px !important;
+}
+
+.outer_table {
+    width:90%;
+    border:1px solid #CCCCCC;
+    box-shadow: 0 4px 10px 0 rgba(0,0,0,0.07), 0 4px 10px 0 rgba(0,0,0,0.07);
+    margin-left:5%;
+}
+.twitter{
+    height:auto !important;
+}
+
+.Table_profile{
+    display: table;
+    font-family: 'Arial';
+    font-size:1.1vw;
+    border-collapse: collapse;
+    width: 85%;
+    margin-left:5%;
+    margin-top:2%;
+    margin-bottom:2%;
+
+    color:#000000;
+}
+
+.Row_profile {
+    display: table-row;
+}
+    .Cell_profile
+    {
+		display:table-cell;
+		height:0px;
+		text-align: left;
+		padding-left:15px;
+		padding-top: 8px;
+		padding-right:10px;
+		font-size:1.1vw;
+		color:#000000;
+        vertical-align: middlev !important;
+    }
+.Cell_profile input[type="text"] {
+    margin-bottom: 0;
+    padding: 2px 10px;
+}
+	.button {
+  background-color: #f1bc19;
+
+  color: white;
+  border:none;
+  padding: 5px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1.1vw;
+  margin: 2px 2px;
+  cursor: pointer;
+
+
+}
+
+}
+.button {
+  background-color: #f1bc19;
+
+  color: white;
+  border:none;
+  padding: 5px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1.1vw;
+  margin: 2px 2px;
+  cursor: pointer;
+
+
+}
+
+.button1 {
+  box-shadow: 0 4px 10px 0 rgba(0,0,0,0.07), 0 4px 10px 0 rgba(0,0,0,0.07);
+  border-radius: 4px;
+
+}
+
+.button2 {
+  box-shadow: 0 4px 10px 0 rgba(0,0,0,0.07),0 4px 20px 0 rgba(0,0,0,0.07);
+  border-radius: 4px;
+
+}
+.password{
+font-family: 'Arial';
+		font-size:1.1vw;
+		border-collapse: collapse;
+		width: 75%;
+		margin-left:5%;
+
+		color:#000000;
+
+
+}
+
+
+  h5{
+  font-size:14px;
+   }
+
+
+
+@media screen and (max-width: 700px) {
+
+
+  img{
+  display:none;
+
+  }
+
+  div.content {margin-left: 0;}
+}
+
+@media screen and (max-width: 500px) {
+
+  img{
+  display:none;
+
+  }
+
+
+  div.content {margin-left: 0;}
+}
+
+.btn-a-mix{
+    text-transform: capitalize;
+    color:#fff !important;
+}
+
+.btn-a-mix:hover{
+    background-color: #e91d4a;
+    color: #fff !important;
+}
+
+.Cell_profile{
+    vertical-align:middle !important;
+}
+
+.Row_profile .Cell_profile>p {
+    font-size: 14px !important;
+    font-family: "Open Sans", sans-serif;
+    white-space: nowrap;
+}
+
+
+
+</style>
+
+<h3 class="heading">
+    Associate Business Partner Details
+</h3>
+
+<div style="overflow-x:auto;">
+    <form method="post" action=".">
+        {% csrf_token %}
+
+        <div class="outer_table">
+
+            <div class="Table_profile">
+
+                <!-- row 1 -->
+                <div class="Row_profile">
+                    <div class="Cell_profile">
+                        <p class="font-small">Business Name</p>
+                    </div>
+                    <div class="Cell_profile">
+                        <p>:-</p>
+                    </div>
+                    <div class="Cell_profile">
+                        {{form.business_name}}
+                        <span class="error-red">{{form.errors.business_name.as_text}}</span>
+                    </div>
+
+                    <div class="Cell_profile">
+                        <p class="font-small">Address 1</p>
+                    </div>
+                    <div class="Cell_profile">
+                        <p>:-</p>
+                    </div>
+                    <div class="Cell_profile">
+                        {{form.address_line_1}}
+                        <span class="error-red">{{form.errors.address_line_1.as_text}}</span>
+                    </div>
+                </div>
+                <!-- row 1 -->
+
+                <div class="Row_profile">
+                    <div class="Cell_profile">
+                        <p class="font-small">Owner Name</p>
+                    </div>
+                    <div class="Cell_profile">
+                        <p>:-</p>
+                    </div>
+                    <div class="Cell_profile">
+                        {{form.name}}
+                        <span class="error-red">{{form.errors.name.as_text}}</span>
+                    </div>
+
+                    <div class="Cell_profile">
+                        <p class="font-small">Address 2</p>
+                    </div>
+                    <div class="Cell_profile">
+                        <p>:-</p>
+                    </div>
+                    <div class="Cell_profile">
+                        {{form.address_line_2}}
+                        <span class="error-red">{{form.errors.address_line_2.as_text}}</span>
+                    </div>
+
+                </div>
+
+                <div class="Row_profile">
+                    <div class="Cell_profile">
+                        <p class="font-small">Email Address</p>
+                    </div>
+                    <div class="Cell_profile">
+                        <p>:-</p>
+                    </div>
+                    <div class="Cell_profile">
+                        {{form.email_id}}
+                        <span class="error-red">{{form.errors.email_id.as_text}}</span>
+                    </div>
+
+                    <div class="Cell_profile">
+                        <p class="font-small">Country</p>
+                    </div>
+                    <div class="Cell_profile">
+                        <p>:-</p>
+                    </div>
+                    <div class="Cell_profile">
+                        {{form.country}}
+                        <span class="error-red">{{form.errors.country.as_text}}</span>
+                    </div>
+
+                </div>
+
+                <div class="Row_profile">
+                    <div class="Cell_profile">
+                        <p class="font-small">Mobile Number</p>
+                    </div>
+                    <div class="Cell_profile">
+                        <p>:-</p>
+                    </div>
+                    <div class="Cell_profile">
+                        {{form.telephone_number}}
+                        <span class="error-red">{{form.errors.telephone_number.as_text}}</span>
+                    </div>
+
+                    <div class="Cell_profile">
+                        <p class="font-small">State</p>
+                    </div>
+                    <div class="Cell_profile">
+                        <p>:-</p>
+                    </div>
+                    <div class="Cell_profile">
+                        {{form.state}}
+                        <span class="error-red">{{form.errors.state.as_text}}</span>
+                    </div>
+
+                </div>
+
+                <div class="Row_profile">
+                    <div class="Cell_profile">
+                        <p class="font-small">Alternative Mobile Number</p>
+                    </div>
+                    <div class="Cell_profile">
+                        <p>:-</p>
+                    </div>
+                    <div class="Cell_profile">
+                        {{form.alternate_mobile_number}}
+                        <span class="error-red">{{form.errors.alternate_mobile_number.as_text}}</span>
+                    </div>
+
+                    <div class="Cell_profile">
+                        <p class="font-small">City</p>
+                    </div>
+                    <div class="Cell_profile">
+                        <p>:-</p>
+                    </div>
+                    <div class="Cell_profile">
+                        {{form.city}}
+                        <span class="error-red">{{form.errors.city.as_text}}</span>
+                    </div>
+                </div>
+
+                <div class="Row_profile">
+                    <div class="Cell_profile">
+                        <p class="font-small">Pin Code</p>
+                    </div>
+                    <div class="Cell_profile">
+                        <p>:-</p>
+                    </div>
+                    <div class="Cell_profile">
+                        {{form.pincode}}
+                        <span class="error-red">{{form.errors.pincode.as_text}}</span>
+                    </div>
+
+                    <div class="Cell_profile">
+                        <p class="font-small">Shop Act Number</p>
+                    </div>
+                    <div class="Cell_profile">
+                        <p>:-</p>
+                    </div>
+                    <div class="Cell_profile">
+                        {{form.shop_act_number}}
+                        <span class="error-red">{{form.errors.shop_act_number.as_text}}</span>
+                    </div>
+
+                </div>
+
+                <div class="Row_profile">
+                    <div class="Cell_profile">
+                        <p class="font-small">Pan Card Number</p>
+                    </div>
+                    <div class="Cell_profile">
+                        <p>:-</p>
+                    </div>
+                    <div class="Cell_profile">
+                        {{form.pan_number}}
+                        <span class="error-red">{{form.errors.pan_number.as_text}}</span>
+                    </div>
+
+                    <div class="Cell_profile">
+                        <p class="font-small">GST Number</p>
+                    </div>
+                    <div class="Cell_profile">
+                        <p>:-</p>
+                    </div>
+                    <div class="Cell_profile">
+                        {{form.gst_number}}
+                        <span class="error-red">{{form.errors.gst_number.as_text}}</span>
+                    </div>
+                </div>
+
+                <div class="Row_profile">
+                    <div class="Cell_profile">
+                        <p class="font-small">Registration Date</p>
+                    </div>
+                    <div class="Cell_profile">
+                        <p>:-</p>
+                    </div>
+                    <div class="Cell_profile">
+                        <input type="text" id="date" value="{{user.date_joined}}" readonly>
+                    </div>
+
+                    <div class="Cell_profile">
+                        <p class="font-small">Aadhar Card Number</p>
+                    </div>
+                    <div class="Cell_profile">
+                        <p>:-</p>
+                    </div>
+                    <div class="Cell_profile">
+                        {{form.aadhar_number}}
+                        <span class="error-red">{{form.errors.aadhar_number.as_text}}</span>
+                    </div>
+
+                </div>
+
+
+                <div class="Row_profile">
+                    <div class="Cell_profile">
+
+                    </div>
+                    <div class="Cell_profile">
+
+                    </div>
+                    <div class="Cell_profile" style="padding:0">
+                        <br />
+                        <button class="button button1 btn-a-mix" type="submit">Save Changes</button>
+                    </div>
+                    <div class="Cell_profile" style="padding:0; padding-top:2px;">
+                        <br />
+                        <a href="{% url 'customer:profile-view' %}" class="btn-a-mix button button2">
+                            Cancel
+                        </a>
+                        <br />
+
+                    </div><div class="Cell_profile">
+
+                </div>
+                    <div class="Cell_profile">
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<script>
+    document.getElementById("id_owner_name").value = '{{ user.get_full_name }}';
+</script>
+<script>
+    var element = document.getElementById("my_vendor_profile_link");
+    element.classList.add("active");
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<script>
+
+    function get_state_by_city(state_id){
+        $('#id_city').find('option').remove().end().append("<option value=''>Select City</option>");
+        $.ajax({
+            type:'GET',
+            url : '/city_ajax',
+            data : {
+                state_name: state_id
+            },
+            success : function(data){
+                if(data == 'Ajax_City_Error'){
+                }
+                else{
+                    for (i=0; i<data.length; i++){
+                        $('#id_city').append('<option value="'+data[i].id+'">'+data[i].text+'</option>');
+
+                    }
+                }
+                $("#id_city").val('{{form.city.value}}');
+            },
+            failure : function(result){
+                $('#id_system_error').modal('show');
+            },
+        });
+    }
+
+    $( document ).ready(function() {
+        var state_current_id = $('#id_state').val();
+        get_state_by_city(state_current_id)
+    });
+
+    $('#id_state').change(function(){
+        $('#id_city').find('option').remove().end().append("<option value=''>Select City</option>");
+        $.ajax({
+            type:'GET',
+            url : '/city_ajax',
+            data : {
+                state_name: this.value
+            },
+            success : function(data){
+
+                console.log('##########################################')
+                console.log(data)
+                console.log('##########################################')
+
+                if(data == 'Ajax_City_Error'){
+                }
+                else{
+                    for (i=0; i<data.length; i++){
+                        $('#id_city').append('<option value="'+data[i].id+'">'+data[i].text+'</option>');
+                    }
+                }
+            },
+            failure : function(result){
+                $('#id_system_error').modal('show');
+            },
+        });
+    });
+</script>
+
+{% endblock tabcontent %}

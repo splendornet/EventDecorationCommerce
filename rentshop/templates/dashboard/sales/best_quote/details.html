@@ -1,0 +1,242 @@
+{% extends 'dashboard/layout.html' %}
+{% load sorting_tags %}
+{% load i18n %}
+
+{% block title %}
+    {% trans "Best Quote" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li class="active"><a href="{% url 'dashboard:best_quote' %}">{% trans "Best Quote" %}</a></li>
+    </ul>
+{% endblock %}
+
+{% block header %}
+    <div class="page-header">
+        <h1>{% trans "Best Quote" %}</h1>
+    </div>
+{% endblock header %}
+
+{% block dashboard_content %}
+<form action="." method="post" class="order_table">
+    {% csrf_token %}
+    <table class="table table-bordered">
+        <caption>
+            <em class="icon-briefcase icon-large"></em> Best Quote Details
+            <span id="selected_mark" class="selection_mark label label-default"></span>
+            <input type="hidden" id="ids_ev_list">
+        </caption>
+        {% if quote %}
+        <tr>
+            <th>Person Name</th>
+            <th>Organization Name</th>
+            <th>Phone No.</th>
+            <th>Email</th>
+            <th>Event Type</th>
+            <th>Event Date</th>
+            <th>Allocated ASP</th>
+            <th>Actions</th>
+        </tr>
+
+        <tr>
+            <td>
+                {{ quote.person_name}} {{ quote.user}}
+            </td>
+            <td>
+                {{quote.organization_name}}
+            </td>
+            <td>{{quote.telephone_number}}</td>
+            <td>{{quote.email}}</td>
+            <td>
+                {% for event in quote.event_type %}
+                    {% if event == "1" %}
+                        Annual{% if not forloop.last %},{% endif %}
+                    {% endif %}
+                    {% if event == "2" %}
+                        Festival{% if not forloop.last %},{% endif %}
+                    {% endif %}
+                    {% if event == "3" %}
+                        Concert{% if not forloop.last %},{% endif %}
+                    {% endif %}
+                    {% if event == "4" %}
+                        Exhibition{% if not forloop.last %},{% endif %}
+                    {% endif %}
+                    {% if event == "5" %}
+                        Fashion Show{% if not forloop.last %},{% endif %}
+                    {% endif %}
+                    {% if event == "6" %}
+                        Customized Wedding{% if not forloop.last %},{% endif %}
+                    {% endif %}
+                    {% if event == "7" %}
+                        Customized Birthday{% if not forloop.last %},{% endif %}
+                    {% endif %}
+                    {% if event == "8" %}
+                        Other{% if not forloop.last %},{% endif %}
+                    {% endif %}
+                {% endfor %}
+            </td>
+            <td>{{quote.enquiry_date.date}}</td>
+            <td>
+                {% if quote.get_allocated_vendor %}
+                    {{quote.get_allocated_vendor}}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+            <td>
+                {% if quote.get_allocated_vendor %}
+                    {% if quote.basket_instance %}
+                        <button type="button" onclick="toggle_cart_div()" class="btn btn-primary btn-xs btn-block">View</button>
+                    {% else %}
+                        <a href="/dashboard/sales-team/custom-orders-create/?customer={{quote.created_by.id}}&enq={{quote.id}}" class="btn btn-xs btn-block btn-success">
+                            Generate Order
+                        </a>
+                    {% endif %}
+                {% else %}
+                    <button type="button" onclick="toggle_tab('{{quote.id}}')" class="btn btn-xs btn-block btn-primary">
+                        Allocate
+                    </button>
+                {% endif %}
+            </td>
+        </tr>
+        {% else %}
+        <tr><td>{% trans "No record found." %}</td></tr>
+        {% endif %}
+    </table>
+    {% include "dashboard/partials/pagination.html" %}
+</form>
+
+<div class="panel panel-default" hidden id="div_order">
+    <div class="panel-heading"><strong>Order details</strong></div>
+    <div class="panel-body">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Product</th>
+                <th>Type</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for line in quote.basket_instance.lines.all %}
+            <tr>
+                <td>{{line.product}}</td>
+                <td>{{line.order_type}}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+    <div id="create_rate_card" class="modal" role="dialog" style="top:70px">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close close1" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Allocate To ASP</h4>
+                </div>
+                <form action="{% url 'dashboard:best-quote-allocate' pk=quote.id %}" style="margin-top:20px; padding-top:15px; padding:10px; border:1px solid #ddd;" method="POST">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <h5 style="font-weight:bold">Allocate.</h5>
+                        <div class="form-group">
+                            <br/>
+                            <label for="id_vendors">Select ASP:</label> <br/>
+                            <select class="form-control django-select2 select2-hidden-accessible" id="id_vendors" name="vendors" style="width:100%;" multiple>
+                                <option value="">--------------</option>
+                                {% for item in form.vendors %}
+                                {{item}}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Create</button>
+                        <button type="button" class="btn btn-default close1" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock dashboard_content %}
+
+{% block extrascripts %}
+    {{ block.super }}
+    <script>
+
+        function toggle_cart_div(){
+            $('#div_order').show();
+        }
+
+        function toggle_tab(id){
+           $('#create_rate_card').show();
+        }
+
+    $(document).ready(function(){
+        $('#vendor').select2({
+            width: '100%',
+            minimumInputLength: 2,
+            ajax: {
+                url: '/get_vendor_best_quote',
+                dataType: 'json',
+                type: "GET",
+                data: function (term) {
+                    return {
+                        term: term
+                    };
+                },
+                processResults: function (response) {
+                    return {
+                        results: $.map(response, function (item) {
+
+                            return {
+                                name: item.name,
+                                id: item.id
+                            }
+                        })
+                    };
+                },
+            }
+        });
+    });
+
+    $('.close1').click(function (){
+       $('#create_rate_card').hide();
+    });
+
+</script>
+
+<script>
+
+    function get_type() {
+
+        var type_value = $("#id_type").val();
+        if(type_value == 'INDIVIDUAL')
+        {
+           $("#catform").attr("action", "/create_individual_db/");
+        }
+         else{
+            $("#catform").attr("action", "/create_multi_db/");
+         }
+    }
+
+    function create_abp(ul,category, type){
+        var url='';
+        if(type == 'INDIVIDUAL')
+        {
+            url= '/create_individual_db/';
+         }
+         else{
+         url =  '/create_multi_db/';
+         }
+        var _url = ul+'?&category='+category;
+        document.location.href = _url;
+    }
+</script>
+{% endblock %}

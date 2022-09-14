@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+{% load static %}
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>Vendor Registration Form</title>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script>
+
+    <script>
+
+        $('document').ready(function(){
+            email_ajax();
+            <!--$("#email_error_text").hide();-->
+            <!--$("#id_state").append("<option value=''>Select State</option>");-->
+            <!--$("#id_state,#id_city").attr("required",true);-->
+            <!--$("#id_city").append("<option value=''>Select City</option>");-->
+            <!--$("#id_city").attr("required",true);-->
+            <!--$('#id_country').change(function(){-->
+
+                var country_id = $('#id_country').val();
+                $.ajax({
+                    type:'GET',
+                    url : '/state_ajax/',
+                    data : {
+                        country_id:country_id
+                    },
+                    success : function(data)
+                    {
+                        if (data=='Ajax_State_Error'){
+                            $('#id_system_error').modal('show');
+                        }
+                        else{
+                            for (i=0; i<data.length; i++){
+                                $('#id_state').append('<option value="'+data[i].state_id+'">'+data[i].state_name+'</option>');
+                            }
+                        }
+                    },
+                    failure : function(result){
+                        $('#id_system_error').modal('show');
+                    },
+                });
+            <!--});-->
+
+
+            $('#id_state').change(function(){
+                //console.log('state called');
+                $('#id_city').find('option').remove().end().append("<option value=''>Select City</option>");
+
+                $.ajax({
+                    type:'GET',
+                    url : '/city_ajax',
+                    data : {
+                        state_id:this.value
+                    },
+                    success : function(data)
+                    {
+                        console.log(data);
+                        if(data == 'Ajax_City_Error'){
+                            $('#id_system_error').modal('show');
+                        }
+                        else{
+                            for (i=0; i<data.length; i++){
+                                $('#id_city').append('<option value="'+data[i].city_name+'">'+data[i].city_name+'</option>');
+                            }
+                        }
+                    },
+                    failure : function(result){
+                        $('#id_system_error').modal('show');
+                    },
+                });
+            });
+
+            $('#id_email').change(function(){
+                email_ajax();
+            });
+
+            function email_ajax(){
+                var email_id = $("#id_email").val();
+                if (email_id != ''){
+                    $.ajax({
+                        type:'GET',
+                        url: '/email_ajax',
+                        data:{
+                            email_id:email_id
+                        },
+                        success: function(data)
+                            {
+                                <!--console.log(data);-->
+                                if(data=='email_exists'){
+                                    $("#email_error_text").show();
+                                    $('#id_register_btn').attr('disabled','disabled');
+                                }
+                                else{
+                                    $("#email_error_text").hide();
+                                    $('#id_register_btn').removeAttr('disabled');
+
+                                }
+                            },
+                        failure: function(result){
+                        },
+                    });
+                }
+            }
+
+
+
+
+            $("#id_register_btn").click(function(){
+                console.log('called');
+                <!--$("#partner_form").validate({-->
+                    <!--rules: {-->
+                        <!--id_name: {-->
+                            <!--required: true,-->
+                        <!--},-->
+                    <!--},-->
+                    <!--messages: {-->
+                        <!--id_name: {-->
+                            <!--required: "Title is required.",-->
+                        <!--},-->
+                    <!--},-->
+                <!--});-->
+            });
+        });
+    </script>
+
+    <style>
+        .errorlist{
+            list-style:outside none none;
+            color:red;
+        }
+        #id_panel_default{
+            box-shadow:12px 10px 10px rgba(135, 79, 79, 0.1);
+        }
+        .error_label{
+            color:red; font-weight:300; font-size:13px;
+            margin-top:12px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Warning</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{{form.errors.name}}</p>
+                    <p>{{form.errors.pan_number}}</p>
+                    <p>{{form.errors.vat_number}}</p>
+                    <p>{{form.errors.telephone_number}}</p>
+                    <p>{{form.errors.pincode}}</p>
+                    <p>{{form.errors.address_line_1}}</p>
+                    <p>{{form.errors.address_line_2}}</p>
+                    <p>{{form_user.errors.email}}</p>
+                    <p>{{form_user.errors.username}}</p>
+                    <p>{{form_user.errors.password1}}</p>
+                    <p>{{form_user.errors.password2}}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Try Again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="id_system_error" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">System Error</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Something went wrong ! Please Try Again</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Try Again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <br/>
+        <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+            <div class="panel panel-default" id="id_panel_default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">ASP Registration Form<small></small></h3>
+                </div>
+                <div class="panel-body">
+                    <form role="form" id="partner_form" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            {{form.name}}
+                            {% if form.errors.name %}
+                                <label class="error_label">{{form.errors.name.as_text}}</label>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+
+                        </div>
+                        <div class="form-group">
+                            {{form_user.email}}
+                            <label class="error_label" id="email_error_text" hidden>* Email already exists</label>
+                            {% if form.errors.email %}
+                                <label class="error_label">{{form.errors.emai.as_text}}</label>
+                            {% endif %}
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    {{form_user.password1}}
+                                    {% if form_user.errors.password1 %}
+                                        <label class="error_label">{{form_user.errors.password1.as_text}}</label>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    {{form_user.password2}}
+                                    <!--{% if form_user.errors.password2 %}-->
+                                        <!--<label>{{form_user.errors.password2}}</label>-->
+                                    <!--{% endif %}-->
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if form_user.errors.password2 %}
+                            <div class="form-group">
+                                <label class="error_label">{{form_user.errors.password2.as_text}}</label>
+                            </div>
+                        {% endif %}
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    {{form.pan_number}}
+
+                                    {% if form.errors.pan_number %}
+                                        <label class="error_label">{{form.errors.pan_number.as_text}}</label>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    {{form.vat_number}}
+                                    {% if form.errors.vat_number %}
+                                        <label class="error_label">{{form.errors.vat_number.as_text}}</label>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {{form.telephone_number}}
+                            {% if form.errors.telephone_number %}
+                                <label class="error_label">{{form.errors.telephone_number.as_text}}</label>
+                            {% endif %}
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    {{form.address_line_1}}
+                                    {% if form.errors.address_line_1 %}
+                                        <label class="error_label">{{form.errors.address_line_1.as_text}}</label>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    {{form.address_line_2}}
+                                    {% if form.errors.address_line_2 %}
+                                        <label class="error_label">{{form.errors.address_line_2.as_text}}</label>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {{form.country}}
+                            <!--<label>{{form.errors.country}}</label>-->
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    {{form.state}}
+                                    <!--<label>{{form.errors.state}}</label>-->
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    {{form.city}}
+                                    <!--<label>{{form.errors.city}}</label>-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {{form.pincode}}
+                            {% if form.errors.pincode %}
+                                <label class="error_label">{{form.errors.pincode.as_text}}</label>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            {{form.categories}}
+                            <label>{{form.errors.categories}}</label>
+                        </div>
+                        <!--<div class="form-group">-->
+                            <!--<label class="control-label">-->
+                                <!--<input type="checkbox" value="" id="id_terms" required>-->
+                                <!--<a href="#">I Agree Terms & Conditions</a>-->
+                            <!--</label>-->
+                        <!--</div>-->
+                        <input type="submit" id="id_register_btn" value="Register" class="btn btn-info btn-block">
+                        <br/>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                <a href="/export" class="btn btn-warning btn-block">Download Template</a>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                <a href="/import" class="btn btn-warning btn-block">Import CSV</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $('document').ready(function(){
+            $('#id_register_btn').attr('disabled','disabled');
+            $('#id_name,#id_email,#id_password1,#id_password2,#id_pan_number,#id_vat_number,#id_telephone_number,#id_address_line_1,#id_address_line_2,#id_country,#id_state,#id_city,#id_pincode,#id_categories').addClass("form-control");
+            $('#id_email').attr('placeholder','Email Address');
+            $('#id_password1').attr('placeholder','Password');
+            $('#id_password2').attr('placeholder','Confirm Password');
+
+            <!--{% if form_user.errors or form.errors %}-->
+                <!--$('#myModal').modal('show');-->
+            <!--{% endif %}-->
+
+            {% if system_error %}
+                $('#id_system_error').modal('show');
+            {% endif %}
+
+            $('#id_pan_number').keyup(function(){
+                this.value = this.value.toUpperCase();
+            });
+
+            <!--$("#id_terms").change(function(){-->
+                <!--if($("#id_terms").is(":checked")){-->
+                    <!--$('#id_register_btn').removeAttr('disabled');-->
+                <!--}-->
+                <!--else{-->
+                    <!--$('#id_register_btn').attr('disabled','disabled');-->
+                <!--}-->
+            <!--});-->
+        });
+    </script>
+
+</body>
+</html>

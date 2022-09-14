@@ -1,0 +1,63 @@
+{% extends 'dashboard/layout.html' %}
+{% load currency_filters %}
+{% load i18n %}
+
+{% block body_class %}{{ block.super }} create-page{% endblock %}
+
+{% block title %}
+    {% trans "Image Upload" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<ul class="breadcrumb">
+    <li>
+        <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+    </li>
+    <li class="active">{% trans "Edit" %}</li>
+</ul>
+{% endblock %}
+
+{% block headertext %}My Offer - {{page_title}}{% endblock %}
+
+{% block dashboard_content %}
+<div class="page-content">
+    <div class="table-header">
+        <h2>{{page_title}}</h2>
+    </div>
+
+    <form method="post" class="well" enctype='multipart/form-data'>
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input disabled type="text" name="sub_title" value="{{page_title}}" placeholder="Sub Title" id="id_sub_title" class="form-control wpcf7-text wpcf7-validates-as-required">
+                    <p class="color-red"></p>
+                    <input type="hidden" name="id" value="{{id}}" class="form-control">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label>Upload Image</label>
+                    {{form.menu_image}}
+                    <p class="color-red"></p>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-md btn-primary">Update</button>
+        <a href="{% url 'dashboard:uplaod-my-offer-image-v1'  %}?type={{obj.id}}" class="btn btn-md btn-default">Cancel</a>
+    </form>
+</div>
+{% endblock dashboard_content %}
+
+{% block extrascripts %}
+    {{ block.super }}
+<script>
+
+    $('#menu_image-clear_id').hide();
+
+</script>
+{% endblock %}

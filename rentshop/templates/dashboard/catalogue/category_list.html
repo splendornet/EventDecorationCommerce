@@ -1,0 +1,59 @@
+{% extends 'dashboard/layout.html' %}
+{% load category_tags %}
+{% load i18n %}
+{% load render_table from django_tables2 %}
+
+{% block body_class %}{{ block.super }} catalogue{% endblock %}
+
+{% block title %}
+    {% trans "Categories" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li class="active">{% trans "Categories" %}</li>
+    </ul>
+{% endblock %}
+
+{% block header %}
+    <div class="page-header" >
+        <a href="{% url 'dashboard:arrange_category' %}" class="btn btn-warning btn-lg pull-right">{% trans "Rearragne Main Categories" %}</a>
+        <a style="margin:0px 5px;"  href="{% url 'dashboard:catalogue-category-create' %}" class="btn btn-primary btn-lg pull-right"><em class="icon-plus"></em> {% trans "Create new category" %}</a>
+        <!--<a style="margin:0px 5px;" class="btn btn-primary btn-lg pull-right" href="{% url 'export_category' %}">{% trans "Download Categories" %}</a>-->
+        <button style="margin:0px 5px;" class="btn btn-primary btn-lg pull-right" type="button" onclick="download_category('{% url 'export_category' %}')">{% trans "Download Categories" %}</button>
+        <h1>{% trans "Categories" %}</h1>
+    </div>
+{% endblock header %}
+
+{% block dashboard_content %}
+    <div class="alert alert-info">
+        <p>{% trans "You are editing:" %}
+            <strong><a href="{% url 'dashboard:catalogue-category-list' %}">{% trans "Home" %}</a></strong>
+            {% if ancestors %}
+                &gt;
+                {% for ancestor in ancestors %}
+                    <strong><a href="{% url 'dashboard:catalogue-category-detail-list' pk=ancestor.pk %}">{{ ancestor.name }}</a></strong>{% if not forloop.last %} > {% endif %}
+                {% endfor %}
+            {% endif %}
+        </p>
+    </div>
+
+    <style>
+        .num_children>a{ color: #fff; background-color: #286090; border-color: #122b40;padding: 10px 16px; font-size: 18px; line-height: 1.3333333; border-radius: 6px; display: inline-block; margin-bottom: 0; font-weight: normal; text-align: center; vertical-align: middle; touch-action: manipulation; cursor: pointer; background-image: none; border: 1px solid transparent; border-top-color: transparent; border-right-color: transparent; border-bottom-color: transparent; border-left-color: transparent; white-space: nowrap; padding: 6px 12px; font-size: 14px; line-height: 1.42857143; border-radius: 4px; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+    </style>
+
+    {% render_table categories %}
+
+    {% if not child_categories %}
+        <p>{% trans "There are no categories." %}</p>
+    {% endif %}
+{% endblock dashboard_content %}
+
+{% load static %}
+{% block extrascripts %}
+    {{ block.super }}
+    <script src="{% static 'oscar/js/dashboard/catalogue/category.js' %}"></script>
+{% endblock %}

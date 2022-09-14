@@ -1,0 +1,35 @@
+{% load currency_filters %}
+{% load i18n %}
+
+
+
+
+
+<div id="cart" class="cart">
+    <button type="button" data-toggle="dropdown" data-loading-text="Loading..." class="dropdown-toggle" style="z-index:0;">
+        <i class="fa fa-shopping-cart"></i>
+        <strong>Cart:</strong>
+        <span id="cart-total" class="cart-total">
+            <!--0 item(s)-->
+                {% if request.basket.is_tax_known %}
+                    {{ request.basket.total_incl_tax|currency:request.basket.currency }}
+                {% else %}
+                    {{ request.basket.total_excl_tax|currency:request.basket.currency }}
+                {% endif %}
+        </span>
+        <span id="cart-total2" class="cart-total2">
+            <!--0 item(s)-->
+                {% if request.basket.is_tax_known %}
+                    {{ request.basket.total_incl_tax|currency:request.basket.currency }}
+                {% else %}
+                    {{ request.basket.total_excl_tax|currency:request.basket.currency }}
+                {% endif %}
+        </span>		<span id="cart-total3" class="cart-total3">0 item(s)</span>		<i class="fa fa-angle-down"></i>
+    </button>
+    <ul class="dropdown-menu pull-right">
+        {% include "basket/partials/basket_quick.html" %}
+        <!--<li>-->
+            <!--<p class="text-center">Your shopping cart is empty!</p>-->
+        <!--</li>-->
+    </ul>
+</div>

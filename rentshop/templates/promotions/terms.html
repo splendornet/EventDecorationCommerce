@@ -1,0 +1,97 @@
+{% extends "layout_2_col.html" %}
+{% load i18n %}
+
+{% block navigation %}
+    {% include "partials/nav_primary.html" with expand_dropdown=1 %}
+{% endblock %}
+
+{% block title %}
+    TakeRentPe | Terms & Conditions
+{% endblock %}
+
+
+{% block content %}
+<style>
+    .content{ padding-left:20px; padding-right:15px; font-size:14px; } .container{ margin-bottom:20px;
+} .term {margin-top: 165px;}} h2{ padding-left:20px; }
+    .p-li{font-size:18px;}
+</style>
+<div class="container term" style="color:#000 !important">
+    <h2 style="padding-left:0;">Terms & Conditions</h2>
+    <br/>
+    {% if obj.content %}
+    <p>
+        {{obj.content|safe}}
+    </p>
+    {% else %}
+    <p class="p-h">
+        <strong>1. Equipment Return and Missing Items</strong>
+    </p>
+    <p class="p-b">
+        All rental items must be ready for pick-up at scheduled times and placed into their original storage containers. If you do not have someone on-site at time of pick-up, it is common to have missing equipment at an event due to the number of people handling the equipment, including your guests, caterer, site personnel, cleaning crews and other people working the event. For your own satisfaction, it is best for care taking person from your side or appointed freelancer event planner from your side to count-in the equipment with our driver at pick-up so that you can verify any missing equipment at that time. If missing items are found after our scheduled pick-up, you are responsible for returning those items to our warehouse in a timely manner to avoid additional rental charges. We can return to your location and pick-up them for an additional charge. The lessee agrees to pay for any damage to, loss of, or any theft (disappearance) of items, regardless of cause or fault. Delivered items cannot be returned unless they have major defects and are non – functional.
+    </p>
+
+    <p class="p-h">
+        <strong>2. You Agree and Confirm</strong>
+    </p>
+    <p class="p-b">
+        <ul>
+    <li class="p-li">You will use the services provided by takerentpe.com, its affiliates and contracted companies, for lawful purpose only and complies with all applicable laws and regulations while using the site and transaction on the site.</li>
+    <li class="p-li">The address at which delivery of the product ordered by you is to be made will be correct and proper in all respects.</li>
+    <li class="p-li">Before placing an order you will check the product description carefully.</li>
+    <li class="p-li">By placing an order for a product you agree to be bound by the conditions of sale included in the items description.</li>
+    <li class="p-li">You may not use the site for other purposes.</li>
+    <li class="p-li">If our ASP(Associate service provider) doesn’t accept the order and takerentpe.com decided to send some other ASP, the details and the information to be send or informed to the client.</li>
+    <li class="p-li">The picture of product which we had uploaded it will be not similar as actual as uploaded picture.</li>
+
+</ul>
+    </p>
+
+    <p class="p-h">
+        <strong>3. Additional Charges may apply if</strong>
+    </p>
+    <p class="p-b">
+         <ul>
+    <li class="p-li">If asked to site visit and we find the equipment to be operating, service charges may apply.</li>
+    <li class="p-li">If any charges are incurred during the event, an additional invoice will be forwarded to the renter.</li>
+    <li class="p-li">If missing items are found after scheduled pick-up, you are responsible for returning those items to our warehouse in a timely manner to avoid additional rental charges. We can return to your location and pick-up them for an additional charge.	</li>
+</ul>
+    </p>
+
+    <p class="p-h">
+        <strong>4. Void where prohibited</strong>
+    </p>
+    <p class="p-b">
+        <ul>
+    <li class="p-li">Using of any crawler, automated program, device, software, etc. that accesses the content of the Website. Also hacking or imposing huge load on our Website. is forbidden.</li>
+    <li class="p-li">Using of any crawler, automated program, device, software, etc. that accesses the content of the Website. Also hacking or imposing huge load on our Website. is forbidden.</li>
+
+</ul>
+    </p>
+
+    <p class="p-h">
+        <strong>5. Aware from fake:</strong>
+    </p>
+    <p class="p-b">
+<ul>
+    <li class="p-li">Fake enquiries are strongly refuses with the legal action ahead.</li>
+    <li class="p-li">Do not share, mark or post such an information that make illegal intrigue against another party or person, control on deal or comprehend a virus like harmful items or trademark, copyright, or other proprietary right protected, unless with the written permission / agreement of the owner for such rights.</li>
+    <li class="p-li">You will not Distribute, sell, copy or modify any part of the Website without takerentpe’s written agreement.</li>
+    <li class="p-li">You agree to receive promotional, transactional and commercial communications from takerentpe through email or SMS.</li>
+    <li class="p-li">In some cases, your order/party images/videos may be used on our website for demonstration/reference to new customers. In the case where you are not interested in participating in this program, you may opt-out by sending an email to dgmtrp@gmail.com.
+</li>
+</ul>
+    </p>
+
+
+    <p class="p-b">
+Please be noted that it may take up to 48 business hours to remove your picture/videos.
+Your reservation will be cancelled, deposit will be deducted and You can be subjected to terms of the ASP if you fail to comply with these terms.
+
+Any complaints or concerns with regard to the Platform or any breach of these Terms or Privacy Policy can be directed to the designated Grievance Officer through an email signed with electronic signature sent to dgmtrp@gmail.com.
+
+    </p>
+
+{% endif %}
+</div>
+{% endblock %}

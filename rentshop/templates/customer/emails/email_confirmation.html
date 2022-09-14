@@ -1,0 +1,16 @@
+{% extends "customer/emails/base.html" %}
+{% load currency_filters i18n %}
+
+{% block tbody %}
+    <tr>
+        <td class="content-block">
+            <p xmlns="http://www.w3.org/1999/html">Hello {{first_name}} {{last_name}},</p>
+            <p>{% blocktrans with order_number=order.number %}Thank you for registering with us.{% endblocktrans %}</p>
+            <p>{% blocktrans with order_number=order.number %}To activate your account with email id {{email_id}} please click following link.{% endblocktrans %}</p>
+            <br/>
+            <a href="{{domain}}{% url 'email_activate_link' uidb64=uid token=token %}">{{domain}}{% url 'email_activate_link' uidb64=uid token=token %}</a>
+        </td>
+    </tr>
+
+
+{% endblock %}

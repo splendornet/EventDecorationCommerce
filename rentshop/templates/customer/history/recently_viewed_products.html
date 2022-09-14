@@ -1,0 +1,87 @@
+{% load i18n %}
+{% load product_tags %}
+{% load thumbnail %}
+{% load mathfilters %}
+{% load basket_tags %}
+{% load purchase_info_tags %}
+{% load common %}
+
+<style>
+    .btn-rc{
+        display: initial !important;
+    }
+    .btn-link-red{
+        display: initial !important;
+        padding:3px 6px;
+        background-color: #f4b800;
+        color: #fff !important;
+    }
+    .btn-link-red:hover{
+        background-color: #e91d4a;
+        color: #fff !important;
+    }
+    .btn-gp{
+        margin-right:0 !important;
+    }
+    span.product-title{
+        font-size: 12px;
+        color: #444;
+        font-weight: bold;
+    }
+</style>
+
+{% with products_sliced=products|slice:":3" %}
+    {% if products_sliced %}
+        {% for product in products_sliced %}
+            <li>
+                {% with image=product.primary_image %}
+                    <div>
+                         {% thumbnail image.original "x155" upscale=False as thumb %}
+                            <a href="{{ product.get_absolute_url }}" target="_blank" title="{{ product.get_absolute_url }}">
+                                <img width="90" height="130" style="max-width:6em;min-height:4em;" src="{{thumb.url}}" class="attachment-shop_thumbnail size-shop_thumbnail wp-post-image" alt="inner19"/>
+                                <span class="product-title">{{product.title|truncatewords:2}}</span>
+                            </a>
+                        {% endthumbnail %}
+                    </div>
+                {% endwith %}
+
+                <div class="star-rating" title="Rated 5 out of 5"><span style="width:{% if product.rating %} {{product.rating|div:5|mul:100}}% {% else %} 0% {% endif %}">
+                    <strong class="rating">5</strong> out of 5</span>
+                </div>
+
+                <div class="" style="text-align:left;">
+                    {% purchase_info_for_product request product as session %}
+
+                    {% if session.availability.is_available_to_buy %}
+                        {% basket_form request product 'single' as basket_form %}
+
+                        <!-- small cart button -->
+                        {% if product.get_product_class.name == 'Rent Or Sale' %}
+                            <a href="{{product.get_absolute_url}}" target="_blank" class="btn btn-red btn-link-red btn-gp">
+                                {% trans "Buy" %}
+                            </a>
+                            <a href="{{product.get_absolute_url}}" target="_blank" class="btn btn-red btn-link-red btn-gp">
+                                {% trans "Rent" %}
+                            </a>
+                        {% else %}
+                            <a href="{{product.get_absolute_url}}" target="_blank" class="btn btn-red btn-link-red">
+                                {% if product.get_product_class.name == 'Rent' %}
+                                    {% trans "Rent" %}
+                                {% elif product.get_product_class.name == 'Sale' %}
+                                    {% trans "Buy" %}
+                                {% elif product.get_product_class.name == 'Professional' %}
+                                    {% trans "Rent" %}
+                                {% elif product.get_product_class.name == 'Service' %}
+                                    {% trans "View Details" %}
+                                {% else %}
+                                    {% trans "Add to basket" %}
+                                {% endif %}
+                            </a>
+                        {% endif %}
+                       <!-- small cart button -->
+                    {% endif %}
+                </div>
+            </li>
+        {% endfor %}
+    {% endif %}
+{% endwith %}

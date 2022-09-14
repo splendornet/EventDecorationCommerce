@@ -1,0 +1,222 @@
+{% extends "customer/emails/base.html" %}
+{% load currency_filters i18n %}
+
+{% block tbody %}
+{% if paidDetails %}
+    <tr>
+        <td class="content-block">
+            <p xmlns="http://www.w3.org/1999/html">Hello {{order.user.first_name}},
+
+            </p>
+            <p>{% blocktrans with order_number=order.number %}We are pleased to confirm your order {{ order_number }} amount has been updated.{% endblocktrans %}</p>
+        </td>
+    </tr>
+
+    <tr>
+        <td class="content-block">
+            <table class="order">
+                <tbody>
+                <tr>
+                    <td>{% trans 'Your order contains:' %}</td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <table class="order-items" cellpadding="0" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td><b>Items</b></td>
+                                    <td style="text-align:right"><b>Price</b></td>
+                                </tr>
+                                {% for line in order.lines.all %}
+                                    <tr>
+
+                                        <td>{{ line.title }} &times; {{ line.quantity }}</td>
+                                        <td class="alignright"></td>
+                                    </tr>
+                                {% endfor %}
+                                <tr>
+                                    <td class="alignright">{% trans 'Order total(incl. tax):' %}</td>
+                                    <td class="alignright">{{ order.total_amount_incl_tax|currency:order.currency }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="alignright">{% trans 'Discount:' %}</td>
+                                    <td class="alignright">{{ order.total_discount_excl_tax|currency:order.currency }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="alignright" width="80%">{% trans 'Total After Discount(incl. tax):' %}</td>
+                                    <td class="alignright">{{order_total_after_discount|currency:order.currency }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="alignright" width="80%">{% trans 'Amount Paid:' %}</td>
+                                    <td class="alignright">{{order.paid_amount|currency:order.currency }}</td>
+                                </tr>
+                                <tr class="total">
+                                    <td class="alignright" width="80%">{% trans 'Due Amount :' %}</td>
+                                    <td class="alignright">{{ due_amount|currency:order.currency }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody></table>
+        </td>
+    </tr>
+
+    <tr>
+        <td class="content-block">
+            <p>{% trans 'Shipping address:' %}</p>
+            <p>{% for field in order.shipping_address.active_address_fields %}  {{ field }}<br/>
+            {% endfor %}</p>
+        </td>
+    </tr>
+
+    {% if status_url %}
+        <tr>
+            <td class="content-block">
+                {% blocktrans %}You can view the status of this order by clicking <a href="{{ status_url }}" title="order status">here</a>{% endblocktrans %}
+            </td>
+        </tr>
+    {% endif %}
+{% elif cancelOrder %}
+    <tr>
+        <td class="content-block">
+            <p xmlns="http://www.w3.org/1999/html">Hello {{order.user.first_name}},</p>
+            <p>{% blocktrans with order_number=order.number %}We are pleased to inform, your order {{ order_number }} has been cancelled.{% endblocktrans %}</p>
+        </td>
+    </tr>
+
+    <tr>
+        <td class="content-block">
+            <table class="order">
+                <tbody><tr>
+                    <td>{% trans 'Your order contains:' %}</td>
+                </tr>
+                <!--<tr>-->
+                     <!--<td><b>Items</b></td>-->
+                     <!--<td><b>Price</b></td>-->
+                 <!--</tr>-->
+                <tr>
+                    <td>
+                        <table class="order-items" cellpadding="0" cellspacing="0">
+                            <tbody>
+                            <tr>
+                                <td><b>Items</b></td>
+                                <td style="text-align:right"><b>Price</b></td>
+                            </tr>
+                                {% for line in order.lines.all %}
+                                    <tr>
+                                        <td>{{ line.title }} &times; {{ line.quantity }}</td>
+                                        <td class="alignright"></td>
+                                    </tr>
+                                {% endfor %}
+                                <tr>
+                                    <td class="alignright">{% trans 'Order total(incl. tax):' %}</td>
+                                    <td class="alignright">{{ order.total_amount_incl_tax|currency:order.currency }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="alignright">{% trans 'Discount:' %}</td>
+                                    <td class="alignright">{{ order.total_discount_excl_tax|currency:order.currency }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="alignright" width="80%">{% trans 'Total After Discount(incl. tax):' %}</td>
+                                    <td class="alignright">{{order_total_after_discount|currency:order.currency }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="alignright" width="80%">{% trans 'Amount Paid:' %}</td>
+                                    <td class="alignright">{{order.paid_amount|currency:order.currency }}</td>
+                                </tr>
+                                <tr class="total">
+                                    <td class="alignright" width="80%">{% trans 'Due Amount :' %}</td>
+                                    <td class="alignright">{{ due_amount|currency:order.currency }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody></table>
+        </td>
+    </tr>
+
+    <tr>
+        <td class="content-block">
+            <p>{% trans 'Shipping address:' %}</p>
+            <p>{% for field in order.shipping_address.active_address_fields %}  {{ field }}<br/>
+            {% endfor %}</p>
+        </td>
+    </tr>
+
+    {% if status_url %}
+        <tr>
+            <td class="content-block">
+                {% blocktrans %}You can view the status of this order by clicking <a href="{{ status_url }}" title="order status">here</a>{% endblocktrans %}
+            </td>
+        </tr>
+    {% endif %}
+{% else %}
+    <tr>
+        <td class="content-block">
+            <p xmlns="http://www.w3.org/1999/html">Hello {{order.user.first_name}},</p>
+            <p>{% blocktrans with order_number=order.number %}We are pleased to confirm your order {{ order_number }} has been received and
+            will be processed shortly.{% endblocktrans %}</p>
+        </td>
+    </tr>
+
+    <tr>
+        <td class="content-block">
+            <table class="order">
+                <tbody><tr>
+                    <td>{% trans 'Your order contains:' %}</td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <table class="order-items" cellpadding="0" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                <td><b>Items</b></td>
+                                <td style="text-align:right"><b>Price</b></td>
+                            </tr>
+                                {% for line in order.lines.all %}
+                                    <tr>
+                                        <td>{{ line.title }} &times; {{ line.quantity }}</td>
+                                        <td class="alignright">{{ line.line_price_incl_tax|currency:order.currency }}</td>
+                                    </tr>
+                                {% endfor %}
+                                <tr>
+                                    <td class="alignright">{% trans 'Basket total:' %}</td>
+                                    <td class="alignright">{{ order.basket_total_incl_tax|currency:order.currency }}</td>
+                                </tr>
+                                <!--<tr>-->
+                                    <!--<td class="alignright">{% trans 'Shipping:' %}</td>-->
+                                    <!--<td class="alignright">{{ order.shipping_incl_tax|currency:order.currency }}</td>-->
+                                <!--</tr>-->
+                                <tr class="total">
+                                    <td class="alignright" width="80%">{% trans 'Order Total:' %}</td>
+                                    <td class="alignright">{{ order.total_incl_tax|currency:order.currency }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody></table>
+        </td>
+    </tr>
+
+    <tr>
+        <td class="content-block">
+            <p>{% trans 'Shipping address:' %}</p>
+            <p>{% for field in order.shipping_address.active_address_fields %}  {{ field }}<br/>
+            {% endfor %}</p>
+        </td>
+    </tr>
+
+    {% if status_url %}
+        <tr>
+            <td class="content-block">
+                {% blocktrans %}You can view the status of this order by clicking <a href="{{ status_url }}" title="order status">here</a>{% endblocktrans %}
+            </td>
+        </tr>
+    {% endif %}
+{% endif %}
+{% endblock %}

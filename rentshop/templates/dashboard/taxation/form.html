@@ -1,0 +1,95 @@
+{% extends 'dashboard/layout.html' %}
+{% load currency_filters %}
+{% load i18n %}
+
+{% block body_class %}{{ block.super }} create-page{% endblock %}
+
+{% block title %}
+    {{ title }} | {% trans "Taxations" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li>
+            <a href="{% url 'dashboard:taxation-index' %}">Taxation</a>
+        </li>
+
+    <li class="active">{% trans "Edit" %}</li>
+    </ul>
+{% endblock %}
+
+{% block headertext %}Taxation{% endblock %}
+
+{% block dashboard_content %}
+    <div class="table-header">
+        <h2><i class="icon-money icon-large"></i>
+            {% if tax %}
+                Edit Taxation
+            {% else %}
+                Create Taxation
+            {% endif %}
+        </h2>
+    </div>
+    <form method="post" class="well" enctype='multipart/form-data'>
+        {% csrf_token %}
+        <div class="form-group" style="margin-bottom:10px;">
+            <p class="control-label">Apply On</p>
+            {{form.apply_to}} <br/>
+            <p class="color-red">
+                {{form.errors.apply_to.as_text}}
+            </p>
+        </div>
+        <div class="form-group" style="margin-bottom:10px;">
+            <p class="control-label">{% if request.GET.type == '2' %} Sale Tax Percentage {% elif request.GET.type == '4' %} Professional Tax Percentage {% else %}Rent Tax Percentage {% endif %}</p>
+            {{form.tax_percentage}}
+            {% if form.errors.tax_percentage %}
+                <p class="color-red">*{{form.errors.tax_percentage.as_text}}</p>
+            {% endif %}
+        </div>
+        <div class="form-group" style="margin-bottom:10px;display:none" id="sale-tax-div">
+            <p class="control-label">Sale Tax Percentage</p>
+            {{form.sale_tax_percent}}
+            {% if form.errors.sale_tax_percent %}
+                <p class="color-red">*{{form.errors.sale_tax_percent.as_text}}</p>
+            {% endif %}
+        </div>
+        {% block form_actions %}
+            <div class="form-actions">
+                <button class="btn btn-primary btn-lg" type="submit" data-loading-text="{% trans 'Saving...' %}">{% trans "Save" %}</button> {% trans "or" %}
+                <a href="{% url 'dashboard:taxation-index' %}" class="btn btn-default">{% trans "cancel" %}</a>
+            </div>
+        {% endblock form_actions %}
+    </form>
+{% endblock dashboard_content %}
+
+{% block extrascripts %}
+    {{ block.super }}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script>
+        function for_products_change(){
+            var selectedItem = $('#id_apply_to').val();
+            if(selectedItem != 3)
+            {
+                $("#sale-tax-div").css("display", "none");
+            }
+            else
+            {
+                $("#sale-tax-div").css("display", "block");
+            }
+        }
+
+        $(document).ready(function () {
+            var selectedItem = $('#id_apply_to').val();
+            if(selectedItem != 3){
+                $("#sale-tax-div").css("display", "none");
+            }
+            else{
+                $("#sale-tax-div").css("display", "block");
+            }
+        });
+    </script>
+{% endblock %}

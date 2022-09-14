@@ -1,0 +1,111 @@
+{% extends "customer/baseaccountpage.html" %}
+{% load i18n %}
+
+{% block tabcontent %}
+
+<style>
+    .button {
+        width:160px; padding:10px 24px;
+    }
+</style>
+
+<h3 class="heading"> Edit Profile </h3>
+
+<div style="overflow-x:auto;">
+    <form action="." method="post">
+        {% csrf_token %}
+
+        <div class="Table_profile">
+
+            <!-- first name -->
+            <div class="Row_profile">
+                <div class="Cell_profile" style="width:25%;">
+                    <p>First Name</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>:-</p>
+                </div>
+                <div class="Cell_profile">
+                    {{form.first_name}}
+                    <span class="error-red">{{form.errors.first_name.as_text}}</span>
+                </div>
+            </div>
+            <!-- first name -->
+
+            <!-- last name -->
+            <div class="Row_profile">
+                <div class="Cell_profile">
+                    <p>Last Name</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>:-</p>
+                </div>
+                <div class="Cell_profile">
+                    {{form.last_name}}
+                    <span class="error-red">{{form.errors.last_name.as_text}}</span>
+                </div>
+            </div>
+            <!-- last name -->
+
+            <!-- email -->
+            <div class="Row_profile">
+                <div class="Cell_profile">
+                    <p>Email Address</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>:-</p>
+                </div>
+                <div class="Cell_profile">
+                    {{form.email}}
+                    <span class="error-red">{{form.errors.email.as_text}}</span>
+                </div>
+            </div>
+            <!-- email -->
+
+            <!-- number -->
+            <div class="Row_profile">
+                <div class="Cell_profile">
+                    <p>Mobile Number</p>
+                </div>
+                <div class="Cell_profile">
+                    <p>:-</p>
+                </div>
+                <div class="Cell_profile">
+                    <input type="number" value="{{user.profile_user}}" name="mobile_number" id="id_mobile_number">
+                    <span class="error-red">{{form.errors.mobile_number.as_text}}</span>
+                </div>
+            </div>
+            <!-- number -->
+
+            <br />
+
+            <!-- button -->
+            <div class="Row_profile">
+                <div class="Cell_profile">
+                    <button style="width:200px;" class="button button1" type="submit">Save Changes</button>
+                </div>
+                <div class="Cell_profile">
+
+                </div>
+                <div class="Cell_profile">
+                    <a href="{% url 'customer:profile-view' %}">
+                        <button class="button button2" type="button">Cancel</button>
+                    </a>
+                </div>
+            </div>
+            <!-- button -->
+
+        </div>
+    </form>
+
+
+</div>
+<script>
+    document.getElementById("id_mobile_number").value = {{ user.customprofile.mobile_number }};
+</script>
+<script>
+    var element = document.getElementById("my_profile_link");
+    element.classList.add("active");
+</script>
+
+{% endblock tabcontent %}

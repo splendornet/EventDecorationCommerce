@@ -1,0 +1,679 @@
+{% extends 'dashboard/layout.html' %}
+{% load currency_filters %}
+{% load i18n %}
+{% load sorting_tags %}
+{% load widget_tweaks %}
+
+{% block body_class %}{{ block.super }} orders home{% endblock %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <meta http-equiv="refresh" content="300">
+{% endblock %}
+
+{% block breadcrumbs %}
+{% endblock %}
+
+{% block headertext %}
+Net Profit
+{% endblock %}
+
+{% block dashboard_content %}
+
+<style>
+    .tab-db{
+        padding-top:10px;
+        padding-left:10px;
+        padding-right:10px;
+    }
+</style>
+
+{% if request.user.is_superuser %}
+<ul class="nav nav-tabs">
+    <li class="active">
+        <a data-toggle="tab" href="#Daily">Daily</a>
+    </li>
+    <li><a data-toggle="tab" href="#Weekly">Weekly</a></li>
+    <li><a data-toggle="tab" href="#Monthly">Monthly</a></li>
+    <li><a data-toggle="tab" href="#Quarterly">Quarterly</a></li>
+    <li><a data-toggle="tab" href="#Annualy">Annualy</a></li>
+</ul>
+
+<div class="tab-content" style="border: 1px solid #ddd; border-top: 0px;">
+    <div id="Daily" class="tab-pane fade in active tab-db">
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="well">
+                    <form action="." method="get" class="form-inline" id="search_form">
+                        {% for field in form %}
+                            {% if field.id_for_label %}
+                                {% if field.is_hidden %}
+                                    {% render_field field class+='form-control' %}
+                                {% else %}
+                                    <span class="form-group{% if field.errors %} has-error{% endif %}">
+                                        {{ field.label_tag }}
+                                        {% render_field field class+='form-control' %}
+                                        {% for error in field.errors %}
+                                            <ul class="error-block">
+                                                <li>{{ error }}</li>
+                                            </ul>
+                                        {% endfor %}
+                                    </span>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        <input value="daily" name="record_type" hidden>
+                        <input type="submit" value="{% trans 'Search' %}" class="btn btn-primary" />
+                        <a class="btn btn-default" href="{% url 'dashboard:accounts-net-profit' %}" >{% trans "Reset" %}</a>
+
+                    </form>
+                </div>
+
+                <table class="table table-striped table-bordered table-hover">
+                    <caption>
+                        <em class="icon-time"></em>
+                        {% trans "Daily Stats Orders" %}
+                        <a href="{% url 'dashboard:accounts-export-net-profile' pk=1 %}?order_number={{request.GET.order_number}}&customer_name={{request.GET.customer_name}}&order_date={{request.GET.order_date}}&record_type=daily" class="pull-right btn btn-xs btn-primary">
+                            <em class="icon icon-download"></em>
+                            Download
+                        </a>
+                    </caption>
+                    <tr>
+                        <th class="col-md-10">{% trans "Orders" %}</th>
+                        <td class="col-md-2" >{{daily_order_count}}</td>
+                    </tr>
+                    <tr>
+                        <th class="col-md-10">{% trans "Order Total (Rs)" %}</th>
+                        <td class="col-md-2" >{{daily_order_total|default:'0'}}</td>
+                    </tr>
+                    <tr>
+                        <th class="col-md-10">{% trans "Order Total Earning (Rs)" %}</th>
+                        <td class="col-md-2" >{{daily_order_earning_total|default:'0'}}</td>
+                    </tr>
+                </table>
+
+                <table class="display table table-striped table-bordered table-hover daily_table">
+                    <caption>
+                        <h3 class="pull-left">Daily Orders</h3> &nbsp;
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th class="order_first">Order number</th>
+                            <th class="order_first">Customer</th>
+                            {% if user.is_superuser %}
+                            <th>Total Amount</th>
+                            <th>{% trans "Number of items" %}</th>
+                            {% endif %}
+                            <th>{% trans "Shipping address" %}</th>
+                            <th>{% trans "Date of purchase" %}</th>
+                            <th>{% trans "Status" %}</th>
+                            <th>{% trans "Payment Status" %}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for order in daily_orders %}
+                        <tr>
+                            <td><a href="{% url 'dashboard:order-detail' number=order.number %}">{{ order.number }}</a></td>
+                            <td>
+                                {% if order.user.is_staff %}
+                                    {{order.user.first_name|title}} {{order.user.last_name|title}}
+                                {% else %}
+                                    {% if order.user.pk %}
+                                    <a href="{% url 'dashboard:user-detail' pk=order.user.pk %}">
+                                        {{order.user.first_name|title}} {{order.user.last_name|title}}
+                                    </a>
+                                    {% else %}
+                                        {{order.user.first_name|title}} {{order.user.last_name|title}}
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                            {% if user.is_superuser %}
+                            <td>{{ order.total_incl_tax|currency:order.currency }}</td>
+                            <td>{{ order.num_items }}</td>
+                            {% endif %}
+                            <td>{{ order.shipping_address|default:"-" }}</td>
+                            <td>{{ order.date_placed }}</td>
+                            <td>{{ order.status|default:"-" }}</td>
+                            <td>{{ order.get_order_payment_status_display|default:"-" }}</td>
+                            <td>
+                                <a class="btn btn-info" href="{% url 'dashboard:order-detail' number=order.number %}">{% trans "View" %}</a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td>No records</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div id="Weekly" class="tab-pane fade tab-db">
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="well">
+                    <form action="." method="get" class="form-inline" id="search_form">
+                        {% for field in form %}
+                            {% if field.id_for_label %}
+                                {% if field.is_hidden %}
+                                    {% render_field field class+='form-control' %}
+                                {% else %}
+                                    <span class="form-group{% if field.errors %} has-error{% endif %}">
+                                        {{ field.label_tag }}
+                                        {% render_field field class+='form-control' %}
+                                        {% for error in field.errors %}
+                                            <ul class="error-block">
+                                                <li>{{ error }}</li>
+                                            </ul>
+                                        {% endfor %}
+                                    </span>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        <input value="weekly" name="record_type" hidden>
+                        <input type="submit" value="{% trans 'Search' %}" class="btn btn-primary" />
+                        <a class="btn btn-default" href="{% url 'dashboard:accounts-net-profit' %}" >{% trans "Reset" %}</a>
+
+                    </form>
+                </div>
+
+                <table class="table table-striped table-bordered table-hover">
+                    <caption>
+                        <em class="icon-time"></em>
+                        {% trans "Weekly Stats Orders" %}
+                        <a href="{% url 'dashboard:accounts-export-net-profile' pk=2 %}?order_number={{request.GET.order_number}}&customer_name={{request.GET.customer_name}}&order_date={{request.GET.order_date}}&record_type=weekly" class="pull-right btn btn-xs btn-primary">
+                            <em class="icon icon-download"></em>
+                            Download
+                        </a>
+                    </caption>
+                    <tr>
+                        <th class="col-md-10">{% trans "Orders" %}</th>
+                        <td class="col-md-2" >{{weekly_order_count}}</td>
+                    </tr>
+                    <tr>
+                        <th class="col-md-10">{% trans "Order Total (Rs)" %}</th>
+                        <td class="col-md-2" >{{weekly_order_total|default:'0'}}</td>
+                    </tr>
+                    <tr>
+                        <th class="col-md-10">{% trans "Order Total Earning (Rs)" %}</th>
+                        <td class="col-md-2" >{{weekly_order_earning_total|default:'0'}}</td>
+                    </tr>
+                </table>
+                <table class="display table table-striped table-bordered table-hover">
+                    <caption>
+                        <h3 class="pull-left">Weekly Orders</h3> &nbsp;
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th class="order_first">Order number</th>
+                            <th class="order_first">Customer</th>
+                            {% if user.is_superuser %}
+                            <th>Total Amount</th>
+                            <th>{% trans "Number of items" %}</th>
+                            {% endif %}
+                            <th>{% trans "Shipping address" %}</th>
+                            <th>{% trans "Date of purchase" %}</th>
+                            <th>{% trans "Status" %}</th>
+                            <th>{% trans "Payment Status" %}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for order in weekly_orders %}
+                        <tr>
+                            <td><a href="{% url 'dashboard:order-detail' number=order.number %}">{{ order.number }}</a></td>
+                            <td>
+                                {% if order.user.is_staff %}
+                                    {{order.user.first_name|title}} {{order.user.last_name|title}}
+                                {% else %}
+                                    {% if order.user.pk %}
+                                    <a href="{% url 'dashboard:user-detail' pk=order.user.pk %}">
+                                        {{order.user.first_name|title}} {{order.user.last_name|title}}
+                                    </a>
+                                    {% else %}
+                                    {{order.user.first_name|title}} {{order.user.last_name|title}}
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                            {% if user.is_superuser %}
+                            <td>{{ order.total_incl_tax|currency:order.currency }}</td>
+                            <td>{{ order.num_items }}</td>
+                            {% endif %}
+                            <td>{{ order.shipping_address|default:"-" }}</td>
+                            <td>{{ order.date_placed }}</td>
+                            <td>{{ order.status|default:"-" }}</td>
+                            <td>{{ order.get_order_payment_status_display|default:"-" }}</td>
+                            <td>
+                                <a class="btn btn-info" href="{% url 'dashboard:order-detail' number=order.number %}">{% trans "View" %}</a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td>No records</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div id="Monthly" class="tab-pane fade tab-db">
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="well">
+                    <form action="." method="get" class="form-inline" id="search_form">
+                        {% for field in form %}
+                            {% if field.id_for_label %}
+                                {% if field.is_hidden %}
+                                    {% render_field field class+='form-control' %}
+                                {% else %}
+                                    <span class="form-group{% if field.errors %} has-error{% endif %}">
+                                        {{ field.label_tag }}
+                                        {% render_field field class+='form-control' %}
+                                        {% for error in field.errors %}
+                                            <ul class="error-block">
+                                                <li>{{ error }}</li>
+                                            </ul>
+                                        {% endfor %}
+                                    </span>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        <input value="monthly" name="record_type" hidden>
+                        <input type="submit" value="{% trans 'Search' %}" class="btn btn-primary" />
+                        <a class="btn btn-default" href="{% url 'dashboard:accounts-net-profit' %}" >{% trans "Reset" %}</a>
+
+                    </form>
+                </div>
+
+                <table class="table table-striped table-bordered table-hover">
+                    <caption>
+                        <em class="icon-time"></em>
+                        {% trans "Monthly Stats Orders" %}
+                        <a href="{% url 'dashboard:accounts-export-net-profile' pk=3 %}?order_number={{request.GET.order_number}}&customer_name={{request.GET.customer_name}}&order_date={{request.GET.order_date}}&record_type=monthly" class="pull-right btn btn-xs btn-primary">
+                            <em class="icon icon-download"></em>
+                            Download
+                        </a>
+                    </caption>
+                    <tr>
+                        <th class="col-md-10">{% trans "Orders" %}</th>
+                        <td class="col-md-2" >{{monthly_order_count}}</td>
+                    </tr>
+                    <tr>
+                        <th class="col-md-10">{% trans "Order Total (Rs)" %}</th>
+                        <td class="col-md-2" >{{monthly_order_total|default:'0'}}</td>
+                    </tr>
+                    <tr>
+                        <th class="col-md-10">{% trans "Order Total Earning (Rs)" %}</th>
+                        <td class="col-md-2" >{{monthly_order_earning_total|default:'0'}}</td>
+                    </tr>
+                </table>
+                <table class="display table table-striped table-bordered table-hover month_table">
+                    <caption>
+                        <h3 class="pull-left">Monthly Orders</h3> &nbsp;
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th class="order_first">Order number</th>
+                            <th class="order_first">Customer</th>
+                            {% if user.is_superuser %}
+                            <th>Total Amount</th>
+                            <th>{% trans "Number of items" %}</th>
+                            {% endif %}
+                            <th>{% trans "Shipping address" %}</th>
+                            <th>{% trans "Date of purchase" %}</th>
+                            <th>{% trans "Status" %}</th>
+                            <th>{% trans "Payment Status" %}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for order in monthly_orders %}
+                        <tr>
+                            <td><a href="{% url 'dashboard:order-detail' number=order.number %}">{{ order.number }}</a></td>
+                            <td>
+                                {% if order.user.is_staff %}
+                                    {{order.user.first_name|title}} {{order.user.last_name|title}}
+                                {% else %}
+                                    {% if order.user.pk %}
+                                    <a href="{% url 'dashboard:user-detail' pk=order.user.pk %}">
+                                        {{order.user.first_name|title}} {{order.user.last_name|title}}
+                                    </a>
+                                    {% else %}
+                                        {{order.user.first_name|title}} {{order.user.last_name|title}}
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                            {% if user.is_superuser %}
+                            <td>{{ order.total_incl_tax|currency:order.currency }}</td>
+                            <td>{{ order.num_items }}</td>
+                            {% endif %}
+                            <td>{{ order.shipping_address|default:"-" }}</td>
+                            <td>{{ order.date_placed }}</td>
+                            <td>{{ order.status|default:"-" }}</td>
+                            <td>{{ order.get_order_payment_status_display|default:"-" }}</td>
+                            <td>
+                                <a class="btn btn-info" href="{% url 'dashboard:order-detail' number=order.number %}">{% trans "View" %}</a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td>No records</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div id="Quarterly" class="tab-pane fade tab-db">
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="well">
+                    <form action="." method="get" class="form-inline" id="search_form">
+                        {% for field in form %}
+                            {% if field.id_for_label %}
+                                {% if field.is_hidden %}
+                                    {% render_field field class+='form-control' %}
+                                {% else %}
+                                    <span class="form-group{% if field.errors %} has-error{% endif %}">
+                                        {{ field.label_tag }}
+                                        {% render_field field class+='form-control' %}
+                                        {% for error in field.errors %}
+                                            <ul class="error-block">
+                                                <li>{{ error }}</li>
+                                            </ul>
+                                        {% endfor %}
+                                    </span>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        <input value="quarterly" name="record_type" hidden>
+                        <input type="submit" value="{% trans 'Search' %}" class="btn btn-primary" />
+                        <a class="btn btn-default" href="{% url 'dashboard:accounts-net-profit' %}" >{% trans "Reset" %}</a>
+
+                    </form>
+                </div>
+
+                <table class="table table-striped table-bordered table-hover">
+                    <caption>
+                        <em class="icon-time"></em>
+                        {% trans "Quarterly Stats Orders" %}
+                        <a href="{% url 'dashboard:accounts-export-net-profile' pk=4 %}?order_number={{request.GET.order_number}}&customer_name={{request.GET.customer_name}}&order_date={{request.GET.order_date}}&record_type=quarterly" class="pull-right btn btn-xs btn-primary">
+                            <em class="icon icon-download"></em>
+                            Download
+                        </a>
+                    </caption>
+                    <tr>
+                        <th class="col-md-10">{% trans "Orders" %}</th>
+                        <td class="col-md-2" >{{quarterly_order_count}}</td>
+                    </tr>
+                    <tr>
+                        <th class="col-md-10">{% trans "Order Total (Rs)" %}</th>
+                        <td class="col-md-2" >{{quarterly_order_total|default:'0'}}</td>
+                    </tr>
+                    <tr>
+                        <th class="col-md-10">{% trans "Order Total Earning (Rs)" %}</th>
+                        <td class="col-md-2" >{{quarterly_order_earning_total|default:'0'}}</td>
+                    </tr>
+                </table>
+                <table class="display table table-striped table-bordered table-hover">
+                    <caption>
+                        <h3 class="pull-left">Quarterly Orders</h3> &nbsp;
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th class="order_first">Order number</th>
+                            <th class="order_first">Customer</th>
+                            {% if user.is_superuser %}
+                            <th>Total Amount</th>
+                            <th>{% trans "Number of items" %}</th>
+                            {% endif %}
+                            <th>{% trans "Shipping address" %}</th>
+                            <th>{% trans "Date of purchase" %}</th>
+                            <th>{% trans "Status" %}</th>
+                            <th>{% trans "Payment Status" %}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for order in quarterly_orders %}
+                        <tr>
+                            <td><a href="{% url 'dashboard:order-detail' number=order.number %}">{{ order.number }}</a></td>
+                            <td>
+                                {% if order.user.is_staff %}
+                                    {{order.user.first_name|title}} {{order.user.last_name|title}}
+                                {% else %}
+                                    {% if order.user.pk %}
+                                    <a href="{% url 'dashboard:user-detail' pk=order.user.pk %}">
+                                        {{order.user.first_name|title}} {{order.user.last_name|title}}
+                                    </a>
+                                    {% else %}
+                                        {{order.user.first_name|title}} {{order.user.last_name|title}}
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                            {% if user.is_superuser %}
+                            <td>{{ order.total_incl_tax|currency:order.currency }}</td>
+                            <td>{{ order.num_items }}</td>
+                            {% endif %}
+                            <td>{{ order.shipping_address|default:"-" }}</td>
+                            <td>{{ order.date_placed }}</td>
+                            <td>{{ order.status|default:"-" }}</td>
+                            <td>{{ order.get_order_payment_status_display|default:"-" }}</td>
+                            <td>
+                                <a class="btn btn-info" href="{% url 'dashboard:order-detail' number=order.number %}">{% trans "View" %}</a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td>No records</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div id="Annualy" class="tab-pane fade tab-db">
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="well">
+                    <form action="." method="get" class="form-inline" id="search_form">
+                        {% for field in form %}
+                            {% if field.id_for_label %}
+                                {% if field.is_hidden %}
+                                    {% render_field field class+='form-control' %}
+                                {% else %}
+                                    <span class="form-group{% if field.errors %} has-error{% endif %}">
+                                        {{ field.label_tag }}
+                                        {% render_field field class+='form-control' %}
+                                        {% for error in field.errors %}
+                                            <ul class="error-block">
+                                                <li>{{ error }}</li>
+                                            </ul>
+                                        {% endfor %}
+                                    </span>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        <input value="yearly" name="record_type" hidden>
+                        <input type="submit" value="{% trans 'Search' %}" class="btn btn-primary" />
+                        <a class="btn btn-default" href="{% url 'dashboard:accounts-net-profit' %}" >{% trans "Reset" %}</a>
+
+                    </form>
+                </div>
+
+                <table class="table table-striped table-bordered table-hover">
+                    <caption>
+                        <em class="icon-time"></em>
+                        {% trans "Yearly Stats Orders" %}
+                        <a href="{% url 'dashboard:accounts-export-net-profile' pk=5 %}?order_number={{request.GET.order_number}}&customer_name={{request.GET.customer_name}}&order_date={{request.GET.order_date}}&record_type=yearly" class="pull-right btn btn-xs btn-primary">
+                            <em class="icon icon-download"></em>
+                            Download
+                        </a>
+                    </caption>
+                    <tr>
+                        <th class="col-md-10">{% trans "Orders" %}</th>
+                        <td class="col-md-2" >{{yearly_order_count}}</td>
+                    </tr>
+                    <tr>
+                        <th class="col-md-10">{% trans "Order Total (Rs)" %}</th>
+                        <td class="col-md-2" >{{yearly_order_total|default:'0'}}</td>
+                    </tr>
+                    <tr>
+                        <th class="col-md-10">{% trans "Order Total Earning (Rs)" %}</th>
+                        <td class="col-md-2" >{{yearly_order_earning_total|default:'0'}}</td>
+                    </tr>
+                </table>
+                <table class="display table table-striped table-bordered table-hover">
+                    <caption>
+                        <h3 class="pull-left">Yearly Orders</h3> &nbsp;
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th class="order_first">Order number</th>
+                            <th class="order_first">Customer</th>
+                            {% if user.is_superuser %}
+                            <th>Total Amount</th>
+                            <th>{% trans "Number of items" %}</th>
+                            {% endif %}
+                            <th>{% trans "Shipping address" %}</th>
+                            <th>{% trans "Date of purchase" %}</th>
+                            <th>{% trans "Status" %}</th>
+                            <th>{% trans "Payment Status" %}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for order in yearly_orders %}
+                        <tr>
+                            <td><a href="{% url 'dashboard:order-detail' number=order.number %}">{{ order.number }}</a></td>
+                            <td>
+                                {% if order.user.is_staff %}
+                                    {{order.user.first_name|title}} {{order.user.last_name|title}}
+                                {% else %}
+                                    {% if order.user.pk %}
+                                    <a href="{% url 'dashboard:user-detail' pk=order.user.pk %}">
+                                        {{order.user.first_name|title}} {{order.user.last_name|title}}
+                                    </a>
+                                    {% else %}
+                                        {{order.user.first_name|title}} {{order.user.last_name|title}}
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                            {% if user.is_superuser %}
+                            <td>{{ order.total_incl_tax|currency:order.currency }}</td>
+                            <td>{{ order.num_items }}</td>
+                            {% endif %}
+                            <td>{{ order.shipping_address|default:"-" }}</td>
+                            <td>{{ order.date_placed }}</td>
+                            <td>{{ order.status|default:"-" }}</td>
+                            <td>{{ order.get_order_payment_status_display|default:"-" }}</td>
+                            <td>
+                                <a class="btn btn-info" href="{% url 'dashboard:order-detail' number=order.number %}">{% trans "View" %}</a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td>No records</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% load static %}
+{% block extrascripts %}
+
+    {{ block.super }}
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.22/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.22/datatables.min.js"></script>
+    <script>
+
+
+        $(document).ready(function() {
+            var table_attr = {
+                searching: false,
+                lengthChange: false,
+                pageLength: 20,
+                pagingType: 'simple'
+            }
+            $('table.display').DataTable(table_attr);
+
+            var url_parameter = '{{request.GET.record_type}}';
+
+            if (url_parameter == 'daily'){
+                $('[href="#Daily"]').tab('show');
+            }
+            if (url_parameter == 'weekly'){
+                $('[href="#Weekly"]').tab('show');
+            }
+            if (url_parameter == 'monthly'){
+                $('[href="#Monthly"]').tab('show');
+            }
+            if (url_parameter == 'quarterly'){
+                $('[href="#Quarterly"]').tab('show');
+            }
+            if (url_parameter == 'yearly'){
+                $('[href="#Annualy"]').tab('show');
+            }
+
+        });
+    </script>
+
+{% endblock %}

@@ -1,0 +1,314 @@
+{% extends 'dashboard/layout.html' %}
+{% load sorting_tags %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}
+    {% trans "Partners" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li class="active">{% trans "Calendar" %}</li>
+    </ul>
+{% endblock %}
+
+{% block extrastyles %}
+    <link href="{% static 'oscar/packages/fullcalendar/packages/core/main.css' %}" rel='stylesheet' />
+    <link href="{% static 'oscar/packages/fullcalendar/packages/daygrid/main.css' %}" rel='stylesheet' />
+    <link href="{% static 'oscar/packages/fullcalendar/packages/timegrid/main.css' %}" rel='stylesheet' />
+    <link href="{% static 'oscar/packages/fullcalendar/packages/list/main.css' %}" rel='stylesheet' />
+    <link href="https://cdn.jsdelivr.net/bootstrap.timepicker/0.2.6/css/bootstrap-timepicker.min.css" rel="stylesheet" />
+    <link rel='stylesheet' href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.min.css" />
+    <link rel="stylesheet" href="{% static "oscar/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" %}" />
+    <link rel="stylesheet" href="{% static "oscar/css/datetimepicker.css" %}" />
+    <style>
+        .fc-basicDay-button, .fc-basicWeek-button{
+            display:none !important;
+        }
+        #calendar{
+            margin-top:20px;
+        }
+        .col-sm-offset-5 {
+            margin-left: 43.666667%;
+        }
+        .fc-right {
+            position: absolute;
+            right: 15px;
+        }
+        .fc-center{
+            text-align : center;
+        }
+        .fc-icon{
+            line-height:0.5em;
+        }
+        .nav-tabs > li > a {
+            font-size:16px;
+        }
+        .tab-content{
+            padding:10px;
+            border:1px solid #ddd;
+            border-top:#fff;
+        }
+        .fc-month-button{
+            display:none;
+        }
+    </style>
+{% endblock %}
+
+{% block dashboard_content %}
+
+<!-- modal -->
+<div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h4 class="modal-title white-text w-100 font-weight-bold py-2">Add Notes</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{% url 'add_admin_notes' %}" method="post">
+                {% csrf_token %}
+                <div class="modal-body mx-3">
+                    <div class="md-form mb-4">
+                        <em class="fa fa-date prefix grey-text"></em>
+                        <label data-error="wrong" data-success="right" for="defaultForm-endDate">Date:</label>
+                        <input type="text" id="event_start_date" class="form-control event_start_date" name="event_start_date" readonly>
+                    </div>
+                    <div class="md-form mb-4">
+                        <label data-error="wrong" data-success="right" for="defaultForm-timepicker1">Time</label>
+                        <input id="timepicker1" type="text" class="form-control input-small" name="timepicker1">
+                    </div>
+                    <div class="md-form mb-4">
+                        <i class="fa fa-envelope prefix grey-text"></i>
+                        <label data-error="wrong" data-success="right" for="defaultForm-reason">Note:</label>
+                        <input type="text" id="reason_event" class="form-control" name="reason_event">
+                    </div>
+                    <input type="hidden" value="" id="guruji_name" name="guruji_name">
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button class="btn-cus" id="submit_event">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- modal -->
+
+<!-- modal -->
+<div id="event_alert" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Notes</h4>
+            </div>
+            <div class="modal-body">
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal -->
+
+<!-- add notes modal -->
+<div class="modal fade" id="add_notes_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h4 class="modal-title white-text w-100 font-weight-bold py-2">Add Notes</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body mx-3">
+                <div class="md-form mb-4">
+                    <em class="fa fa-date prefix grey-text"></em>
+                    <label data-error="wrong" data-success="right" for="defaultForm-endDate">Date:</label>
+                    <input type="text" id="note_start_date" class="form-control event_start_date" name="event_start_date" readonly>
+                </div>
+                <hr/>
+                <div class="md-form mb-4">
+                    <label data-error="wrong" data-success="right" for="defaultForm-timepicker1">Time</label>
+                    <input type="time" id="notes_time" name="notes_time" class="form-control">
+                </div>
+                <hr/>
+                <div class="md-form mb-4">
+                    <em class="fa fa-envelope prefix grey-text"></em>
+                    <label data-error="wrong" data-success="right" for="defaultForm-reason">Note:</label>
+                    <input type="text" id="note_details" class="form-control" name="note_details">
+                </div>
+                <hr/>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button class="btn-cus btn btn-md btn-primary" id="submit_note">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- add notes modal -->
+
+<div class="row">
+    <div class="col-md-12">
+        {% if request.user.is_superuser %}
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#home">Notes</a></li>
+            <li><a data-toggle="tab" href="#menu1">Events</a></li>
+        </ul>
+        <div class="tab-content">
+            <div id="home" class="tab-pane fade in active">
+                <div id="note_calendar"></div>
+            </div>
+            <div id="menu1" class="tab-pane fade">
+                <div id="event_calendar"></div>
+            </div>
+        </div>
+        {% else %}
+        <div class="row col-md-12">
+            <div id="event_calendar"></div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock dashboard_content %}
+
+{% block extrascripts %}
+    {{ block.super }}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.js'></script>
+    <script src="{% static "oscar/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js" %}"></script>
+    <script src="{% static "oscar/js/bootstrap-datetimepicker/locales/bootstrap-datetimepicker.all.js" %}"></script>
+    <script src="https://cdn.jsdelivr.net/bootstrap.timepicker/0.2.6/js/bootstrap-timepicker.min.js"></script>
+
+    <script>
+        function note_calendar(){
+            var e = JSON.parse('{{ notes|escapejs }}');
+            $('#note_calendar').fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,basicWeek,basicDay'
+                },
+                navLinks: false,
+                editable: false,
+                timezone: 'local',
+                aspectRatio: 3.0,
+                events: e,
+
+                // add note event
+                dayClick: function(date,jsEvent,view, resource=e){
+                    cur_date = new Date();
+                    if(date<cur_date){
+                        alert("You can not add back dated notes.");
+                    }else{
+                        $("#note_start_date").val(date.format())
+                        min_date = new Date($("#note_start_date").val())
+                        $("#event_end_date").datetimepicker({
+                            minDate: min_date,
+                            startDate: min_date
+                        })
+                        window.$("#add_notes_modal").modal("show");
+                    }
+                },
+                // add note event
+
+            });
+        }
+
+        function event_calendar(){
+            var e = JSON.parse('{{ events|escapejs }}');
+            $('#event_calendar').fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,basicWeek,basicDay'
+                },
+                navLinks: false,
+                editable: false,
+                timezone: 'local',
+                aspectRatio: 3.0,
+                events: e,
+            });
+        }
+
+        $(document).ready(function() {
+            note_calendar();
+            event_calendar();
+        });
+        $(document).ready(function () {
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            $('#event_calendar').fullCalendar('render');
+            $('#note_calendar').fullCalendar('render');
+        });
+        $('#myTab a:first').tab('show');
+        });
+
+    </script>
+
+    <script>
+        // save notes
+        $('#submit_note').on('click', function (){
+
+            var note_start_date = $('#note_start_date').val();
+            var notes_time = $('#notes_time').val();
+            var note_details = $('#note_details').val();
+
+            if (note_start_date == ''){
+                alert('Please enter valid note date.');
+                return false;
+            }
+            if (notes_time == ''){
+                alert('Please enter valid note time.');
+                return false;
+            }
+            if (note_details == ''){
+                alert('Please enter valid note details.');
+                return false;
+            }
+
+            $.ajax({
+                type:'GET',
+                url : '/create_note/',
+                data : {
+                    note_start_date: note_start_date,
+                    notes_time: notes_time,
+                    note_details: note_details,
+                },
+                success : function(data){
+                    console.log(data)
+                    if(data == 'IN_SERVER'){
+                        window.location.replace("/dashboard");
+                    }
+                    if (data == 'TRUE'){
+                        window.location.reload();
+                    }
+                },
+                failure : function(result){
+                },
+            });
+
+        });
+        // save notes
+    </script>
+
+
+<script type="text/javascript">
+  $('#timepicker1').timepicker({
+    showInputs: false
+  });
+
+</script>
+{% endblock %}
+
+

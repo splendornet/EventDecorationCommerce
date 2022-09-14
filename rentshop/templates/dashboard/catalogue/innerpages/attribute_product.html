@@ -1,0 +1,112 @@
+{% load i18n %}
+{% load common %}
+{% block product_images_content %}
+<style>
+    .tr_clone
+    {
+    display:none
+    }
+
+</style>
+<div class="table-header">
+    <h3 class="pull-left">{% trans "Attributes" %}</h3>
+    <!--    <button type="button" onclick="add_image_formset()" class="btn btn-xs btn-warning pull-right">Add attribute</button>-->
+</div>
+<div class="well">
+    {{ attribute_formset.management_form }}
+    {{ attribute_formset.non_form_errors }}
+
+    <!--    {{ attribute_formset }}-->
+    <!--    <ol id="right1">-->
+    <table class="table table-hover" id="item_table">
+        <thead>
+        <tr role="row">
+            <th>Attribute</th>
+
+            <th>Value</th>
+            <th>Remove</th>
+        </tr>
+        </thead>
+        <tbody>
+        <input type="hidden" name="form-TOTAL_FORMS" value="1" id="id_form-TOTAL_FORMS">
+        <input type="hidden" name="form-INITIAL_FORMS" value="0" id="id_form-INITIAL_FORMS">
+        <input type="hidden" name="form-MIN_NUM_FORMS" value="0" id="id_form-MIN_NUM_FORMS">
+        <input type="hidden" name="form-MAX_NUM_FORMS" value="100" id="id_form-MAX_NUM_FORMS">
+        {% for attribute_form in attribute_formset %}
+
+        <tr id="{{ attribute_form.prefix }}-row"
+            class="{% if attribute_form.attribute.value == None and forloop.counter0 > 0 or attribute_form.attribute.value == '' and forloop.counter0 > 0 %}tr_clone{% else %}empty{% endif %} {% if attribute_form.attribute.value %}has_attribute{% endif %} ">
+            <td>
+
+                <select name="attribute_mapping-{{forloop.counter0}}-attribute"
+                        id="id_attribute_mapping-{{forloop.counter0}}-attribute"
+                        onchange="get_attributechange('{{forloop.counter0}}');" style="width: 95%;" tabindex="-1"
+                        class="select2-hidden-accessible product-attr" aria-hidden="true">
+                    <option value="">--------------</option>
+                    {% for item in attribute_form.attribute %}
+                        {{item}}
+                    {% endfor %}
+                </select>
+            </td>
+            <td>
+                <select name="attribute_mapping-{{forloop.counter0}}-value"
+                        id="id_attribute_mapping-{{forloop.counter0}}-value"
+                         style="width: 95%;" tabindex="-1"
+                        class="select2-hidden-accessible product-attr-val" aria-hidden="true" multiple="true">
+                        {% if attribute_form.value.value %}
+                        {% get_only_related_values attribute_form.attribute.value attribute_form.value attribute_form.value.value as attribute_form_values %}
+                        {% for item in attribute_form.value %}
+                        {% if item.data.value in attribute_form_values %}
+                        {% check_selected item attribute_form.value.value as selected_value %}
+                        {% if selected_value.data.selected %}
+                        <option value="{{selected_value.data.value}}" selected>{{selected_value.data.value}}</option>
+                    {% else %}
+                    <option value="{{selected_value.data.value}}">{{selected_value.data.value}}</option>
+                    {% endif %}
+                    {% endif %}
+
+                    {% endfor %}
+                        {% else %}
+                        {% for item in attribute_form.value %}
+                    {% check_selected item attribute_form.value.value as selected_value %}
+                        {% if selected_value.data.selected %}
+                        <option value="{{selected_value.data.value}}" selected>{{selected_value.data.value}}</option>
+                    {% else %}
+                    <option value="{{selected_value.data.value}}">{{selected_value.data.value}}</option>
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                </select>
+
+            </td>
+            <td>
+                <main style="height:32px" class="main_{{forloop.counter0}}">
+                    {% if attribute_form.attribute.value %}
+                    <button type="button" class="btn btn-sm btn-danger btn-attribute-delete"
+                            onclick="delete_attribute('{{forloop.counter0}}')">remove
+                    </button>
+                    {% endif %}
+                </main>
+            </td>
+
+        </tr>
+        {{attribute_form.id}}
+        {% for error in attribute_form.non_field_errors %}{{error}} {% endfor %}
+
+        {% endfor %}
+
+
+        </tbody>
+    </table>
+
+    <button type="button" class="btn btn-warning addbtn" onclick="add_attribute_formset()" style="margin-right: 5px;"
+            id="add">Add Row
+    </button>
+
+    <!--        {% for attribute_form in attribute_formset %}-->
+    <!--            {% include "dashboard/partials/form_fields_inline.html" with form=attribute_form %}-->
+
+    <!--        {% endfor %}-->
+    <!--    </ol>-->
+</div>
+{% endblock product_images_content %}

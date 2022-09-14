@@ -1,0 +1,126 @@
+{% extends "layout_2_col.html" %}
+{% load i18n %}
+{% load thumbnail %}
+{% load currency_filters %}
+{% load purchase_info_tags %}
+{% load display_tags %}
+{% load reviews_tags %}
+{% load staticfiles %}
+{% load mathfilters %}
+{% load common %}
+
+{% load product_tags %}
+{% load purchase_info_tags %}
+
+{% block navigation %}
+    {% include "partials/nav_primary.html" with expand_dropdown=1 %}
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block column_left %}
+{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'oscar/css/products/about1.css' %}" type="text/css" media="screen">
+
+<style>
+    .content{
+        padding-left:20px;
+        padding-right:15px;
+        font-size:14px;
+    }
+    .container{
+        margin-bottom:20px;
+        margin-top: 40px;
+<!--        background-image:url("{% static 'oscar/images/about_us/about_us.jpg' %}") ;-->
+        background-size: cover;
+        height: auto;
+        overflow: hidden;
+        display: block;
+    }
+    h2{
+        padding-left:20px;
+    }
+    .container1{
+    margin-top:20px;
+    }
+    header a:hover {
+    color:black;
+    }
+
+</style>
+
+<div class="container1">
+    <img src="{% static 'oscar/images/about_us/about_us.jpg' %}" alt="Snow" style="width:100%;height:100%;">
+
+ <div class="centered">
+  <div class="aboutus-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="aboutus">
+                        <h2 class="aboutus-title">About Us</h2>
+						</div>
+						</div>
+                        {% if obj.content %}
+                <div class="col-md-8">
+                    <div class="aboutus">
+                        <p class="aboutus-text">  {{obj.content|safe}}
+                                            </div>
+
+    {% else %}
+						<div class="col-md-8">
+                    <div class="aboutus">
+                        <p class="aboutus-text"> Take Rent Pe is a one-stop solution for all your event needs, from Baby Shower to Naming Ceremony, From Mehandi- Haldi Ceremony to Reception, From Surprise Birthday Décor to Valentine Day Décor, we offer you the best services in a one click. We accredit Small & Medium-sized event material suppliers & event coordinators around us on one platform so that customers have ease of managing their entire event under one roof hassle-free.</p>
+                        <p class="aboutus-text">We have been in the event industry for the last 25+ years and after lots of challenges we developed such a platform where everyone can come and geared up for their event on a click. </p>
+                                            </div>
+                </div>
+				<div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="aboutus">
+						</div>
+						</div>
+				<div class="col-md-8">
+                    <div class="aboutus">
+                        <p class="aboutus-text">Take Rent Pe is an online platform that allows its users to connect the decorators and create their memorable event. The platform enables its clients to fulfil their any kind of services/ products related requirements in a convenient way.</p>
+                        <p class="aboutus-text"> Take Rent Pe is a part of the journey of every successful event, as it gives freedom for our clients & event managers to be free from all bookings and they get ample decor setup options. We provide numerous opportunities to roar and celebrate the great success of their event, we never compromise on the product quality of all the materials that are provided by us.</p>
+                                            </div>
+                </div>
+
+
+{% endif %}
+
+                <div class="col-md-5 col-sm-6 col-xs-12">
+                    <div class="feature">
+                        <div class="feature-box">
+                            <div class="clearfix">
+
+                                <div class="feature-content">
+
+                                    <p></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="feature-box">
+                            <div class="clearfix">
+
+                                <div class="feature-content">
+
+                                    <p></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="feature-box">
+                            <div class="clearfix">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div></div>
+</div>
+<br/><br/>
+
+{% endblock %}

@@ -1,0 +1,7 @@
+{% if record.table_vendor_name %}
+    <a style="text-transform:capitalize;" target="_blank" href="{% url 'dashboard:partner-manage' pk=record.table_vendor_name.id %}">
+        {{record.table_vendor_name.name}}
+    </a>
+{% else %}
+    -
+{% endif %}

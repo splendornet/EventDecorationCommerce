@@ -1,0 +1,53 @@
+<div class="">
+    <div class="col-md-2">
+        <div class="form-group fr-mt">
+            <label>Rent Quantity From:</label>
+            {{form.rent_quantity_from}}
+            <span class="form-set-error">{{form.errors.rent_quantity_from.as_text}}</span>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group fr-mt">
+            <label>Rent Quantity To:</label>
+            {{form.rent_quantity_to}}
+            <span class="form-set-error">{{form.errors.rent_quantity_to.as_text}}</span>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group fr-mt">
+            <label>Rent Req. In Days:</label>
+            {{form.rent_requirement_day}}
+        </div>
+    </div>
+    {% if product.is_transporation_available %}
+    <div class="col-md-2">
+        <div class="form-group fr-mt">
+            <label>Rent Cost (Inc TAX):</label>
+            {{form.rent_cost_incl_tax}}
+            <span class="form-set-error">{{form.errors.rent_cost_incl_tax.as_text}}</span>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group fr-mt">
+            <label>Rent Transportation (Incl TAX):</label>
+            {{form.rent_transport_cost}}
+            <span class="form-set-error">{{form.errors.rent_transport_cost.as_text}}</span>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-md-4">
+        <div class="form-group fr-mt">
+            <label>Rent Cost (Including TAX.):</label>
+            {{form.rent_cost_incl_tax}}
+            <span class="form-set-error">{{form.errors.rent_cost_incl_tax.as_text}}</span>
+        </div>
+    </div>
+    {% endif %}
+    <div class="col-md-2">
+        <div class="form-group fr-mt">
+            <label>Rent Remarks</label>
+            {{form.rent_remarks}}
+            <span class="form-set-error">{{form.errors.rent_remarks.as_text}}</span>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,130 @@
+{% extends "customer/baseaccountpage.html" %}
+{% load thumbnail %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% load common %}
+
+
+{% block tabcontent %}
+
+<script>
+     window.location = "/accounts/wishlists/";
+</script>
+
+<div class="wishlist-detail" hidden>
+        <h2>{{wishlist.name}}</h2>
+       {% if form.total_form_count %}
+        <form class="stacked" method="post">
+            {{ form.management_form }}
+            {% csrf_token %}
+            <table class="shop_table shop_table_responsive cart wishlist-table">
+                <tbody>
+                    <tr>
+                        <th>{% trans 'Product Image' %}</th>
+                        <th>{% trans 'Name' %}</th>
+                        <th>{% trans 'Price' %}</th>
+                    </tr>
+
+                    {% for subform in form %}
+
+                        {% with line=subform.instance product=subform.instance.product %}
+                            {% if product or product.is_approved == None %}
+                            <tr>
+                                <td>
+                                    {% if product.is_approved == 'Approved' %}
+
+                                        {% with image=product.primary_image %}
+                                            {% thumbnail image.original "100x100" upscale=False as thumb %}
+                                                <a href="{{ product.get_absolute_url }}">
+                                                    <img class="thumbnail" src="{{ thumb.url }}" alt="{{ product.get_title }}" />
+                                                </a>
+                                            {% empty %}
+                                                <a href="{{ product.get_absolute_url }}">
+                                                    <img class="thumbnail" src="{{ image.original.url }}" alt="{{ product.get_title }}" />
+                                                </a>
+                                            {% endthumbnail %}
+                                        {% endwith %}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if product.is_approved == 'Approved'  %}
+                                        <a href="{{ line.product.get_absolute_url }}" class="wl-pro-title">{{ line.get_title }}</a>
+                                    {% else %}
+                                        <em>{{ line.get_title }} ({% trans 'Not available anymore' %})</em>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if product.is_approved == 'Approved'  %}
+                                        {% wish_list_price request product.id as wish_list_obj %}
+                                        {% for i in wish_list_obj %}
+
+                                            {% if i.price_excl_tax %}
+                                                {{i.price_excl_tax}} &#x20b9; {% if i.rent_price %}
+                                                / {{i.rent_price}} &#x20b9;
+                                                {% endif %}
+                                            {% else %}
+                                                {{i.rent_price}} &#x20b9;
+                                            {% endif %}
+
+                                        {% endfor %}
+                                    {% endif%}
+                                </td>
+                                <!--<td>-->
+                                    <!--{% for field in subform %}-->
+                                        <!--{% render_field field class+="form-control" %}-->
+                                        <!--{% for error in field.errors %}-->
+                                            <!--<ul class="error-block">-->
+                                                <!--<li>{{ error }}</li>-->
+                                            <!--</ul>-->
+                                        <!--{% endfor %}-->
+                                    <!--{% endfor %}-->
+                                <!--</td>-->
+                                <!--<td>-->
+                                    <!--<div class="btn-group">-->
+                                        <!--{% if product %}-->
+                                            <!--<a class="btn btn-default" href="{{ line.product.get_absolute_url }}">{% trans 'View product' %}</a>-->
+                                            <!--<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">-->
+                                                <!--<span class="caret"></span>-->
+                                            <!--</button>-->
+                                        <!--{% else %}-->
+                                            <!--<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">-->
+                                                <!--{% trans 'Actions' %}-->
+                                                <!--<span class="caret"></span>-->
+                                            <!--</a>-->
+                                        <!--{% endif %}-->
+                                        <!--<ul class="dropdown-menu">-->
+                                            <!--<li><a href="{% url 'customer:wishlists-remove-product' key=wishlist.key line_pk=line.pk %}">-->
+                                                    <!--{% trans 'Remove' %}-->
+                                            <!--</a></li>-->
+                                            <!--{% for other_wishlist in other_wishlists %}-->
+                                                <!--<li><a href="{% url 'customer:wishlists-move-product-to-another' key=wishlist.key line_pk=line.pk to_key=other_wishlist.key %}">-->
+                                                        <!--{% blocktrans with name=other_wishlist.name %}-->
+                                                            <!--Move to '{{ name }}' wish list-->
+                                                        <!--{% endblocktrans %}-->
+                                                <!--</a></li>-->
+                                            <!--{% endfor %}-->
+                                        <!--</ul>-->
+                                    <!--</div>-->
+                                <!--</td>-->
+                            </tr>
+                            {% endif %}
+                        {% endwith %}
+                    {% endfor %}
+                    <!--<tr>-->
+                        <!--<td colspan="2"></td>-->
+                        <!--<td>-->
+                            <!--<button class="btn btn-primary" type="submit" data-loading-text="{% trans 'Updating...' %}">{% trans "Update quantities" %}</button>-->
+                        <!--</td>-->
+                        <!--<td></td>-->
+                    <!--</tr>-->
+                </tbody>
+            </table>
+        </form>
+
+    {% else %}
+        {% trans "Your wish list is empty." %}
+    {% endif %}
+</div>
+
+
+{% endblock tabcontent %}

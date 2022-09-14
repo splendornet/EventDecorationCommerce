@@ -1,0 +1,192 @@
+{% extends "layout_2_col.html" %}
+{% load i18n %}
+{% load thumbnail %}
+{% load currency_filters %}
+{% load purchase_info_tags %}
+{% load display_tags %}
+{% load reviews_tags %}
+{% load staticfiles %}
+{% load mathfilters %}
+{% load common %}
+
+{% load product_tags %}
+{% load purchase_info_tags %}
+
+{% block navigation %}
+    {% include "partials/nav_primary.html" with expand_dropdown=1 %}
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block column_left %}
+{% endblock %}
+
+{% block content %}
+
+<style>
+    html {
+        scroll-behavior: smooth !important;
+    }
+
+    .Sale { background-color:#F4B801 !important; } .Rent { background-color:#F4B801  !important; } .RentOrSale { background-color:#F4B801 !important; } .Service { background-color:#F4B801 !important; } .Professional{background-color:#F4B801 !important; } .Sale_after { border-color: transparent transparent #F4B801 transparent; } .Rent_after { border-color: transparent transparent #F4B801  transparent;} .RentOrSale_after { border-color: transparent transparent #F4B801 transparent; } .Service_after { border-color: transparent transparent #F4B801 transparent; } .Professional_after{border-color: transparent transparent #F4B801 transparent; } .Sale_before { border-color: transparent #F4B801 transparent transparent; } .Rent_before { border-color: transparent #F4B801  transparent transparent;} .RentOrSale_before { border-color: transparent #F4B801 transparent transparent; } .Service_before { border-color: transparent #F4B801 transparent transparent;} .Professional_before{border-color: transparent #F4B801 transparent  transparent; } .btn-link-red{ background-color: #f4b800; color: #fff !important; } .btn-link-red:hover{ background-color: #e91d4a; color: #fff !important; } .btn-gp{ margin-right:0 !important; }
+    .home-banner-img{
+     //   height:30em !important;
+    }
+    .banner-text-mr{
+      //  margin-top:-130px !important;;
+    }
+    .postid-2784 .btn-red {
+        width: auto;
+        margin-bottom: 0px !important;
+        margin-right: 10px;
+    }
+    .nz-content-box-2 .box-content {
+        margin-bottom: 0px !important;
+        height: auto !important;
+        padding-bottom: 0px !important;
+    }
+    .section-1-pr, .section-3-div{
+        padding-top:10px  !important;
+    }
+    @media only screen and (min-width: 768px) {
+        .woocommerce .products .product, .woocommerce .menu-group {
+            padding-right: 0px !important;
+            padding-left: 0px !important;
+        }
+    }
+    .mr-top-l1{
+        padding-top: 1rem !important;
+    }
+    #parallax_2{
+        margin-bottom:0px !important;
+    }
+    .owl-wrapper-outer{
+        height:auto !important;
+    }
+</style>
+
+<div id="nz-content" class='content nz-clearfix sidebar-none padding-false'>
+    <div class='page-full-width'>
+        <!-- post start -->
+        <div id="post-28" class="post-28 page type-page status-publish hentry">
+            <section class="page-content nz-clearfix">
+
+                <!-- welcome box -->
+                <!--
+                <div class="box_html welcome">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-3"><h2>Welcome</h2></div>
+                            <div class="col-sm-9 right-text">
+                                <h3>
+                                    WELCOME, IN TAKE RENT PE FAMILY!
+                                </h3>
+                                <p class="text-just">
+                                    <span class="text-center">Our digital platform enables you to décor your events with lots of fun from your home, office anywhere you want.</span><br>
+                                    Take Rent Pe is a solution providing platform for your celebration where you can book you’re A to Z decoration material on rental basis and hire professionals for your event decoration under one roof. Take Rent Pe made it’s easier for people to securely search and select require material, add to your cart and confirm your order on a single click.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                -->
+                <!-- welcome box -->
+
+                <!-- section 1 -->
+                <!-- product row -->
+                <div id="nz-discover-menu" style="padding-bottom:0;" class="section-1-pr mr-top-l1 nz-section horizontal autoheight-false animate-false full-width-false " data-img-width="3" data-img-height="3" data-animation-speed="35000" data-parallax="false">
+                    <div class="container">
+                        <div class="nz-row">
+                            {% include "promotions/partials/section_1.html" %}
+                        </div>
+                    </div>
+                </div>
+                <!-- product row -->
+                <!-- section 1 -->
+
+                <!-- empty space -->
+                <div class="nz-section horizontal autoheight-false animate-false full-width-false zigzag-top" data-img-width="13" data-img-height="8" data-animation-speed="35000" data-parallax="false" style="background-image:url();background-repeat:repeat-x;background-position:left top;background-attachment:scroll;padding-top:4px;padding-bottom:4px;">
+                    <div class="container">
+                        <div class="nz-row">
+                            <div class="col vc_col-sm-12 col12  col-animate-false" style="" data-effect="fade" data-align="left" data-margin="false">
+                                <div class="col-inner" style=""></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- empty space -->
+
+                <!-- parallax 1 -->
+                <div id="parallax_0" class="parallax">
+                    <div data-source-url="/media/takerentpe-parallax-wedding.jpg" class="home-banner-img parallax1" style="background-image: url(&quot;http://livedemo00.template-help.com/opencart_53405/image/cache/catalog/parallax-1-2050x1677.jpg&quot;); background-position: 50% 51.9385%; width: 1360px; margin-left: -680px; left: 50%;">
+                        <div class="container">
+                            <h2 class="banner-text-mr">Events Planners</h2>
+                            <a href="/catalogue/category/event-planner_169/" target="_blank">View <br> all</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- parallax 1 -->
+
+                <!-- section 2 -->
+                <div id="nz-features" class="mr-top-l1 nz-section horizontal autoheight-false animate-false full-width-false " data-animation-speed="35000" data-parallax="false">
+                    <div class="container m-less-padding">
+                        <div class="nz-row">
+                            {% include "promotions/partials/section_2.html" %}
+                        </div>
+                    </div>
+                </div>
+                <!-- section 2 -->
+
+                <!-- paralax -->
+                <div id="parallax_1" class="parallax">
+                    <div data-source-url="/media/venu.jpg" class="home-banner-img parallax1" style="background-image: url(/media/venu.jpg); background-position: 50% 51.9385%; width: 1360px; margin-left: -680px; left: 50%; ">
+                        <div class="container">
+                            <h2 class="banner-text-mr">Wedding Venues</h2>
+                            <a href="{% url 'catalogue:wedding_venue' %}" target="_blank">View <br> all</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- section 3 -->
+                <div  id="nz-features" class="mr-top-l1 nz-section horizontal service-div autoheight-false animate-false full-width-false " data-animation-speed="35000" data-parallax="false">
+                    <div class="container m-less-padding">
+                        <div class="nz-row">
+                            {% include "promotions/partials/section_3.html" %}
+                        </div>
+                    </div>
+                </div>
+                <!-- section 3 -->
+
+                <div id="parallax_2" class="parallax">
+                    <div data-source-url="/media/catering2.jpg" class="home-banner-img parallax1" style="background-image: url(/media/catering2.jpg); background-position: 50% 51.9385%; width: 1360px; margin-left: -680px; left: 50%;">
+                        <div class="container">
+                            <h2 class="banner-text-mr">Catering</h2>
+                            <a href="/catalogue/category/caterers_168" target="_blank">View <br> all</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- section 4 -->
+                <div id="nz-features" class="section-3-div nz-section horizontal autoheight-false animate-false full-width-false " data-animation-speed="35000" data-parallax="false" style="background-color:#ffffff;padding-top:70px;padding-bottom:50px;">
+                    <div class="container m-less-padding">
+                        {% recently_viewed_products current_product=product %}
+                    </div>
+                </div>
+                <!-- section 4 -->
+
+<!--                <div id="nz-features" class="nz-section horizontal autoheight-false animate-false full-width-false " data-animation-speed="35000" data-parallax="false" style="background-color:#ffffff;padding-top:70px;padding-bottom:50px;">-->
+<!--                    <hr/>-->
+<!--                    <div class="container m-less-padding">-->
+<!--                        <h1>&nbsp;</h1>-->
+<!--                        <h1>&nbsp;</h1>-->
+<!--                        <h1>&nbsp;</h1>-->
+<!--                        <h1>&nbsp;</h1>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+            </section>
+        </div>
+    </div>
+
+{% endblock content %}

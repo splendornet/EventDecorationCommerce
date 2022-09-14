@@ -1,0 +1,7 @@
+
+*.pyc
+**/.idea
+**/takerentenv
+**/media
+**/media_2
+**/static
