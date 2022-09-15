@@ -395,7 +395,7 @@ html {
   border: 2px solid ffffff;
 }
 .carousel-indicators {
-  bottom: 40px;
+  bottom: 12px;
 }
 .carousel-indicators li {
   background: #dbdbdb;

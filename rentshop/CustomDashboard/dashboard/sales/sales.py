@@ -1020,15 +1020,19 @@ class OffersPrimeBucketView(generic.ListView):
 
         basket_lines = BasketLine.objects.filter(basket__id__in=queryset.values('basket_id'))
         basket_id_list = []
-        for basket_line in basket_lines:
-            category_name_lst = list(
-                basket_line.product.categories.last().get_ancestors().values_list('name', flat=True))
-            category_name_lst.append(basket_line.product.categories.last().name)
+        ###### alteration if query didn't able to execute
+        try:
+            for basket_line in basket_lines:
+                category_name_lst = list(
+                    basket_line.product.values_list('name', flat=True))
+                category_name_lst.append(basket_line.product.categories.last().name)
+
 
             if any(name in category_name_lst for name in offers_cat_list):
                 basket_id_list.append(basket_line.basket.id)
-        offers_queryset = queryset.filter(basket_id__in=basket_id_list)
-        return offers_queryset
+        except:
+            offers_queryset = queryset.filter(basket_id__in=basket_id_list)
+            return offers_queryset
 
 
 class OffersOrderReallocate(generic.ListView):
@@ -1091,14 +1095,16 @@ class OffersOrderReallocate(generic.ListView):
 
         basket_lines = BasketLine.objects.filter(basket__id__in=queryset.values('basket_id'))
         basket_id_list = []
-        for basket_line in basket_lines:
-            category_name_lst = list(basket_line.product.categories.last().get_ancestors().values_list('name', flat=True))
-            category_name_lst.append(basket_line.product.categories.last().name)
+        try:
+            for basket_line in basket_lines:
+                category_name_lst = list(basket_line.product.categories.last().get_ancestors().values_list('name', flat=True))
+                category_name_lst.append(basket_line.product.categories.last().name)
 
-            if any(name in category_name_lst for name in offers_cat_list):
-                basket_id_list.append(basket_line.basket.id)
-        offers_queryset = queryset.filter(basket_id__in=basket_id_list)
-        return offers_queryset
+                if any(name in category_name_lst for name in offers_cat_list):
+                    basket_id_list.append(basket_line.basket.id)
+        except:
+            offers_queryset = queryset.filter(basket_id__in=basket_id_list)
+            return offers_queryset
 
 
 def export_offers_prime_bucket(request):

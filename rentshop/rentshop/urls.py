@@ -172,7 +172,8 @@ urlpatterns = [
     # admin url
     url('admin/', admin.site.urls),
     url(r'^i18n/', include('django.conf.urls.i18n')),
-
+    url('master/', include(('master_access.urls','master_access'),namespace='master')),
+    
     # packages imports
     url(r'^select2/', include('django_select2.urls')),
     url(r'^captcha/', include('captcha.urls')),

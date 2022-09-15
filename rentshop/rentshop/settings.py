@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'payu',
     'RentCore',
     'embed_video',
+    'master_access',
 ]+ get_core_apps(
     [
         'CustomCatalogue.catalogue',
