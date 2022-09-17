@@ -211,10 +211,10 @@ background-color:white;
                     </div>
                     <ul class="list-inline pull-right">
 
-                        <li>
+                        <!-- <li>
                             <a href="{% url 'checkout:billing_address' fill_form=1 %}"> <button type="button" class="btn btn-default prev-step" id="prev-btn">Previous</button></a>
 
-                        </li>
+                        </li> -->
 
                         <li>
                             <button type="submit" class="btn btn-warning " data-loading-text="{% trans 'Continuing...' %}">{% trans "Save and Continue" %}</button>
@@ -244,7 +244,11 @@ background-color:white;
 {{block.super}}
 
 
-
+<script>
+    $("[name*='first_name']").val('{{request.user.first_name}}')
+    $("[name*='last_name']").val('{{request.user.last_name}}')
+    $("[name*='phone_number']").val('{{phone_number}}')
+</script>
 <script>
     $(document).ready(function () {
 

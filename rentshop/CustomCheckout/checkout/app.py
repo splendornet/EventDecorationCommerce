@@ -21,7 +21,7 @@ class CheckoutApplication(CoreCheckoutApplication):
         urlpatterns = super(CheckoutApplication, self).get_urls()
         urlpatterns += [
             url(r'^billing_address/(?P<fill_form>\d+)', self.billing_address.as_view(), name='billing_address'),
-            url(r'^shipping_address', self.shipping_address_view.as_view(), name='shipping_address'),
+            url(r'^shipping_address/', self.shipping_address_view.as_view(), name='shipping_address'),
             path('', self.index_view.as_view(), name='index'),
 
         ]

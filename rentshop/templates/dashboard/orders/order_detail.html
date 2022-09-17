@@ -141,8 +141,15 @@
                                             <br/>
                                             {% if not line.is_line_package_product %}
                                                 {% if line.product_invoice %}
+                                                {%if order.status == 'Completed'%}    
+                                                {% if order.get_order_payment_status_display == 'Initiated'%}
+                                                        
+                                                        <a href="#" style="font-size:10px;" class="btn btn-xs btn-primary" onclick="alert('Please complete your payment')">Invoice</a>
+                                                    {%else%}   
                                                     <a href="{{line.product_invoice}}" style="font-size:10px;" target="_blank" class="btn btn-xs btn-primary">Invoice</a>
-                                                {% else %}
+                                                    {%endif%}
+                                                    {%endif%}
+                                                    {% else %}
                                                     <button type="button" class="btn btn-xs btn-primary" disabled>Invoice</button>
                                                 {% endif %}
                                             {% endif %}
@@ -161,13 +168,17 @@
                                             <a href="{% if line.product.id %}{%  url 'dashboard:catalogue-product' pk=line.product.id %} {% else %} # {% endif %}" target="_blank">{{ line.title }}</a>
                                             <br>
                                             {% if line.product_invoice %}
-                                                <a href="{{line.product_invoice}}" style="font-size:10px;" target="_blank" class="btn btn-xs btn-primary">Invoice</a>
-                                            {% else %}
+                                            {%if order.status == 'Completed'%}
+                                            <a href="{{line.product_invoice}}" style="font-size:10px;" target="_blank" class="btn btn-xs btn-primary">Invoice</a>
+                                            {%endif%}
+
                                                 <button type="button" class="btn btn-xs btn-primary" disabled>Invoice</button>
                                             {% endif %}
                                         </td>
                                         {% endif %}
-                                        <td>{{ line.upc|default:"-" }}</td>
+                                        <td>
+                                            {{ line.upc|default:"-" }}
+                                        </td>
                                         <td>
                                             {% if line.order_type == 'Sale' %}
                                                 -
