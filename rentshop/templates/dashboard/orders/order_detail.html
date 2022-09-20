@@ -204,6 +204,9 @@
                                             {% else %}
                                                 {{ line.partner|default:"-"}}
                                             {% endif %}
+                                            {% if not line.final_payment%}
+                                            <a class="btn btn-primary" href="/dashboard/partners/prime/prime-order-allocate/{{line.order.number}}/" style="font-size: 9px;">Change ASP</a>
+                                            {% endif %}
                                         </td>
                                         <td>
                                             {{line.shipping_charges|default:'0'}}
