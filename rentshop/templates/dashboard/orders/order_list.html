@@ -170,9 +170,10 @@
                                     </button>
                                     <ul class="dropdown-menu pull-right">
                                         <li><a href="{% url 'dashboard:order-detail' number=order.number %}">{% trans "View" %}</a></li>
-                                        {% if order.get_order_payment_status_display == 'Initiated' %}
+                                        <!-- {% if order.get_order_payment_status_display == 'Initiated' %} -->
+                                        <!-- <li><a href="#" onclick="delete_order('{{order.number}}')">{% trans "Delete" %}</a></li> -->
+                                        <!-- {% endif %} -->
                                         <li><a href="#" onclick="delete_order('{{order.number}}')">{% trans "Delete" %}</a></li>
-                                        {% endif %}
                                     </ul>
                                 </div>
                             </div>
