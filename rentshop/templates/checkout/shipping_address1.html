@@ -187,7 +187,7 @@ background-color:white;
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label for="id_line4">City</label>
+                                        <label for="id_line4" id="city_label">City</label>
                                         <select name="city" class="form-control" id="id_city" required>
                                             <option value="">City</option>
                                         </select>
@@ -253,8 +253,12 @@ background-color:white;
     $(document).ready(function () {
 
         // state on change
+        
+        
         $('#id_state_raw').on('change', function(){
+            $('#id_state').val('1')
             $('#id_state').val($("#id_state_raw option:selected").text());
+            
             $('#id_city').empty().append('<option selected="selected" value="">Select City</option>');
             $.ajax({
                 type:'GET',
