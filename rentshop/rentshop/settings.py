@@ -518,13 +518,13 @@ CONTACT_ADMIN_EMAIL = ['rmtest08@gmail.com', 'p.mohadikar@splendornet.com']
 
 FOOTER_TERM = 'Copyright © 2018-2019 Take Rent Pe, All rights reserved'
 
-SITE_URL = 'http://takerentpe-dev.progfeel.co.in'
+SITE_URL = 'https://beta.takerentpe.com'
 
 # CC AVE
 CC_URL = ' https://test.ccavenue.com'
 CC_MERCHANT_ID = '198605'
-CC_ACCESS_CODE = 'AVYF81FK72BH23FYHB'
-CC_WORKING_KEY = 'D354E70142D2966BD4D7D006D13568E3'
+CC_ACCESS_CODE = 'AVGU03HL59BJ04UGJB'
+CC_WORKING_KEY = 'EAFB2FADC35B0BF64C964204D7008EB0'
 CC_CURRENCY = 'INR'
 CC_LANG = 'EN'
 CC_BILL_CONTRY = 'India'

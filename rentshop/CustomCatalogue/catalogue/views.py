@@ -1279,7 +1279,8 @@ def get_total_price_new(request):
                 return HttpResponse(status)
 
             prod = prod_obj.last()
-
+            if quantity>prod.daily_capacity:
+                return HttpResponse(420)
             if prod.product_cost_type != 'Multiple':
                 price_obj = prod.stockrecords.last()
                 price1 = get_price_new(price_obj,flower_type)

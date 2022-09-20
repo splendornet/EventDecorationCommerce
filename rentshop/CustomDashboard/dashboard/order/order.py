@@ -552,6 +552,21 @@ class CustomOrderDetailView(OrderDetailView):
             messages.error(request, _("Unable to change order status as the requested new status is not valid"))
         else:
             messages.info(request, success_msg)
+            ##########send order completed msg
+
+            try:
+                mobile_number = order.user.profile_user.mobile_number
+
+            # message = 'Your full payment is successfully received for Order No. '+ str(order.number)+''
+                message = 'Your Order No. '+ str(order.number)+'  is '+str(new_status).lower()+' successfully. Take Rent Pe.'
+                msg_kwargs = {
+                   'message': message,
+                    'mobile_number': mobile_number,
+                }
+
+                send_sms(**msg_kwargs)
+            except:
+                messages.error(request, "No number is attached to user to sent message")
         return self.reload_page()
 
     def create_order_payment_event(self, request, order):
@@ -648,11 +663,12 @@ class CustomOrderDetailView(OrderDetailView):
                         email.send()
 
                         #send sms to client FULL PAYMENT
-                        if order.user.is_staff:
-                            active_user = User.objects.filter(id= order.user.id).values_list('id')
-                            active_partner = Partner.objects.filter(users__in=active_user)
-                            mobile_number = active_partner.last().telephone_number
-                        else:
+                        try:
+                            if order.user.is_staff:
+                                active_user = User.objects.filter(id= order.user.id).values_list('id')
+                                active_partner = Partner.objects.filter(users__in=active_user)
+                                mobile_number = active_partner.last().telephone_number
+                        except:
                             mobile_number = order.user.profile_user.mobile_number
 
                         # message = 'Your full payment is successfully received for Order No. '+ str(order.number)+''
