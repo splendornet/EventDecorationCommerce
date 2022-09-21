@@ -25,6 +25,7 @@ from oscar.apps.checkout import signals
 
 # internal imports
 from .utils import *
+from CustomCustomer.customer.models import CustomProfile
 
 # model/class imports
 
@@ -64,6 +65,10 @@ class CustomShippingAddressView(ShippingAddressView):
         ctx = super(CustomShippingAddressView, self).get_context_data(**kwargs)
 
         if self.request.user.is_authenticated:
+            try:
+                ctx['phone_number']=CustomProfile.objects.get(user=self.request.user.id).mobile_number
+            except:
+                pass
             ctx['addresses'] = self.get_available_addresses()
 
         ctx['states'] = States.objects.all().order_by('state_name')
@@ -265,6 +270,7 @@ def payment_success(request):
 
         order_data = {
             'order_payment_status': pay_status,
+            
             'status': 'Initiated'
         }
 
@@ -368,7 +374,7 @@ def payment_success(request):
             print('-----------in exception----------')
 
         allocate_vendor(order_number)
-
+        messages.success("Payment recieved successfully")
         return redirect('/')
 
     except Exception as e:

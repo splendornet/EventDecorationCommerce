@@ -110,8 +110,9 @@
         <div class="wizard-inner">
         <div class="connecting-line"></div>
         <ul class="nav nav-tabs step-checkout-form">
-            <li class="step1 active">
-                {% with data=request.META.HTTP_REFERER %}
+            {% with data=request.META.HTTP_REFERER %}
+            <!-- <li class="step1 active">
+
                 {% check_end data as checked_data %}
 
                 <a href="{% if checked_data %}{% url 'checkout:billing_address' fill_form=0 %} {% else %} {% url 'checkout:billing_address' fill_form=1 %} {% endif %}" data-toggle="tooltip" data-placement="top" title="Billing Details">
@@ -120,9 +121,9 @@
                         </span>
                 </a>
 
-            </li>
+            </li> -->
             <li class="step2 disabled">
-                <a href="{% if checked_data %}#{% else %}{% url 'checkout:shipping-address' %}{% endif %}" data-toggle="tooltip" data-placement="top" title="Delivery Address">
+                <a href="{% url 'checkout:shipping-address' %}" data-toggle="tooltip" data-placement="top" title="Delivery Address">
 <!--                <span class="navbar-text">-->
                     <span class="round-tab">
                     <span class="glyphicon glyphicon-map-marker"></span>

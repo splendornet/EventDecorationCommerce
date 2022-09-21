@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'HeaderMenu',
     'captcha',
     'payu',
+    'master_access',
 ]+ get_core_apps(
     [
         'CustomCatalogue.catalogue',

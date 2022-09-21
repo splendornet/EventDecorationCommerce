@@ -771,6 +771,16 @@
                         position: 'bottom-right',
                     });
                 }
+                else if(data == 420){
+                    $.toast({
+                        heading: 'Warning',
+                        text: `Daily Limit Exceeded (Limit ${$("#id_quantity").val()}).`,
+                        icon: 'warning',
+                        loader: true,
+                        loaderBg: '#9EC600',
+                        position: 'bottom-right',
+                    });
+                }
                 else if(data.status == 204){
                 document.getElementById("snt-normal-price").innerHTML =  data.total_price;
                 document.getElementById("snt-normal-ship").innerHTML =  data.shipping_price;

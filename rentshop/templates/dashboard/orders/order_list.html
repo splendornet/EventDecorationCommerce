@@ -162,7 +162,21 @@
                         <td>{{ order.status|default:"-" }}</td>
                         <td>{{ order.get_order_payment_status_display|default:"-" }}</td>
                         <td>
-                            <a class="btn btn-info" href="{% url 'dashboard:order-detail' number=order.number %}">{% trans "View" %}</a>
+                            <div class="btn-toolbar">
+                                <div class="btn-group">
+                                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
+                                        {% trans "Actions" %}
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li><a href="{% url 'dashboard:order-detail' number=order.number %}">{% trans "View" %}</a></li>
+                                        <!-- {% if order.get_order_payment_status_display == 'Initiated' %} -->
+                                        <!-- <li><a href="#" onclick="delete_order('{{order.number}}')">{% trans "Delete" %}</a></li> -->
+                                        <!-- {% endif %} -->
+                                        <li><a href="#" onclick="delete_order('{{order.number}}')">{% trans "Delete" %}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 {% endfor %}
@@ -222,6 +236,18 @@
         <script src="{% static 'oscar/js/dashboard/orders/order_list.js' %}"></script>
         <script>
             category_auto_select();
+        </script>
+        <script>
+            function delete_order(number){
+                a=confirm(" Are you sure to delete order.")
+                if (a){
+                    $.ajax({
+                    url:`/master/orders/`+number+`/delete/`,
+                    method:'GET'
+                }).done(window.location.reload())
+                }
+                
+            }
         </script>
         <script>
             $(document).ready(function() {

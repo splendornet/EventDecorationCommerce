@@ -16,9 +16,9 @@ class CustomShippingAddressForm(ShippingAddressForm):
     state = forms.CharField(min_length=2, max_length=100, label=('State'), validators=[RegexValidator('^([A-Za-z])+$', message='Enter a valid state name.')],required=False)
     notes = forms.CharField(max_length=225, required=False, widget=forms.Textarea)
     country = forms.ModelChoiceField(queryset=Country_Country.objects.filter(country_name='India'), initial='India')
-    phone_number = forms.CharField(max_length=10,min_length=10)
+    phone_number = forms.CharField(max_length=15,min_length=10)
     line1 = forms.CharField(max_length=100, min_length=2, validators=[RegexValidator('^[ A-Za-z0-9_,/.@-]*$',
-                                                                                     message='Enter a valid address line 1. Only allowed (Alphabets, numbers and @-,/_.)')])
+                                                                                     message='Enter a valid address line 1. Only allowed (Alphabets, numbers and @-,/_.)')],required=True)
     postcode = forms.CharField(max_length=10)
 
     def __init__(self, *args, **kwargs):
@@ -65,14 +65,23 @@ class CustomShippingAddressForm(ShippingAddressForm):
 class CustomBillingAddressForm(forms.ModelForm):
 
 
+    # first_name = forms.CharField(min_length=2, max_length=20, validators=[RegexValidator('^([A-Za-z])+$', message='Enter a valid first name.')])
+    # last_name = forms.CharField(min_length=2, max_length=20, validators=[RegexValidator('^([A-Za-z])+$', message='Enter a valid last name.')])
+    # line4 = forms.CharField(min_length=2, max_length=100, label=('City'), validators=[RegexValidator('^([A-Za-z])+$', message='Enter a valid city name.')])
+    # state = forms.CharField(min_length=2, max_length=100, label=('State'), validators=[RegexValidator('^([A-Za-z])+$', message='Enter a valid state name.')])
+    # country = forms.ModelChoiceField(queryset=Country_Country.objects.filter(country_name='India'), initial='India')
+    # line1 = forms.CharField(max_length=100, min_length=2, validators=[RegexValidator('^[ A-Za-z0-9_,/.@-]*$',
+    #          message='Enter a valid address line 1. Only allowed (Alphabets, numbers and @-,/_.)')])
+    # postcode = forms.CharField(max_length=10)
+    
     first_name = forms.CharField(min_length=2, max_length=20, validators=[RegexValidator('^([A-Za-z])+$', message='Enter a valid first name.')])
     last_name = forms.CharField(min_length=2, max_length=20, validators=[RegexValidator('^([A-Za-z])+$', message='Enter a valid last name.')])
-    line4 = forms.CharField(min_length=2, max_length=100, label=('City'), validators=[RegexValidator('^([A-Za-z])+$', message='Enter a valid city name.')])
-    state = forms.CharField(min_length=2, max_length=100, label=('State'), validators=[RegexValidator('^([A-Za-z])+$', message='Enter a valid state name.')])
+    line4 = forms.CharField(min_length=2, max_length=100, label=('City'), validators=[RegexValidator('^([A-Za-z])+$', message='Enter a valid city name.')],required=False)
+    state = forms.CharField(min_length=2, max_length=100, label=('State'), validators=[RegexValidator('^([A-Za-z])+$', message='Enter a valid state name.')],required=False)
     country = forms.ModelChoiceField(queryset=Country_Country.objects.filter(country_name='India'), initial='India')
-    line1 = forms.CharField(max_length=100, min_length=2, validators=[RegexValidator('^[ A-Za-z0-9_,/.@-]*$',
+    line1 = forms.CharField(max_length=100, validators=[RegexValidator('^[ A-Za-z0-9_,/.@-]*$',
              message='Enter a valid address line 1. Only allowed (Alphabets, numbers and @-,/_.)')])
-    postcode = forms.CharField(max_length=10)
+    postcode = forms.CharField(max_length=10, required=False)
     class Meta:
         model = CustomBillingAddress
         fields = (
