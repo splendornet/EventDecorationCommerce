@@ -240,10 +240,8 @@
             function delete_order(number){
                 a=confirm(" Are you sure to delete order.")
                 if (a){
-                    $.ajax({
-                    url:`/master/orders/`+number+`/delete/`,
-                    method:'GET'
-                }).done(window.location.reload())
+                    url=`/master/orders/`+number+`/delete/`,
+                    window.location=url
                 }
                 
             }

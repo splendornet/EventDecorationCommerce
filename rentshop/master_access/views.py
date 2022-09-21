@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from CustomOrder.order.models import Order, Line
 from CustomPartner.partner.models import MultiDB
 from django.http import JsonResponse
@@ -7,15 +8,15 @@ from django.http import JsonResponse
 
 # Create your views here.
 
-
+@login_required
 def delete_order(request,number=None):
     order=Order.objects.get(number=number)
-    order.delete()
+    # order.delete()
     print(f"Order {number} deleted Successully")
-    # messages.success(request,"Order deleted successfully")
+    messages.success(request,"Order deleted successfully")
     return redirect('/dashboard/orders/')
 
-
+@login_required
 def change_asp(request,order_number=None,partner_id=None):
     if request.method=="GET":
 

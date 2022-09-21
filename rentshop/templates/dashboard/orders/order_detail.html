@@ -200,13 +200,14 @@
                                         <td>
                                             
                                             {% if line.allocated_order_line.all %}
-                                                {{ line.allocated_order_line.last.vendor }}
+                                                {{ line.allocated_order_line.last.vendor }}<br>
                                             {% else %}
                                                 {{ line.partner|default:"-"}}
+                                                 {% if not line.final_payment%}
+                                                 &nbsp;&nbsp;<a class="btn btn-primary" href="/dashboard/partners/prime/prime-order-allocate/{{line.order.number}}/" style="font-size: 9px;">Allocate ASP</a>
+                                                {% endif %}
                                             {% endif %}
-                                            {% if not line.final_payment%}
-                                            <a class="btn btn-primary" href="/dashboard/partners/prime/prime-order-allocate/{{line.order.number}}/" style="font-size: 9px;">Change ASP</a>
-                                            {% endif %}
+                                           
                                         </td>
                                         <td>
                                             {{line.shipping_charges|default:'0'}}
@@ -214,6 +215,8 @@
                                         {% if order.status == 'Completed' %}
                                             {% if line.final_payment %}
                                                 <td>Final Payment Received</td>
+                                            {% elif not line.allocated_order_line.last.vendor%}
+                                            <a class="btn-success" href="#" onclick="alert('Please allocate asp for this order')">Final Payment</button>
                                             {% else %}
                                                 <td>
                                                     <form action="." method="post" class="pull-left flat">
