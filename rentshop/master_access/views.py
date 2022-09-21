@@ -11,7 +11,7 @@ from django.http import JsonResponse
 @login_required
 def delete_order(request,number=None):
     order=Order.objects.get(number=number)
-    # order.delete()
+    order.delete()
     print(f"Order {number} deleted Successully")
     messages.success(request,"Order deleted successfully")
     return redirect('/dashboard/orders/')
