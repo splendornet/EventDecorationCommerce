@@ -292,7 +292,11 @@
                             {% if order_status_form.has_choices %}
                                 {% include "dashboard/partials/form_fields.html" with form=order_status_form %}
                                 <input type="hidden" value="change_order_status" name="order_action" />
+                                {% if line.partner %}
+                                <button type="button" class="btn btn-primary" onclick="alert('Please allocate ASP to change order status')">Change status</button>
+                                {% else %}
                                 <button type="button" class="btn btn-primary" onclick="confirm_order_status()">Change status</button>
+                                {% endif %}
                             {% else %}
                                 {% trans "This order can't have its status changed." %}
                             {% endif %}
