@@ -256,7 +256,6 @@ background-color:white;
         
         
         $('#id_state_raw').on('change', function(){
-            $('#id_state').val('1')
             $('#id_state').val($("#id_state_raw option:selected").text());
             
             $('#id_city').empty().append('<option selected="selected" value="">Select City</option>');

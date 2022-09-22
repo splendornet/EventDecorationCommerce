@@ -71,7 +71,7 @@
                                 -
                             {% endfor %}
                         </td>
-                        <td class="no-border text-right">
+                        <!-- <td class="no-border text-right">
                             {% if order.get_billing_address %}
                                 {% for field in order.get_billing_address %}
                                     {{ field }}<br/>
@@ -81,7 +81,7 @@
                                     {{ field }}<br/>
                                 {% endfor %}
                             {% endif %}
-                        </td>
+                        </td> -->
                     </tr>
                     </tbody>
                 </table>
@@ -97,7 +97,7 @@
                             <strong>PAN No:</strong> {{vendor.pan_number|default:'-'}} <br/>
                             <strong>GST Registration No:</strong> {{vendor.gst_number|default:'-'}}
                         </th>
-                        <th class="no-border text-right">Shipping Address :</th>
+                        <th class="no-border text-right">Billing/ Shipping Address :</th>
                     </tr>
                     </thead>
                     <tbody class="no-border">
