@@ -662,6 +662,7 @@ class CustomOrderDetailView(OrderDetailView):
                         email.content_subtype = "html"
                         email.send()
 
+                        mobile_number=None
                         #send sms to client FULL PAYMENT
                         try:
                             if order.user.is_staff:
