@@ -287,7 +287,7 @@ background-color:white;
         var x_city = $('#id_line4').val();
         //if(path_current == '/checkout/billing_address/1'){
         if(x_state && x_city){
-            var state = $('#id_state').val();
+            var state = $('#id_state_raw').val();
             var city = $('#id_line4').val();
             $.get('/get_state_id/?state_name='+state, function(data) {
                 $("#id_state_raw").val(data);
