@@ -96,6 +96,7 @@
                         <h1 class="trp-product-listing-title">{{ title }}</h1>
                     </div>
                     <div class="col-sm-4">
+                        {% if products %}
                         <select class="trp-price-range form-control mt-10" name="price-range" id="price-range" onchange="add_price_filter()">
                             <option value=''>Select Price Range</option>
                             {% for k,v in price_filter %}
@@ -106,6 +107,7 @@
                                 {% endif %}
                             {% endfor %}
                         </select>
+                        {% endif %}
                     </div>
                 </div>
             </div>
