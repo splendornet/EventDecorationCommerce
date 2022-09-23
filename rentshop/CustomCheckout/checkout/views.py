@@ -374,8 +374,9 @@ def payment_success(request):
             print('-----------in exception----------')
 
         allocate_vendor(order_number)
+        
         messages.success("Payment recieved successfully")
-        return redirect('/')
+        return redirect('/accounts/orders/')
 
     except Exception as e:
 
