@@ -238,7 +238,7 @@
         </script>
         <script>
             function delete_order(number){
-                a=confirm(" Are you sure to delete order.")
+                a=confirm(" Order are linked still want to delete?")
                 if (a){
                     url=`/master/orders/`+number+`/delete/`,
                     window.location=url
