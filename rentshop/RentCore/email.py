@@ -81,8 +81,10 @@ def send_sms(**msg_kwargs):
     pwd = settings.SMS_PASS
 
     # url = 'http://sms.vndsms.com/vendorsms/pushsms.aspx?user=' + str(user) + '&password=' + str(pwd) + '&msisdn=' + str(mobile_number) + '&sid=VISION&msg=' + str(message) + '&fl=0&gwid=2'
-    url = 'http://dlt.vndsms.com/api/mt/SendSMS?user=' + str(user) + '&password=' + str(pwd) + '&senderid=TRPGMP&channel=Trans&DCS=0&flashsms=0&number=' + str(91)+str(mobile_number) + '&text=' + str(message) + '&peid=1201161131173430752'
+    # url = 'http://dlt.vndsms.com/api/mt/SendSMS?user=' + str(user) + '&password=' + str(pwd) + '&senderid=TRPGMP&channel=Trans&DCS=0&flashsms=0&number=' + str(91)+str(mobile_number) + '&text=' + str(message) + '&peid=1201161131173430752'
     # url = 'http://sms2.vndsms.com/sendsms/bulksms.php?username=takerentpe&password=123456&type=TEXT&sender=TRPGMP&entityId=1201161131173430752&mobile=' + str(91)+str(mobile_number) + '&message='+ str(message)
+    
+    url = 'http://sms2.vndsms.com/sendsms/bulksms_v2.php?apikey=dGFrZXJlbnRwZTpTc1VUM3E3bA==&type=TEXT&sender=TRPGMP&entityId=1201161131173430752&mobile=' + str(91)+str(mobile_number) + '&message='+ str(message)
     print(url)
     responce = requests.get(url)
     print(responce.content)

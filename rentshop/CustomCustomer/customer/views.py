@@ -890,7 +890,7 @@ def get_vendor_otp(request):
         # integrate SMS Gateway
 
         message = "Otp is sent on your mobile number."
-        sms_message = str(random_str) + " iis One-Time Password for your Take Rent Pe account, valid for 10 minutes only. Please do not share your OTP with anyone. Take Rent Pe"
+        sms_message = str(random_str) + " is One-Time Password for your Take Rent Pe account, valid for 10 minutes only. Please do not share your OTP with anyone."
         sms_kwargs = {
             'message': sms_message,
             'mobile_number': mobile_number
