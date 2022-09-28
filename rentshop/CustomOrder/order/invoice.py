@@ -45,7 +45,7 @@ def generate_order_summary(order):
     html = template.render(context)
     # create pdf body
     try:
-        pdf_path1="opt/takerentpe-dev/rentshop/"+pdf_path
+        pdf_path1="/opt/takerentpe-dev/rentshop/"+pdf_path
         pdfkit.from_string(
             html, pdf_path1, options=options
         )
@@ -78,7 +78,7 @@ def generate_order_invoice(order):
     html = template.render(context)
     # create pdf body
     try:
-        pdf_path1="opt/takerentpe-dev/rentshop/"+pdf_path
+        pdf_path1="/opt/takerentpe-dev/rentshop/"+pdf_path
         pdfkit.from_string(
             html, pdf_path1, options=options
         )
@@ -112,7 +112,7 @@ def generate_order_invoice_product(line, order):
     html = template.render(context)
     # create pdf body
     try:
-        pdf_path1="opt/takerentpe-dev/rentshop/"+pdf_path
+        pdf_path1="/opt/takerentpe-dev/rentshop/"+pdf_path
         pdfkit.from_string(
             html, pdf_path1, options=options
         )
