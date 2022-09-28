@@ -410,7 +410,7 @@
                 <div class="row">
                   <div class="col-sm-6 col-md-5 ">
                     <p class="trp-booking-label mb-5">Select Booking Date</p>
-                      <input class="product-date-picker" id="id_daterange" type="text" name="daterange" value="" {% if product.product_class.name != 'Sale'  %} onchange="check_date(this)" {% endif %}/>
+                      <input class="product-date-picker" id="id_daterange" style="width: 130%;" type="text" name="daterange" value="" {% if product.product_class.name != 'Sale'  %} onchange="check_date(this)" {% endif %}/>
                   </div>
                 </div>
               </div>
@@ -512,7 +512,9 @@
                 </ul>
 
                 <div class="tab-content ">
+                    
                     <div class="tab-pane active" id="productDescription">
+                        
                         {{ product.description|safe}}
                     </div>
                     <div class="tab-pane" id="productDetails">
