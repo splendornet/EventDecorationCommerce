@@ -1195,7 +1195,7 @@ def generate_order_summary(order):
     from django.template.loader import get_template
 
     pdf_name = 'order_summary_%s.pdf' % (str(order.number))
-    pdf_path = 'media/order_summary/' + pdf_name
+    pdf_path = current_site.domain + 'media/order_summary/' + pdf_name
 
     options = {}
 
