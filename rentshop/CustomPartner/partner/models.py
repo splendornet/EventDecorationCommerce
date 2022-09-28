@@ -348,7 +348,9 @@ class IndividualDB(models.Model):
         for individual_asp in self.individual_asp.all():
             ret = ret + individual_asp.name + ','
         return ret[:-1]
-
+    def __str__(self):
+        return self.category.name
+        
 class VendorProductStatus(models.Model):
 
     date_created = models.DateTimeField(auto_now_add=True)
