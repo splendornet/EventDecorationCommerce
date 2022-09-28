@@ -59,7 +59,9 @@ def generate_order_invoice(order):
     from django.template.loader import get_template
 
     pdf_name = 'order_invoice_%s.pdf' % (str(order.number))
-    pdf_path = 'media/order_summary/' + pdf_name
+    # pdf_path = 'media/order_summary/' + pdf_name
+
+    pdf_path = '/opt/takerentpe-dev/rentshop/media/order_summary/' + pdf_name
 
     options = {}
 
@@ -91,7 +93,9 @@ def generate_order_invoice_product(line, order):
     from django.template.loader import get_template
 
     pdf_name = pdf_name = 'order_invoice_%s_%s_%s.pdf' % (str(order.number), str(line.partner.id), (line.product.id))
-    pdf_path = 'media/order_summary/' + pdf_name
+    # pdf_path = 'media/order_summary/' + pdf_name
+
+    pdf_path = '/opt/takerentpe-dev/rentshop/media/order_summary/' + pdf_name
 
     options = {}
     vendor = Partner.objects.get(id=line.partner.id)
