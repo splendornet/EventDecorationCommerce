@@ -203,9 +203,9 @@
                                             
                                             {% if line.allocated_order_line.all %}
                                                 {{ line.allocated_order_line.last.vendor }}<br>
-                                                <!-- {% if line.final_payment %}
-                                                <a href="#" class="btn btn-success" style="font-size: 9px;">Re-Generate Invoice</a>
-                                                {% endif %} -->
+                                                {% if not line.final_payment %}
+                                                <a href="/dashboard/partners/re_allocate/{{line.order.number}}/" class="btn btn-success" style="font-size: 9px;">Re-Allocate ASP</a>
+                                                {% endif %}
                                             {% else %}
                                                 {{ line.partner|default:"-"}}
                                                  {% if not line.final_payment%}
