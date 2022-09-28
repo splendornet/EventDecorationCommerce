@@ -1194,11 +1194,12 @@ def generate_order_summary(order):
     import pdfkit, tempfile
     from django.template.loader import get_template
 
-    current_site = Site.objects.get_current()
     pdf_name = 'order_summary_%s.pdf' % (str(order.number))
-    pdf_path = current_site.domain + 'media/order_summary/' + pdf_name
+    pdf_path = 'media/order_summary/' + pdf_name
 
     options = {}
+
+    current_site = Site.objects.get_current()
 
     context = dict()
     context['order'] = order
