@@ -144,9 +144,9 @@
                                                 {%if order.status == 'Completed'%}
                                                     {% if order.get_order_payment_status_display == 'Initiated'%}
                                                         
-                                                        <a href="#" style="font-size:10px;" class="btn btn-xs btn-primary" onclick="alert('Please complete your payment')">Invoice</a>
+                                                        <a style="font-size:10px;" class="btn btn-xs btn-primary" onclick="alert('Please complete your payment')">Invoice</a>
                                                     {% elif not line.final_payment %}
-                                                    <a href="#" style="font-size:10px;" class="btn btn-xs btn-primary" onclick="alert('Please complete your Final Payment')">Invoice</a>
+                                                    <a style="font-size:10px;" class="btn btn-xs btn-primary" onclick="alert('Please complete your Final Payment')">Invoice</a>
                                                     {%else%}   
                                                     <a href="{{line.product_invoice}}" style="font-size:10px;" target="_blank" class="btn btn-xs btn-primary">Invoice</a>
                                                     {%endif%}
@@ -174,7 +174,7 @@
                                                {%if order.status == 'Completed'%}
                                                     {% if order.get_order_payment_status_display == 'Initiated'%}
                                                     
-                                                    <a href="#" style="font-size:10px;" class="btn btn-xs btn-primary" onclick="alert('Please complete your payment')">Invoice</a>
+                                                    <a style="font-size:10px;" class="btn btn-xs btn-primary" onclick="alert('Please complete your payment')">Invoice</a>
                                                 {%else%}
                                                     <a href="{{line.product_invoice}}" style="font-size:10px;" target="_blank" class="btn btn-xs btn-primary">Invoice</a>
                                                     {%endif%}
@@ -220,8 +220,8 @@
                                         {% if order.status == 'Completed' %}
                                             {% if line.final_payment %}
                                                 <td>Final Payment Received</td>
-                                            {% elif not line.allocated_order_line.last.vendor%}
-                                            <a class="btn-success" href="#" onclick="alert('Please allocate asp for this order')">Final Payment</button>
+                                            {% elif not order.get_order_payment_status_display == 'Success'%}
+                                            <a class="btn-success" onclick="alert('Please make payment to use final payment for this order')">Final Payment</button>
                                             {% else %}
                                                 <td>
                                                     <form action="." method="post" class="pull-left flat">
