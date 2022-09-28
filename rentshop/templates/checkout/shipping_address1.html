@@ -155,7 +155,7 @@ background-color:white;
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <label for="id_line1">Delivery Address</label>
+                                        <label for="id_line1">Full Delivery Address</label>
                                         {{form.line1}}
                                         {% if form.errors.line1 %}
                                         <label class="error_label">{{form.errors.line1.as_text}}</label>
@@ -171,7 +171,7 @@ background-color:white;
                                         {% endif %}
                                     </div>
                                 </div>
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div class="col-md-6">
                                         <label for="id_state">State</label>
                                         <select name="state_raw" class="form-control" id="id_state_raw" required>
@@ -183,9 +183,9 @@ background-color:white;
                                         {% if form.errors.state %}
                                             <label class="error_label">{{form.errors.state.as_text}}</label>
                                         {% endif %}
-                                    </div>
+                                    </div> -->
                                 </div>
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div class="col-md-6">
                                         <label for="id_line4" id="city_label">City</label>
                                         <select name="city" class="form-control" id="id_city" required>
@@ -196,7 +196,7 @@ background-color:white;
                                             <label class="error_label">{{form.errors.line4.as_text}}</label>
                                         {% endif %}
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label for="id_postcode">Pincode</label>
