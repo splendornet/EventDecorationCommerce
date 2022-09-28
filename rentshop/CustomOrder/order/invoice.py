@@ -109,12 +109,12 @@ def generate_order_invoice_product(line, order):
     template = get_template('dashboard/orders/invoices/order_invoice_product.html')
     html = template.render(context)
     # create pdf body
-    # try:
-    pdfkit.from_string(
-        html, pdf_path, options=options
-    )
-    # except:
-    #     pass
+    try:
+        pdfkit.from_string(
+            html, pdf_path, options=options
+        )
+    except:
+        pass
 
     return pdf_path
 
