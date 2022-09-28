@@ -66,7 +66,7 @@
                     <tr>
                         <td class="no-border">
                             {% if line.allocated_order_line.all %}
-
+                                {{ line.allocated_order_line.last.vendor }}
                             {% else %}
                             {{vendor.business_name|default:'-'}} <br/>
                             {% for vn_addr in vendor.vendor_full_address_list %}
