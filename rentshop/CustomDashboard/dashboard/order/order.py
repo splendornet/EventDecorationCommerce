@@ -907,10 +907,12 @@ class OrderInvoiceProductView(View):
 
         vendor = Partner.objects.get(id=kwargs.get('vendor_id'))
         order = Order.objects.get(id=kwargs.get('pk'))
+        line = OrderLine.objects.filter(number=order.number).last()
         current_site = Site.objects.get_current()
 
         context = dict()
         context['order'] = order
+        context['line'] = line
         context['site'] = 'TakeRentPe'
         context['site_logo'] = current_site.domain + '/static/' + settings.LOGO_URL
         context['vendor'] = vendor

@@ -66,15 +66,23 @@
                     <tr>
                         <td class="no-border">
                             {% if line.allocated_order_line.all %}
-                                {{ line.allocated_order_line.last.vendor }}
+                                {{ line.allocated_order_line.last.vendor }}<br>
+                                {{ line.allocated_order_line.last.vendor.business_name }}<br>
+                                {{ line.allocated_order_line.last.vendor.address_line_1}}<br>
+                                {{ line.allocated_order_line.last.vendor.city }}<br>
+                                {{ line.allocated_order_line.last.vendor.state}}<br>
+                                {{ line.allocated_order_line.last.vendor.country}} - {{ line.allocated_order_line.last.vendor.pincode }}<br>
+                                Mobile: {{ line.allocated_order_line.last.vendor.telephone_number| default:"-"}}
+                                
                             {% else %}
+                            {{vendor.name|default:'-'}}<br>
                             {{vendor.business_name|default:'-'}} <br/>
                             {% for vn_addr in vendor.vendor_full_address_list %}
                                 {{vn_addr}} <br/>
                             {% empty %}
                                 -
                             {% endfor %}
-
+                            Mobile: {{vendor.telephone_number| default:'-'}}
                             {% endif %}
                         </td>
                         <td class="no-border text-right">
@@ -105,8 +113,19 @@
                     <thead class="no-border">
                     <tr class="no-border">
                         <th class="no-border">
-                            <strong>PAN No:</strong> {{vendor.pan_number|default:'-'}} <br/>
-                            <strong>GST Registration No:</strong> {{vendor.gst_number|default:'-'}}
+                            <strong>PAN No:</strong> 
+                            {% if line.allocated_order_line.all %}
+                            {{ line.allocated_order_line.last.vendor.pan_number| default:"-"}}
+                            {%else%}
+                            {{vendor.pan_number|default:'-'}} 
+                            {%endif%}
+                            <br/>
+                            <strong>GST Registration No:</strong> 
+                            {% if line.allocated_order_line.all %}
+                            {{ line.allocated_order_line.last.vendor.gst_number| default:"-" }}
+                            {%else%}
+                            {{vendor.gst_number|default:'-'}}
+                            {%endif%}
                         </th>
                         <!-- <th class="no-border text-right">Billing/ Shipping Address :</th> -->
                     </tr>
@@ -305,11 +324,19 @@
                         <td colspan="9" style="text-align:right">
                             <strong>For {{vendor.business_name|default:"-"}}:</strong>
                             <br/>
-                            {% if vendor.digital_signature %}
-                                <img src="{{vendor.digital_signature.url}}" style="width:150px; height:150px;" alt=""/>
-                            {% else %}
+                            {% if line.allocated_order_line.all %}
+                                {%if line.allocated_order_line.last.vendor.digital_signature %}
+                                <img src="{{line.allocated_order_line.last.vendor.digital_signature.url}}" style="width:150px; height:150px;" alt=""/>
+                                {%else%}
                                 <img src="/media/image_not_found.jpg" style="width:150px; height:150px;" alt=""/>
-                            {% endif %}
+                                {%endif%}
+                            {%else%}
+                                {% if vendor.digital_signature %}
+                                    <img src="{{vendor.digital_signature.url}}" style="width:150px; height:150px;" alt=""/>
+                                {% else %}
+                                    <img src="/media/image_not_found.jpg" style="width:150px; height:150px;" alt=""/>
+                                {% endif %}
+                            {%endif%}
                             <br/>
                             <strong>Authorized Signatory</strong>
                         </td>

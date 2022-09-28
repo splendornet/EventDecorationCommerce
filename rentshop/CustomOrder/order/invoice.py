@@ -100,6 +100,7 @@ def generate_order_invoice_product(line, order):
     context = dict()
     context['order'] = order
     context['order_line'] = line
+    context['line'] = line
     context['site'] = 'TakeRentPe'
     context['site_logo'] = current_site.domain + '/static/' + settings.LOGO_URL
     context['vendor'] = vendor
