@@ -12,7 +12,7 @@ class CustomShippingAddressForm(ShippingAddressForm):
 
     first_name = forms.CharField(min_length=2, max_length=20, validators=[RegexValidator('^([A-Za-z\s])+$', message='Enter a valid first name.')])
     last_name = forms.CharField(min_length=2, max_length=20, validators=[RegexValidator('^([A-Za-z\s])+$', message='Enter a valid last name.')])
-    line4 = forms.CharField(min_length=2, max_length=100, label=('City'), validators=[RegexValidator('^([A-Za-z\s&])+$', message='Enter a valid city name.')])
+    line4 = forms.CharField(min_length=2, max_length=100, label=('City'), validators=[RegexValidator('^([A-Za-z\s&])+$', message='Enter a valid city name.')],required=False)
     state = forms.CharField(min_length=2, max_length=100, label=('State'), validators=[RegexValidator('^([A-Za-z\s&])+$', message='Enter a valid state name.')],required=False)
     notes = forms.CharField(max_length=225, required=False, widget=forms.Textarea)
     country = forms.ModelChoiceField(queryset=Country_Country.objects.filter(country_name='India'), initial='India')
