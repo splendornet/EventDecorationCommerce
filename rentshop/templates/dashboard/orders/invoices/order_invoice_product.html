@@ -58,17 +58,28 @@
                     <thead class="no-border">
                     <tr class="no-border">
                         <th class="no-border"><strong>Service Provide By:</strong></th>
-                        <th class="no-border text-right"><strong>Billing Address :</strong></th>
+                        <!-- <th class="no-border text-right"><strong>Billing Address :</strong></th> -->
+                        <th class="no-border text-right">Billing/ Shipping Address :</th>
                     </tr>
                     </thead>
                     <tbody class="no-border">
                     <tr>
                         <td class="no-border">
+                            {% if line.allocated_order_line.all %}
+
+                            {% else %}
                             {{vendor.business_name|default:'-'}} <br/>
                             {% for vn_addr in vendor.vendor_full_address_list %}
                                 {{vn_addr}} <br/>
                             {% empty %}
                                 -
+                            {% endfor %}
+
+                            {% endif %}
+                        </td>
+                        <td class="no-border text-right">
+                            {% for field in order.shipping_address.active_address_fields %}
+                                {{ field }}<br/>
                             {% endfor %}
                         </td>
                         <!-- <td class="no-border text-right">
@@ -97,7 +108,7 @@
                             <strong>PAN No:</strong> {{vendor.pan_number|default:'-'}} <br/>
                             <strong>GST Registration No:</strong> {{vendor.gst_number|default:'-'}}
                         </th>
-                        <th class="no-border text-right">Billing/ Shipping Address :</th>
+                        <!-- <th class="no-border text-right">Billing/ Shipping Address :</th> -->
                     </tr>
                     </thead>
                     <tbody class="no-border">
@@ -105,11 +116,11 @@
                         <td class="no-border">
                             &nbsp;
                         </td>
-                        <td class="no-border text-right">
+                        <!-- <td class="no-border text-right">
                             {% for field in order.shipping_address.active_address_fields %}
                                 {{ field }}<br/>
                             {% endfor %}
-                        </td>
+                        </td> -->
                     </tr>
                     </tbody>
                 </table>
