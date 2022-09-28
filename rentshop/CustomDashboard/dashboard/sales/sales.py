@@ -822,14 +822,16 @@ class ReallocateOrderListView(generic.ListView):
 
         basket_lines = BasketLine.objects.filter(basket__id__in=queryset.values('basket_id'))
         basket_id_list = []
-        for basket_line in basket_lines:
-            category_name_lst = list(
-                basket_line.product.categories.last().get_ancestors().values_list('name', flat=True))
-            category_name_lst.append(basket_line.product.categories.last().name)
+        try:
+            for basket_line in basket_lines:
+                category_name_lst = list(
+                    basket_line.product.categories.last().get_ancestors().values_list('name', flat=True))
+                category_name_lst.append(basket_line.product.categories.last().name)
 
-            if any(name in category_name_lst for name in offers_cat_list):
-                basket_id_list.append(basket_line.basket.id)
-        exl_queryset = queryset.filter(basket_id__in=basket_id_list)
+                if any(name in category_name_lst for name in offers_cat_list):
+                    basket_id_list.append(basket_line.basket.id)
+        except:
+            exl_queryset = queryset.filter(basket_id__in=basket_id_list)
         return exl_queryset
 
 
