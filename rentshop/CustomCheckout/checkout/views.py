@@ -48,7 +48,7 @@ States = get_model('country','State')
 logger = logging.getLogger('oscar.checkout')
 trigger_email = get_class('RentCore.tasks', 'trigger_email')
 send_sms = get_class('RentCore.email', 'send_sms')
-
+VoucherApplication = get_model('voucher', 'VoucherApplication')
 
 class CustomShippingAddressView(ShippingAddressView):
 
@@ -267,6 +267,9 @@ def payment_success(request):
         CCavenuePaymentDetails.objects.filter(order_number=order_number, transaction_id=order_transaction_id).update(**cc_data)
 
         # update order status
+        if not pay_status=='success':
+            coupon_used=VoucherApplication.objects.filter(order__number=order_number)
+            coupon_used.delete()
 
         order_data = {
             'order_payment_status': pay_status,
@@ -376,7 +379,8 @@ def payment_success(request):
         allocate_vendor(order_number)
         
         messages.success("Payment recieved successfully")
-        return redirect('/accounts/orders/')
+        return redirect('/')
+        # return redirect('/accounts/orders/')
 
     except Exception as e:
 
