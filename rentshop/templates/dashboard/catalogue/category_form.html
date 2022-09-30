@@ -30,6 +30,8 @@
     <div class="well">
         <form action="." method="post" class='wysiwyg' enctype='multipart/form-data'>
             {% csrf_token %}
+            <label>Name</label><br>
+            <input class="form-control" data-toggle="tooltip" data-placement="bottom" title="Meta Title will be name for category" type="text" id="name_variable" value="" readonly><br>
             {{form.as_p}}
             <br/>
             <button type="submit" class="btn btn-primary" id="category_submit">Submit</button>
@@ -103,6 +105,11 @@
 
     });
 
+</script>
+<script>
+    $('#name_variable').val($('[name*="name"]').val())
+    $('[for*="id_name"]').html("Meta Title")
+    $('[for*="id_description"]').html("Meta Description")
 </script>
 
 {% endblock %}
