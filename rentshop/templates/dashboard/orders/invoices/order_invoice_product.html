@@ -158,8 +158,8 @@
                         <th class="no-border text-right">
                             <strong>Event Date:</strong> <br>
                             Start Date: {{line.booking_start_date.date}}<br>
-                            End Date: {{line.booking_end_date.date}} <br/>
-                            <strong>Invoice Number:</strong> IN-{{order.number}} <br/>
+                            &nbsp;End Date: {{line.booking_end_date.date}}<br/>
+                            <strong>Invoice Number:</strong> IN-{{order.number}}<br/>
                         </th>
                     </tr>
                     </thead>
@@ -335,13 +335,13 @@
                             <br/>
                             {% if line.allocated_order_line.all %}
                                 {%if line.allocated_order_line.last.vendor.digital_signature %}
-                                <img src="/opt/takerentpe-dev/rentshop{{line.allocated_order_line.last.vendor.digital_signature.url}}" style="width:150px; height:150px;" alt=""/>
+                                <img src="{{line.allocated_order_line.last.vendor.digital_signature.url}}" style="width:150px; height:150px;" alt=""/>
                                 {%else%}
                                 <img src="/opt/takerentpe-dev/rentshop/media/image_not_found.jpg" style="width:150px; height:150px;" alt=""/>
                                 {%endif%}
                             {%else%}
                                 {% if vendor.digital_signature %}
-                                    <img src="/opt/takerentpe-dev/rentshop{{vendor.digital_signature.url}}" style="width:150px; height:150px;" alt=""/>
+                                    <img src="{{vendor.digital_signature.url}}" style="width:150px; height:150px;" alt=""/>
                                 {% else %}
                                     <img src="/opt/takerentpe-dev/rentshop/media/image_not_found.jpg" style="width:150px; height:150px;" alt=""/>
                                 {% endif %}
