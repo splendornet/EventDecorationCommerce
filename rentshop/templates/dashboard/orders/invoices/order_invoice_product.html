@@ -156,6 +156,9 @@
                             <strong>Order Date:</strong> {{order.date_placed.date}}
                         </th>
                         <th class="no-border text-right">
+                            <strong>Booking Date:</strong> <br>
+                            Start Date: {{line.booking_start_date.date}}<br>
+                            End Date: {{line.booking_end_date.date}} <br/>
                             <strong>Invoice Number:</strong> IN-{{order.number}} <br/>
                         </th>
                     </tr>
@@ -322,19 +325,25 @@
                     </tr>
                     <tr>
                         <td colspan="9" style="text-align:right">
-                            <strong>For {{vendor.business_name|default:"-"}}:</strong>
+                            <strong>For 
+                                {% if line.allocated_order_line.all %}
+                                {{ line.allocated_order_line.last.vendor.business_name }}:
+                                {%else%}
+                                {{vendor.business_name|default:"-"}}:
+                                {%endif%}
+                            </strong>
                             <br/>
                             {% if line.allocated_order_line.all %}
                                 {%if line.allocated_order_line.last.vendor.digital_signature %}
-                                <img src="{{line.allocated_order_line.last.vendor.digital_signature.url}}" style="width:150px; height:150px;" alt=""/>
+                                <img src="/opt/takerentpe-dev/rentshop/{{line.allocated_order_line.last.vendor.digital_signature.url}}" style="width:150px; height:150px;" alt=""/>
                                 {%else%}
-                                <img src="/media/image_not_found.jpg" style="width:150px; height:150px;" alt=""/>
+                                <img src="/opt/takerentpe-dev/rentshop/media/image_not_found.jpg" style="width:150px; height:150px;" alt=""/>
                                 {%endif%}
                             {%else%}
                                 {% if vendor.digital_signature %}
-                                    <img src="{{vendor.digital_signature.url}}" style="width:150px; height:150px;" alt=""/>
+                                    <img src="/opt/takerentpe-dev/rentshop/{{vendor.digital_signature.url}}" style="width:150px; height:150px;" alt=""/>
                                 {% else %}
-                                    <img src="/media/image_not_found.jpg" style="width:150px; height:150px;" alt=""/>
+                                    <img src="/opt/takerentpe-dev/rentshop/media/image_not_found.jpg" style="width:150px; height:150px;" alt=""/>
                                 {% endif %}
                             {%endif%}
                             <br/>
