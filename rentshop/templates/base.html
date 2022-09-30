@@ -17,8 +17,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
         <meta name="created" content="{% now "jS M Y h:i" %}" />
-        <meta name="name" content="{% block title %}  TakeRentPe {{ shop_tagline }}{% endblock %}"/>
-        <meta name="link" content="window.location.url()"/>
+        <meta name="name" content="Dashboard |TakeRentPe"/>
+        <meta name="link" content="{{request.path}}"/>
         <meta name="description" content="{% block description %}{% endblock %}" />
         <meta name="viewport" content="{% block viewport %}width=device-width{% endblock %}" />
         <meta name="robots" content="NOARCHIVE,NOCACHE" />
