@@ -335,7 +335,8 @@
                             <br/>
                             {% if line.allocated_order_line.all %}
                                 {%if line.allocated_order_line.last.vendor.digital_signature %}
-
+                                {{line.allocated_order_line.last.vendor.digital_signature}} <br>
+                                {{line.allocated_order_line.last.vendor.digital_signature.url}} <br>
                                 pp<img src="/opt/takerentpe-dev/rentshop/media/{{line.allocated_order_line.last.vendor.digital_signature}}" style="width:150px; height:150px;" alt=""/>
                                 qqq<img src="/opt/takerentpe-dev/rentshop/media{{line.allocated_order_line.last.vendor.digital_signature}}" style="width:150px; height:150px;" alt=""/>
                                 rrr<img src="/opt/takerentpe-dev/rentshop/{{line.allocated_order_line.last.vendor.digital_signature.url}}" style="width:150px; height:150px;" alt=""/>
