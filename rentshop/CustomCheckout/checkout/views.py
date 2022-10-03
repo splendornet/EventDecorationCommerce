@@ -438,7 +438,10 @@ def payment_cancel(request):
         pay_status = 'cancel'
         if payment_status == 'Aborted':
             pay_status = 'cancel'
-
+        
+        if pay_status=='cancel':
+            coupon_used=VoucherApplication.objects.filter(order__number=order_number)
+            coupon_used.delete()
         cc_data = {
             'status': pay_status, 'payment_reference_id': payment_tracking_id,
             'gateway_response':payment_list, 'gateway_chiper':request.POST.get('encResp')

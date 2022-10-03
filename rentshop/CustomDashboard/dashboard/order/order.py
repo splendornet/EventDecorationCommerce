@@ -144,7 +144,8 @@ class CustomOrderListView(OrderListView):
         :return: queryset
         """
 
-        queryset = self.queryset_orders_for_user_obj().order_by('-number')
+        queryset = self.queryset_orders_for_user_obj()
+        # queryset = self.queryset_orders_for_user_obj().order_by("-number")
 
         self.form = self.form_class(self.request.GET)
         if not self.form.is_valid():
