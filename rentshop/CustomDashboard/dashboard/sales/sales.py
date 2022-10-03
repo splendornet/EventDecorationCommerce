@@ -747,7 +747,7 @@ def re_allocate_vendor(request):
 
         # order booked sms
         message = 'You have received a new order for ' + str(ol_obj.order_line.booking_start_date.date()) + 'to' + str(
-            ol_obj.order_line.booking_end_date.date()) + ' Check order on ' + '(' + str(
+            ol_obj.order_line.booking_end_date.date()) + ' Click on the link to check details of the order. ' + '(' + str(
             order_link) + ')' + ' Happy Celebranto!'
         msg_kwargs = {
             'message': message,
