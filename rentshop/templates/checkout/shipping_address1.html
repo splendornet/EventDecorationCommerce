@@ -206,10 +206,12 @@ background-color:white;
                                         {% endif %}
                                     </div>
                                 </div>
+                                <div class="left-meni"><h5>Payable Amount: </h5></div><div class="right-meni"><h5> ₹ {{basket.payable_amount}}</h5></div>
+                                <br>
                             </div>
                         </div>
                     </div>
-                    <ul class="list-inline pull-right">
+                    <center class="list-inline">
 
                         <!-- <li>
                             <a href="{% url 'checkout:billing_address' fill_form=1 %}"> <button type="button" class="btn btn-default prev-step" id="prev-btn">Previous</button></a>
@@ -217,10 +219,12 @@ background-color:white;
                         </li> -->
 
                         <li>
-                            <button type="submit" class="btn btn-warning " data-loading-text="{% trans 'Continuing...' %}">{% trans "Save and Continue" %}</button>
+                            <button id='place-order'  type="submit" class="btn btn-warning next-step" data-loading-text="{% trans 'Submitting...' %}">{% trans "Place order" %}</button>
+                            <!-- <button type="submit" class="btn btn-warning " data-loading-text="{% trans 'Continuing...' %}">{% trans "Save and Continue" %}</button> -->
                         </li>
 
-                    </ul>
+                    </center>
+                 <!-- </ul> -->
                 </div>
             </div>
             <div class="row" style="border:0px solid; width:1px;">
@@ -248,6 +252,7 @@ background-color:white;
     $("[name*='first_name']").val('{{request.user.first_name}}')
     $("[name*='last_name']").val('{{request.user.last_name}}')
     $("[name*='phone_number']").val('{{phone_number}}')
+    $("[name*='line1']").val(' ')
 </script>
 <script>
     $(document).ready(function () {
