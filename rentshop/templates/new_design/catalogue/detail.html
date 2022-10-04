@@ -1143,10 +1143,16 @@ $(document).ready(function () {
 });
 
 </script>
+<style>
+    .drp-calendar.right {
+    display: none !important;
+  }
+</style>
 <script>
 $(function() {
     $('input[name="daterange"]').daterangepicker({
         autoApply: true,
+        linkedCalendars: false,
         autoUpdateInput: false,
         locale: {
             cancelLabel: 'Clear'
