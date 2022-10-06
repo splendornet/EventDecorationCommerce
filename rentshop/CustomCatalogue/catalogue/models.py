@@ -342,7 +342,7 @@ class ProductImage(AbstractProductImage):
     image_product_sequence = models.IntegerField(null=True, blank=True)
     is_dp_image = models.BooleanField(default=False)
     image_caption = models.TextField(max_length=1000, blank=True, null= True)
-
+    image_alt_text = models.CharField(max_length=500, default=None, blank=True, null= True)
     class Meta:
         unique_together = ('image_product_sequence', 'product')
 
