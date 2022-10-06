@@ -480,6 +480,8 @@ OSCAR_DEFAULT_CURRENCY = 'INR'
 
 SLIDER_IMAGE_FOLDER = 'slider'
 
+OSCAR_FROM_EMAIL = 'info@takerentpe.com'
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtpout.secureserver.net'
