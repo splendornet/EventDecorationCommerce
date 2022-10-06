@@ -410,7 +410,7 @@
                 <div class="row">
                   <div class="col-sm-6 col-md-5 ">
                     <p class="trp-booking-label mb-5">Select Booking Date</p>
-                      <input class="product-date-picker" id="id_daterange" type="text" name="daterange" value="" {% if product.product_class.name != 'Sale'  %} onchange="check_date(this)" {% endif %}/>
+                      <input class="product-date-picker" id="id_daterange" style="width: 130%;" type="text" name="daterange" value="" {% if product.product_class.name != 'Sale'  %} onchange="check_date(this)" {% endif %}/>
                   </div>
                 </div>
               </div>
@@ -418,7 +418,7 @@
                 <div class="trp-product-count-wrapper mt-15">
                 <p class="trp-booking-label mb-5">Quantity</p>
                 <div class="trp-product-count">
-                  <button class="trp-button-count no-active" disabled >-</button>
+                  <button class="trp-button-count no-active" id="prev_quantity_cart" disabled >-</button>
 <!--                  <input type="text"  class="trp-number-product" value="1">-->
                     {% if product.product_cost_type == 'Multiple' %}
                     {% get_quantity_for_multiple product.stockrecords.last as quantity_value %}
@@ -427,7 +427,7 @@
                     <input onchange="set_quantity(this)" class="trp-number-product"  id="id_quantity_value" type="text" name="id_quantity_value" value="1"/>
                     {% endif %}
                     <input  class="time-text" id="prod_id" type="hidden" name="prod_id" value="{{product.id}}"/>
-                  <button class="trp-button-count">+</button>
+                  <button class="trp-button-count" id="add_quantity_cart">+</button>
                 </div>
               </div>
                 <div class="trp-product-shipping mt-40">
@@ -512,7 +512,9 @@
                 </ul>
 
                 <div class="tab-content ">
+                    
                     <div class="tab-pane active" id="productDescription">
+                        
                         {{ product.description|safe}}
                     </div>
                     <div class="tab-pane" id="productDetails">
@@ -592,10 +594,11 @@
 
 </section>
 
-<!-- How to rent section -->
-{% include "new_design/partials/how_to_rent.html" %}
+
 <!-- payment method section -->
 {% include "new_design/partials/payment_method_section.html" %}
+<!-- How to rent section -->
+{% include "new_design/partials/how_to_rent.html" %}
 <link rel="stylesheet" type="text/css" href="{% static 'core_assets/packages/jquery-toast-plugin-1/src/jquery.toast.css' %}"/>
 {% endblock content %}
 {% block extrascripts %}
@@ -672,6 +675,9 @@
 </script>
 {% endif %}
 <script>
+    $('#prev_quantity_cart').on('click',function(){
+        $("#add_quantity_cart").attr('disabled',false)
+    })
     function set_quantity(e){
         quantity = $('#id_quantity_value').val();
         $('#id_quantity').val(quantity);
@@ -772,6 +778,7 @@
                     });
                 }
                 else if(data == 420){
+                    $("#add_quantity_cart").attr('disabled',true)
                     $.toast({
                         heading: 'Warning',
                         text: `Daily Limit Exceeded (Limit ${$("#id_quantity").val()}).`,
@@ -1136,10 +1143,16 @@ $(document).ready(function () {
 });
 
 </script>
+<style>
+    .drp-calendar.right {
+    display: none !important;
+  }
+</style>
 <script>
 $(function() {
     $('input[name="daterange"]').daterangepicker({
         autoApply: true,
+        linkedCalendars: false,
         autoUpdateInput: false,
         locale: {
             cancelLabel: 'Clear'

@@ -86,10 +86,10 @@
           </div>
           </div>
           <!-- search for desktop -->
-          <form class="trp-header-search" name="search_sudo" method="get" action="#0">
+          <form class="trp-header-search" name="search_sudo" method="get" action="#0" onsubmit="header_search()">
             <div class="search-boxhd">
-              <input required="" type="text" name="q" class="trp-search-input" placeholder="" onsubmit="header_search()" id="q" autocomplete="off">
-                <button id="trp-searchdata" class="trp-search-btn" type="submit"  onclick="header_search()"> Search</button>
+              <input required="" type="text" name="q" class="trp-search-input" placeholder="" id="q" autocomplete="off" required>
+                <button id="trp-searchdata" class="trp-search-btn" type="submit"> Search</button>
             </div>
           </form>
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -166,10 +166,10 @@
              </li>
              <!-- search for tab and mobile -->
              <li class="trp-mobile-search">
-              <form method="get" class="trp-header-search-mob" action="#0">
+              <form method="get" class="trp-header-search-mob" action="#0" onsubmit="header_search()">
                 <div class="search-boxhd">
-                  <input required="" type="text" name="q" class="trp-search-input" placeholder="" onsubmit="header_search()" id="mobileq" autocomplete="off">
-                    <button id="trp-searchdata" class="trp-search-btn" type="submit" onclick="header_search()"> Search</button>
+                  <input required="" type="text" name="q" class="trp-search-input" placeholder="" id="mobileq" autocomplete="off" required>
+                    <button id="trp-searchdata" class="trp-search-btn" type="submit" > Search</button>
                 </div>
               </form>
 

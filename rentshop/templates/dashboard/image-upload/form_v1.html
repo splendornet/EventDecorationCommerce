@@ -48,7 +48,8 @@
         </div>
 
         <button type="submit" class="btn btn-md btn-primary">Update</button>
-        <a href="{% url 'dashboard:uplaod-my-offer-image-v1'  %}?type={{obj.id}}" class="btn btn-md btn-default">Cancel</a>
+        <!-- <a href="{% url 'dashboard:uplaod-my-offer-image-v1'  %}?type={{obj.id}}" class="btn btn-md btn-default">Cancel</a> -->
+        <a class="btn btn-md btn-default" onclick="if(confirm('Are you sure'))window.close()">Cancel</a>
     </form>
 </div>
 {% endblock dashboard_content %}

@@ -233,7 +233,13 @@
 
 										<td class="text-right" style="display: none;">Apply Coupon</td>
 
-										<td class="text-right"><a class="trp-offer-popup" href="#" data-toggle="modal" data-target="#sampleModalMd">View Offers</a> </td>
+										<td class="text-right">
+										{%if not basket.balance_amount_price %}
+										<a href="#" onclick="alert('Please add product to cart.')">Apply Coupon</a>
+										{%else%}
+											<a class="trp-offer-popup" href="#" data-toggle="modal" data-target="#sampleModalMd">Apply Coupon</a>
+										{%endif%}
+										</td>
 										{% endif %}
 										{% endwith %}
 									</tr>
@@ -272,7 +278,9 @@
 				<div class="modal-body">
 
 						<ul class="trp-offer-list">
-
+							{% if not voucher_list%}
+							<h3 class="trp-coupon-title">No coupons are available for now.</h3>
+							{%else%}
 							{% for voucher in voucher_list %}
 							<li>
 								<div class="trp-coupon-detail-wrapper">
@@ -307,6 +315,7 @@
 								</div>
 							</li>
 							{% endfor %}
+							{%endif%}
 
 						</ul>
 

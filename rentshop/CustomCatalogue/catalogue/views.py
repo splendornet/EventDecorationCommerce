@@ -81,7 +81,7 @@ class CustomCatalogueView(CatalogueView):
         search_filter_list = None
 
         if request.GET.get('mega_search'):
-            search_value = request.GET.get('mega_search')
+            search_value = str(request.GET.get('mega_search')).strip()
 
         if request.GET.get('price_range'):
             search_price = request.GET.get('price_range')
@@ -204,7 +204,7 @@ class CustomProductCategoryView(ProductCategoryView):
         search_filter_list = None
 
         if request.GET.get('mega_search'):
-            search_value = request.GET.get('mega_search')
+            search_value = str(request.GET.get('mega_search')).strip()
 
         if request.GET.get('category'):
             search_category = request.GET.get('category')
@@ -324,7 +324,7 @@ class ProductWeddingVenueView(CatalogueView):
         search_filter_list = None
 
         if request.GET.get('mega_search'):
-            search_value = request.GET.get('mega_search')
+            search_value = str(request.GET.get('mega_search')).strip()
 
         if request.GET.get('category'):
             search_category = request.GET.get('category')
@@ -1279,6 +1279,7 @@ def get_total_price_new(request):
                 return HttpResponse(status)
 
             prod = prod_obj.last()
+
             if quantity>prod.daily_capacity:
                 return HttpResponse(420)
             if prod.product_cost_type != 'Multiple':
@@ -1866,7 +1867,7 @@ class CustomNewCatalogueView(ProductCategoryView):
             search_price = request.GET.get('price_range')
 
         if request.GET.get('mega_search'):
-            search_value = request.GET.get('mega_search')
+            search_value = str(request.GET.get('mega_search')).strip()
 
         if request.GET.get('category'):
             search_category = request.GET.get('category')

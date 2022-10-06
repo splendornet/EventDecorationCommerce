@@ -45,8 +45,9 @@ def generate_order_summary(order):
     html = template.render(context)
     # create pdf body
     try:
+        pdf_path1="/opt/takerentpe-dev/rentshop/"+pdf_path
         pdfkit.from_string(
-            html, pdf_path, options=options
+            html, pdf_path1, options=options
         )
     except:
         pass
@@ -77,8 +78,9 @@ def generate_order_invoice(order):
     html = template.render(context)
     # create pdf body
     try:
+        pdf_path1="/opt/takerentpe-dev/rentshop/"+pdf_path
         pdfkit.from_string(
-            html, pdf_path, options=options
+            html, pdf_path1, options=options
         )
     except:
         pass
@@ -100,6 +102,7 @@ def generate_order_invoice_product(line, order):
     context = dict()
     context['order'] = order
     context['order_line'] = line
+    context['line'] = line
     context['site'] = 'TakeRentPe'
     context['site_logo'] = current_site.domain + '/static/' + settings.LOGO_URL
     context['vendor'] = vendor
@@ -109,8 +112,9 @@ def generate_order_invoice_product(line, order):
     html = template.render(context)
     # create pdf body
     try:
+        pdf_path1="/opt/takerentpe-dev/rentshop/"+pdf_path
         pdfkit.from_string(
-            html, pdf_path, options=options
+            html, pdf_path1, options=options
         )
     except:
         pass

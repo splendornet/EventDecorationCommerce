@@ -144,7 +144,8 @@ class CustomOrderListView(OrderListView):
         :return: queryset
         """
 
-        queryset = self.queryset_orders_for_user_obj().order_by('-number')
+        queryset = self.queryset_orders_for_user_obj()
+        # queryset = self.queryset_orders_for_user_obj().order_by("-number")
 
         self.form = self.form_class(self.request.GET)
         if not self.form.is_valid():
@@ -662,6 +663,7 @@ class CustomOrderDetailView(OrderDetailView):
                         email.content_subtype = "html"
                         email.send()
 
+                        mobile_number=None
                         #send sms to client FULL PAYMENT
                         try:
                             if order.user.is_staff:
@@ -906,10 +908,12 @@ class OrderInvoiceProductView(View):
 
         vendor = Partner.objects.get(id=kwargs.get('vendor_id'))
         order = Order.objects.get(id=kwargs.get('pk'))
+        line = OrderLine.objects.filter(number=order.number).last()
         current_site = Site.objects.get_current()
 
         context = dict()
         context['order'] = order
+        context['line'] = line
         context['site'] = 'TakeRentPe'
         context['site_logo'] = current_site.domain + '/static/' + settings.LOGO_URL
         context['vendor'] = vendor

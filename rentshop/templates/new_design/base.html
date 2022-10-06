@@ -14,7 +14,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="{% static 'new_design/assets/images/favicon.png' %}" type="image/x-icon">
-    <title>Take Rent Pe</title>
+    <title>{% if title%}{{title}}| TakeRentPe {%else%}TakeRentPe {%endif%}</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta name="created" content="{% now "jS M Y h:i" %}" />
+    <meta name="title" content="{% if title%}{{title}}| TakeRentPe {%else%}TakeRentPe {%endif%}"/>
+    <meta name="meta_url" content="{{request.META.HTTP_REFERER}}"/>
+    <meta name="description" content="{% block description %}{% if filters.category %} {% for cat in category_list %} {% if cat.id == filters.category %} {{cat.description|striptags }} {% endif %} {% endfor %} {% else %} {{ category.description|striptags}} {% endif %}{{description}}{% endblock %}" />
+    <meta name="viewport" content="{% block viewport %}width=device-width{% endblock %}" />
+    <meta name="robots" content="NOARCHIVE,NOCACHE" />
     <link rel="stylesheet" href="{% static 'new_design/assets/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'new_design/assets/css/bootstrap-theme.min.css' %}">
     <!-- css -->

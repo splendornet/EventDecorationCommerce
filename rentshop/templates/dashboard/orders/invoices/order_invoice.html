@@ -67,13 +67,19 @@
                     <thead class="no-border">
                     <tr class="no-border">
                         <th class="no-border"><strong>Service Provide By:</strong></th>
-                        <th class="no-border text-right"><strong>Billing Address :</strong></th>
+                        <!-- <th class="no-border text-right"><strong>Billing Address :</strong></th> -->
+                        <th class="no-border text-right">Billing/ Shipping Address :</th>
                     </tr>
                     </thead>
                     <tbody class="no-border">
                     <tr>
                         <td class="no-border">
                             {{site}}
+                        </td>
+                        <td class="no-border text-right">
+                            {% for field in order.shipping_address.active_address_fields %}
+                                {{ field }}<br/>
+                            {% endfor %}
                         </td>
                         <!-- <td class="no-border text-right">
                             {% if order.get_billing_address %}
@@ -101,7 +107,7 @@
                             <strong>PAN No:</strong> {{pan_number}} <br/>
                             <strong>GST Registration No:</strong>{{gst_number}}
                         </th>
-                        <th class="no-border text-right">Billing/ Shipping Address :</th>
+                        <!-- <th class="no-border text-right">Billing/ Shipping Address :</th> -->
                     </tr>
                     </thead>
                     <tbody class="no-border">
@@ -109,12 +115,12 @@
                         <td class="no-border">
                             &nbsp;
                         </td>
-                        <td class="no-border text-right">
+                        <!-- <td class="no-border text-right">
                             {% for field in order.shipping_address.active_address_fields %}
                                 {{ field }}<br/>
                             {% endfor %}
                         </td>
-                    </tr>
+                    </tr> -->
                     </tbody>
                 </table>
             </div>

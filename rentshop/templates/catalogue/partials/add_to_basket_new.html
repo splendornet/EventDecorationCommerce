@@ -17,7 +17,7 @@
 {% if not in_basket_obj %}
     <form id="add_to_basket_form" style="z-index:0;" action="{% url 'basket:add' pk=product.pk  %}" method="post" class="" >
 {% else %}
-     <form id="add_to_basket_form" style="z-index:0;" action="{% url 'basket:add' pk=product.pk  %}" method="post" class="" onsubmit="return confirm('Same product is already added in the cart');">
+     <form id="add_to_basket_form" style="z-index:0;" method="" class="" onsubmit="confirm('Same product is already added in the cart');">
          {% endif %}
         {% csrf_token %}
          <input type="hidden" name="product_type" id="id_product_type" value="{{product.product_class.name}}">

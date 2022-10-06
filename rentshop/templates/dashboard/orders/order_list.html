@@ -120,6 +120,7 @@
                         <th>
                             <input type="checkbox" id="order_master_selected">
                         </th>
+                        <!-- <th class="order_first">Order ID</th> -->
                         <th class="order_first">Order number</th>
                         <th class="order_first">Customer</th>
                         {% if user.is_superuser %}
@@ -139,7 +140,8 @@
                         <td>
                             <input type="checkbox" class="order_selected" name="order_checkbox" value="{{order.id}}" id="order_selected">
                         </td>
-                        <td><a href="{% url 'dashboard:order-detail' number=order.number %}">{{ order.number }}</a></td>
+                        <!-- <td>{{order.id}}</td> -->
+                        <td id="order_id_details"><a href="{% url 'dashboard:order-detail' number=order.number %}">{{ order.id }}</a></td>
                         <td>
                             {% if order.user.is_staff %}
                                 {{order.user.first_name|title}} {{order.user.last_name|title}}
@@ -238,7 +240,7 @@
         </script>
         <script>
             function delete_order(number){
-                a=confirm(" Are you sure to delete order.")
+                a=confirm(" Order are linked still want to delete?")
                 if (a){
                     url=`/master/orders/`+number+`/delete/`,
                     window.location=url

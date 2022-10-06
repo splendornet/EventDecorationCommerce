@@ -58,17 +58,36 @@
                     <thead class="no-border">
                     <tr class="no-border">
                         <th class="no-border"><strong>Service Provide By:</strong></th>
-                        <th class="no-border text-right"><strong>Billing Address :</strong></th>
+                        <!-- <th class="no-border text-right"><strong>Billing Address :</strong></th> -->
+                        <th class="no-border text-right">Billing/ Shipping Address :</th>
                     </tr>
                     </thead>
                     <tbody class="no-border">
                     <tr>
                         <td class="no-border">
+                            {% if line.allocated_order_line.all %}
+                                {{ line.allocated_order_line.last.vendor }}<br>
+                                {{ line.allocated_order_line.last.vendor.business_name }}<br>
+                                {{ line.allocated_order_line.last.vendor.address_line_1}}<br>
+                                {{ line.allocated_order_line.last.vendor.city }}<br>
+                                {{ line.allocated_order_line.last.vendor.state}}<br>
+                                {{ line.allocated_order_line.last.vendor.country}} - {{ line.allocated_order_line.last.vendor.pincode }}<br>
+                                Mobile: {{ line.allocated_order_line.last.vendor.telephone_number| default:"-"}}
+                                
+                            {% else %}
+                            {{vendor.name|default:'-'}}<br>
                             {{vendor.business_name|default:'-'}} <br/>
                             {% for vn_addr in vendor.vendor_full_address_list %}
                                 {{vn_addr}} <br/>
                             {% empty %}
                                 -
+                            {% endfor %}
+                            Mobile: {{vendor.telephone_number| default:'-'}}
+                            {% endif %}
+                        </td>
+                        <td class="no-border text-right">
+                            {% for field in order.shipping_address.active_address_fields %}
+                                {{ field }}<br/>
                             {% endfor %}
                         </td>
                         <!-- <td class="no-border text-right">
@@ -94,10 +113,21 @@
                     <thead class="no-border">
                     <tr class="no-border">
                         <th class="no-border">
-                            <strong>PAN No:</strong> {{vendor.pan_number|default:'-'}} <br/>
-                            <strong>GST Registration No:</strong> {{vendor.gst_number|default:'-'}}
+                            <strong>PAN No:</strong> 
+                            {% if line.allocated_order_line.all %}
+                            {{ line.allocated_order_line.last.vendor.pan_number| default:"-"}}
+                            {%else%}
+                            {{vendor.pan_number|default:'-'}} 
+                            {%endif%}
+                            <br/>
+                            <strong>GST Registration No:</strong> 
+                            {% if line.allocated_order_line.all %}
+                            {{ line.allocated_order_line.last.vendor.gst_number| default:"-" }}
+                            {%else%}
+                            {{vendor.gst_number|default:'-'}}
+                            {%endif%}
                         </th>
-                        <th class="no-border text-right">Billing/ Shipping Address :</th>
+                        <!-- <th class="no-border text-right">Billing/ Shipping Address :</th> -->
                     </tr>
                     </thead>
                     <tbody class="no-border">
@@ -105,11 +135,11 @@
                         <td class="no-border">
                             &nbsp;
                         </td>
-                        <td class="no-border text-right">
+                        <!-- <td class="no-border text-right">
                             {% for field in order.shipping_address.active_address_fields %}
                                 {{ field }}<br/>
                             {% endfor %}
-                        </td>
+                        </td> -->
                     </tr>
                     </tbody>
                 </table>
@@ -126,7 +156,9 @@
                             <strong>Order Date:</strong> {{order.date_placed.date}}
                         </th>
                         <th class="no-border text-right">
-                            <strong>Invoice Number:</strong> IN-{{order.number}} <br/>
+                            <strong>Event Date:</strong> {{line.booking_start_date.date}}<br>
+                            <!-- &nbsp;End Date: {{line.booking_end_date.date}}<br/> -->
+                            <strong>Invoice Number:</strong> IN-{{order.number}}<br/>
                         </th>
                     </tr>
                     </thead>
@@ -292,13 +324,27 @@
                     </tr>
                     <tr>
                         <td colspan="9" style="text-align:right">
-                            <strong>For {{vendor.business_name|default:"-"}}:</strong>
+                            <strong>For 
+                                {% if line.allocated_order_line.all %}
+                                {{ line.allocated_order_line.last.vendor.business_name }}:
+                                {%else%}
+                                {{vendor.business_name|default:"-"}}:
+                                {%endif%}
+                            </strong>
                             <br/>
-                            {% if vendor.digital_signature %}
-                                <img src="{{vendor.digital_signature.url}}" style="width:150px; height:150px;" alt=""/>
-                            {% else %}
-                                <img src="/media/image_not_found.jpg" style="width:150px; height:150px;" alt=""/>
-                            {% endif %}
+                            {% if line.allocated_order_line.all %}
+                                {%if line.allocated_order_line.last.vendor.digital_signature %}
+                                <img src="https://beta.takerentpe.com{{line.allocated_order_line.last.vendor.digital_signature.url}}" style="width:150px; height:150px;" alt=""/>
+                                {%else%}
+                                <img src="/opt/takerentpe-dev/rentshop/media/image_not_found.jpg" style="width:150px; height:150px;" alt=""/>
+                                {%endif%}
+                            {%else%}
+                                {% if vendor.digital_signature %}
+                                    <img src="https://beta.takerentpe.com{{vendor.digital_signature.url}}" style="width:150px; height:150px;" alt=""/>
+                                {% else %}
+                                    <img src="/opt/takerentpe-dev/rentshop/media/image_not_found.jpg" style="width:150px; height:150px;" alt=""/>
+                                {% endif %}
+                            {%endif%}
                             <br/>
                             <strong>Authorized Signatory</strong>
                         </td>

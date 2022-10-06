@@ -10,7 +10,11 @@
     {% basket_form request product as basket_form %}
     {% line_item_checker request product as in_basket_obj %}
     <div class="trp-display-inline-block">
-     <form id="add_to_basket_form" style="z-index:0;" action="{% url 'basket:add' pk=product.pk  %}" method="post" class="" {% if in_basket_obj %} onsubmit="return confirm('Same product is already added in the cart');" {% endif %}>
+        {% if in_basket_obj %}
+    <form id="add_to_basket_form" style="z-index:0;" action="" method="" class=""  onsubmit="return alert('Same product is already added in the cart');">
+        {% else %} 
+    <form id="add_to_basket_form" style="z-index:0;" action="{% url 'basket:add' pk=product.pk  %}" method="post" class="">
+        {% endif %}
          {% csrf_token %}
          <input type="hidden" name="product_type" id="id_product_type" value="{{product.product_class.name}}">
          <input type="hidden" name="product_type" id="id_product_id" value="{{product.id}}">

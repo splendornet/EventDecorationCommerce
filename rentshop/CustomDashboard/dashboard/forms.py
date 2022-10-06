@@ -393,10 +393,16 @@ class CustomProductImageForm(ProductImageForm):
         self.fields['caption'].label = ''
         self.fields['caption'].required = False
 
+        self.fields['image_alt_text'].widget.attrs['class'] = 'form-control seq-class is_vendor'
+        self.fields['image_alt_text'].widget.attrs['placeholder'] = 'Image Alt Text'
+        self.fields['image_alt_text'].label = ''
+        self.fields['image_alt_text'].required = False
+
+
     class Meta:
 
         model = ProductImage
-        fields = ['product', 'original', 'caption', 'img_sequence', 'is_dp_image','caption']
+        fields = ['product', 'original', 'caption', 'image_alt_text','img_sequence', 'is_dp_image','caption']
 
         widgets = {
             'original': ImageInput(),

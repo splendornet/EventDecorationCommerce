@@ -746,8 +746,8 @@ def re_allocate_vendor(request):
         order_link = current_site.domain + '/dashboard/orders/' + str(ol_obj.order_number) + '/'
 
         # order booked sms
-        message = 'You have received a new order for ' + str(ol_obj.order_line.booking_start_date.date) + '-' + str(
-            ol_obj.order_line.booking_end_date.date) + ' Click on the link to check details of the order. ' + '(' + str(
+        message = 'You have received a new order for ' + str(ol_obj.order_line.booking_start_date.date()) + 'to' + str(
+            ol_obj.order_line.booking_end_date.date()) + ' Click on the link to check details of the order. ' + '(' + str(
             order_link) + ')' + ' Happy Celebranto!'
         msg_kwargs = {
             'message': message,
@@ -822,14 +822,16 @@ class ReallocateOrderListView(generic.ListView):
 
         basket_lines = BasketLine.objects.filter(basket__id__in=queryset.values('basket_id'))
         basket_id_list = []
-        for basket_line in basket_lines:
-            category_name_lst = list(
-                basket_line.product.categories.last().get_ancestors().values_list('name', flat=True))
-            category_name_lst.append(basket_line.product.categories.last().name)
+        try:
+            for basket_line in basket_lines:
+                category_name_lst = list(
+                    basket_line.product.categories.last().get_ancestors().values_list('name', flat=True))
+                category_name_lst.append(basket_line.product.categories.last().name)
 
-            if any(name in category_name_lst for name in offers_cat_list):
-                basket_id_list.append(basket_line.basket.id)
-        exl_queryset = queryset.filter(basket_id__in=basket_id_list)
+                if any(name in category_name_lst for name in offers_cat_list):
+                    basket_id_list.append(basket_line.basket.id)
+        except:
+            exl_queryset = queryset.filter(basket_id__in=basket_id_list)
         return exl_queryset
 
 
