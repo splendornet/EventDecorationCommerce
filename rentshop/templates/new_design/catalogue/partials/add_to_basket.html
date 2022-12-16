@@ -11,9 +11,9 @@
     {% line_item_checker request product as in_basket_obj %}
     <div class="trp-display-inline-block">
         {% if in_basket_obj %}
-    <form id="add_to_basket_form" style="z-index:0;" action="{% url 'basket:add' pk=product.pk  %}" method="post" class="">
-        {% else %} 
-    <form id="add_to_basket_form" style="z-index:0;" action="{% url 'basket:add' pk=product.pk  %}" method="post" class="">
+    <form id="add_to_basket_form" style="z-index:0;" action="" method="" class=""  onsubmit='return alert("Please login before adding product");'>
+        {% else %}
+    <form id="add_to_basket_form" style="z-index:0;" action="{% url 'basket:add' pk=product.pk  %}" method="post" class="" >
         {% endif %}
          {% csrf_token %}
          <input type="hidden" name="product_type" id="id_product_type" value="{{product.product_class.name}}">
