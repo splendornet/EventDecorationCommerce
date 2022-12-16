@@ -11,7 +11,7 @@
     {% line_item_checker request product as in_basket_obj %}
     <div class="trp-display-inline-block">
         {% if in_basket_obj %}
-    <form id="add_to_basket_form" style="z-index:0;" action="" method="" class=""  onsubmit="return alert('Same product is already added in the cart');">
+    <form id="add_to_basket_form" style="z-index:0;" action="{% url 'basket:add' pk=product.pk  %}" method="post" class="">
         {% else %} 
     <form id="add_to_basket_form" style="z-index:0;" action="{% url 'basket:add' pk=product.pk  %}" method="post" class="">
         {% endif %}
